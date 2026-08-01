@@ -1,0 +1,128 @@
+{
+ "budget": {
+  "actions_failed": 0,
+  "actions_left": 300,
+  "actions_ok": 0,
+  "attempt_amplification": null,
+  "ceiling_actions": 300,
+  "ceiling_commands": 2000,
+  "commands_sent": 40,
+  "http_amplification": null,
+  "http_amplification_is_really_attempts": true,
+  "http_amplification_note": "arm-level attempts per successful ACTION, including attempts that never reached the network. The arm cannot compute the transport ratio: only the proxy ledger knows which attempts were forwarded (`http.forwarded`). Divide that count by `actions_ok` for the real one.",
+  "probe_actions": 0,
+  "reserve_for_probes": 0,
+  "resets": 0
+ },
+ "desk": {
+  "beats": [],
+  "calls": 0,
+  "calls_missing_from_ledger": 0,
+  "cli_cost_usd": 0.0,
+  "cost_ceiling_usd": 25.0,
+  "ledger_failures": [],
+  "model": "claude-opus-5",
+  "spend_gate": {
+   "action_cap": 5616,
+   "actions_charged": 0,
+   "campaign": "theoria-arm:A3-campaign-devpile:g50t-5849a774:20260801T043743Z-R2-g50t-a",
+   "caps": {
+    "action_cap": 5616,
+    "arithmetic": {
+     "action_cap": 5616,
+     "action_cap_hard_bound": 6000,
+     "action_cap_planned": 5616,
+     "actions_budget": 300,
+     "arm_attempts_capped_by_commands_ceiling": false,
+     "commands_ceiling": 2000,
+     "cost_ceiling_usd": 25.0,
+     "env_max_attempts": 3,
+     "env_outbound_per_arm_command_measured": 1.0031,
+     "fixed_commands": 3,
+     "fixed_outbound": 36,
+     "http_per_command": 1.75,
+     "http_per_command_is_validated": false,
+     "http_per_command_provenance": "arc-recon/data/incidents.jsonl:16 (INC-011) side_by_side, bare_cc arm, ar25, cookies=True, 35 http / 20 executed commands. Different arm, different transport, different denominator from the one plan_caps uses.",
+     "http_per_command_retired_from_sizing": true,
+     "model_call_ceiling_usd": 4.0,
+     "outbound_per_action": 9.3,
+     "outbound_per_action_decomposition": {
+      "blended": 8.091,
+      "decomposable_legs": 5,
+      "derivation": "armtools.refusal.derive_outbound_per_action over every leg under runs/ whose env_upstream is three.arcprize.org",
+      "legs": 8,
+      "outbound_action_forwarded": 801,
+      "productive": 1.081,
+      "successful_actions": 99,
+      "transient_share_of_classifiable": 0.846
+     },
+     "outbound_per_action_is_validated": true,
+     "outbound_per_action_provenance": "251 outbound ACTION requests / 27 successful ACTIONs, pooled over the four live legs in runs/ whose env_upstream is three.arcprize.org (20260728T012311Z, 20260728T014402Z, 20260728T015354Z, 20260729T004020Z-leg01). Numerator is the sum of http.attempts over env_step records with http.forwarded=true; denominator is env_step records with an ACTION name and status 200. Cross-checked against proxy/var/spend_gate.jsonl, which agrees exactly (105/105) on the one leg both cover. Per-leg ratios 16.8 / 6.0 / 5.143 / 10.556. REGIME: this is a blended number, not a transport number -- see OUTBOUND_PER_ACTION_REGIME.",
+     "outbound_per_action_regime": "blended",
+     "outbound_tail_safety": 2.0,
+     "retry_safety": 1.5,
+     "ttl_seconds": 11700.0,
+     "unit": "one action = one outbound ARC HTTP request (spend_policy.json)",
+     "usd_cap": 29.0,
+     "wall_clock_s": 10800.0
+    },
+    "ttl_seconds": 11700.0,
+    "usd_cap": 29.0
+   },
+   "model_call_ceiling_usd": 4.0,
+   "model_calls_charged": 0,
+   "pool": {
+    "action_ceiling": 24000,
+    "gate_version": "1.0",
+    "ledger_abspath": "C:\\Users\\user\\Desktop\\theoria\\proxy\\var\\spend_gate.jsonl",
+    "ledger_path": "proxy/var/spend_gate.jsonl",
+    "policy_path": "proxy/spend_policy.json",
+    "policy_sha256": "732778326d64436586f944853f1f0db46d50639ad71a5ac0499d8c4827ec1572",
+    "pool": "theoria-shared-2026-07",
+    "pool_root": "C:\\Users\\user\\Desktop\\theoria",
+    "usd_ceiling": 214.9
+   },
+   "released": false,
+   "renewals": 0,
+   "reservation_id": "res-169dec40697d4d8f",
+   "tripped": null,
+   "unpriced_calls": 0,
+   "usd_cap": 29.0,
+   "usd_charged": 0.0
+  },
+  "unpriced_calls": 0,
+  "usage_total": {}
+ },
+ "elapsed_s": 321.9,
+ "levels": {
+  "boundaries": 0,
+  "events": [],
+  "finished": false,
+  "level": 1,
+  "levels_completed": 0,
+  "reset_probes": [],
+  "starts": [
+   0
+  ]
+ },
+ "outcome": "reset_failed",
+ "steps": 1,
+ "stopped_because": "RESET did not return 200 after 40 attempts",
+ "surprises": {
+  "by_family": {
+   "computational": 0,
+   "empirical": 0
+  },
+  "by_kind": {
+   "execution_mismatch": 0,
+   "heuristic_miss": 0,
+   "probe_refutation": 0,
+   "proof_failure": 0,
+   "render_mismatch": 0,
+   "replay_mismatch": 0,
+   "search_timeout": 0
+  },
+  "total": 0,
+  "unhandled": 0
+ }
+}

@@ -1,0 +1,443 @@
+[
+ {
+  "actions_at_call": 5,
+  "beat": "theorize",
+  "call": 1,
+  "call_idx": 0,
+  "chars_in": 87705,
+  "chars_out": 56359,
+  "cli_cost_usd": 1.5730589999999998,
+  "commands_at_call": 77,
+  "elapsed_ms": 530104,
+  "elapsed_s_at_call": 903.0,
+  "gate_charged_usd": 1.573059,
+  "gate_unpriced": false,
+  "label": "round1",
+  "model": "claude-opus-5",
+  "step_idx": 6,
+  "transitions_at_call": 5,
+  "turn": 2,
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 40322,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 40322,
+   "cache_read_input_tokens": 0,
+   "inference_geo": "not_available",
+   "input_tokens": 2,
+   "iterations": [
+    {
+     "cache_creation": {
+      "ephemeral_1h_input_tokens": 40322,
+      "ephemeral_5m_input_tokens": 0
+     },
+     "cache_creation_input_tokens": 40322,
+     "cache_read_input_tokens": 0,
+     "input_tokens": 2,
+     "output_tokens": 45604,
+     "type": "message"
+    }
+   ],
+   "output_tokens": 45604,
+   "server_tool_use": {
+    "web_fetch_requests": 0,
+    "web_search_requests": 0
+   },
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ },
+ {
+  "actions_at_call": 9,
+  "beat": "theorize",
+  "call": 2,
+  "call_idx": 1,
+  "chars_in": 82649,
+  "chars_out": 66113,
+  "cli_cost_usd": 1.689508,
+  "commands_at_call": 115,
+  "elapsed_ms": 602394,
+  "elapsed_s_at_call": 1708.5,
+  "gate_charged_usd": 1.689508,
+  "gate_unpriced": false,
+  "label": "round1",
+  "model": "claude-opus-5",
+  "step_idx": 10,
+  "transitions_at_call": 9,
+  "turn": 6,
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 38019,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 38019,
+   "cache_read_input_tokens": 0,
+   "inference_geo": "not_available",
+   "input_tokens": 2,
+   "iterations": [
+    {
+     "cache_creation": {
+      "ephemeral_1h_input_tokens": 38019,
+      "ephemeral_5m_input_tokens": 0
+     },
+     "cache_creation_input_tokens": 38019,
+     "cache_read_input_tokens": 0,
+     "input_tokens": 2,
+     "output_tokens": 51251,
+     "type": "message"
+    }
+   ],
+   "output_tokens": 51251,
+   "server_tool_use": {
+    "web_fetch_requests": 0,
+    "web_search_requests": 0
+   },
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ },
+ {
+  "actions_at_call": 13,
+  "beat": "theorize",
+  "call": 3,
+  "call_idx": 2,
+  "chars_in": 93828,
+  "chars_out": 74607,
+  "cli_cost_usd": 1.8941430000000001,
+  "commands_at_call": 167,
+  "elapsed_ms": 681764,
+  "elapsed_s_at_call": 2659.4,
+  "gate_charged_usd": 1.894143,
+  "gate_unpriced": false,
+  "label": "round1",
+  "model": "claude-opus-5",
+  "step_idx": 14,
+  "transitions_at_call": 13,
+  "turn": 10,
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 42774,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 42774,
+   "cache_read_input_tokens": 0,
+   "inference_geo": "not_available",
+   "input_tokens": 2,
+   "iterations": [
+    {
+     "cache_creation": {
+      "ephemeral_1h_input_tokens": 42774,
+      "ephemeral_5m_input_tokens": 0
+     },
+     "cache_creation_input_tokens": 42774,
+     "cache_read_input_tokens": 0,
+     "input_tokens": 2,
+     "output_tokens": 57386,
+     "type": "message"
+    }
+   ],
+   "output_tokens": 57386,
+   "server_tool_use": {
+    "web_fetch_requests": 0,
+    "web_search_requests": 0
+   },
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ },
+ {
+  "actions_at_call": 13,
+  "beat": "theorize",
+  "call": 4,
+  "call_idx": 3,
+  "chars_in": 103810,
+  "chars_out": 73810,
+  "cli_cost_usd": 1.410259,
+  "commands_at_call": 167,
+  "elapsed_ms": 386733,
+  "elapsed_s_at_call": 3046.8,
+  "gate_charged_usd": 1.410259,
+  "gate_unpriced": false,
+  "label": "round2",
+  "model": "claude-opus-5",
+  "step_idx": 14,
+  "transitions_at_call": 13,
+  "turn": 10,
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 46853,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 46853,
+   "cache_read_input_tokens": 0,
+   "inference_geo": "not_available",
+   "input_tokens": 2,
+   "iterations": [
+    {
+     "cache_creation": {
+      "ephemeral_1h_input_tokens": 46853,
+      "ephemeral_5m_input_tokens": 0
+     },
+     "cache_creation_input_tokens": 46853,
+     "cache_read_input_tokens": 0,
+     "input_tokens": 2,
+     "output_tokens": 36283,
+     "type": "message"
+    }
+   ],
+   "output_tokens": 36283,
+   "server_tool_use": {
+    "web_fetch_requests": 0,
+    "web_search_requests": 0
+   },
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ },
+ {
+  "actions_at_call": 17,
+  "beat": "theorize",
+  "call": 5,
+  "call_idx": 4,
+  "chars_in": 105030,
+  "chars_out": 9578,
+  "cli_cost_usd": 2.863988,
+  "commands_at_call": 181,
+  "elapsed_ms": 807418,
+  "elapsed_s_at_call": 3919.3,
+  "gate_charged_usd": 2.863988,
+  "gate_unpriced": false,
+  "label": "round1",
+  "model": "claude-opus-5",
+  "step_idx": 18,
+  "transitions_at_call": 17,
+  "turn": 14,
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 111301,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 111301,
+   "cache_read_input_tokens": 47236,
+   "inference_geo": "not_available",
+   "input_tokens": 4,
+   "iterations": [
+    {
+     "cache_creation": {
+      "ephemeral_1h_input_tokens": 64065,
+      "ephemeral_5m_input_tokens": 0
+     },
+     "cache_creation_input_tokens": 64065,
+     "cache_read_input_tokens": 47236,
+     "input_tokens": 2,
+     "output_tokens": 3701,
+     "type": "message"
+    }
+   ],
+   "output_tokens": 67701,
+   "server_tool_use": {
+    "web_fetch_requests": 0,
+    "web_search_requests": 0
+   },
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ },
+ {
+  "actions_at_call": 17,
+  "beat": "theorize",
+  "call": 6,
+  "call_idx": 5,
+  "chars_in": 105451,
+  "chars_out": 90364,
+  "cli_cost_usd": 2.012925,
+  "commands_at_call": 181,
+  "elapsed_ms": 700562,
+  "elapsed_s_at_call": 4620.5,
+  "gate_charged_usd": 2.012925,
+  "gate_unpriced": false,
+  "label": "round2",
+  "model": "claude-opus-5",
+  "step_idx": 18,
+  "transitions_at_call": 17,
+  "turn": 14,
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 47369,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 47369,
+   "cache_read_input_tokens": 0,
+   "inference_geo": "not_available",
+   "input_tokens": 2,
+   "iterations": [
+    {
+     "cache_creation": {
+      "ephemeral_1h_input_tokens": 47369,
+      "ephemeral_5m_input_tokens": 0
+     },
+     "cache_creation_input_tokens": 47369,
+     "cache_read_input_tokens": 0,
+     "input_tokens": 2,
+     "output_tokens": 60173,
+     "type": "message"
+    }
+   ],
+   "output_tokens": 60173,
+   "server_tool_use": {
+    "web_fetch_requests": 0,
+    "web_search_requests": 0
+   },
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ },
+ {
+  "actions_at_call": 21,
+  "beat": "theorize",
+  "call": 7,
+  "call_idx": 6,
+  "chars_in": 113563,
+  "chars_out": 95888,
+  "cli_cost_usd": 2.089105,
+  "commands_at_call": 232,
+  "elapsed_ms": 689519,
+  "elapsed_s_at_call": 5760.3,
+  "gate_charged_usd": 2.089105,
+  "gate_unpriced": false,
+  "label": "round1",
+  "model": "claude-opus-5",
+  "step_idx": 22,
+  "transitions_at_call": 21,
+  "turn": 18,
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 50825,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 50825,
+   "cache_read_input_tokens": 0,
+   "inference_geo": "not_available",
+   "input_tokens": 2,
+   "iterations": [
+    {
+     "cache_creation": {
+      "ephemeral_1h_input_tokens": 50825,
+      "ephemeral_5m_input_tokens": 0
+     },
+     "cache_creation_input_tokens": 50825,
+     "cache_read_input_tokens": 0,
+     "input_tokens": 2,
+     "output_tokens": 61744,
+     "type": "message"
+    }
+   ],
+   "output_tokens": 61744,
+   "server_tool_use": {
+    "web_fetch_requests": 0,
+    "web_search_requests": 0
+   },
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ },
+ {
+  "actions_at_call": 25,
+  "beat": "theorize",
+  "call": 8,
+  "call_idx": 7,
+  "chars_in": 122430,
+  "chars_out": 98851,
+  "cli_cost_usd": 2.020405,
+  "commands_at_call": 271,
+  "elapsed_ms": 624999,
+  "elapsed_s_at_call": 6588.2,
+  "gate_charged_usd": 2.020405,
+  "gate_unpriced": false,
+  "label": "round1",
+  "model": "claude-opus-5",
+  "step_idx": 26,
+  "transitions_at_call": 25,
+  "turn": 22,
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 55161,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 55161,
+   "cache_read_input_tokens": 0,
+   "inference_geo": "not_available",
+   "input_tokens": 2,
+   "iterations": [
+    {
+     "cache_creation": {
+      "ephemeral_1h_input_tokens": 55161,
+      "ephemeral_5m_input_tokens": 0
+     },
+     "cache_creation_input_tokens": 55161,
+     "cache_read_input_tokens": 0,
+     "input_tokens": 2,
+     "output_tokens": 57138,
+     "type": "message"
+    }
+   ],
+   "output_tokens": 57138,
+   "server_tool_use": {
+    "web_fetch_requests": 0,
+    "web_search_requests": 0
+   },
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ },
+ {
+  "actions_at_call": 29,
+  "beat": "theorize",
+  "call": 9,
+  "call_idx": 8,
+  "chars_in": 128759,
+  "chars_out": 28468,
+  "cli_cost_usd": 3.1826165,
+  "commands_at_call": 290,
+  "elapsed_ms": 898079,
+  "elapsed_s_at_call": 7568.6,
+  "gate_charged_usd": 3.182616,
+  "gate_unpriced": false,
+  "label": "round1",
+  "model": "claude-opus-5",
+  "step_idx": 30,
+  "transitions_at_call": 29,
+  "turn": 26,
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 121582,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 121582,
+   "cache_read_input_tokens": 57517,
+   "inference_geo": "not_available",
+   "input_tokens": 4,
+   "iterations": [
+    {
+     "cache_creation": {
+      "ephemeral_1h_input_tokens": 64065,
+      "ephemeral_5m_input_tokens": 0
+     },
+     "cache_creation_input_tokens": 64065,
+     "cache_read_input_tokens": 57517,
+     "input_tokens": 2,
+     "output_tokens": 11842,
+     "type": "message"
+    }
+   ],
+   "output_tokens": 75842,
+   "server_tool_use": {
+    "web_fetch_requests": 0,
+    "web_search_requests": 0
+   },
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+]

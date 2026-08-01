@@ -1,0 +1,14 @@
+{
+ "config": {
+  "carry_refutations": true,
+  "min_bits": 0.0
+ },
+ "decisions": [],
+ "enabled": false,
+ "fired_this_generation": 0,
+ "generations": 0,
+ "probes_allowed": 0,
+ "probes_refused": 0,
+ "refusal_reasons": {},
+ "retired_hypotheses": []
+}

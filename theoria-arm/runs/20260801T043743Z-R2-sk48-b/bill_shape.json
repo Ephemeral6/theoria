@@ -1,0 +1,15 @@
+{
+ "calls": [],
+ "reading": "`actions_at_call` counts BILLED actions; `commands_sent` counts HTTP requests, and the two differ by this API's 400-wave retry envelope. A curve against one is not a curve against the other.",
+ "totals": {
+  "actions_billed": 0,
+  "commands_sent": 40,
+  "desk_calls": 0,
+  "elapsed_s": 373.1,
+  "http_amplification": null,
+  "transitions_observed": 0,
+  "usd": 0.0,
+  "usd_per_billed_action": null,
+  "usd_per_transition": null
+ }
+}

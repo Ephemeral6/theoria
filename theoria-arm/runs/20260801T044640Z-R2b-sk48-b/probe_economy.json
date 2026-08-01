@@ -1,0 +1,85 @@
+{
+ "config": {
+  "carry_refutations": true,
+  "min_bits": 0.0
+ },
+ "decisions": [
+  {
+   "action": [
+    "key",
+    1
+   ],
+   "allowed": true,
+   "bits": 1.777426770704,
+   "reason": "",
+   "step_idx": 6
+  },
+  {
+   "action": [
+    "key",
+    2
+   ],
+   "allowed": true,
+   "bits": 1.822180588983,
+   "reason": "",
+   "step_idx": 7
+  },
+  {
+   "action": [
+    "key",
+    1
+   ],
+   "allowed": false,
+   "bits": 1.777426770704,
+   "reason": "this is the same experiment as P-01 -- same action, same prediction from every hypothesis, therefore the same partition of the frontier. Re-running it cannot separate anything P-01 did not.",
+   "step_idx": 8
+  },
+  {
+   "action": [
+    "key",
+    1
+   ],
+   "allowed": true,
+   "bits": 2.190841577947,
+   "reason": "",
+   "step_idx": 9
+  },
+  {
+   "action": [
+    "key",
+    2
+   ],
+   "allowed": true,
+   "bits": 2.053169592226,
+   "reason": "",
+   "step_idx": 10
+  }
+ ],
+ "enabled": false,
+ "fired_this_generation": 4,
+ "generations": 1,
+ "probes_allowed": 4,
+ "probes_refused": 1,
+ "refusal_reasons": {
+  "this is the same experiment as P-01 -- same action, same pre": 1
+ },
+ "retired_hypotheses": [
+  "edge_advance_1",
+  "edge_advance_2",
+  "edge_advance_3",
+  "inert",
+  "without_a2_icon1_field_takes_5",
+  "without_a2_icon2_body_takes_6",
+  "without_a2_icon2_hole_takes_0",
+  "without_a2_lower_ink2_takes_2",
+  "without_a2_tape1_takes_4",
+  "without_a2_tape2_takes_1",
+  "without_a2_thumb_takes_2",
+  "without_a2_track_takes_3",
+  "world_inert",
+  "world_inert_plus_edge",
+  "world_inert_plus_edge_1",
+  "world_inert_plus_edge_2",
+  "world_inert_plus_edge_3"
+ ]
+}

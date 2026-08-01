@@ -1,0 +1,301 @@
+{
+ "config": {
+  "carry_refutations": true,
+  "min_bits": 0.0
+ },
+ "decisions": [
+  {
+   "action": [
+    "key",
+    2
+   ],
+   "allowed": true,
+   "bits": 1.572768313833,
+   "reason": "",
+   "step_idx": 6
+  },
+  {
+   "action": [
+    "key",
+    5
+   ],
+   "allowed": true,
+   "bits": 2.204925584893,
+   "reason": "",
+   "step_idx": 7
+  },
+  {
+   "action": [
+    "key",
+    2
+   ],
+   "allowed": true,
+   "bits": 2.204925584893,
+   "reason": "",
+   "step_idx": 8
+  },
+  {
+   "action": [
+    "key",
+    5
+   ],
+   "allowed": true,
+   "bits": 2.204925584893,
+   "reason": "",
+   "step_idx": 9
+  },
+  {
+   "action": [
+    "key",
+    2
+   ],
+   "allowed": true,
+   "bits": 1.394848870026,
+   "reason": "",
+   "step_idx": 10
+  },
+  {
+   "action": [
+    "key",
+    5
+   ],
+   "allowed": true,
+   "bits": 2.2195282823,
+   "reason": "",
+   "step_idx": 11
+  },
+  {
+   "action": [
+    "key",
+    2
+   ],
+   "allowed": true,
+   "bits": 1.955012006402,
+   "reason": "",
+   "step_idx": 12
+  },
+  {
+   "action": [
+    "key",
+    5
+   ],
+   "allowed": true,
+   "bits": 2.273661689922,
+   "reason": "",
+   "step_idx": 13
+  },
+  {
+   "action": [
+    "key",
+    2
+   ],
+   "allowed": true,
+   "bits": 1.394848870026,
+   "reason": "",
+   "step_idx": 14
+  },
+  {
+   "action": [
+    "key",
+    5
+   ],
+   "allowed": true,
+   "bits": 2.2195282823,
+   "reason": "",
+   "step_idx": 15
+  },
+  {
+   "action": [
+    "key",
+    2
+   ],
+   "allowed": true,
+   "bits": 1.955012006402,
+   "reason": "",
+   "step_idx": 16
+  },
+  {
+   "action": [
+    "key",
+    5
+   ],
+   "allowed": true,
+   "bits": 2.273661689922,
+   "reason": "",
+   "step_idx": 17
+  },
+  {
+   "action": [
+    "key",
+    2
+   ],
+   "allowed": true,
+   "bits": 1.394848870026,
+   "reason": "",
+   "step_idx": 18
+  },
+  {
+   "action": [
+    "key",
+    5
+   ],
+   "allowed": true,
+   "bits": 2.2195282823,
+   "reason": "",
+   "step_idx": 19
+  },
+  {
+   "action": [
+    "key",
+    2
+   ],
+   "allowed": true,
+   "bits": 1.955012006402,
+   "reason": "",
+   "step_idx": 20
+  },
+  {
+   "action": [
+    "key",
+    5
+   ],
+   "allowed": true,
+   "bits": 2.273661689922,
+   "reason": "",
+   "step_idx": 21
+  },
+  {
+   "action": [
+    "key",
+    2
+   ],
+   "allowed": true,
+   "bits": 1.394848870026,
+   "reason": "",
+   "step_idx": 22
+  },
+  {
+   "action": [
+    "key",
+    5
+   ],
+   "allowed": true,
+   "bits": 2.2195282823,
+   "reason": "",
+   "step_idx": 23
+  },
+  {
+   "action": [
+    "key",
+    2
+   ],
+   "allowed": true,
+   "bits": 1.955012006402,
+   "reason": "",
+   "step_idx": 24
+  },
+  {
+   "action": [
+    "key",
+    5
+   ],
+   "allowed": true,
+   "bits": 2.273661689922,
+   "reason": "",
+   "step_idx": 25
+  },
+  {
+   "action": [
+    "key",
+    5
+   ],
+   "allowed": true,
+   "bits": 1.535463109152,
+   "reason": "",
+   "step_idx": 26
+  },
+  {
+   "action": [
+    "key",
+    2
+   ],
+   "allowed": true,
+   "bits": 1.955012006402,
+   "reason": "",
+   "step_idx": 27
+  },
+  {
+   "action": [
+    "key",
+    5
+   ],
+   "allowed": true,
+   "bits": 2.273661689922,
+   "reason": "",
+   "step_idx": 28
+  },
+  {
+   "action": [
+    "key",
+    2
+   ],
+   "allowed": true,
+   "bits": 1.955012006402,
+   "reason": "",
+   "step_idx": 29
+  },
+  {
+   "action": [
+    "key",
+    5
+   ],
+   "allowed": false,
+   "bits": 2.2195282823,
+   "reason": "4 probes already spent since the last adjudication (cap 4). The frontier is a function of the manual, and the manual has not changed since, so further probes are drawn from the same hypothesis set.",
+   "step_idx": 30
+  }
+ ],
+ "enabled": false,
+ "fired_this_generation": 20,
+ "generations": 2,
+ "probes_allowed": 24,
+ "probes_refused": 1,
+ "refusal_reasons": {
+  "4 probes already spent since the last adjudication (cap 4). ": 1
+ },
+ "retired_hypotheses": [
+  "edge_advance",
+  "edge_advance_1",
+  "edge_advance_2",
+  "edge_advance_3",
+  "inert",
+  "without_key1_inert_at_spawn",
+  "without_key2_body_arrives",
+  "without_key2_body_leaves",
+  "without_key3_inert_below_spawn",
+  "without_key5_body_clears",
+  "without_key5_body_respawns",
+  "without_key5_slot1_dims",
+  "without_key5_slot1_lights",
+  "without_key5_slot2_centre_darkens",
+  "without_key5_slot2_centre_resets",
+  "without_key5_slot2_ring_resets",
+  "without_key5_slot2_row1_lights",
+  "without_key5_slot2_row2_left_lights",
+  "without_key5_slot2_row2_right_lights",
+  "without_key5_slot2_row3_lights",
+  "without_key5_underline1_dims",
+  "without_key5_underline1_lights",
+  "without_key5_underline2_dims",
+  "without_key5_underline2_lights",
+  "without_meter_burn_key2_next",
+  "without_meter_burn_key2_rightmost",
+  "without_meter_burn_key4_next",
+  "world_anchored_manual",
+  "world_inert",
+  "world_inert_plus_edge",
+  "world_inert_plus_edge_1",
+  "world_inert_plus_edge_2",
+  "world_inert_plus_edge_3"
+ ]
+}

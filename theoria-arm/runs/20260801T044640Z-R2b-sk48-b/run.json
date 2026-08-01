@@ -1,0 +1,872 @@
+{
+  "arm": "theoria",
+  "arm_version": {
+    "files": 85,
+    "sha256": "e5b0eff73ddfcdc4849cf42c03d9ce247842fee2c4e6461acb50ebdee2a46322"
+  },
+  "env_proxy": {
+    "arm": "theoria",
+    "card_ids": [
+      "72768704-0b24-4c4b-ab6a-fa7aabe0879f"
+    ],
+    "commands": 52,
+    "denials": 0,
+    "guard": {
+      "allow_only": null,
+      "cut_version": "v1",
+      "n_dev": 4,
+      "n_sealed": 21,
+      "piles_path": "arc-recon/data/piles.json",
+      "sha256": "3feca53e5ede695cfa46ae994cb95fd6b43abb9d97295e8c87e6302b41bbc19a",
+      "unknown_policy": "deny"
+    },
+    "guids": {
+      "sk48-d8078629": "549304e2-d998-4fe2-84a2-c09eabc4aa72"
+    },
+    "incidents": 92,
+    "key_injected": true,
+    "meta_calls": 41,
+    "run_id": "r-0e38c80cabdf478c",
+    "upstream": "https://three.arcprize.org",
+    "variant": null
+  },
+  "game_id": "sk48-d8078629",
+  "ledger": "C:\\Users\\user\\Desktop\\theoria\\theoria-arm\\runs\\20260801T044640Z-R2b-sk48-b\\ledger.jsonl",
+  "run_id": "r-0e38c80cabdf478c",
+  "slug": "20260801T044640Z-R2b-sk48-b",
+  "spend": {
+    "action_cap": 5616,
+    "actions_charged": 0,
+    "campaign": "theoria-arm:A3-campaign-devpile:sk48-d8078629:20260801T044640Z-R2b-sk48-b",
+    "caps": {
+      "action_cap": 5616,
+      "arithmetic": {
+        "action_cap": 5616,
+        "action_cap_hard_bound": 6000,
+        "action_cap_planned": 5616,
+        "actions_budget": 300,
+        "arm_attempts_capped_by_commands_ceiling": false,
+        "commands_ceiling": 2000,
+        "cost_ceiling_usd": 25.0,
+        "env_max_attempts": 3,
+        "env_outbound_per_arm_command_measured": 1.0031,
+        "fixed_commands": 3,
+        "fixed_outbound": 36,
+        "http_per_command": 1.75,
+        "http_per_command_is_validated": false,
+        "http_per_command_provenance": "arc-recon/data/incidents.jsonl:16 (INC-011) side_by_side, bare_cc arm, ar25, cookies=True, 35 http / 20 executed commands. Different arm, different transport, different denominator from the one plan_caps uses.",
+        "http_per_command_retired_from_sizing": true,
+        "model_call_ceiling_usd": 4.0,
+        "outbound_per_action": 9.3,
+        "outbound_per_action_decomposition": {
+          "blended": 8.091,
+          "decomposable_legs": 5,
+          "derivation": "armtools.refusal.derive_outbound_per_action over every leg under runs/ whose env_upstream is three.arcprize.org",
+          "legs": 8,
+          "outbound_action_forwarded": 801,
+          "productive": 1.081,
+          "successful_actions": 99,
+          "transient_share_of_classifiable": 0.846
+        },
+        "outbound_per_action_is_validated": true,
+        "outbound_per_action_provenance": "251 outbound ACTION requests / 27 successful ACTIONs, pooled over the four live legs in runs/ whose env_upstream is three.arcprize.org (20260728T012311Z, 20260728T014402Z, 20260728T015354Z, 20260729T004020Z-leg01). Numerator is the sum of http.attempts over env_step records with http.forwarded=true; denominator is env_step records with an ACTION name and status 200. Cross-checked against proxy/var/spend_gate.jsonl, which agrees exactly (105/105) on the one leg both cover. Per-leg ratios 16.8 / 6.0 / 5.143 / 10.556. REGIME: this is a blended number, not a transport number -- see OUTBOUND_PER_ACTION_REGIME.",
+        "outbound_per_action_regime": "blended",
+        "outbound_tail_safety": 2.0,
+        "retry_safety": 1.5,
+        "ttl_seconds": 11700.0,
+        "unit": "one action = one outbound ARC HTTP request (spend_policy.json)",
+        "usd_cap": 29.0,
+        "wall_clock_s": 10800.0
+      },
+      "ttl_seconds": 11700.0,
+      "usd_cap": 29.0
+    },
+    "model_call_ceiling_usd": 4.0,
+    "model_calls_charged": 6,
+    "pool": {
+      "action_ceiling": 24000,
+      "gate_version": "1.0",
+      "ledger_abspath": "C:\\Users\\user\\Desktop\\theoria\\proxy\\var\\spend_gate.jsonl",
+      "ledger_path": "proxy/var/spend_gate.jsonl",
+      "policy_path": "proxy/spend_policy.json",
+      "policy_sha256": "732778326d64436586f944853f1f0db46d50639ad71a5ac0499d8c4827ec1572",
+      "pool": "theoria-shared-2026-07",
+      "pool_root": "C:\\Users\\user\\Desktop\\theoria",
+      "usd_ceiling": 214.9
+    },
+    "released": false,
+    "renewals": 0,
+    "reservation_id": "res-360c0ace8d1242eb",
+    "tripped": {
+      "message": "reservation res-360c0ace8d1242eb for 'theoria-arm:A3-campaign-devpile:sk48-d8078629:20260801T044640Z-R2b-sk48-b' is at $20.3032 of its $29.0000 cap",
+      "rule": "RESERVATION_USD_CAP"
+    },
+    "unpriced_calls": 0,
+    "usd_cap": 29.0,
+    "usd_charged": 20.303224
+  },
+  "summary": {
+    "action_counts": {
+      "1": 3,
+      "2": 2,
+      "3": 2,
+      "4": 1,
+      "7": 1
+    },
+    "bill": {
+      "actions_billed": 9,
+      "commands_sent": 52,
+      "desk_calls": 6,
+      "elapsed_s": 8151.6,
+      "http_amplification": 5.778,
+      "transitions_observed": 9,
+      "usd": 20.303224,
+      "usd_per_billed_action": 2.255914,
+      "usd_per_transition": 2.255914
+    },
+    "budget": {
+      "actions_failed": 0,
+      "actions_left": 291,
+      "actions_ok": 9,
+      "attempt_amplification": 5.778,
+      "ceiling_actions": 300,
+      "ceiling_commands": 2000,
+      "commands_sent": 52,
+      "http_amplification": 5.778,
+      "http_amplification_is_really_attempts": true,
+      "http_amplification_note": "arm-level attempts per successful ACTION, including attempts that never reached the network. The arm cannot compute the transport ratio: only the proxy ledger knows which attempts were forwarded (`http.forwarded`). Divide that count by `actions_ok` for the real one.",
+      "probe_actions": 3,
+      "reserve_for_probes": 0,
+      "resets": 1
+    },
+    "carried_books": {
+      "carried": {
+        "playbook.dsl": {
+          "chars": 7100,
+          "sha256": "8945e784b0aba80860a9238fb04607d20fdba5be440848797536030bb752fc16"
+        },
+        "theory.dsl": {
+          "chars": 48450,
+          "sha256": "8ae0c50c9a158ac20fde764545cc873f668e34ccd31988a91238fc6f787ed090"
+        }
+      },
+      "empty": false,
+      "seed_from": "runs/20260731T1430Z-A3-level2-carried-r3/books",
+      "skipped": []
+    },
+    "certify_rounds": 4,
+    "desk": {
+      "beats": [
+        "theorize"
+      ],
+      "calls": 6,
+      "calls_missing_from_ledger": 0,
+      "cli_cost_usd": 20.303224,
+      "cost_ceiling_usd": 25.0,
+      "ledger_failures": [],
+      "model": "claude-opus-5",
+      "spend_gate": {
+        "action_cap": 5616,
+        "actions_charged": 0,
+        "campaign": "theoria-arm:A3-campaign-devpile:sk48-d8078629:20260801T044640Z-R2b-sk48-b",
+        "caps": {
+          "action_cap": 5616,
+          "arithmetic": {
+            "action_cap": 5616,
+            "action_cap_hard_bound": 6000,
+            "action_cap_planned": 5616,
+            "actions_budget": 300,
+            "arm_attempts_capped_by_commands_ceiling": false,
+            "commands_ceiling": 2000,
+            "cost_ceiling_usd": 25.0,
+            "env_max_attempts": 3,
+            "env_outbound_per_arm_command_measured": 1.0031,
+            "fixed_commands": 3,
+            "fixed_outbound": 36,
+            "http_per_command": 1.75,
+            "http_per_command_is_validated": false,
+            "http_per_command_provenance": "arc-recon/data/incidents.jsonl:16 (INC-011) side_by_side, bare_cc arm, ar25, cookies=True, 35 http / 20 executed commands. Different arm, different transport, different denominator from the one plan_caps uses.",
+            "http_per_command_retired_from_sizing": true,
+            "model_call_ceiling_usd": 4.0,
+            "outbound_per_action": 9.3,
+            "outbound_per_action_decomposition": {
+              "blended": 8.091,
+              "decomposable_legs": 5,
+              "derivation": "armtools.refusal.derive_outbound_per_action over every leg under runs/ whose env_upstream is three.arcprize.org",
+              "legs": 8,
+              "outbound_action_forwarded": 801,
+              "productive": 1.081,
+              "successful_actions": 99,
+              "transient_share_of_classifiable": 0.846
+            },
+            "outbound_per_action_is_validated": true,
+            "outbound_per_action_provenance": "251 outbound ACTION requests / 27 successful ACTIONs, pooled over the four live legs in runs/ whose env_upstream is three.arcprize.org (20260728T012311Z, 20260728T014402Z, 20260728T015354Z, 20260729T004020Z-leg01). Numerator is the sum of http.attempts over env_step records with http.forwarded=true; denominator is env_step records with an ACTION name and status 200. Cross-checked against proxy/var/spend_gate.jsonl, which agrees exactly (105/105) on the one leg both cover. Per-leg ratios 16.8 / 6.0 / 5.143 / 10.556. REGIME: this is a blended number, not a transport number -- see OUTBOUND_PER_ACTION_REGIME.",
+            "outbound_per_action_regime": "blended",
+            "outbound_tail_safety": 2.0,
+            "retry_safety": 1.5,
+            "ttl_seconds": 11700.0,
+            "unit": "one action = one outbound ARC HTTP request (spend_policy.json)",
+            "usd_cap": 29.0,
+            "wall_clock_s": 10800.0
+          },
+          "ttl_seconds": 11700.0,
+          "usd_cap": 29.0
+        },
+        "model_call_ceiling_usd": 4.0,
+        "model_calls_charged": 6,
+        "pool": {
+          "action_ceiling": 24000,
+          "gate_version": "1.0",
+          "ledger_abspath": "C:\\Users\\user\\Desktop\\theoria\\proxy\\var\\spend_gate.jsonl",
+          "ledger_path": "proxy/var/spend_gate.jsonl",
+          "policy_path": "proxy/spend_policy.json",
+          "policy_sha256": "732778326d64436586f944853f1f0db46d50639ad71a5ac0499d8c4827ec1572",
+          "pool": "theoria-shared-2026-07",
+          "pool_root": "C:\\Users\\user\\Desktop\\theoria",
+          "usd_ceiling": 214.9
+        },
+        "released": false,
+        "renewals": 0,
+        "reservation_id": "res-360c0ace8d1242eb",
+        "tripped": {
+          "message": "reservation res-360c0ace8d1242eb for 'theoria-arm:A3-campaign-devpile:sk48-d8078629:20260801T044640Z-R2b-sk48-b' is at $20.3032 of its $29.0000 cap",
+          "rule": "RESERVATION_USD_CAP"
+        },
+        "unpriced_calls": 0,
+        "usd_cap": 29.0,
+        "usd_charged": 20.303224
+      },
+      "unpriced_calls": 0,
+      "usage_total": {
+        "cache_creation_input_tokens": 573505,
+        "cache_read_input_tokens": 154091,
+        "input_tokens": 26,
+        "output_tokens": 573161
+      }
+    },
+    "desk_failures": [
+      {
+        "error": "SpendGateTripped: reservation res-360c0ace8d1242eb for 'theoria-arm:A3-campaign-devpile:sk48-d8078629:20260801T044640Z-R2b-sk48-b' is at $20.3032 of its $29.0000 cap",
+        "step_idx": 10
+      }
+    ],
+    "elapsed_s": 8151.5,
+    "engine_dispatches": 5,
+    "engines_online": {
+      "candidate_rows": 1373,
+      "dispatch_errors": 0,
+      "dispatches": 5,
+      "per_engine": {
+        "cegis_miner": {
+          "delivered": 5,
+          "dispatches": 5,
+          "errored": 0,
+          "refused_with_reason": 5,
+          "skipped": 0
+        },
+        "mdl_segmenter": {
+          "delivered": 5,
+          "dispatches": 5,
+          "errored": 0,
+          "refused_with_reason": 0,
+          "skipped": 0
+        },
+        "zero_space": {
+          "delivered": 5,
+          "dispatches": 5,
+          "errored": 0,
+          "refused_with_reason": 0,
+          "skipped": 0
+        }
+      }
+    },
+    "game_id": "sk48-d8078629",
+    "levels": {
+      "boundaries": 0,
+      "events": [],
+      "finished": false,
+      "level": 1,
+      "levels_completed": 0,
+      "reset_probes": [],
+      "starts": [
+        0
+      ]
+    },
+    "levels_completed": 0,
+    "model_calls": 6,
+    "outcome": "spend_gate_tripped",
+    "run_id": "r-0e38c80cabdf478c",
+    "score": null,
+    "scorecard": null,
+    "steps": 10,
+    "stopped_because": "the shared spend pool refused another request, so this leg stops here rather than retrying into the ceiling: SpendGateTripped: reservation res-360c0ace8d1242eb for 'theoria-arm:A3-campaign-devpile:sk48-d8078629:20260801T044640Z-R2b-sk48-b' is at $20.3032 of its $29.0000 cap",
+    "surprises": {
+      "by_family": {
+        "computational": 1,
+        "empirical": 6
+      },
+      "by_kind": {
+        "execution_mismatch": 0,
+        "heuristic_miss": 1,
+        "probe_refutation": 2,
+        "proof_failure": 0,
+        "render_mismatch": 0,
+        "replay_mismatch": 4,
+        "search_timeout": 0
+      },
+      "total": 7,
+      "unhandled": 1
+    },
+    "theorize_rounds": 3,
+    "transfer": {
+      "actions": {
+        "detail": "the carried manual's executable form did not load (theory.py has not been generated), so no overlap could be computed. This says nothing about what the manual declares.",
+        "game_offers": [
+          1,
+          2,
+          3,
+          4,
+          7
+        ],
+        "manual_action_ids": null,
+        "manual_declares": null,
+        "predictor_error": "theory.py has not been generated",
+        "reason": "predictor_did_not_load",
+        "shared": null,
+        "testable": false
+      },
+      "actions_spent_so_far": 5,
+      "carried_theory_is_testable_on_this_game": false,
+      "certify": {
+        "cheap_green": false,
+        "proof_layer_available": false,
+        "replay": {},
+        "replay_first_divergence": null,
+        "responsibility": {},
+        "unambiguous": {}
+      },
+      "compiled": {
+        "errors": {
+          "parse": "ParseError: Line 130: Expected 'goal' statement, got: laws:"
+        },
+        "forms": [],
+        "lean_state_estimate": null,
+        "ok": false,
+        "parsed": false
+      },
+      "desk_calls_after_carry": 6,
+      "final_declared_names": {
+        "event": [
+          "recolored"
+        ],
+        "invariant": [
+          "board_cells",
+          "cells_needing_an_owner",
+          "ink0_instances",
+          "ink1_instances",
+          "ink2_instances",
+          "ink3_instances",
+          "ink4_instances",
+          "ink5_instances",
+          "ink6_instances",
+          "owned_dynamic_cells"
+        ],
+        "landmark": [],
+        "object": [
+          "Ink0",
+          "Ink1",
+          "Ink2",
+          "Ink3",
+          "Ink4",
+          "Ink5",
+          "Ink6"
+        ],
+        "rule": [
+          "a1_icon1_field_takes_0",
+          "a1_icon1_field_takes_1",
+          "a1_icon1_field_takes_2",
+          "a1_icon1_field_takes_6",
+          "a1_icon2_body_takes_2",
+          "a1_icon2_body_takes_3",
+          "a1_icon2_body_takes_5",
+          "a1_icon2_hole_takes_3",
+          "a1_icon2_hole_takes_5",
+          "a1_lower_ink2_takes_4",
+          "a1_lower_ink2_takes_5",
+          "a1_tape1_takes_1",
+          "a1_tape1_takes_2",
+          "a1_tape2_takes_4",
+          "a1_tape2_takes_5",
+          "a1_thumb_takes_6",
+          "a1_track_takes_0",
+          "a1_track_takes_6",
+          "a2_icon1_field_takes_5",
+          "a2_icon2_body_takes_6",
+          "a2_icon2_hole_takes_0",
+          "a2_lower_ink2_takes_2",
+          "a2_tape1_takes_4",
+          "a2_tape2_takes_1",
+          "a2_thumb_takes_2",
+          "a2_track_takes_3",
+          "a3_hides_tape2_ones",
+          "a3_hides_tape2_twos",
+          "a4_advances_the_corner_pixel",
+          "a4_shows_tape2_ones",
+          "a4_shows_tape2_twos",
+          "a7_hides_tape2_ones",
+          "a7_hides_tape2_twos"
+        ],
+        "theorem": [
+          "a_manual_that_does_not_compile_predicts_nothing_at_all",
+          "how_the_swap_rules_discriminate_top_from_bottom_and_where_they_could_break",
+          "silence_is_a_prediction_and_i_now_have_fewer_forged_ones",
+          "tape1_was_never_shown_it_was_tape2_passing_through",
+          "tape2_is_hidden_and_shown_and_the_guard_that_isolates_it",
+          "the_census_closes_to_the_pixel_and_that_is_why_seven_types",
+          "the_dsl_cannot_copy_a_colour",
+          "the_dynamic_set_is_four_rectangles_and_one_corner_pixel",
+          "the_hide_and_show_rules_are_pinned_to_rows_38_39_and_the_swap_makes_that_a_live_question",
+          "the_meter_pixel_has_one_witness_and_three_live_readings",
+          "the_swap_is_the_answer_to_last_rounds_declared_hole",
+          "there_is_no_goal_section_and_that_is_deliberate",
+          "this_is_a_two_row_list_and_a1_a2_move_between_the_rows",
+          "three_and_seven_are_the_same_key_so_far_and_i_wrote_them_twice",
+          "two_keys_have_never_been_pressed_and_one_of_them_is_probably_a_pointer",
+          "what_i_predict_before_i_see_it",
+          "what_the_current_frame_shows_outside_the_dynamic_set",
+          "what_the_engines_gave_me_and_what_certify_gave_me_instead"
+        ]
+      },
+      "model_calls_so_far": 0,
+      "prediction": {
+        "D0": 73,
+        "K": 4,
+        "available": false,
+        "background": 5,
+        "declared_colours": [
+          0,
+          1,
+          5,
+          9
+        ],
+        "declared_colours_present_in_frame_0": [
+          0,
+          1,
+          5,
+          9
+        ],
+        "dynamic_cells": 97,
+        "formula": "unexplained(frame_0) = D0 - K",
+        "objects_declared": 4,
+        "predicted_unexplained": null,
+        "withheld_because": "the carried manual uses `arc-instances: all` on Glyph9, Vacated, Spent, Dark, which spreads one declaration over every dynamic cell of its colour. The formula assumes one declaration draws one pixel, so it does not apply here and reporting a number would be a test of nothing."
+      },
+      "prediction_scored": {
+        "detail": "the carried manual uses `arc-instances: all` on Glyph9, Vacated, Spent, Dark, which spreads one declaration over every dynamic cell of its colour. The formula assumes one declaration draws one pixel, so it does not apply here and reporting a number would be a test of nothing.",
+        "formula": "unexplained(frame_0) = D0 - K",
+        "observed": null,
+        "predicted": null,
+        "verdict": "withheld"
+      },
+      "provenance": {
+        "books_carried": {
+          "carried": {
+            "playbook.dsl": {
+              "chars": 7100,
+              "sha256": "8945e784b0aba80860a9238fb04607d20fdba5be440848797536030bb752fc16"
+            },
+            "theory.dsl": {
+              "chars": 48450,
+              "sha256": "8ae0c50c9a158ac20fde764545cc873f668e34ccd31988a91238fc6f787ed090"
+            }
+          },
+          "empty": false,
+          "seed_from": "runs/20260731T1430Z-A3-level2-carried-r3/books",
+          "skipped": []
+        },
+        "carried": {
+          "playbook.dsl": {
+            "bytes": 7100,
+            "lines": 102,
+            "sha256": "8945e784b0aba80860a9238fb04607d20fdba5be440848797536030bb752fc16"
+          },
+          "theory.dsl": {
+            "bytes": 48472,
+            "lines": 229,
+            "sha256": "231ae4d7a48783a75704f244310f620b9dc32c141a1b500c35efa6ff28d7a8ef",
+            "sha256_before_stripping": "8ae0c50c9a158ac20fde764545cc873f668e34ccd31988a91238fc6f787ed090"
+          }
+        },
+        "declared_name_count": 64,
+        "declared_names": {
+          "event": [],
+          "invariant": [
+            "board_cells",
+            "dark_instances",
+            "glyph9_instances",
+            "meter_cells_burned",
+            "spent_instances",
+            "vacated_instances"
+          ],
+          "landmark": [
+            "spawn_probe"
+          ],
+          "object": [
+            "Dark",
+            "Glyph9",
+            "Spent",
+            "Vacated"
+          ],
+          "rule": [
+            "key1_inert_at_spawn",
+            "key2_body_arrives",
+            "key2_body_leaves",
+            "key3_inert_below_spawn",
+            "key5_body_clears",
+            "key5_body_respawns",
+            "key5_slot1_dims",
+            "key5_slot1_lights",
+            "key5_slot2_centre_darkens",
+            "key5_slot2_centre_resets",
+            "key5_slot2_ring_resets",
+            "key5_slot2_row1_lights",
+            "key5_slot2_row2_left_lights",
+            "key5_slot2_row2_right_lights",
+            "key5_slot2_row3_lights",
+            "key5_underline1_dims",
+            "key5_underline1_lights",
+            "key5_underline2_dims",
+            "key5_underline2_lights",
+            "meter_burn_key2_next",
+            "meter_burn_key2_rightmost",
+            "meter_burn_key4_next"
+          ],
+          "theorem": [
+            "a_landmark_is_only_as_true_as_the_comment_beside_it",
+            "dynamic_census",
+            "i_cannot_manufacture_an_instance_on_a_cell_that_has_never_changed",
+            "off_board_cell_terms_evaluate_false_and_that_is_load_bearing",
+            "silence_is_a_prediction_and_exactly_two_of_my_spawn_silences_are_still_forged",
+            "the_action_map_after_thirtythree_transitions",
+            "the_cascade_is_animation_and_one_press_is_one_lattice_cell",
+            "the_cascade_length_is_a_free_channel_that_i_discard_by_construction",
+            "the_cut_is_reversed_and_the_guard_is_now_earned",
+            "the_dsl_cannot_say_unknown_and_cannot_say_parity",
+            "the_four_refutations_are_one_experiment_and_it_paid_for_itself",
+            "the_goal_section_is_empty_on_purpose",
+            "the_hole_is_an_aperture_and_only_the_ring_needs_floor",
+            "the_key_alphabet_hypothesis_is_refuted",
+            "the_knob_is_the_only_thing_within_reach_and_i_do_not_know_how_it_is_pressed",
+            "the_manual_heals_one_step_behind_and_the_meter_is_where_it_shows",
+            "the_maze_is_a_six_pixel_lattice",
+            "the_meter_edge_saturates_the_refutation_channel_and_parity_makes_it_worse",
+            "the_meter_is_a_budget_and_it_is_now_priced_correctly",
+            "the_meter_is_command_parity_and_no_key_touches_it",
+            "the_panel_guard_is_earned_but_its_extrapolation_is_not",
+            "the_panel_is_a_marker_that_alternates_between_two_slots",
+            "the_rules_i_still_have_no_witness_for_and_will_not_write",
+            "the_socket_is_a_keyhole_and_names_the_winning_position",
+            "the_socket_is_unreachable_until_the_comb_opens",
+            "the_two_no_op_rules_still_fail_the_gain_test_and_i_keep_them_for_a_weaker_reason",
+            "the_world_is_not_a_function_of_the_drawn_frame",
+            "two_actions_have_never_been_pressed_and_one_of_them_may_be_a_click",
+            "what_action5_is_after_four_presses_at_home",
+            "what_i_predict_before_i_see_it",
+            "what_the_engines_gave_me"
+          ]
+        },
+        "landmarks_stripped": [
+          "spawn_probe"
+        ],
+        "landmarks_stripped_why": "a landmark's `# arc-cell: (r, c)` is level data, not domain: the manual names the landmark and the level places it. Carrying the coordinates would move one game's geometry into another game's computed level, which is the same defect excluding problem.json exists to prevent -- and it happened on the first live carry before this was added.",
+        "not_carried": {
+          "problem.json": "the level instance is computed from the frames of the game being played; carrying it would import the previous game's board and make the transfer claim unfalsifiable"
+        },
+        "source_books_dir": "C:\\Users\\user\\Desktop\\theoria\\theoria-arm\\runs\\20260731T1430Z-A3-level2-carried-r3\\books",
+        "source_game_id": "sk48-d8078629",
+        "source_run": "20260731T1430Z-A3-level2-carried-r3"
+      },
+      "replay_means": "NOT evidence about the manual's rules: the carried manual's executable form did not load (theory.py has not been generated), so no overlap could be computed. This says nothing about what the manual declares.",
+      "retention": {
+        "by_kind": {
+          "event": {
+            "added": [
+              "recolored"
+            ],
+            "carried": 0,
+            "dropped": [],
+            "kept": []
+          },
+          "invariant": {
+            "added": [
+              "cells_needing_an_owner",
+              "ink0_instances",
+              "ink1_instances",
+              "ink2_instances",
+              "ink3_instances",
+              "ink4_instances",
+              "ink5_instances",
+              "ink6_instances",
+              "owned_dynamic_cells"
+            ],
+            "carried": 6,
+            "dropped": [
+              "dark_instances",
+              "glyph9_instances",
+              "meter_cells_burned",
+              "spent_instances",
+              "vacated_instances"
+            ],
+            "kept": [
+              "board_cells"
+            ]
+          },
+          "landmark": {
+            "added": [],
+            "carried": 1,
+            "dropped": [
+              "spawn_probe"
+            ],
+            "kept": []
+          },
+          "object": {
+            "added": [
+              "Ink0",
+              "Ink1",
+              "Ink2",
+              "Ink3",
+              "Ink4",
+              "Ink5",
+              "Ink6"
+            ],
+            "carried": 4,
+            "dropped": [
+              "Dark",
+              "Glyph9",
+              "Spent",
+              "Vacated"
+            ],
+            "kept": []
+          },
+          "rule": {
+            "added": [
+              "a1_icon1_field_takes_0",
+              "a1_icon1_field_takes_1",
+              "a1_icon1_field_takes_2",
+              "a1_icon1_field_takes_6",
+              "a1_icon2_body_takes_2",
+              "a1_icon2_body_takes_3",
+              "a1_icon2_body_takes_5",
+              "a1_icon2_hole_takes_3",
+              "a1_icon2_hole_takes_5",
+              "a1_lower_ink2_takes_4",
+              "a1_lower_ink2_takes_5",
+              "a1_tape1_takes_1",
+              "a1_tape1_takes_2",
+              "a1_tape2_takes_4",
+              "a1_tape2_takes_5",
+              "a1_thumb_takes_6",
+              "a1_track_takes_0",
+              "a1_track_takes_6",
+              "a2_icon1_field_takes_5",
+              "a2_icon2_body_takes_6",
+              "a2_icon2_hole_takes_0",
+              "a2_lower_ink2_takes_2",
+              "a2_tape1_takes_4",
+              "a2_tape2_takes_1",
+              "a2_thumb_takes_2",
+              "a2_track_takes_3",
+              "a3_hides_tape2_ones",
+              "a3_hides_tape2_twos",
+              "a4_advances_the_corner_pixel",
+              "a4_shows_tape2_ones",
+              "a4_shows_tape2_twos",
+              "a7_hides_tape2_ones",
+              "a7_hides_tape2_twos"
+            ],
+            "carried": 22,
+            "dropped": [
+              "key1_inert_at_spawn",
+              "key2_body_arrives",
+              "key2_body_leaves",
+              "key3_inert_below_spawn",
+              "key5_body_clears",
+              "key5_body_respawns",
+              "key5_slot1_dims",
+              "key5_slot1_lights",
+              "key5_slot2_centre_darkens",
+              "key5_slot2_centre_resets",
+              "key5_slot2_ring_resets",
+              "key5_slot2_row1_lights",
+              "key5_slot2_row2_left_lights",
+              "key5_slot2_row2_right_lights",
+              "key5_slot2_row3_lights",
+              "key5_underline1_dims",
+              "key5_underline1_lights",
+              "key5_underline2_dims",
+              "key5_underline2_lights",
+              "meter_burn_key2_next",
+              "meter_burn_key2_rightmost",
+              "meter_burn_key4_next"
+            ],
+            "kept": []
+          },
+          "theorem": {
+            "added": [
+              "a_manual_that_does_not_compile_predicts_nothing_at_all",
+              "how_the_swap_rules_discriminate_top_from_bottom_and_where_they_could_break",
+              "silence_is_a_prediction_and_i_now_have_fewer_forged_ones",
+              "tape1_was_never_shown_it_was_tape2_passing_through",
+              "tape2_is_hidden_and_shown_and_the_guard_that_isolates_it",
+              "the_census_closes_to_the_pixel_and_that_is_why_seven_types",
+              "the_dsl_cannot_copy_a_colour",
+              "the_dynamic_set_is_four_rectangles_and_one_corner_pixel",
+              "the_hide_and_show_rules_are_pinned_to_rows_38_39_and_the_swap_makes_that_a_live_question",
+              "the_meter_pixel_has_one_witness_and_three_live_readings",
+              "the_swap_is_the_answer_to_last_rounds_declared_hole",
+              "there_is_no_goal_section_and_that_is_deliberate",
+              "this_is_a_two_row_list_and_a1_a2_move_between_the_rows",
+              "three_and_seven_are_the_same_key_so_far_and_i_wrote_them_twice",
+              "two_keys_have_never_been_pressed_and_one_of_them_is_probably_a_pointer",
+              "what_the_current_frame_shows_outside_the_dynamic_set",
+              "what_the_engines_gave_me_and_what_certify_gave_me_instead"
+            ],
+            "carried": 31,
+            "dropped": [
+              "a_landmark_is_only_as_true_as_the_comment_beside_it",
+              "dynamic_census",
+              "i_cannot_manufacture_an_instance_on_a_cell_that_has_never_changed",
+              "off_board_cell_terms_evaluate_false_and_that_is_load_bearing",
+              "silence_is_a_prediction_and_exactly_two_of_my_spawn_silences_are_still_forged",
+              "the_action_map_after_thirtythree_transitions",
+              "the_cascade_is_animation_and_one_press_is_one_lattice_cell",
+              "the_cascade_length_is_a_free_channel_that_i_discard_by_construction",
+              "the_cut_is_reversed_and_the_guard_is_now_earned",
+              "the_dsl_cannot_say_unknown_and_cannot_say_parity",
+              "the_four_refutations_are_one_experiment_and_it_paid_for_itself",
+              "the_goal_section_is_empty_on_purpose",
+              "the_hole_is_an_aperture_and_only_the_ring_needs_floor",
+              "the_key_alphabet_hypothesis_is_refuted",
+              "the_knob_is_the_only_thing_within_reach_and_i_do_not_know_how_it_is_pressed",
+              "the_manual_heals_one_step_behind_and_the_meter_is_where_it_shows",
+              "the_maze_is_a_six_pixel_lattice",
+              "the_meter_edge_saturates_the_refutation_channel_and_parity_makes_it_worse",
+              "the_meter_is_a_budget_and_it_is_now_priced_correctly",
+              "the_meter_is_command_parity_and_no_key_touches_it",
+              "the_panel_guard_is_earned_but_its_extrapolation_is_not",
+              "the_panel_is_a_marker_that_alternates_between_two_slots",
+              "the_rules_i_still_have_no_witness_for_and_will_not_write",
+              "the_socket_is_a_keyhole_and_names_the_winning_position",
+              "the_socket_is_unreachable_until_the_comb_opens",
+              "the_two_no_op_rules_still_fail_the_gain_test_and_i_keep_them_for_a_weaker_reason",
+              "the_world_is_not_a_function_of_the_drawn_frame",
+              "two_actions_have_never_been_pressed_and_one_of_them_may_be_a_click",
+              "what_action5_is_after_four_presses_at_home",
+              "what_the_engines_gave_me"
+            ],
+            "kept": [
+              "what_i_predict_before_i_see_it"
+            ]
+          }
+        },
+        "names_added_on_the_new_game": 67,
+        "names_carried": 64,
+        "names_dropped": 62,
+        "names_kept": 2,
+        "retention_rate": 0.0312,
+        "scope": "names only. A kept name may have a completely rewritten body; the snapshot diffs are the record of that."
+      },
+      "stage": "cold",
+      "world": {
+        "actions_used": [
+          "ACTION1",
+          "ACTION2",
+          "ACTION3",
+          "ACTION4",
+          "ACTION7",
+          "RESET"
+        ],
+        "background": 5,
+        "cascade_lengths": [
+          1,
+          2
+        ],
+        "cells_needing_an_owner": 73,
+        "colours_seen": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          8,
+          9,
+          14
+        ],
+        "constant_cells": 3999,
+        "distinct_states": 5,
+        "dynamic_box": [
+          29,
+          10,
+          54,
+          63
+        ],
+        "dynamic_cells": 97,
+        "max_frames_in_one_command": 2,
+        "shape": [
+          64,
+          64
+        ],
+        "states": 6,
+        "steps": 6
+      }
+    },
+    "turns": 7,
+    "win_levels": 8,
+    "world": {
+      "actions_used": [
+        "ACTION1",
+        "ACTION2",
+        "ACTION3",
+        "ACTION4",
+        "ACTION7",
+        "RESET"
+      ],
+      "background": 5,
+      "cascade_lengths": [
+        1,
+        2
+      ],
+      "cells_needing_an_owner": 74,
+      "colours_seen": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        14
+      ],
+      "constant_cells": 3998,
+      "distinct_states": 8,
+      "dynamic_box": [
+        29,
+        10,
+        54,
+        63
+      ],
+      "dynamic_cells": 98,
+      "max_frames_in_one_command": 2,
+      "shape": [
+        64,
+        64
+      ],
+      "states": 10,
+      "steps": 10
+    }
+  }
+}

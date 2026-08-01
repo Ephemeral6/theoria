@@ -1,0 +1,118 @@
+{
+ "books_carried": {
+  "carried": {
+   "playbook.dsl": {
+    "chars": 7100,
+    "sha256": "8945e784b0aba80860a9238fb04607d20fdba5be440848797536030bb752fc16"
+   },
+   "theory.dsl": {
+    "chars": 48450,
+    "sha256": "8ae0c50c9a158ac20fde764545cc873f668e34ccd31988a91238fc6f787ed090"
+   }
+  },
+  "empty": false,
+  "seed_from": "runs/20260731T1430Z-A3-level2-carried-r3/books",
+  "skipped": []
+ },
+ "carried": {
+  "playbook.dsl": {
+   "bytes": 7100,
+   "lines": 102,
+   "sha256": "8945e784b0aba80860a9238fb04607d20fdba5be440848797536030bb752fc16"
+  },
+  "theory.dsl": {
+   "bytes": 48472,
+   "lines": 229,
+   "sha256": "231ae4d7a48783a75704f244310f620b9dc32c141a1b500c35efa6ff28d7a8ef",
+   "sha256_before_stripping": "8ae0c50c9a158ac20fde764545cc873f668e34ccd31988a91238fc6f787ed090"
+  }
+ },
+ "declared_name_count": 64,
+ "declared_names": {
+  "event": [],
+  "invariant": [
+   "board_cells",
+   "dark_instances",
+   "glyph9_instances",
+   "meter_cells_burned",
+   "spent_instances",
+   "vacated_instances"
+  ],
+  "landmark": [
+   "spawn_probe"
+  ],
+  "object": [
+   "Dark",
+   "Glyph9",
+   "Spent",
+   "Vacated"
+  ],
+  "rule": [
+   "key1_inert_at_spawn",
+   "key2_body_arrives",
+   "key2_body_leaves",
+   "key3_inert_below_spawn",
+   "key5_body_clears",
+   "key5_body_respawns",
+   "key5_slot1_dims",
+   "key5_slot1_lights",
+   "key5_slot2_centre_darkens",
+   "key5_slot2_centre_resets",
+   "key5_slot2_ring_resets",
+   "key5_slot2_row1_lights",
+   "key5_slot2_row2_left_lights",
+   "key5_slot2_row2_right_lights",
+   "key5_slot2_row3_lights",
+   "key5_underline1_dims",
+   "key5_underline1_lights",
+   "key5_underline2_dims",
+   "key5_underline2_lights",
+   "meter_burn_key2_next",
+   "meter_burn_key2_rightmost",
+   "meter_burn_key4_next"
+  ],
+  "theorem": [
+   "a_landmark_is_only_as_true_as_the_comment_beside_it",
+   "dynamic_census",
+   "i_cannot_manufacture_an_instance_on_a_cell_that_has_never_changed",
+   "off_board_cell_terms_evaluate_false_and_that_is_load_bearing",
+   "silence_is_a_prediction_and_exactly_two_of_my_spawn_silences_are_still_forged",
+   "the_action_map_after_thirtythree_transitions",
+   "the_cascade_is_animation_and_one_press_is_one_lattice_cell",
+   "the_cascade_length_is_a_free_channel_that_i_discard_by_construction",
+   "the_cut_is_reversed_and_the_guard_is_now_earned",
+   "the_dsl_cannot_say_unknown_and_cannot_say_parity",
+   "the_four_refutations_are_one_experiment_and_it_paid_for_itself",
+   "the_goal_section_is_empty_on_purpose",
+   "the_hole_is_an_aperture_and_only_the_ring_needs_floor",
+   "the_key_alphabet_hypothesis_is_refuted",
+   "the_knob_is_the_only_thing_within_reach_and_i_do_not_know_how_it_is_pressed",
+   "the_manual_heals_one_step_behind_and_the_meter_is_where_it_shows",
+   "the_maze_is_a_six_pixel_lattice",
+   "the_meter_edge_saturates_the_refutation_channel_and_parity_makes_it_worse",
+   "the_meter_is_a_budget_and_it_is_now_priced_correctly",
+   "the_meter_is_command_parity_and_no_key_touches_it",
+   "the_panel_guard_is_earned_but_its_extrapolation_is_not",
+   "the_panel_is_a_marker_that_alternates_between_two_slots",
+   "the_rules_i_still_have_no_witness_for_and_will_not_write",
+   "the_socket_is_a_keyhole_and_names_the_winning_position",
+   "the_socket_is_unreachable_until_the_comb_opens",
+   "the_two_no_op_rules_still_fail_the_gain_test_and_i_keep_them_for_a_weaker_reason",
+   "the_world_is_not_a_function_of_the_drawn_frame",
+   "two_actions_have_never_been_pressed_and_one_of_them_may_be_a_click",
+   "what_action5_is_after_four_presses_at_home",
+   "what_i_predict_before_i_see_it",
+   "what_the_engines_gave_me"
+  ]
+ },
+ "landmarks_stripped": [
+  "spawn_probe"
+ ],
+ "landmarks_stripped_why": "a landmark's `# arc-cell: (r, c)` is level data, not domain: the manual names the landmark and the level places it. Carrying the coordinates would move one game's geometry into another game's computed level, which is the same defect excluding problem.json exists to prevent -- and it happened on the first live carry before this was added.",
+ "not_carried": {
+  "problem.json": "the level instance is computed from the frames of the game being played; carrying it would import the previous game's board and make the transfer claim unfalsifiable"
+ },
+ "source_books_dir": "C:\\Users\\user\\Desktop\\theoria\\theoria-arm\\runs\\20260731T1430Z-A3-level2-carried-r3\\books",
+ "source_game_id": "g50t-5849a774",
+ "source_run": "20260731T1430Z-A3-level2-carried-r3"
+}
