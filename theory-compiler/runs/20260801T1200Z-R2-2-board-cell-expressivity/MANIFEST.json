@@ -1,0 +1,114 @@
+{
+  "acceptance": {
+    "bar_lowered": false,
+    "line": "GAP R2-2 is closed as an expressivity question: the extension is designed, argued and refused, with the counter-example manual",
+    "met": true,
+    "why": "the brief's instruction 4 fired. The v0.3 grammar states the edge-advance law and predicts the right cell whenever the level seats an instance there (SEATING.json, L2/L3), on a manual byte-identical to the one that is silent under the arm's seating (L1). No grammar extension was invented and CONTRACTS/dsl_grammar_v0.3.md is unchanged. What was delivered instead is the pair of compiler defects that disguised the routing, both now refusals with negative controls."
+  },
+  "base_commit": "e8345aff",
+  "branch": "z/r2-2-grammar",
+  "cell": "R2-2",
+  "cost": {
+    "api_calls": 0,
+    "arc_actions": 0,
+    "desk_calls": 0,
+    "model_calls": 0,
+    "network": "none",
+    "sealed_pile_contact": "none",
+    "usd": 0.0
+  },
+  "delivered": {
+    "cross_territory": "monitor/inbox/20260801T1200Z-theory-compiler-to-theoria-arm-r2-2-is-yours-the-grammar-already-says-it.md; no file under theoria-arm/ was edited",
+    "decision_record": "theory-compiler/DECISIONS.md D-TC-033",
+    "defects_fixed": [
+      "recolored(<landmark>, 1) compiled in three of four forms, the rule fired, and the frame never changed: the effect was `state.edge_color = 1` onto a dataclass with no such field, absent from State.key(), read by nothing",
+      "gen_markdown rendered an effect target on a cell term (`then leftof(?s)'s colour becomes 1`) that gen_python and gen_lean both refused, on the bare no-IR path that no other check covers"
+    ],
+    "grammar_change": "none. CONTRACTS/dsl_grammar_v0.3.md untouched; the parser is untouched.",
+    "ledger_entry": "cold-start-a0/THEORIZE_LOG.md E-10 (the first REJECTED entry), naming legs 20260731T1430Z-A3-level2-carried-r3 and 20260731T1500Z-A3-sk48-carried-l1 and probes sk48-l1 P-03/P-06/P-09, per Theoria.md:345",
+    "tests_added": "theory-compiler/tests/test_write_targets.py, 12 tests (3 positive controls, 7 negative controls, 2 pinning the unseated-instance warning)"
+  },
+  "files": [
+    {
+      "path": "cold-start-a0/THEORIZE_LOG.md",
+      "sha256": "d756d4b476ad3bbbe556c3ea86a809e7169b110ed6799ff75eb5e67d85ae7843"
+    },
+    {
+      "path": "monitor/inbox/20260801T1200Z-theory-compiler-to-theoria-arm-r2-2-is-yours-the-grammar-already-says-it.md",
+      "sha256": "d91f6102218bd7fa408cf51bc568e133bcf054575b363c779a5243bc91d73273"
+    },
+    {
+      "path": "theory-compiler/DECISIONS.md",
+      "sha256": "e8690ffe2a894218c32b1167f8ccd6f0d386f4a7660bfc24981f235b5cab8146"
+    },
+    {
+      "path": "theory-compiler/runs/20260801T1200Z-R2-2-board-cell-expressivity/FINDING.md",
+      "sha256": "14154f78cc08e48c321f69a21773a87459be56bba78dcaf94c067c6eb947050a"
+    },
+    {
+      "path": "theory-compiler/runs/20260801T1200Z-R2-2-board-cell-expressivity/GATES.txt",
+      "sha256": "306a82a6fc23332c0b21d7e042e64f465927b643ba0c1b70f3642665a8e0bda3"
+    },
+    {
+      "path": "theory-compiler/runs/20260801T1200Z-R2-2-board-cell-expressivity/LANDMARK_EFFECT.txt",
+      "sha256": "459b9263dd2e57e9dbe2fb00118b6a1535af6d8e46d3c9888e6f0cedb61ec8e7"
+    },
+    {
+      "path": "theory-compiler/runs/20260801T1200Z-R2-2-board-cell-expressivity/PROBE.json",
+      "sha256": "ad2919d3bb50ab829c0ff1a38da0d7caebac784bd6d5d956cb93b7255e60efa7"
+    },
+    {
+      "path": "theory-compiler/runs/20260801T1200Z-R2-2-board-cell-expressivity/PROBE.txt",
+      "sha256": "7639dc2f13c3a463486063498e7dec0c0d04aeb30d940a32fb64f6e94dac4a79"
+    },
+    {
+      "path": "theory-compiler/runs/20260801T1200Z-R2-2-board-cell-expressivity/RUN_STATE.md",
+      "sha256": "1348170d93a418b2f15ea0b787d15f2d04a8bc36dbe1d191a630feb33da86aac"
+    },
+    {
+      "path": "theory-compiler/runs/20260801T1200Z-R2-2-board-cell-expressivity/SEATING.json",
+      "sha256": "68a243569b5f881fa4211f5fae5b0f2c3b19fb62e4878dc64ce8a9fbedb30edd"
+    },
+    {
+      "path": "theory-compiler/runs/20260801T1200Z-R2-2-board-cell-expressivity/SEATING.txt",
+      "sha256": "c1597de07c880834e480a77bd39d16677ae4866f853801479aa112f913251ede"
+    },
+    {
+      "path": "theory-compiler/runs/20260801T1200Z-R2-2-board-cell-expressivity/probe_grammar.py",
+      "sha256": "36c300714fd587062abc6b8c238e220f721e9ad84286ea7011033d3cd2ce72b3"
+    },
+    {
+      "path": "theory-compiler/runs/20260801T1200Z-R2-2-board-cell-expressivity/probe_landmark_effect.py",
+      "sha256": "4460eb76bd4a30153df35db3aa23d3eff872c0211492da003996a23c29acdf8a"
+    },
+    {
+      "path": "theory-compiler/runs/20260801T1200Z-R2-2-board-cell-expressivity/probe_seating.py",
+      "sha256": "0905c49928014a52b3d5607303ee77139c7ef1c8cbf7eab609e8d020569c7d43"
+    },
+    {
+      "path": "theory-compiler/src/theory_compiler/generators/gen_markdown.py",
+      "sha256": "02e0621f0c1dd078a49e952ae217fdae5bf5d2a1f3232d54e5e79f075a970699"
+    },
+    {
+      "path": "theory-compiler/src/theory_compiler/ir.py",
+      "sha256": "5f3d9637348ef20b49ba71da004f6c92484edddf8444cd4f5ee3810efe5a3996"
+    },
+    {
+      "path": "theory-compiler/src/theory_compiler/writes.py",
+      "sha256": "82a9325f1f44ca646e2ed714b5265630cc92e77b47f0e060f54f24978d2eb077"
+    },
+    {
+      "path": "theory-compiler/tests/test_write_targets.py",
+      "sha256": "1e1c8ece5c8b9312d42e90ac0a08a09d0201d27ff3a6fd3faec951dbda8678ac"
+    }
+  ],
+  "gates": {
+    "contracts_verify": "green",
+    "negative_control_mutation": "both checks removed -> 9 of 12 red; the 3 survivors are exactly the positive controls, which must pass either way",
+    "pytest": "375 passed, 1 skipped (363 passed, 1 skipped before this run)",
+    "verify_c8": "all checks pass"
+  },
+  "prompt_id": "R2-2-close-the-expressivity-hole",
+  "seed": null,
+  "utc": "2026-08-01T12:00:00Z"
+}

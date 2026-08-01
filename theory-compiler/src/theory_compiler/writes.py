@@ -37,7 +37,9 @@ whole of the fix; the definition alone would be a comment.
 
 from typing import Dict, List, Optional, Sequence, Set, Tuple
 
-from .parser.ast_nodes import EventAlt, FuncCall, NameRef, RuleDecl, TheoryAST
+from .parser.ast_nodes import (
+    EventAlt, FuncCall, NameRef, RuleDecl, TheoryAST, VarRef,
+)
 
 
 class WritesError(Exception):
@@ -170,6 +172,57 @@ class WriteSets:
         return out
 
 
+def written_names(rule: RuleDecl, writes: "WriteSets") -> Optional[List[str]]:
+    """The names a rule's event writes, or `None` if the event has no write set.
+
+    Split out of `of_rule` because two callers need the two halves separately.
+
+    * `None` means the event is in neither the manual's `writes { ... }` clauses
+      nor v0.3's default table. That is somebody else's error and it already has
+      a better message than this function could give (v0.3 §7: the hard refusal
+      belongs at the point of use, so that a manual with an unrecognised event
+      is refused *for that*). Callers pass it through.
+    * A raised `WritesError` means the write set resolved and one of the
+      arguments it points at is not a name at all — `recolored(leftof(?s), 1)`.
+      There is nothing further to learn from that manual: the sentence has no
+      object in it.
+
+    A rule variable is returned as `"?a"`, spelled with its mark. Callers see
+    this only on an **ungrounded** rule — `gen_markdown` renders the AST as the
+    author wrote it, while `build_ir` runs after `ground_over_instances` and
+    already refuses any rule with a variable left in it. A `?a` will become an
+    instance name, so it is not the defect this function is looking for, and
+    treating it as one would refuse every schema in the repository.
+
+    The list is returned in write-set order and may repeat nothing.
+    """
+    event = rule.event
+    if not isinstance(event, FuncCall):
+        return None
+    try:
+        indices = writes.indices(event.name, len(event.args))
+    except WritesError:
+        return None
+    out: List[str] = []
+    for index in indices:
+        arg = event.args[index]
+        if isinstance(arg, VarRef):
+            out.append("?" + arg.name)
+            continue
+        if not isinstance(arg, NameRef):
+            raise WritesError(
+                "rule %r writes argument %d of %s, which is not an object name "
+                "(%r). An event writes objects; a cell term such as "
+                "`leftof(?x)` denotes a *location*, and a location is not a "
+                "thing this manual owns. If the cell needs to change, something "
+                "has to stand on it: seat an instance there and write the rule "
+                "over that instance. See theory-compiler/runs/"
+                "20260801T1200Z-R2-2-board-cell-expressivity/FINDING.md."
+                % (rule.name, index, event.name, arg))
+        out.append(arg.name)
+    return out
+
+
 def check_backend_agreement(rule: RuleDecl, mutated: Sequence[str],
                             writes: WriteSets, backend: str) -> None:
     """A backend's compiled effect must assign exactly `writes(rule)`.
@@ -212,4 +265,4 @@ def write_sets_of(ast: TheoryAST) -> WriteSets:
 
 
 __all__ = ["DEFAULT_WRITE_SETS", "WriteSets", "WritesError",
-           "check_backend_agreement", "write_sets_of"]
+           "check_backend_agreement", "write_sets_of", "written_names"]

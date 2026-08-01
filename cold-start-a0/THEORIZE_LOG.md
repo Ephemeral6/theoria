@@ -363,9 +363,61 @@ Things the world said that `dsl_grammar_v0.1` cannot.
 | E-07 | saying that two live instances of one type never share a cell | **discharged** — `unique` on a field (`dsl_grammar_v0.2` revision item 12) | see below |
 | E-08 | a guard that counts (`count(Token, present = false) >= k`) — the count-lock gate | **discharged** — one rung, in the guard language; see below | the rung below it is a quantifier and it is deliberately not taken |
 | E-09 | putting a *named track* in a *place*: "the object I am about to step onto is **that** one" (`faces(T,D)`) — the miner vocabulary, not the grammar | **discharged** — one rung, mover-relative, one step; see below | 2 bits per repaired transition paid in the segmentation script, and the pass that pays them is the one place the pipeline does not adjudicate by compression |
+| E-10 | a rule about a cell that has never varied — `theoria-arm`'s leading-edge burn (GAP R2-2) | **REFUSED — not an expressivity gap.** The grammar states the law already; the level has to seat an instance. Two compiler defects that disguised this are fixed instead; see below | the DSL is **not** extended. What it cost was one round of R2's probe budget and the mis-routing of a gap to the wrong territory |
 
 E-03 is the one to fix first: a manual whose default behaviour is a comment is
 not a manual.
+
+E-10 is the first **rejected** entry, and it is here rather than nowhere on
+purpose. Theoria.md:345 says an extension enters this ledger naming what forced
+it; the complement is that a request routed here and turned away has to leave a
+record, or the next session re-files it and re-measures it.
+
+**E-10 post-dates the ground-truth seal at the foot of this file, and adds no
+manual clause.** The seal's sentence is *"no clause above was written or revised
+after that point"* and it is about A0's rules and laws, none of which this row
+touches: E-10 is a 2026-08-01 adjudication of a request from `theoria-arm`,
+about a world A0 never contained. Recorded in the open rather than filed
+somewhere the next reader will not look, and flagged here so the seal is not
+read as quietly broken. Full write-up:
+`theory-compiler/runs/20260801T1200Z-R2-2-board-cell-expressivity/FINDING.md`.
+
+### E-10, in full — the gap that was measured and sent back
+
+**What was wanted.** `theoria-arm`'s meter burns one cell of a 64-cell bar per
+even-indexed command, right to left. At the instant a cell burns it has never
+varied, so the arm seats no instance on it, so — the claim — no rule of the form
+`forall ?p in <Type>` can name it. R2 made this reachable rather than
+hypothetical: `edge_advance` and `world_inert_plus_edge` recovered 38 of 47
+off-frontier answers, so the arm can now *predict* the cell it cannot *state*.
+
+**Which leg and which rule forced it**, as Theoria.md:345 requires:
+
+* legs `theoria-arm/runs/20260731T1430Z-A3-level2-carried-r3` (r3, game
+  `g50t-5849a774`, development pile) and
+  `theoria-arm/runs/20260731T1500Z-A3-sk48-carried-l1` (game `sk48-d8078629`);
+* probes `sk48-l1 P-03 / P-06 / P-09` — correctly anchored, 13-cell delta,
+  exactly one virgin cell each — plus r3's ACTION2 probes at 49 cells with one
+  virgin;
+* the rules that could not be written are the twins of r3's
+  `meter_burn_key2_next`, and r3 names the wall itself in theorem
+  `i_cannot_manufacture_an_instance_on_a_cell_that_has_never_changed`;
+* the measurement that reclassified it:
+  `theoria-arm/runs/20260801T0900Z-R2-frontier-by-generation/`.
+
+**Why it is refused.** The grammar already says it. One manual, three levels
+differing only in seating (`SEATING.json`): with an instance on the leading-edge
+cell the rule fires and burns exactly that cell; with the arm's seating the same
+bytes fire nothing. The blocker is the **segmentation operator** — Theoria.md
+line 90's `从不变的沉淀为棋盘`, applied as a hard rule rather than a default —
+and Theoria.md's 可动/不可动 line lists `分割算子空间` as movable, next to
+`DSL 表达力`. R2-2 is a live gap in the other movable part.
+
+**What was done instead.** Two defects that disguised the routing, both in
+`theory-compiler`, both now refusals with tests:
+`recolored(<landmark>, 1)` used to compile, fire, and change nothing; and
+`gen_markdown` used to render an effect target that `gen_python` and `gen_lean`
+both refused. The ask for the real repair went to `monitor/inbox/`.
 
 ### E-08, in full — the widening, and the world that did *not* force it
 
