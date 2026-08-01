@@ -2009,3 +2009,8 @@ claimed 悬挂），测试可加不会撞。三条如实登记的缺口：(1) `r
 测试：工单 verify.sh **6/6 绿**（monitor 套件 525 passed/2 xfailed exit 0；MANIFEST 9 工件哈希复现；边界仅 monitor；封存红线 --allow 三镜像路径同 P1REPLAYLIVE 披露；凭据零泄漏——所有者裁决段仅记变量名与订阅事实，无任何值）。scan exit 0 逐字 `Phase 1: 12/16 green`（裁决不改色，属预期）。`board.candidates()` 复算四件可领。零 API、$0.00、零封存堆接触。
 阻塞：none。
 下一步：A18/A19 priority 1 先领；A18 交付后下一条真腿自然产出「跑完即打分」首条活证据，届时 p1-scorer 复裁；若所有者对封存读法有异议，一句话回滚（注记与 RUN_STATE 都写明触发词）。
+## [monitor] 2026-08-01T035719Z BOARDREFILL-board-refilled-from-todays-evidence
+状态：板上只剩 P1PUSH4 那四件、而今天的证据无处可去——补了 14 件，每一件都追得到一次测量或一封已归档的 ask。R2 的重分类（52 条探针里 35 条锚在世界已离开的一帧上，12 条漏在一个语法命名不了的格子上，0 条归因于选错动作）拆成 A22/A23/C15；R1/R1b 两份轮记录自己招出 `theorize_rounds` 与 `game_id` 四条腿全 null（A24）、以及 R1「记了干预、没转发旗标」（A25）；`ITERATION_PROTOCOL` §2.4 的 frontier_width / probe_yield 提成臂的每腿输出（A26）。另有 8 封 2026-07-31 起送达、收件领地至今零提交的 ask，逐封落成 A27/A28/S45/S46/S47/V28/V29/S48。**只有 A22 带 spend: api，且它现在被挡着**：R1b 实测两腿 $35.139827、§2.10 四腿口径 $40–55，而程序已花约 $285、天花板 $214.90、所有者未裁——item 正文写明认领它的会话没有支出权，先做离线的那一半。
+测试：`cd monitor && python -m pytest -q tests` 收集 527，退出码 0（525 passed + 2 xfailed；本套件的汇总行在本机被吞，用收集数与退出码作证）。`python board.py list` 显示 16 available + 2 blocked（A22 等 A23、A26 等 A24，依赖闸按设计生效）。MANIFEST 由本轮自带的 `make_manifest.py` 生成，`--check` 复算 17 件全等。
+阻塞：A22 等所有者对超支的裁决；`Theoria.md:271` 的 Schema 行移出、以及 `ITERATION_PROTOCOL` §4.4 那条从未被提交的分类学补行，都是基线改动，需要所有者签名而不是工人认领——已在 `monitor/runs/2026-08-01T035719Z-BOARDREFILL/INBOX_RECONCILE.md` 里指名，没有塞进板。
+下一步：任何工人从 p1 的六件里认一件；本轮零验证——每条验收与负样本都是从证据写出来的规格，不是演示，第一个认领者同时是它们可写性的第一次检验。

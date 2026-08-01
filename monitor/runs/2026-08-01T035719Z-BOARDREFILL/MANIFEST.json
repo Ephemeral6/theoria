@@ -1,0 +1,87 @@
+{
+ "artifacts": {
+  "monitor/board/items/A22-r3-generated-frontier-round.md": {
+   "bytes": 3710,
+   "sha256": "a3ff59d6c2d7962ac6e1a857e094210b4ce04529bbbaa5bbab4eeb50cbe1d31f"
+  },
+  "monitor/board/items/A23-anchor-drift-on-the-default-leg.md": {
+   "bytes": 2826,
+   "sha256": "a979ea5dc5e7e054088447375fbde236bc6a66f0a1dd061513c6fb9f757ec88d"
+  },
+  "monitor/board/items/A24-round-scoreboard-columns-are-null.md": {
+   "bytes": 2017,
+   "sha256": "4a88bcee52500ab2ec5f5eaff4795c62cf58b542f49913ef771ba24947b1061e"
+  },
+  "monitor/board/items/A25-change-sentence-not-bound-to-the-knob.md": {
+   "bytes": 1993,
+   "sha256": "4e3a22de24ea6d69d8bacfaf776352496de94d5a8d858b960326740f763992af"
+  },
+  "monitor/board/items/A26-frontier-width-and-probe-yield-as-scoreboard.md": {
+   "bytes": 2497,
+   "sha256": "a315e9d651c54b11cbd40d3dab3df729f2dacbad8d92518c17c6e861f31893ce"
+  },
+  "monitor/board/items/A27-freeze-gate-reads-the-rewritable-half.md": {
+   "bytes": 2211,
+   "sha256": "d10c9901233379eb743e16298b74b4add0ed4f54d00aaadc4c5269dfa85e68cf"
+  },
+  "monitor/board/items/A28-desk-through-the-model-proxy-behind-a-flag.md": {
+   "bytes": 3784,
+   "sha256": "0f4b472aaf943484b4d00c2aaee32c0e61000c9808490272f4091844de8f1bbb"
+  },
+  "monitor/board/items/C15-the-unnameable-cell-has-no-home-in-the-dsl.md": {
+   "bytes": 2603,
+   "sha256": "4e816a1c25397865e72ba0f50c85dc1ef1e4569caf59f21aa28f65c480837341"
+  },
+  "monitor/board/items/S45-launch-blockers-915-916-and-the-reason-floor.md": {
+   "bytes": 3628,
+   "sha256": "ec772aa2fd2532c9cad52822343fb771c908e32e229bbe091d383d26a90bdff8"
+  },
+  "monitor/board/items/S46-turn-costs-mixes-two-axes.md": {
+   "bytes": 2445,
+   "sha256": "983903a25fa1aadc8dc6a100532a69a075872d27a087aa3e531ed4d0bfc7767c"
+  },
+  "monitor/board/items/S47-refusal-wave-retry-predicate.md": {
+   "bytes": 3315,
+   "sha256": "0e5e3647930a91d7b989d322127706240ef9bb3f1c06f51b3ce15f7ce849cfcd"
+  },
+  "monitor/board/items/S48-schema-column-withdrawal-claims-text.md": {
+   "bytes": 3248,
+   "sha256": "34380bb378cf630271827b7d978cd7fb1e1b500c23ba6799acd3cb1af5fb7bf2"
+  },
+  "monitor/board/items/V28-exam-four-tests-must-flip.md": {
+   "bytes": 2352,
+   "sha256": "a89cd21047568bd0f1ff3cb5ef6290dbc28a80f67d375a611a2e60849dbd0eda"
+  },
+  "monitor/board/items/V29-one-proxy-validated-not-two.md": {
+   "bytes": 2288,
+   "sha256": "37ea0da31eaeeeac342f1c71239a2cac9ae4e088caef7e73e27d0717a6c87476"
+  },
+  "monitor/runs/2026-08-01T035719Z-BOARDREFILL/INBOX_RECONCILE.md": {
+   "bytes": 5240,
+   "sha256": "94edd8de6cf8d2b34a6f22f02647057f0bfa8e9d6bad6bcebdf791756c73f3e5"
+  },
+  "monitor/runs/2026-08-01T035719Z-BOARDREFILL/RUN_STATE.md": {
+   "bytes": 5571,
+   "sha256": "6297c7d4d7a7d0564e99607af001a9ccac3b28d399db94d1e236cd0a3c4bd36d"
+  },
+  "monitor/runs/2026-08-01T035719Z-BOARDREFILL/make_manifest.py": {
+   "bytes": 4608,
+   "sha256": "d1837a280627a30e81592f6b2bb56ab4c7d6b1d68686890017a503a466e800bb"
+  }
+ },
+ "base_commit": "e8345affa0d500b8358e19fab65b8e25f615c7f9",
+ "branch": "z/monitor-board-refill",
+ "determinism": "No stochastic step; seed is null. Hashes are over files on disk; `--check` re-derives them.",
+ "prompt_id": "BOARDREFILL",
+ "results": {
+  "board_items_written": 14,
+  "inbox_asks_claimed": 1,
+  "inbox_asks_unclaimed": 8,
+  "items_with_api_spend": [
+   "A22-r3-generated-frontier-round"
+  ],
+  "spend_this_run_usd": 0.0
+ },
+ "utc": "2026-08-01T035719Z",
+ "utc_source": "machine clock at run time, unedited. It reads earlier than artefacts this run cites (R2 at 0900Z, freeze->exam at 0700Z); the skew is recorded in RUN_STATE.md rather than hand-corrected."
+}
