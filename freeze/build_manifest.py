@@ -205,8 +205,27 @@ ITEMS = [
     },
     {
         "n": 10, "name": "统计裁决规则", "status": "partial",
-        "paths": ["freeze/STATS_RULES.md", "battery/audit/stats.py"],
-        "note": "The rules are written (this kit) and the machinery exists "
+        "paths": ["freeze/STATS_RULES.md", "battery/audit/stats.py",
+                  "freeze/e2_withdrawal.py"],
+        "note": "**Two of the three primary endpoints are claimable, not three "
+                "(2026-08-01, §3.0).** The front-loading index paired "
+                "difference was WITHDRAWN from the confirmatory family: it "
+                "buckets cost by `Call.turn`, a label the recorder writes, and "
+                "battery's repaired attack `batched-turn-label-coherent` "
+                "reaches 0.973387097 on it while breaking none of the "
+                "corpus-validated recorder invariants and passing the poverty "
+                "certificate (`battery/audit/threat.py`, "
+                "`battery/artifacts_live/frontload_e2l.json`). No threshold "
+                "repairs that -- the endpoint has no threshold, it has a "
+                "significance test, and what failed is the axis. Swapping in "
+                "the step-axis E2L is refused four ways (PREREG_V9 R1 demotes "
+                "only; E2L has not passed process 1; E2L is itself reached at "
+                "1.0 by `first-turn-bill-coherent`; and `n_paired_games` is 0). "
+                "**Holm's divisor stays 3** so the withdrawal buys the two "
+                "survivors nothing, guarded by `freeze/e2_withdrawal.py` "
+                "(verify.sh stage [19], 8 controls) and stage [16]'s "
+                "`*/family` probe. The rules are written (this kit) and the "
+                "machinery exists "
                 "(`stats.py` implements the sign test and Wilcoxon "
                 "deterministically, no scipy). **They are not wired to each "
                 "other**: the three endpoint definitions in STATS_RULES.md do "
@@ -302,6 +321,52 @@ EXTRA = [
                 "interpreter or the libraries it ran under.",
     },
 ]
+
+
+#: The three primary-endpoint SLOTS and what each can actually carry today.
+#:
+#: This block exists because `verdict.freeze_ready` is a statement about the
+#: thirteen frozen items and says nothing about whether the endpoints those
+#: items adjudicate can be claimed at all.  A kit that reports `freeze_ready`
+#: while one of its three confirmatory endpoints is undefendable is worse than
+#: one that reports blocked, so the endpoint state is published here rather than
+#: left to be inferred from `STATS_RULES.md` prose.
+#:
+#: `family_divisor` is 3 and stays 3 even though only two slots can be claimed:
+#: dropping it to 2 would loosen Holm's tightest level from alpha/3 to alpha/2
+#: (sign-test entry price k>=7 -> k>=6), i.e. withdrawing an endpoint nobody can
+#: pass would buy the survivors a game.  `freeze/e2_withdrawal.py` guards it.
+ENDPOINTS = {
+    "family_divisor": 3,
+    "slots": 3,
+    "in_confirmatory_family": 2,
+    "computable_today": 0,
+    "note": ("Holm's divisor is 3 and does not follow the slot count down. "
+             "`in_confirmatory_family` counts slots that may still carry a "
+             "confirmatory claim; `computable_today` counts those whose "
+             "launch blockers are cleared."),
+    "detail": [
+        {"slot": 1, "name": "U3 达成率",
+         "status": "in-family, not computable",
+         "why": "the value is decided by the Lean kernel and a hashed "
+                "non-triviality checker with a negative control, not by "
+                "reading the arm's own ledger -- so the E2 finding does not "
+                "reach it. Blocked on STATS_RULES.md 9.2 / 9.14 / 9.17-9.20."},
+        {"slot": 2, "name": "判决题准确率（含特异度）",
+         "status": "in-family, not computable",
+         "why": "the marks are produced by `exam`'s grader against ground "
+                "truth, not written by the arm. Blocked on STATS_RULES.md "
+                "9.15 / 9.16; 9.16 is a DISCRIMINATION defect (`memoriser` "
+                "scores identically to ground truth), not a gaming one."},
+        {"slot": 3, "name": "前载指数配对差",
+         "status": "WITHDRAWN 2026-08-01 (STATS_RULES.md 3.0)",
+         "why": "the value is a total function of a record the arm lays out, "
+                "and its bucketing axis `Call.turn` is a free label in that "
+                "record: `batched-turn-label-coherent` reaches 0.973387097 "
+                "arm-reachably with a passing poverty certificate. Demoted to "
+                "exploratory; the slot is kept so the divisor cannot fall."},
+    ],
+}
 
 
 def git(*args):
@@ -416,6 +481,7 @@ def build():
 
     ready = sum(1 for e in entries if e["status"] == "ready")
     return {
+        "endpoints": ENDPOINTS,
         "format": "theoria/freeze-manifest/1",
         "source": "Theoria.md:368 冻结清单（13 项）+ 两项清单外补录",
         "generated_from": {
@@ -435,7 +501,14 @@ def build():
                 "start until every one is: `Theoria.md:368` requires the list "
                 "committed and hashed *before the first game*, and an item that "
                 "is `partial` is one whose bytes can still change without "
-                "anybody noticing." % (ready, len(ITEMS))),
+                "anybody noticing. Separately and independently of the item "
+                "count: %d of the 3 primary-endpoint slots may still carry a "
+                "confirmatory claim (slot 3, the front-loading index paired "
+                "difference, was withdrawn on 2026-08-01, STATS_RULES.md 3.0), "
+                "and %d of them can be computed today. Holm's divisor stays %d. "
+                "See `endpoints`."
+                % (ready, len(ITEMS), ENDPOINTS["in_confirmatory_family"],
+                   ENDPOINTS["computable_today"], ENDPOINTS["family_divisor"])),
         },
         "entries": entries,
     }

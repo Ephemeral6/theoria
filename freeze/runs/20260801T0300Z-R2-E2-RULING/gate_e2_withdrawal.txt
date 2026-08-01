@@ -1,0 +1,13 @@
+PASS the §3.0 withdrawal is stated in both files, the Holm divisor is still 3, all three C2 blocks carry the identity sentence, §8 carries no exception, and the surviving axis defect is disclosed
+rc=0
+
+PASS positive control: the real files pass unmutated
+PASS control fires: drop the identity sentence from ONE C2 block -> W4/不成立版
+PASS control fires: drop the Holm divisor from 3 to 2 -> W3/divisor
+PASS control fires: restore §8's `除 E2 外` exception -> W5/noexempt
+PASS control fires: delete the axis-validity caveat from CLAIMS_TEXT -> W6/caveat
+PASS control fires: demote §3.0 from a ruling to a note -> W1/head
+PASS control fires: blur the measured attack value -> W7/value
+PASS control fires: re-declare the family as two -> W8/neg
+8/8
+rc=0
