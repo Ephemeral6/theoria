@@ -1,0 +1,139 @@
+GATES — R3-anchor-duality
+branch z/anchor-duality, base e8345affa0d500b8358e19fab65b8e25f615c7f9
+worktree .worktrees/anchor-duality (the main tree was not touched)
+
+Three reds appear below. All three are the SAME TWO pre-existing failures,
+reproduced on a clean unmodified worktree of this base commit BEFORE any file
+in this ticket was written, and neither is in a file this ticket changed. The
+evidence for that claim is in §4.
+
+
+================================================================================
+1. cd theoria-arm && python -m pytest -q
+================================================================================
+
+FAILED tests/test_arm.py::test_the_archive_stays_accountable - AssertionError...
+FAILED tests/test_desk_gate.py::test_the_ceiling_table_still_covers_the_archive
+2 failed, 673 passed in 693.22s (0:11:33)
+
+Collection counts, so "none lost" is checkable rather than asserted:
+
+    python -m pytest -o addopts= --collect-only -q
+        675 tests collected in 0.25s
+    python -m pytest -o addopts= --collect-only -q --ignore=tests/test_anchor.py
+        659 tests collected in 0.28s
+
+    675 - 659 = 16, which is tests/test_anchor.py in full. No pre-existing
+    test node id was removed or renamed.
+
+
+================================================================================
+2. cd theoria-arm && python verify.py
+================================================================================
+
+[1/3] suite
+   FAIL  suite red (exit 1)
+   ...
+   FAILED tests/test_arm.py::test_the_archive_stays_accountable - AssertionError...
+   FAILED tests/test_desk_gate.py::test_the_ceiling_table_still_covers_the_archive
+   2 failed, 673 passed in 850.38s (0:14:10)
+
+[2/3] one real run -- the whole arm, offline against proxy/mock
+   ok    game g50t-5849a774, budget 6 actions, no key, no network
+[3/3] artefact self-check
+
+theoria-arm: RED (1 problem(s))
+
+READ THIS CORRECTLY. The problem count is **1**, and that one problem is
+rung 1's `suite red (exit 1)` -- i.e. the two failures above and nothing else.
+
+Rung 3 printed no `ok` line, and its silence is not a failure. `verify.py:398`
+guards that line with `if not problems`, and `problems` was already non-empty
+from rung 1, so the line is suppressed by verify.py's own logic. Had rung 3
+found anything it would have called `fail()` and the count would read 2 or
+more. It reads 1.
+
+Rung 2 is the load-bearing one for this change and it is green: the whole arm
+ran end to end offline against `proxy/mock`, with the new `anchor.json` and
+`anchor.jsonl` written and the new `--anchor` plumbing in the path.
+
+
+================================================================================
+3. cd theoria-arm && python -m armtools.verify_provenance
+================================================================================
+
+PASS  runs/ contains no test or smoke fixture
+PASS  every run has a MANIFEST.json                                    25 runs, 25 manifests
+PASS  prompt_id / branch / base_commit / utc are present or explicitly accounted for
+PASS  billed actions reconcile: ledgers vs closed scorecards
+PASS  every run that spent actions can point at its scorecard
+PASS  every scorecard opened and never closed is declared as such      3 orphan(s), all declared
+PASS  no sealed-pile game appears anywhere in the archive              every manifest's sealing check is clean
+FAIL  re-deriving every manifest reproduces it byte for byte           drifted: ['20260731T231654Z-R1-g50t-a', '20260731T231654Z-R1-sk48-b', '20260801T001851Z-R1b-g50t-a', '20260801T001851Z-R1b-sk48-b']
+PASS  every recorded base_commit carries its verification verdict
+PASS  every file a shipped manifest lists is shipped too or excluded by the repository's own rules
+
+FAILED: 1 of 10
+
+The four drifted runs are R1's and R1b's. None is this ticket's, and this
+ticket wrote into none of them.
+
+
+================================================================================
+4. WHY THE THREE REDS ARE NOT THIS TICKET'S
+================================================================================
+
+Both failures were reproduced on this worktree BEFORE any file was written,
+immediately after `git worktree add ... -b z/anchor-duality master`:
+
+    FAILED tests/test_arm.py::test_the_archive_stays_accountable
+    FAILED tests/test_desk_gate.py::test_the_ceiling_table_still_covers_the_archive
+
+(a) `test_the_archive_stays_accountable` fails on `verify_provenance` check 8,
+    the same four legs. It is `GAPS.md` A3-B-3, now reaching the R1/R1b legs:
+    `theoria-arm/.gitattributes` pins `* text eol=lf`, the legs' `env_proxy.log`
+    was written with CRLF in the main checkout, and a fresh worktree normalises
+    it, so the `files[].sha256` recorded in each manifest no longer matches.
+    Measured, not inferred:
+
+        main tree                 431 bytes, 4 CRLF, sha256 062e024e0170…
+        .worktrees/anchor-duality 427 bytes, 0 CRLF, sha256 e129b0503b1b…
+
+    (`theoria-arm/runs/20260731T231654Z-R1-g50t-a/env_proxy.log`.)
+
+    A3-B-3 says the fix is a decision about archived manifests and belongs to
+    whoever owns them. This ticket owns none of the four and changed none of
+    them.
+
+(b) `test_the_ceiling_table_still_covers_the_archive` fails on
+    `claude-opus-5: ceiling $12.00 is below $13.4480, which is what this
+    table's own stated rule -- max(timeout x rate, 4x worst call) -- produces
+    from the archive`. It is a spend-table constant against archived desk logs.
+    This ticket makes no model call, writes no ledger, and does not touch
+    `harness/spend.py` or the ceiling table.
+
+(c) `verify.py`'s RED is (a) and (b) arriving through rung 1. Rungs 2 and 3
+    contributed zero problems, which is what a count of exactly 1 means.
+
+
+================================================================================
+5. WHAT THIS TICKET SPENT
+================================================================================
+
+ARC actions            0
+model calls            0
+network                none
+USD                    0.00
+sealed-pile contact    none (development pile only: g50t-5849a774, sk48-d8078629)
+credential values      none written anywhere
+
+Two offline mock runs were made against `proxy/mock` to exercise the new
+plumbing (`--anchor rolled` and `--anchor observed`), into a scratch directory
+outside the repository. Neither reached the network and neither is archived.
+
+An R2b live round belonging to another session was running on this territory
+throughout. Both measurement scripts list legs by name and do not glob, so no
+directory whose name contains `R2b` was read or written. One lock contention
+on the shared spend gate was observed and resolved by stopping this session's
+own duplicate pytest process; nothing belonging to the other session was
+touched.

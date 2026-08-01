@@ -10,7 +10,9 @@
   "theoria-arm/tests/test_anchor.py (new)",
   "theoria-arm/DECISIONS.md",
   "theoria-arm/GAPS.md",
-  "theoria-arm/PARTNER_SYNC.md"
+  "theoria-arm/INCIDENTS.md",
+  "PARTNER_SYNC.md",
+  "monitor/inbox/2026-08-01T1200Z-theoria-arm-to-fleet-a-commit-crossed-worktrees.md"
  ],
  "classification": {
   "archive_material": false,
@@ -106,6 +108,11 @@
    "sha256": "864b76bc84685285fb13b1b4cdef8755fd085d713ff79a8a6abb1839d0a2d395"
   },
   {
+   "bytes": 6787,
+   "path": "GATES.txt",
+   "sha256": "a9f97cd7e90e4078598379b5f98803d71934f1eab421f717bde3683725504980"
+  },
+  {
    "bytes": 20822,
    "path": "README.md",
    "sha256": "e572dff342675de60a7f6f1ff5a46cf55989f3cf8953af9a9c39db5ec0c844a5"
@@ -116,9 +123,9 @@
    "sha256": "a8f1f18a00ca8ec6fd1fd397a1b0306b55c2952c480262d58744c3f2c1e22fdf"
   },
   {
-   "bytes": 18958,
+   "bytes": 20754,
    "path": "make_manifest.py",
-   "sha256": "083401b0911d1d851fae624ae630c18afb363141bed72fc556a5b13d932a0f8b"
+   "sha256": "1bd06875ff6f5052cd6657566351504ea8c0e2096dee2936bb4b933c67f4db93"
   },
   {
    "bytes": 11233,
@@ -131,6 +138,14 @@
    "sha256": "42371611644e94615fa8ed05b5c345f05d519399f6a3be3bde22c04bda5e2450"
   }
  ],
+ "incident": {
+  "id": "INC-TA-008",
+  "resolution": "the message was amended to describe the diff it labels; the other session's message is preserved verbatim in INCIDENTS.md so nothing was destroyed; that session's worktree and branch were read only and never written",
+  "source": "a twin session dispatched onto the same defect, in .worktrees/r21 on agent/r2-1-roll-forward-drift, whose own work is still uncommitted in its own worktree",
+  "still_open": "nothing prevents a recurrence; git log -1 before committing is the only detector, and it worked by accident here",
+  "what": "another session's git commit landed on this branch, carrying THIS branch's content under THAT session's message. The content was correct byte for byte; the message described a different implementation (--anchor-policy dual, a _states/_anchor pair, D-AD-001, 1044 commands, 97.7%) that is not in the diff it labelled and whose numbers appear in none of this run's artefacts.",
+  "why_it_matters": "the commit succeeded and git status merely looked surprising. Without reading its own git log this session would have shipped a branch whose message contradicts its content and inherited measurements it never made."
+ },
  "lane": "framework-change",
  "measurement": {
   "anchor_drifted": 35,

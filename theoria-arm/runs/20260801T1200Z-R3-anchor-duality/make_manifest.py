@@ -264,8 +264,37 @@ PAYLOAD = {
         "theoria-arm/tests/test_anchor.py (new)",
         "theoria-arm/DECISIONS.md",
         "theoria-arm/GAPS.md",
-        "theoria-arm/PARTNER_SYNC.md",
+        "theoria-arm/INCIDENTS.md",
+        "PARTNER_SYNC.md",
+        "monitor/inbox/2026-08-01T1200Z-theoria-arm-to-fleet-a-commit-"
+        "crossed-worktrees.md",
     ],
+    "incident": {
+        "id": "INC-TA-008",
+        "what": "another session's git commit landed on this branch, carrying "
+                "THIS branch's content under THAT session's message. The "
+                "content was correct byte for byte; the message described a "
+                "different implementation (--anchor-policy dual, a "
+                "_states/_anchor pair, D-AD-001, 1044 commands, 97.7%) that is "
+                "not in the diff it labelled and whose numbers appear in none "
+                "of this run's artefacts.",
+        "source": "a twin session dispatched onto the same defect, in "
+                  ".worktrees/r21 on agent/r2-1-roll-forward-drift, whose own "
+                  "work is still uncommitted in its own worktree",
+        "resolution": "the message was amended to describe the diff it "
+                      "labels; the other session's message is preserved "
+                      "verbatim in INCIDENTS.md so nothing was destroyed; "
+                      "that session's worktree and branch were read only and "
+                      "never written",
+        "why_it_matters": "the commit succeeded and git status merely looked "
+                          "surprising. Without reading its own git log this "
+                          "session would have shipped a branch whose message "
+                          "contradicts its content and inherited measurements "
+                          "it never made.",
+        "still_open": "nothing prevents a recurrence; git log -1 before "
+                      "committing is the only detector, and it worked by "
+                      "accident here",
+    },
     "not_changed": [
         "theoria-arm/inner/certify.py -- deliberately, and "
         "tests/test_anchor.py::test_certify_never_reads_the_anchor fails the "
