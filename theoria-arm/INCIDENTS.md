@@ -322,3 +322,64 @@ close to guaranteed: the domain text was byte-identical to the one that already
 compiled on g50t, and the one problem-side failure mode — an unplaced landmark —
 was precluded by precisely these leaked coordinates. The compile was true and
 almost uninformative, and the leak is why.
+
+---
+
+## INC-TA-008 · Another session's commit landed on this branch, carrying this branch's content under that session's message — severity: medium (nothing lost; the record was briefly false)
+
+**When.** 2026-08-01, between this ticket staging its work and running
+`git commit`. Discovered because `git status` reported only two staged paths
+when nine had just been added.
+
+**What happened.** `git log` on `z/anchor-duality` showed a commit
+`cd748188` that this session did not create:
+
+> the anchor was stale on 97.7% of commands, and the instrument that would have
+> shown it was skipped by the same failure
+
+The **content** of that commit is this ticket's, byte for byte
+(`git diff HEAD -- theoria-arm/inner/anchor.py` was empty). The **message** is
+not: it describes a different implementation of the same defect —
+`--anchor-policy dual`, a `_states` / `_anchor` pair, a decision `D-AD-001`,
+and measurements over 1044 commands. None of those exist in the diff the
+message labels. This ticket's flag is `--anchor {rolled,observed}`, its
+decision is `D-R3-001`, and its measurement is over 52 probes and 8 legs.
+
+**Where it came from.** A twin session is working the same defect in
+`.worktrees/r21` on `agent/r2-1-roll-forward-drift` — its worktree carries
+`theoria-arm/tests/test_anchor_refusal.py` and
+`theoria-arm/runs/2026-08-01T050800Z-R2-1-anchor-refusal/`, both uncommitted.
+Its branch has **no** commit of that work (`agent/r2-1-roll-forward-drift` is
+still at `4c08ea6b`). So its `git commit` resolved to *this* worktree and
+committed *this* worktree's index under *its* message. There are no hooks in
+`.git/hooks/`, so this was a direct `git commit` from a cwd or with a `-C`
+that pointed here.
+
+**What was lost.** Nothing of that session's: its files are still in its own
+worktree, and none of them were in the commit. What was momentarily lost is the
+truth of the record — a commit message asserting facts about code that is not
+in the commit.
+
+**What was done.** The commit message on this branch was amended to describe
+the diff it actually labels. The other session's message is preserved verbatim
+above, in this entry, so amending destroyed no text. Neither
+`.worktrees/r21` nor `agent/r2-1-roll-forward-drift` was touched: not read
+beyond `git status --short` and `git log`, not written, not checked out.
+A notice was filed at
+`monitor/inbox/2026-08-01T1200Z-theoria-arm-to-fleet-a-commit-crossed-worktrees.md`.
+
+**Why it is worth an incident and not a footnote.** Two independent sessions
+were dispatched onto the same defect, and their working trees are one `git
+commit` away from each other. The failure mode is silent in the direction that
+matters: the commit *succeeded*, `git status` looked merely surprising, and a
+session that had not read its own `git log` would have shipped a branch whose
+message contradicts its content — and, worse, would have inherited numbers
+(97.7%, 1044 commands, `fresh anchor 24 → 1044`) it never measured. Numbers
+travel further than provenance does; the first person to quote them would have
+attributed them to this run's artefacts, where they do not appear.
+
+**Standing hazard, not closed.** Nothing here prevents a recurrence. Both
+sessions are still live as this is written, and a second crossing would land on
+whichever index happens to be staged. `git log -1` before every commit is the
+only detector this session had, and it worked by accident — the tell was a
+staged-file count, not a check.
