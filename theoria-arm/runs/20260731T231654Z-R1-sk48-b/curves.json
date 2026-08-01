@@ -1,0 +1,162 @@
+{
+ "columns": [
+  "level",
+  "turn",
+  "campaign_turn_in_leg",
+  "step_idx",
+  "http_commands",
+  "actions_taken",
+  "theorize_rounds",
+  "model_calls",
+  "usd",
+  "usd_cumulative_in_level",
+  "usd_cumulative_in_leg",
+  "surprise_total",
+  "surprise_replay_mismatch",
+  "surprise_render_mismatch",
+  "surprise_proof_failure",
+  "surprise_probe_refutation",
+  "surprise_execution_mismatch",
+  "surprise_search_timeout",
+  "surprise_heuristic_miss"
+ ],
+ "game_id": "sk48-d8078629",
+ "join_confidence": "degraded",
+ "level_boundaries_at_turn": [],
+ "levels": [
+  {
+   "first_turn": 0,
+   "last_turn": 0,
+   "level": 1,
+   "surprise_total": [
+    0,
+    3
+   ],
+   "surprises": {
+    "execution_mismatch": [
+     0,
+     0
+    ],
+    "heuristic_miss": [
+     0,
+     1
+    ],
+    "probe_refutation": [
+     0,
+     0
+    ],
+    "proof_failure": [
+     0,
+     0
+    ],
+    "render_mismatch": [
+     0,
+     0
+    ],
+    "replay_mismatch": [
+     0,
+     2
+    ],
+    "search_timeout": [
+     0,
+     0
+    ]
+   },
+   "theorize_rounds": [
+    0,
+    0
+   ],
+   "totals": {
+    "http_commands": 38,
+    "surprises": {
+     "execution_mismatch": 0,
+     "heuristic_miss": 1,
+     "probe_refutation": 0,
+     "proof_failure": 0,
+     "render_mismatch": 0,
+     "replay_mismatch": 2,
+     "search_timeout": 0
+    },
+    "theorize_rounds": 0,
+    "turns": 2,
+    "usd": 0.0
+   },
+   "turns": [
+    0,
+    0
+   ],
+   "usd": [
+    0.0,
+    0.0
+   ],
+   "usd_cumulative": [
+    0.0,
+    0.0
+   ]
+  }
+ ],
+ "levels_source": "RUN_STATE.json",
+ "reading": "Three curves per level: `theorize_rounds` (expected to fall toward zero after the first level -- that is C3's carrying claim), the seven surprise counts (a record of what the world did, not of what was paid for), and cumulative cost. The front-load index over these is E2 in battery/metrics/economy.py and is deliberately not recomputed here: a second implementation of a Phase 4 primary endpoint is a second definition of it.",
+ "rows": [
+  {
+   "actions_taken": 0,
+   "campaign_turn_in_leg": 1,
+   "http_commands": 0,
+   "level": 1,
+   "model_calls": 0,
+   "step_idx": null,
+   "surprise_execution_mismatch": 0,
+   "surprise_heuristic_miss": 0,
+   "surprise_probe_refutation": 0,
+   "surprise_proof_failure": 0,
+   "surprise_render_mismatch": 0,
+   "surprise_replay_mismatch": 0,
+   "surprise_search_timeout": 0,
+   "surprise_total": 0,
+   "theorize_rounds": 0,
+   "turn": 0,
+   "usd": 0.0,
+   "usd_cumulative_in_leg": 0.0,
+   "usd_cumulative_in_level": 0.0
+  },
+  {
+   "actions_taken": 5,
+   "campaign_turn_in_leg": 2,
+   "http_commands": 38,
+   "level": 1,
+   "model_calls": 0,
+   "step_idx": null,
+   "surprise_execution_mismatch": 0,
+   "surprise_heuristic_miss": 1,
+   "surprise_probe_refutation": 0,
+   "surprise_proof_failure": 0,
+   "surprise_render_mismatch": 0,
+   "surprise_replay_mismatch": 2,
+   "surprise_search_timeout": 0,
+   "surprise_total": 3,
+   "theorize_rounds": 0,
+   "turn": 0,
+   "usd": 0.0,
+   "usd_cumulative_in_leg": 0.0,
+   "usd_cumulative_in_level": 0.0
+  }
+ ],
+ "run_id": "r-b3cce9aa15ff4bc7",
+ "schema": "theoria-arm/curves v1",
+ "self_check": {
+  "accounts_for_every_env_step": true,
+  "env_step_records_in_the_ledger": 38,
+  "floor": "zero turns is refused outright. 0 == 0 satisfies the equality above, so an empty leg would otherwise write a file of zeros that reads exactly like a leg that was cheap.",
+  "http_commands_over_the_curves": 38,
+  "turns": 2,
+  "why": "a curve is allowed to have fewer turns than the ledger has commands -- a turn issues several -- but it is never allowed to account for fewer commands than were issued. That difference is a hole in the accounting, and it is invisible in the plot: the curve just looks shorter."
+ },
+ "slug": "20260731T231654Z-R1-sk48-b",
+ "totals": {
+  "levels": 1,
+  "surprises": 3,
+  "theorize_rounds": 0,
+  "turns": 2,
+  "usd": 0.0
+ }
+}

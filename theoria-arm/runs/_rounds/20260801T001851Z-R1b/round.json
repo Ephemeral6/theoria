@@ -1,0 +1,81 @@
+{
+ "budget_per_leg": 300,
+ "ceiling_per_leg": 25.0,
+ "change": "goal_protocol=propose, ACTUALLY APPLIED this time (R1 recorded the same sentence and forwarded no flag). Baseline for comparison is r3, not R1: leg ceiling 25 restores r3-like leg length after the per-call ceiling rose from 7 to 12.",
+ "exit_codes": {
+  "20260801T001851Z-R1b-g50t-a": 0,
+  "20260801T001851Z-R1b-sk48-b": 0
+ },
+ "knobs": [
+  "--goal-protocol=propose"
+ ],
+ "legs": [
+  {
+   "actions_ok": 25,
+   "computational": 5,
+   "desk_calls": 9,
+   "empirical": 19,
+   "game_id": null,
+   "level": 1,
+   "levels_completed": 0,
+   "outcome": "spend_gate_tripped",
+   "slug": "20260801T001851Z-R1b-g50t-a",
+   "stopped_because": "the shared spend pool refused another request, so this leg stops here rather than retrying into the ceiling: SpendGateTripped: reservation res-faa3351565d24c08 for 'theoria-arm:A3-campaign-devpile:g50",
+   "surprises": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 5,
+    "probe_refutation": 14,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 5,
+    "search_timeout": 0
+   },
+   "surprises_total": 24,
+   "theorize_rounds": null,
+   "usd": 17.749106
+  },
+  {
+   "actions_ok": 5,
+   "computational": 1,
+   "desk_calls": 6,
+   "empirical": 4,
+   "game_id": null,
+   "level": 1,
+   "levels_completed": 0,
+   "outcome": "spend_gate_tripped",
+   "slug": "20260801T001851Z-R1b-sk48-b",
+   "stopped_because": "the shared spend pool refused another request, so this leg stops here rather than retrying into the ceiling: SpendGateTripped: reservation res-6a1aabbf90f043cb for 'theoria-arm:A3-campaign-devpile:sk4",
+   "surprises": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 1,
+    "probe_refutation": 1,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 3,
+    "search_timeout": 0
+   },
+   "surprises_total": 5,
+   "theorize_rounds": null,
+   "usd": 17.390721
+  }
+ ],
+ "model": "claude-opus-5",
+ "round": "R1b",
+ "seed_books": "runs/20260731T1430Z-A3-level2-carried-r3/books",
+ "totals": {
+  "actions_ok": 30,
+  "desk_calls": 15,
+  "levels_completed": 0,
+  "surprises": {
+   "execution_mismatch": 0,
+   "heuristic_miss": 6,
+   "probe_refutation": 15,
+   "proof_failure": 0,
+   "render_mismatch": 0,
+   "replay_mismatch": 8,
+   "search_timeout": 0
+  },
+  "usd": 35.139827
+ },
+ "utc": "20260801T001851Z"
+}

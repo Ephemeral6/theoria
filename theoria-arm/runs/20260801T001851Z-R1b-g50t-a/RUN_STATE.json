@@ -1,0 +1,175 @@
+{
+ "budget": {
+  "actions_failed": 0,
+  "actions_left": 275,
+  "actions_ok": 25,
+  "attempt_amplification": 5.28,
+  "ceiling_actions": 300,
+  "ceiling_commands": 2000,
+  "commands_sent": 132,
+  "http_amplification": 5.28,
+  "http_amplification_is_really_attempts": true,
+  "http_amplification_note": "arm-level attempts per successful ACTION, including attempts that never reached the network. The arm cannot compute the transport ratio: only the proxy ledger knows which attempts were forwarded (`http.forwarded`). Divide that count by `actions_ok` for the real one.",
+  "probe_actions": 14,
+  "reserve_for_probes": 0,
+  "resets": 1
+ },
+ "desk": {
+  "beats": [
+   "theorize"
+  ],
+  "calls": 9,
+  "calls_missing_from_ledger": 0,
+  "cli_cost_usd": 17.749106,
+  "cost_ceiling_usd": 25.0,
+  "ledger_failures": [],
+  "model": "claude-opus-5",
+  "spend_gate": {
+   "action_cap": 5616,
+   "actions_charged": 0,
+   "campaign": "theoria-arm:A3-campaign-devpile:g50t-5849a774:20260801T001851Z-R1b-g50t-a",
+   "caps": {
+    "action_cap": 5616,
+    "arithmetic": {
+     "action_cap": 5616,
+     "action_cap_hard_bound": 6000,
+     "action_cap_planned": 5616,
+     "actions_budget": 300,
+     "arm_attempts_capped_by_commands_ceiling": false,
+     "commands_ceiling": 2000,
+     "cost_ceiling_usd": 25.0,
+     "env_max_attempts": 3,
+     "env_outbound_per_arm_command_measured": 1.0031,
+     "fixed_commands": 3,
+     "fixed_outbound": 36,
+     "http_per_command": 1.75,
+     "http_per_command_is_validated": false,
+     "http_per_command_provenance": "arc-recon/data/incidents.jsonl:16 (INC-011) side_by_side, bare_cc arm, ar25, cookies=True, 35 http / 20 executed commands. Different arm, different transport, different denominator from the one plan_caps uses.",
+     "http_per_command_retired_from_sizing": true,
+     "model_call_ceiling_usd": 4.0,
+     "outbound_per_action": 9.3,
+     "outbound_per_action_is_validated": true,
+     "outbound_per_action_provenance": "251 outbound ACTION requests / 27 successful ACTIONs, pooled over the four live legs in runs/ whose env_upstream is three.arcprize.org (20260728T012311Z, 20260728T014402Z, 20260728T015354Z, 20260729T004020Z-leg01). Numerator is the sum of http.attempts over env_step records with http.forwarded=true; denominator is env_step records with an ACTION name and status 200. Cross-checked against proxy/var/spend_gate.jsonl, which agrees exactly (105/105) on the one leg both cover. Per-leg ratios 16.8 / 6.0 / 5.143 / 10.556.",
+     "outbound_tail_safety": 2.0,
+     "retry_safety": 1.5,
+     "ttl_seconds": 11700.0,
+     "unit": "one action = one outbound ARC HTTP request (spend_policy.json)",
+     "usd_cap": 29.0,
+     "wall_clock_s": 10800.0
+    },
+    "ttl_seconds": 11700.0,
+    "usd_cap": 29.0
+   },
+   "model_call_ceiling_usd": 4.0,
+   "model_calls_charged": 9,
+   "pool": {
+    "action_ceiling": 24000,
+    "gate_version": "1.0",
+    "ledger_abspath": "C:\\Users\\user\\Desktop\\theoria\\proxy\\var\\spend_gate.jsonl",
+    "ledger_path": "proxy/var/spend_gate.jsonl",
+    "policy_path": "proxy/spend_policy.json",
+    "policy_sha256": "732778326d64436586f944853f1f0db46d50639ad71a5ac0499d8c4827ec1572",
+    "pool": "theoria-shared-2026-07",
+    "pool_root": "C:\\Users\\user\\Desktop\\theoria",
+    "usd_ceiling": 214.9
+   },
+   "released": false,
+   "renewals": 0,
+   "reservation_id": "res-faa3351565d24c08",
+   "tripped": {
+    "message": "reservation res-faa3351565d24c08 for 'theoria-arm:A3-campaign-devpile:g50t-5849a774:20260801T001851Z-R1b-g50t-a' is at $17.7491 of its $29.0000 cap",
+    "rule": "RESERVATION_USD_CAP"
+   },
+   "unpriced_calls": 0,
+   "usd_cap": 29.0,
+   "usd_charged": 17.749106
+  },
+  "unpriced_calls": 0,
+  "usage_total": {
+   "cache_creation_input_tokens": 496597,
+   "cache_read_input_tokens": 82145,
+   "input_tokens": 22,
+   "output_tokens": 498821
+  }
+ },
+ "elapsed_s": 6515.9,
+ "goal": {
+  "absence_is_signed": true,
+  "absence_signature": "the_goal_is_absent_because_no_instance_can_name_the_socket",
+  "actions_without_goal": 25,
+  "criterion": {
+   "max_proposals": 3,
+   "min_new_states": 4
+  },
+  "final_mode": "exploring_no_goal",
+  "first_no_goal_turn": 1,
+  "goal_declared_ever": false,
+  "plan_status_counts": {
+   "no_goal_declared": 21
+  },
+  "proposals": [
+   {
+    "answered": "declined_with_argument",
+    "distinct_states": 4,
+    "proposal_idx": 1,
+    "reason": "the criterion's four conjuncts all held",
+    "signature": "the_goal_is_absent_because_no_instance_can_name_the_socket",
+    "turn": 1
+   },
+   {
+    "answered": "declined_with_argument",
+    "distinct_states": 8,
+    "proposal_idx": 2,
+    "reason": "the criterion's four conjuncts all held",
+    "signature": "the_goal_is_absent_because_no_instance_can_name_the_socket",
+    "turn": 6
+   },
+   {
+    "answered": "declined_with_argument",
+    "distinct_states": 12,
+    "proposal_idx": 3,
+    "reason": "the criterion's four conjuncts all held",
+    "signature": "the_goal_is_absent_because_no_instance_can_name_the_socket",
+    "turn": 11
+   }
+  ],
+  "proposals_made": 3,
+  "protocol": "propose",
+  "reading": "this leg spent 21 of 21 turns, and at least 25 actions, with no winning condition in the manual. On those turns `plan` could not succeed by construction -- not because the search was hard, but because `is_goal` was False everywhere. Reading those turns as failed planning is a category error. The absence is SIGNED: the manual carries `the_goal_is_absent_because_no_instance_can_name_the_socket`, a theorem arguing for not naming a goal yet. That is a position, and the record should show it as one. 3 proposal(s) were made; answers: declined_with_argument, declined_with_argument, declined_with_argument.",
+  "turns": 21,
+  "turns_planning": 0,
+  "turns_without_goal": 21,
+  "turns_without_manual": 0
+ },
+ "levels": {
+  "boundaries": 0,
+  "events": [],
+  "finished": false,
+  "level": 1,
+  "levels_completed": 0,
+  "reset_probes": [],
+  "starts": [
+   0
+  ]
+ },
+ "outcome": "spend_gate_tripped",
+ "steps": 26,
+ "stopped_because": "the shared spend pool refused another request, so this leg stops here rather than retrying into the ceiling: SpendGateTripped: reservation res-faa3351565d24c08 for 'theoria-arm:A3-campaign-devpile:g50t-5849a774:20260801T001851Z-R1b-g50t-a' is at $17.7491 of its $29.0000 cap",
+ "surprises": {
+  "by_family": {
+   "computational": 5,
+   "empirical": 19
+  },
+  "by_kind": {
+   "execution_mismatch": 0,
+   "heuristic_miss": 5,
+   "probe_refutation": 14,
+   "proof_failure": 0,
+   "render_mismatch": 0,
+   "replay_mismatch": 5,
+   "search_timeout": 0
+  },
+  "total": 24,
+  "unhandled": 5
+ }
+}

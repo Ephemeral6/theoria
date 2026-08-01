@@ -1,0 +1,1694 @@
+[
+ {
+  "actions_spent": 5,
+  "beat": "observe",
+  "detail": "opening sweep over [1, 2, 3, 4, 5]",
+  "turn": 0
+ },
+ {
+  "actions_spent": 5,
+  "beat": "transfer",
+  "detail": "carried manual from 20260731T1430Z-A3-level2-carried-r3 certified cold on g50t-5849a774",
+  "prediction": {
+   "detail": "the carried manual uses `arc-instances: all` on Glyph9, Vacated, Spent, Dark, which spreads one declaration over every dynamic cell of its colour. The formula assumes one declaration draws one pixel, so it does not apply here and reporting a number would be a test of nothing.",
+   "formula": "unexplained(frame_0) = D0 - K",
+   "observed": null,
+   "predicted": null,
+   "verdict": "withheld"
+  },
+  "turn": 0
+ },
+ {
+  "actions_before": 5,
+  "certify": {
+   "cheap_green": true,
+   "proof_layer_available": false,
+   "replay": "5/5 transitions replay exactly",
+   "replay_ok": true,
+   "responsibility_ok": true,
+   "unexplained_cells": 0
+  },
+  "elapsed_s": 130.6,
+  "goal": {
+   "absence_is_signed": false,
+   "absence_signature": null,
+   "distinct_states": 4,
+   "goal_declared": false,
+   "mode": "exploring_no_goal",
+   "plan_status": "no_goal_declared",
+   "proposal": {
+    "booked": 1,
+    "checks": [
+     {
+      "check": "the manual declares no winning condition",
+      "ok": true,
+      "read": "exploring_no_goal"
+     },
+     {
+      "check": "there is a compiled predictor for a goal to be written against -- a goal clause naming objects the manual cannot instantiate is not a goal",
+      "ok": true,
+      "read": true
+     },
+     {
+      "check": "enough new world has arrived to change the answer: distinct states seen so far (no proposal has been made yet) >= 4",
+      "ok": true,
+      "read": 4
+     },
+     {
+      "check": "the leg's proposal budget is not spent (< 3)",
+      "ok": true,
+      "read": 0
+     }
+    ],
+    "delivery": "parked for the next theorize call a surprise pays for; this beat spends nothing and calls nothing",
+    "due": true,
+    "new_states": 4,
+    "proposals_made": 0,
+    "refused_because": []
+   },
+   "protocol": "propose",
+   "turn": 1,
+   "turns_planning": 0,
+   "turns_without_goal": 1,
+   "why": "the manual declares no winning condition, so `is_goal` compiles to False everywhere and NO search can succeed. The arm is exploring. That is a legitimate state -- a goal true in the wrong states stops the planner at the first one -- but it is a state, not a planner failure, and every action spent in it is spent without a target."
+  },
+  "plan": {
+   "backend": null,
+   "detail": "the manual states no winning condition, so `is_goal` is `False` everywhere and no search can succeed. This is a gap in the manual, NOT a proof that the level is unsolvable -- constraint 6 forbids reading a failed search as an unsolvability claim.",
+   "plan": null,
+   "status": "no_goal_declared"
+  },
+  "predictor": "loaded",
+  "probe": {
+   "action": 2,
+   "frontier_vacuous": true,
+   "information_gain_bits": 0.0,
+   "kind": "probe",
+   "manual_survived": false,
+   "probe_id": "P-01",
+   "refuted": [
+    "inert",
+    "manual",
+    "without_key1_inert_at_spawn",
+    "without_key2_body_arrives",
+    "without_key2_body_leaves",
+    "without_key3_inert_below_spawn",
+    "without_key5_body_clears",
+    "without_key5_body_respawns",
+    "without_key5_slot1_dims",
+    "without_key5_slot2_centre_darkens",
+    "without_key5_slot2_row1_lights",
+    "without_key5_slot2_row2_left_lights",
+    "without_key5_slot2_row2_right_lights",
+    "without_key5_slot2_row3_lights",
+    "without_key5_underline1_dims",
+    "without_key5_underline2_lights",
+    "without_meter_burn_key2_rightmost",
+    "without_meter_burn_key4_next"
+   ]
+  },
+  "theorize_calls": 1,
+  "theorize_ok": true,
+  "theorize_rounds": 1,
+  "turn": 1
+ },
+ {
+  "actions_before": 6,
+  "elapsed_s": 681.2,
+  "goal": {
+   "absence_is_signed": false,
+   "absence_signature": null,
+   "distinct_states": 5,
+   "goal_declared": false,
+   "mode": "exploring_no_goal",
+   "plan_status": "no_goal_declared",
+   "proposal": {
+    "checks": [
+     {
+      "check": "the manual declares no winning condition",
+      "ok": true,
+      "read": "exploring_no_goal"
+     },
+     {
+      "check": "there is a compiled predictor for a goal to be written against -- a goal clause naming objects the manual cannot instantiate is not a goal",
+      "ok": true,
+      "read": true
+     },
+     {
+      "check": "enough new world has arrived to change the answer: distinct states since the last proposal (5 now, 4 then) >= 4",
+      "ok": false,
+      "read": 1
+     },
+     {
+      "check": "the leg's proposal budget is not spent (< 3)",
+      "ok": true,
+      "read": 1
+     }
+    ],
+    "due": false,
+    "new_states": 1,
+    "proposals_made": 1,
+    "refused_because": [
+     "enough new world has arrived to change the answer: distinct states since the last proposal (5 now, 4 then) >= 4"
+    ]
+   },
+   "protocol": "propose",
+   "turn": 2,
+   "turns_planning": 0,
+   "turns_without_goal": 2,
+   "why": "the manual declares no winning condition, so `is_goal` compiles to False everywhere and NO search can succeed. The arm is exploring. That is a legitimate state -- a goal true in the wrong states stops the planner at the first one -- but it is a state, not a planner failure, and every action spent in it is spent without a target."
+  },
+  "plan": {
+   "backend": null,
+   "detail": "the manual states no winning condition, so `is_goal` is `False` everywhere and no search can succeed. This is a gap in the manual, NOT a proof that the level is unsolvable -- constraint 6 forbids reading a failed search as an unsolvability claim.",
+   "plan": null,
+   "status": "no_goal_declared"
+  },
+  "predictor": "loaded",
+  "probe": {
+   "action": 5,
+   "frontier_vacuous": true,
+   "information_gain_bits": 0.0,
+   "kind": "probe",
+   "manual_survived": false,
+   "probe_id": "P-02",
+   "refuted": [
+    "inert",
+    "manual",
+    "without_key1_inert_at_spawn",
+    "without_key2_body_arrives",
+    "without_key2_body_leaves",
+    "without_key3_inert_below_spawn",
+    "without_key5_body_clears",
+    "without_key5_body_respawns",
+    "without_key5_slot1_dims",
+    "without_key5_slot2_centre_darkens",
+    "without_key5_slot2_row1_lights",
+    "without_key5_slot2_row2_left_lights",
+    "without_key5_slot2_row2_right_lights",
+    "without_key5_slot2_row3_lights",
+    "without_key5_underline1_dims",
+    "without_key5_underline2_lights",
+    "without_meter_burn_key2_rightmost",
+    "without_meter_burn_key4_next"
+   ]
+  },
+  "theorize": "skipped: 2 surprise(s) pending but only 1 new transition(s) since the last call (want 4). Going to get more.",
+  "turn": 2
+ },
+ {
+  "actions_before": 7,
+  "elapsed_s": 689.7,
+  "goal": {
+   "absence_is_signed": false,
+   "absence_signature": null,
+   "distinct_states": 6,
+   "goal_declared": false,
+   "mode": "exploring_no_goal",
+   "plan_status": "no_goal_declared",
+   "proposal": {
+    "checks": [
+     {
+      "check": "the manual declares no winning condition",
+      "ok": true,
+      "read": "exploring_no_goal"
+     },
+     {
+      "check": "there is a compiled predictor for a goal to be written against -- a goal clause naming objects the manual cannot instantiate is not a goal",
+      "ok": true,
+      "read": true
+     },
+     {
+      "check": "enough new world has arrived to change the answer: distinct states since the last proposal (6 now, 4 then) >= 4",
+      "ok": false,
+      "read": 2
+     },
+     {
+      "check": "the leg's proposal budget is not spent (< 3)",
+      "ok": true,
+      "read": 1
+     }
+    ],
+    "due": false,
+    "new_states": 2,
+    "proposals_made": 1,
+    "refused_because": [
+     "enough new world has arrived to change the answer: distinct states since the last proposal (6 now, 4 then) >= 4"
+    ]
+   },
+   "protocol": "propose",
+   "turn": 3,
+   "turns_planning": 0,
+   "turns_without_goal": 3,
+   "why": "the manual declares no winning condition, so `is_goal` compiles to False everywhere and NO search can succeed. The arm is exploring. That is a legitimate state -- a goal true in the wrong states stops the planner at the first one -- but it is a state, not a planner failure, and every action spent in it is spent without a target."
+  },
+  "plan": {
+   "backend": null,
+   "detail": "the manual states no winning condition, so `is_goal` is `False` everywhere and no search can succeed. This is a gap in the manual, NOT a proof that the level is unsolvable -- constraint 6 forbids reading a failed search as an unsolvability claim.",
+   "plan": null,
+   "status": "no_goal_declared"
+  },
+  "predictor": "loaded",
+  "probe": {
+   "action": 1,
+   "kind": "exploration",
+   "why": "this is the same experiment as P-01 -- same action, same prediction from every hypothesis, therefore the same partition of the frontier. Re-running it cannot separate anything P-01 did not."
+  },
+  "theorize": "skipped: 3 surprise(s) pending but only 2 new transition(s) since the last call (want 4). Going to get more.",
+  "turn": 3
+ },
+ {
+  "actions_before": 8,
+  "elapsed_s": 695.0,
+  "goal": {
+   "absence_is_signed": false,
+   "absence_signature": null,
+   "distinct_states": 7,
+   "goal_declared": false,
+   "mode": "exploring_no_goal",
+   "plan_status": "no_goal_declared",
+   "proposal": {
+    "checks": [
+     {
+      "check": "the manual declares no winning condition",
+      "ok": true,
+      "read": "exploring_no_goal"
+     },
+     {
+      "check": "there is a compiled predictor for a goal to be written against -- a goal clause naming objects the manual cannot instantiate is not a goal",
+      "ok": true,
+      "read": true
+     },
+     {
+      "check": "enough new world has arrived to change the answer: distinct states since the last proposal (7 now, 4 then) >= 4",
+      "ok": false,
+      "read": 3
+     },
+     {
+      "check": "the leg's proposal budget is not spent (< 3)",
+      "ok": true,
+      "read": 1
+     }
+    ],
+    "due": false,
+    "new_states": 3,
+    "proposals_made": 1,
+    "refused_because": [
+     "enough new world has arrived to change the answer: distinct states since the last proposal (7 now, 4 then) >= 4"
+    ]
+   },
+   "protocol": "propose",
+   "turn": 4,
+   "turns_planning": 0,
+   "turns_without_goal": 4,
+   "why": "the manual declares no winning condition, so `is_goal` compiles to False everywhere and NO search can succeed. The arm is exploring. That is a legitimate state -- a goal true in the wrong states stops the planner at the first one -- but it is a state, not a planner failure, and every action spent in it is spent without a target."
+  },
+  "plan": {
+   "backend": null,
+   "detail": "the manual states no winning condition, so `is_goal` is `False` everywhere and no search can succeed. This is a gap in the manual, NOT a proof that the level is unsolvable -- constraint 6 forbids reading a failed search as an unsolvability claim.",
+   "plan": null,
+   "status": "no_goal_declared"
+  },
+  "predictor": "loaded",
+  "probe": {
+   "action": 3,
+   "kind": "exploration",
+   "why": "this is the same experiment as P-01 -- same action, same prediction from every hypothesis, therefore the same partition of the frontier. Re-running it cannot separate anything P-01 did not."
+  },
+  "theorize": "skipped: 3 surprise(s) pending but only 3 new transition(s) since the last call (want 4). Going to get more.",
+  "turn": 4
+ },
+ {
+  "actions_before": 9,
+  "certify": {
+   "cheap_green": true,
+   "proof_layer_available": false,
+   "replay": "9/9 transitions replay exactly",
+   "replay_ok": true,
+   "responsibility_ok": true,
+   "unexplained_cells": 0
+  },
+  "elapsed_s": 719.7,
+  "goal": {
+   "absence_is_signed": true,
+   "absence_signature": "the_goal_is_absent_because_no_instance_can_name_the_socket",
+   "distinct_states": 7,
+   "goal_declared": false,
+   "mode": "exploring_no_goal",
+   "plan_status": "no_goal_declared",
+   "proposal": {
+    "checks": [
+     {
+      "check": "the manual declares no winning condition",
+      "ok": true,
+      "read": "exploring_no_goal"
+     },
+     {
+      "check": "there is a compiled predictor for a goal to be written against -- a goal clause naming objects the manual cannot instantiate is not a goal",
+      "ok": true,
+      "read": true
+     },
+     {
+      "check": "enough new world has arrived to change the answer: distinct states since the last proposal (7 now, 4 then) >= 4",
+      "ok": false,
+      "read": 3
+     },
+     {
+      "check": "the leg's proposal budget is not spent (< 3)",
+      "ok": true,
+      "read": 1
+     }
+    ],
+    "due": false,
+    "new_states": 3,
+    "proposals_made": 1,
+    "refused_because": [
+     "enough new world has arrived to change the answer: distinct states since the last proposal (7 now, 4 then) >= 4"
+    ]
+   },
+   "protocol": "propose",
+   "turn": 5,
+   "turns_planning": 0,
+   "turns_without_goal": 5,
+   "why": "the manual declares no winning condition, so `is_goal` compiles to False everywhere and NO search can succeed. The arm is exploring. That is a legitimate state -- a goal true in the wrong states stops the planner at the first one -- but it is a state, not a planner failure, and every action spent in it is spent without a target."
+  },
+  "goal_rider": "answered: declined_with_argument",
+  "plan": {
+   "backend": null,
+   "detail": "the manual states no winning condition, so `is_goal` is `False` everywhere and no search can succeed. This is a gap in the manual, NOT a proof that the level is unsolvable -- constraint 6 forbids reading a failed search as an unsolvability claim.",
+   "plan": null,
+   "status": "no_goal_declared"
+  },
+  "predictor": "loaded",
+  "probe": {
+   "action": 2,
+   "frontier_vacuous": true,
+   "information_gain_bits": 0.0,
+   "kind": "probe",
+   "manual_survived": false,
+   "probe_id": "P-05",
+   "refuted": [
+    "inert",
+    "manual",
+    "without_key2_body_arrives",
+    "without_key2_body_leaves",
+    "without_key3_inert_below_spawn",
+    "without_key5_body_clears",
+    "without_key5_body_respawns",
+    "without_key5_slot1_dims",
+    "without_key5_slot1_lights",
+    "without_key5_slot2_centre_darkens",
+    "without_key5_slot2_centre_resets",
+    "without_key5_slot2_ring_resets",
+    "without_key5_slot2_row1_lights",
+    "without_key5_slot2_row2_left_lights",
+    "without_key5_slot2_row2_right_lights",
+    "without_key5_slot2_row3_lights",
+    "without_key5_underline1_dims",
+    "without_key5_underline1_lights",
+    "without_key5_underline2_dims",
+    "without_key5_underline2_lights",
+    "without_meter_burn_edge_key2",
+    "without_meter_burn_next_key1",
+    "without_meter_burn_next_key2",
+    "without_meter_burn_next_key4"
+   ]
+  },
+  "theorize_calls": 2,
+  "theorize_ok": true,
+  "theorize_rounds": 1,
+  "turn": 5
+ },
+ {
+  "actions_before": 10,
+  "elapsed_s": 2355.3,
+  "goal": {
+   "absence_is_signed": true,
+   "absence_signature": "the_goal_is_absent_because_no_instance_can_name_the_socket",
+   "distinct_states": 8,
+   "goal_declared": false,
+   "mode": "exploring_no_goal",
+   "plan_status": "no_goal_declared",
+   "proposal": {
+    "booked": 2,
+    "checks": [
+     {
+      "check": "the manual declares no winning condition",
+      "ok": true,
+      "read": "exploring_no_goal"
+     },
+     {
+      "check": "there is a compiled predictor for a goal to be written against -- a goal clause naming objects the manual cannot instantiate is not a goal",
+      "ok": true,
+      "read": true
+     },
+     {
+      "check": "enough new world has arrived to change the answer: distinct states since the last proposal (8 now, 4 then) >= 4",
+      "ok": true,
+      "read": 4
+     },
+     {
+      "check": "the leg's proposal budget is not spent (< 3)",
+      "ok": true,
+      "read": 1
+     }
+    ],
+    "delivery": "parked for the next theorize call a surprise pays for; this beat spends nothing and calls nothing",
+    "due": true,
+    "new_states": 4,
+    "proposals_made": 1,
+    "refused_because": []
+   },
+   "protocol": "propose",
+   "turn": 6,
+   "turns_planning": 0,
+   "turns_without_goal": 6,
+   "why": "the manual declares no winning condition, so `is_goal` compiles to False everywhere and NO search can succeed. The arm is exploring. That is a legitimate state -- a goal true in the wrong states stops the planner at the first one -- but it is a state, not a planner failure, and every action spent in it is spent without a target."
+  },
+  "plan": {
+   "backend": null,
+   "detail": "the manual states no winning condition, so `is_goal` is `False` everywhere and no search can succeed. This is a gap in the manual, NOT a proof that the level is unsolvable -- constraint 6 forbids reading a failed search as an unsolvability claim.",
+   "plan": null,
+   "status": "no_goal_declared"
+  },
+  "predictor": "loaded",
+  "probe": {
+   "action": 5,
+   "frontier_vacuous": true,
+   "information_gain_bits": 0.0,
+   "kind": "probe",
+   "manual_survived": false,
+   "probe_id": "P-06",
+   "refuted": [
+    "inert",
+    "manual",
+    "without_key2_body_arrives",
+    "without_key2_body_leaves",
+    "without_key3_inert_below_spawn",
+    "without_key5_body_clears",
+    "without_key5_body_respawns",
+    "without_key5_slot1_dims",
+    "without_key5_slot1_lights",
+    "without_key5_slot2_centre_darkens",
+    "without_key5_slot2_centre_resets",
+    "without_key5_slot2_ring_resets",
+    "without_key5_slot2_row1_lights",
+    "without_key5_slot2_row2_left_lights",
+    "without_key5_slot2_row2_right_lights",
+    "without_key5_slot2_row3_lights",
+    "without_key5_underline1_dims",
+    "without_key5_underline1_lights",
+    "without_key5_underline2_dims",
+    "without_key5_underline2_lights",
+    "without_meter_burn_edge_key2",
+    "without_meter_burn_next_key1",
+    "without_meter_burn_next_key2",
+    "without_meter_burn_next_key4"
+   ]
+  },
+  "theorize": "skipped: 2 surprise(s) pending but only 1 new transition(s) since the last call (want 4). Going to get more.",
+  "turn": 6
+ },
+ {
+  "actions_before": 11,
+  "elapsed_s": 2357.5,
+  "goal": {
+   "absence_is_signed": true,
+   "absence_signature": "the_goal_is_absent_because_no_instance_can_name_the_socket",
+   "distinct_states": 9,
+   "goal_declared": false,
+   "mode": "exploring_no_goal",
+   "plan_status": "no_goal_declared",
+   "proposal": {
+    "checks": [
+     {
+      "check": "the manual declares no winning condition",
+      "ok": true,
+      "read": "exploring_no_goal"
+     },
+     {
+      "check": "there is a compiled predictor for a goal to be written against -- a goal clause naming objects the manual cannot instantiate is not a goal",
+      "ok": true,
+      "read": true
+     },
+     {
+      "check": "enough new world has arrived to change the answer: distinct states since the last proposal (9 now, 8 then) >= 4",
+      "ok": false,
+      "read": 1
+     },
+     {
+      "check": "the leg's proposal budget is not spent (< 3)",
+      "ok": true,
+      "read": 2
+     }
+    ],
+    "due": false,
+    "new_states": 1,
+    "proposals_made": 2,
+    "refused_because": [
+     "enough new world has arrived to change the answer: distinct states since the last proposal (9 now, 8 then) >= 4"
+    ]
+   },
+   "protocol": "propose",
+   "turn": 7,
+   "turns_planning": 0,
+   "turns_without_goal": 7,
+   "why": "the manual declares no winning condition, so `is_goal` compiles to False everywhere and NO search can succeed. The arm is exploring. That is a legitimate state -- a goal true in the wrong states stops the planner at the first one -- but it is a state, not a planner failure, and every action spent in it is spent without a target."
+  },
+  "plan": {
+   "backend": null,
+   "detail": "the manual states no winning condition, so `is_goal` is `False` everywhere and no search can succeed. This is a gap in the manual, NOT a proof that the level is unsolvable -- constraint 6 forbids reading a failed search as an unsolvability claim.",
+   "plan": null,
+   "status": "no_goal_declared"
+  },
+  "predictor": "loaded",
+  "probe": {
+   "action": 2,
+   "frontier_vacuous": true,
+   "information_gain_bits": 0.0,
+   "kind": "probe",
+   "manual_survived": false,
+   "probe_id": "P-07",
+   "refuted": [
+    "inert",
+    "manual",
+    "without_key2_body_arrives",
+    "without_key2_body_leaves",
+    "without_key3_inert_below_spawn",
+    "without_key5_body_clears",
+    "without_key5_body_respawns",
+    "without_key5_slot1_dims",
+    "without_key5_slot1_lights",
+    "without_key5_slot2_centre_darkens",
+    "without_key5_slot2_centre_resets",
+    "without_key5_slot2_ring_resets",
+    "without_key5_slot2_row1_lights",
+    "without_key5_slot2_row2_left_lights",
+    "without_key5_slot2_row2_right_lights",
+    "without_key5_slot2_row3_lights",
+    "without_key5_underline1_dims",
+    "without_key5_underline1_lights",
+    "without_key5_underline2_dims",
+    "without_key5_underline2_lights",
+    "without_meter_burn_edge_key2",
+    "without_meter_burn_next_key1",
+    "without_meter_burn_next_key2",
+    "without_meter_burn_next_key4"
+   ]
+  },
+  "theorize": "skipped: 3 surprise(s) pending but only 2 new transition(s) since the last call (want 4). Going to get more.",
+  "turn": 7
+ },
+ {
+  "actions_before": 12,
+  "elapsed_s": 2387.7,
+  "goal": {
+   "absence_is_signed": true,
+   "absence_signature": "the_goal_is_absent_because_no_instance_can_name_the_socket",
+   "distinct_states": 10,
+   "goal_declared": false,
+   "mode": "exploring_no_goal",
+   "plan_status": "no_goal_declared",
+   "proposal": {
+    "checks": [
+     {
+      "check": "the manual declares no winning condition",
+      "ok": true,
+      "read": "exploring_no_goal"
+     },
+     {
+      "check": "there is a compiled predictor for a goal to be written against -- a goal clause naming objects the manual cannot instantiate is not a goal",
+      "ok": true,
+      "read": true
+     },
+     {
+      "check": "enough new world has arrived to change the answer: distinct states since the last proposal (10 now, 8 then) >= 4",
+      "ok": false,
+      "read": 2
+     },
+     {
+      "check": "the leg's proposal budget is not spent (< 3)",
+      "ok": true,
+      "read": 2
+     }
+    ],
+    "due": false,
+    "new_states": 2,
+    "proposals_made": 2,
+    "refused_because": [
+     "enough new world has arrived to change the answer: distinct states since the last proposal (10 now, 8 then) >= 4"
+    ]
+   },
+   "protocol": "propose",
+   "turn": 8,
+   "turns_planning": 0,
+   "turns_without_goal": 8,
+   "why": "the manual declares no winning condition, so `is_goal` compiles to False everywhere and NO search can succeed. The arm is exploring. That is a legitimate state -- a goal true in the wrong states stops the planner at the first one -- but it is a state, not a planner failure, and every action spent in it is spent without a target."
+  },
+  "plan": {
+   "backend": null,
+   "detail": "the manual states no winning condition, so `is_goal` is `False` everywhere and no search can succeed. This is a gap in the manual, NOT a proof that the level is unsolvable -- constraint 6 forbids reading a failed search as an unsolvability claim.",
+   "plan": null,
+   "status": "no_goal_declared"
+  },
+  "predictor": "loaded",
+  "probe": {
+   "action": 4,
+   "kind": "exploration",
+   "why": "3 probes in a row came back with an empty posterior: every hypothesis refuted, including `inert`, so each eliminated nothing (0.0 bits realised). The frontier is built by ablating the manual, so while the manual is unchanged the next one is vacuous too. Going for evidence the ablation frontier cannot reach instead."
+  },
+  "theorize": "skipped: 4 surprise(s) pending but only 3 new transition(s) since the last call (want 4). Going to get more.",
+  "turn": 8
+ },
+ {
+  "actions_before": 13,
+  "certify": {
+   "cheap_green": true,
+   "proof_layer_available": false,
+   "replay": "13/13 transitions replay exactly",
+   "replay_ok": true,
+   "responsibility_ok": true,
+   "unexplained_cells": 0
+  },
+  "elapsed_s": 2393.3,
+  "goal": {
+   "absence_is_signed": true,
+   "absence_signature": "the_goal_is_absent_because_no_instance_can_name_the_socket",
+   "distinct_states": 10,
+   "goal_declared": false,
+   "mode": "exploring_no_goal",
+   "plan_status": "no_goal_declared",
+   "proposal": {
+    "checks": [
+     {
+      "check": "the manual declares no winning condition",
+      "ok": true,
+      "read": "exploring_no_goal"
+     },
+     {
+      "check": "there is a compiled predictor for a goal to be written against -- a goal clause naming objects the manual cannot instantiate is not a goal",
+      "ok": true,
+      "read": true
+     },
+     {
+      "check": "enough new world has arrived to change the answer: distinct states since the last proposal (10 now, 8 then) >= 4",
+      "ok": false,
+      "read": 2
+     },
+     {
+      "check": "the leg's proposal budget is not spent (< 3)",
+      "ok": true,
+      "read": 2
+     }
+    ],
+    "due": false,
+    "new_states": 2,
+    "proposals_made": 2,
+    "refused_because": [
+     "enough new world has arrived to change the answer: distinct states since the last proposal (10 now, 8 then) >= 4"
+    ]
+   },
+   "protocol": "propose",
+   "turn": 9,
+   "turns_planning": 0,
+   "turns_without_goal": 9,
+   "why": "the manual declares no winning condition, so `is_goal` compiles to False everywhere and NO search can succeed. The arm is exploring. That is a legitimate state -- a goal true in the wrong states stops the planner at the first one -- but it is a state, not a planner failure, and every action spent in it is spent without a target."
+  },
+  "goal_rider": "answered: declined_with_argument",
+  "plan": {
+   "backend": null,
+   "detail": "the manual states no winning condition, so `is_goal` is `False` everywhere and no search can succeed. This is a gap in the manual, NOT a proof that the level is unsolvable -- constraint 6 forbids reading a failed search as an unsolvability claim.",
+   "plan": null,
+   "status": "no_goal_declared"
+  },
+  "predictor": "loaded",
+  "probe": {
+   "action": 5,
+   "frontier_vacuous": true,
+   "information_gain_bits": 0.0,
+   "kind": "probe",
+   "manual_survived": false,
+   "probe_id": "P-09",
+   "refuted": [
+    "inert",
+    "manual",
+    "without_key2_body_arrives",
+    "without_key2_body_leaves",
+    "without_key3_inert_below_spawn",
+    "without_key5_body_clears",
+    "without_key5_body_respawns",
+    "without_key5_slot1_dims",
+    "without_key5_slot1_lights",
+    "without_key5_slot2_centre_darkens",
+    "without_key5_slot2_centre_resets",
+    "without_key5_slot2_ring_resets",
+    "without_key5_slot2_row1_lights",
+    "without_key5_slot2_row2_left_lights",
+    "without_key5_slot2_row2_right_lights",
+    "without_key5_slot2_row3_lights",
+    "without_key5_underline1_dims",
+    "without_key5_underline1_lights",
+    "without_key5_underline2_dims",
+    "without_key5_underline2_lights",
+    "without_meter_burn_edge_key2",
+    "without_meter_burn_next_key1",
+    "without_meter_burn_next_key2",
+    "without_meter_burn_next_key4"
+   ]
+  },
+  "theorize_calls": 1,
+  "theorize_ok": true,
+  "theorize_rounds": 1,
+  "turn": 9
+ },
+ {
+  "actions_before": 14,
+  "elapsed_s": 3177.1,
+  "goal": {
+   "absence_is_signed": true,
+   "absence_signature": "the_goal_is_absent_because_no_instance_can_name_the_socket",
+   "distinct_states": 11,
+   "goal_declared": false,
+   "mode": "exploring_no_goal",
+   "plan_status": "no_goal_declared",
+   "proposal": {
+    "checks": [
+     {
+      "check": "the manual declares no winning condition",
+      "ok": true,
+      "read": "exploring_no_goal"
+     },
+     {
+      "check": "there is a compiled predictor for a goal to be written against -- a goal clause naming objects the manual cannot instantiate is not a goal",
+      "ok": true,
+      "read": true
+     },
+     {
+      "check": "enough new world has arrived to change the answer: distinct states since the last proposal (11 now, 8 then) >= 4",
+      "ok": false,
+      "read": 3
+     },
+     {
+      "check": "the leg's proposal budget is not spent (< 3)",
+      "ok": true,
+      "read": 2
+     }
+    ],
+    "due": false,
+    "new_states": 3,
+    "proposals_made": 2,
+    "refused_because": [
+     "enough new world has arrived to change the answer: distinct states since the last proposal (11 now, 8 then) >= 4"
+    ]
+   },
+   "protocol": "propose",
+   "turn": 10,
+   "turns_planning": 0,
+   "turns_without_goal": 10,
+   "why": "the manual declares no winning condition, so `is_goal` compiles to False everywhere and NO search can succeed. The arm is exploring. That is a legitimate state -- a goal true in the wrong states stops the planner at the first one -- but it is a state, not a planner failure, and every action spent in it is spent without a target."
+  },
+  "plan": {
+   "backend": null,
+   "detail": "the manual states no winning condition, so `is_goal` is `False` everywhere and no search can succeed. This is a gap in the manual, NOT a proof that the level is unsolvable -- constraint 6 forbids reading a failed search as an unsolvability claim.",
+   "plan": null,
+   "status": "no_goal_declared"
+  },
+  "predictor": "loaded",
+  "probe": {
+   "action": 2,
+   "frontier_vacuous": true,
+   "information_gain_bits": 0.0,
+   "kind": "probe",
+   "manual_survived": false,
+   "probe_id": "P-10",
+   "refuted": [
+    "inert",
+    "manual",
+    "without_key2_body_arrives",
+    "without_key2_body_leaves",
+    "without_key3_inert_below_spawn",
+    "without_key5_body_clears",
+    "without_key5_body_respawns",
+    "without_key5_slot1_dims",
+    "without_key5_slot1_lights",
+    "without_key5_slot2_centre_darkens",
+    "without_key5_slot2_centre_resets",
+    "without_key5_slot2_ring_resets",
+    "without_key5_slot2_row1_lights",
+    "without_key5_slot2_row2_left_lights",
+    "without_key5_slot2_row2_right_lights",
+    "without_key5_slot2_row3_lights",
+    "without_key5_underline1_dims",
+    "without_key5_underline1_lights",
+    "without_key5_underline2_dims",
+    "without_key5_underline2_lights",
+    "without_meter_burn_edge_key2",
+    "without_meter_burn_next_key1",
+    "without_meter_burn_next_key2",
+    "without_meter_burn_next_key4"
+   ]
+  },
+  "theorize": "skipped: 2 surprise(s) pending but only 1 new transition(s) since the last call (want 4). Going to get more.",
+  "turn": 10
+ },
+ {
+  "actions_before": 15,
+  "elapsed_s": 3179.4,
+  "goal": {
+   "absence_is_signed": true,
+   "absence_signature": "the_goal_is_absent_because_no_instance_can_name_the_socket",
+   "distinct_states": 12,
+   "goal_declared": false,
+   "mode": "exploring_no_goal",
+   "plan_status": "no_goal_declared",
+   "proposal": {
+    "booked": 3,
+    "checks": [
+     {
+      "check": "the manual declares no winning condition",
+      "ok": true,
+      "read": "exploring_no_goal"
+     },
+     {
+      "check": "there is a compiled predictor for a goal to be written against -- a goal clause naming objects the manual cannot instantiate is not a goal",
+      "ok": true,
+      "read": true
+     },
+     {
+      "check": "enough new world has arrived to change the answer: distinct states since the last proposal (12 now, 8 then) >= 4",
+      "ok": true,
+      "read": 4
+     },
+     {
+      "check": "the leg's proposal budget is not spent (< 3)",
+      "ok": true,
+      "read": 2
+     }
+    ],
+    "delivery": "parked for the next theorize call a surprise pays for; this beat spends nothing and calls nothing",
+    "due": true,
+    "new_states": 4,
+    "proposals_made": 2,
+    "refused_because": []
+   },
+   "protocol": "propose",
+   "turn": 11,
+   "turns_planning": 0,
+   "turns_without_goal": 11,
+   "why": "the manual declares no winning condition, so `is_goal` compiles to False everywhere and NO search can succeed. The arm is exploring. That is a legitimate state -- a goal true in the wrong states stops the planner at the first one -- but it is a state, not a planner failure, and every action spent in it is spent without a target."
+  },
+  "plan": {
+   "backend": null,
+   "detail": "the manual states no winning condition, so `is_goal` is `False` everywhere and no search can succeed. This is a gap in the manual, NOT a proof that the level is unsolvable -- constraint 6 forbids reading a failed search as an unsolvability claim.",
+   "plan": null,
+   "status": "no_goal_declared"
+  },
+  "predictor": "loaded",
+  "probe": {
+   "action": 5,
+   "frontier_vacuous": true,
+   "information_gain_bits": 0.0,
+   "kind": "probe",
+   "manual_survived": false,
+   "probe_id": "P-11",
+   "refuted": [
+    "inert",
+    "manual",
+    "without_key2_body_arrives",
+    "without_key2_body_leaves",
+    "without_key3_inert_below_spawn",
+    "without_key5_body_clears",
+    "without_key5_body_respawns",
+    "without_key5_slot1_dims",
+    "without_key5_slot1_lights",
+    "without_key5_slot2_centre_darkens",
+    "without_key5_slot2_centre_resets",
+    "without_key5_slot2_ring_resets",
+    "without_key5_slot2_row1_lights",
+    "without_key5_slot2_row2_left_lights",
+    "without_key5_slot2_row2_right_lights",
+    "without_key5_slot2_row3_lights",
+    "without_key5_underline1_dims",
+    "without_key5_underline1_lights",
+    "without_key5_underline2_dims",
+    "without_key5_underline2_lights",
+    "without_meter_burn_edge_key2",
+    "without_meter_burn_next_key1",
+    "without_meter_burn_next_key2",
+    "without_meter_burn_next_key4"
+   ]
+  },
+  "theorize": "skipped: 3 surprise(s) pending but only 2 new transition(s) since the last call (want 4). Going to get more.",
+  "turn": 11
+ },
+ {
+  "actions_before": 16,
+  "elapsed_s": 3181.7,
+  "goal": {
+   "absence_is_signed": true,
+   "absence_signature": "the_goal_is_absent_because_no_instance_can_name_the_socket",
+   "distinct_states": 13,
+   "goal_declared": false,
+   "mode": "exploring_no_goal",
+   "plan_status": "no_goal_declared",
+   "proposal": {
+    "checks": [
+     {
+      "check": "the manual declares no winning condition",
+      "ok": true,
+      "read": "exploring_no_goal"
+     },
+     {
+      "check": "there is a compiled predictor for a goal to be written against -- a goal clause naming objects the manual cannot instantiate is not a goal",
+      "ok": true,
+      "read": true
+     },
+     {
+      "check": "enough new world has arrived to change the answer: distinct states since the last proposal (13 now, 12 then) >= 4",
+      "ok": false,
+      "read": 1
+     },
+     {
+      "check": "the leg's proposal budget is not spent (< 3)",
+      "ok": false,
+      "read": 3
+     }
+    ],
+    "due": false,
+    "new_states": 1,
+    "proposals_made": 3,
+    "refused_because": [
+     "enough new world has arrived to change the answer: distinct states since the last proposal (13 now, 12 then) >= 4",
+     "the leg's proposal budget is not spent (< 3)"
+    ]
+   },
+   "protocol": "propose",
+   "turn": 12,
+   "turns_planning": 0,
+   "turns_without_goal": 12,
+   "why": "the manual declares no winning condition, so `is_goal` compiles to False everywhere and NO search can succeed. The arm is exploring. That is a legitimate state -- a goal true in the wrong states stops the planner at the first one -- but it is a state, not a planner failure, and every action spent in it is spent without a target."
+  },
+  "plan": {
+   "backend": null,
+   "detail": "the manual states no winning condition, so `is_goal` is `False` everywhere and no search can succeed. This is a gap in the manual, NOT a proof that the level is unsolvable -- constraint 6 forbids reading a failed search as an unsolvability claim.",
+   "plan": null,
+   "status": "no_goal_declared"
+  },
+  "predictor": "loaded",
+  "probe": {
+   "action": 1,
+   "kind": "exploration",
+   "why": "3 probes in a row came back with an empty posterior: every hypothesis refuted, including `inert`, so each eliminated nothing (0.0 bits realised). The frontier is built by ablating the manual, so while the manual is unchanged the next one is vacuous too. Going for evidence the ablation frontier cannot reach instead."
+  },
+  "theorize": "skipped: 4 surprise(s) pending but only 3 new transition(s) since the last call (want 4). Going to get more.",
+  "turn": 12
+ },
+ {
+  "actions_before": 17,
+  "certify": {
+   "cheap_green": false,
+   "proof_layer_available": false,
+   "replay": "15/17 transitions replay exactly",
+   "replay_ok": false,
+   "responsibility_ok": true,
+   "unexplained_cells": 0
+  },
+  "elapsed_s": 3188.2,
+  "goal": {
+   "absence_is_signed": true,
+   "absence_signature": "the_goal_is_absent_because_no_instance_can_name_the_socket",
+   "distinct_states": 13,
+   "goal_declared": false,
+   "mode": "exploring_no_goal",
+   "plan_status": "no_goal_declared",
+   "proposal": {
+    "checks": [
+     {
+      "check": "the manual declares no winning condition",
+      "ok": true,
+      "read": "exploring_no_goal"
+     },
+     {
+      "check": "there is a compiled predictor for a goal to be written against -- a goal clause naming objects the manual cannot instantiate is not a goal",
+      "ok": true,
+      "read": true
+     },
+     {
+      "check": "enough new world has arrived to change the answer: distinct states since the last proposal (13 now, 12 then) >= 4",
+      "ok": false,
+      "read": 1
+     },
+     {
+      "check": "the leg's proposal budget is not spent (< 3)",
+      "ok": false,
+      "read": 3
+     }
+    ],
+    "due": false,
+    "new_states": 1,
+    "proposals_made": 3,
+    "refused_because": [
+     "enough new world has arrived to change the answer: distinct states since the last proposal (13 now, 12 then) >= 4",
+     "the leg's proposal budget is not spent (< 3)"
+    ]
+   },
+   "protocol": "propose",
+   "turn": 13,
+   "turns_planning": 0,
+   "turns_without_goal": 13,
+   "why": "the manual declares no winning condition, so `is_goal` compiles to False everywhere and NO search can succeed. The arm is exploring. That is a legitimate state -- a goal true in the wrong states stops the planner at the first one -- but it is a state, not a planner failure, and every action spent in it is spent without a target."
+  },
+  "goal_rider": "answered: declined_with_argument",
+  "plan": {
+   "backend": null,
+   "detail": "the manual states no winning condition, so `is_goal` is `False` everywhere and no search can succeed. This is a gap in the manual, NOT a proof that the level is unsolvable -- constraint 6 forbids reading a failed search as an unsolvability claim.",
+   "plan": null,
+   "status": "no_goal_declared"
+  },
+  "predictor": "loaded",
+  "probe": {
+   "action": 2,
+   "frontier_vacuous": true,
+   "information_gain_bits": 0.0,
+   "kind": "probe",
+   "manual_survived": false,
+   "probe_id": "P-13",
+   "refuted": [
+    "inert",
+    "manual",
+    "without_key2_body_arrives",
+    "without_key2_body_leaves",
+    "without_key3_inert_below_spawn",
+    "without_key5_body_clears",
+    "without_key5_body_respawns",
+    "without_key5_slot1_dims",
+    "without_key5_slot1_lights",
+    "without_key5_slot2_centre_darkens",
+    "without_key5_slot2_centre_resets",
+    "without_key5_slot2_ring_resets",
+    "without_key5_slot2_row1_lights",
+    "without_key5_slot2_row2_left_lights",
+    "without_key5_slot2_row2_right_lights",
+    "without_key5_slot2_row3_lights",
+    "without_key5_underline1_dims",
+    "without_key5_underline1_lights",
+    "without_key5_underline2_dims",
+    "without_key5_underline2_lights",
+    "without_meter_burn_edge_key2",
+    "without_meter_burn_next_key1",
+    "without_meter_burn_next_key2",
+    "without_meter_burn_next_key4"
+   ]
+  },
+  "theorize": "stopped repairing after 2 rounds; going back for evidence",
+  "theorize_calls": 1,
+  "theorize_ok": true,
+  "theorize_rounds": 2,
+  "turn": 13
+ },
+ {
+  "actions_before": 18,
+  "elapsed_s": 4472.7,
+  "goal": {
+   "absence_is_signed": true,
+   "absence_signature": "the_goal_is_absent_because_no_instance_can_name_the_socket",
+   "distinct_states": 14,
+   "goal_declared": false,
+   "mode": "exploring_no_goal",
+   "plan_status": "no_goal_declared",
+   "proposal": {
+    "checks": [
+     {
+      "check": "the manual declares no winning condition",
+      "ok": true,
+      "read": "exploring_no_goal"
+     },
+     {
+      "check": "there is a compiled predictor for a goal to be written against -- a goal clause naming objects the manual cannot instantiate is not a goal",
+      "ok": true,
+      "read": true
+     },
+     {
+      "check": "enough new world has arrived to change the answer: distinct states since the last proposal (14 now, 12 then) >= 4",
+      "ok": false,
+      "read": 2
+     },
+     {
+      "check": "the leg's proposal budget is not spent (< 3)",
+      "ok": false,
+      "read": 3
+     }
+    ],
+    "due": false,
+    "new_states": 2,
+    "proposals_made": 3,
+    "refused_because": [
+     "enough new world has arrived to change the answer: distinct states since the last proposal (14 now, 12 then) >= 4",
+     "the leg's proposal budget is not spent (< 3)"
+    ]
+   },
+   "protocol": "propose",
+   "turn": 14,
+   "turns_planning": 0,
+   "turns_without_goal": 14,
+   "why": "the manual declares no winning condition, so `is_goal` compiles to False everywhere and NO search can succeed. The arm is exploring. That is a legitimate state -- a goal true in the wrong states stops the planner at the first one -- but it is a state, not a planner failure, and every action spent in it is spent without a target."
+  },
+  "plan": {
+   "backend": null,
+   "detail": "the manual states no winning condition, so `is_goal` is `False` everywhere and no search can succeed. This is a gap in the manual, NOT a proof that the level is unsolvable -- constraint 6 forbids reading a failed search as an unsolvability claim.",
+   "plan": null,
+   "status": "no_goal_declared"
+  },
+  "predictor": "loaded",
+  "probe": {
+   "action": 5,
+   "frontier_vacuous": true,
+   "information_gain_bits": 0.0,
+   "kind": "probe",
+   "manual_survived": false,
+   "probe_id": "P-14",
+   "refuted": [
+    "inert",
+    "manual",
+    "without_key2_body_arrives",
+    "without_key2_body_leaves",
+    "without_key3_inert_below_spawn",
+    "without_key5_body_clears",
+    "without_key5_body_respawns",
+    "without_key5_slot1_dims",
+    "without_key5_slot1_lights",
+    "without_key5_slot2_centre_darkens",
+    "without_key5_slot2_centre_resets",
+    "without_key5_slot2_ring_resets",
+    "without_key5_slot2_row1_lights",
+    "without_key5_slot2_row2_left_lights",
+    "without_key5_slot2_row2_right_lights",
+    "without_key5_slot2_row3_lights",
+    "without_key5_underline1_dims",
+    "without_key5_underline1_lights",
+    "without_key5_underline2_dims",
+    "without_key5_underline2_lights",
+    "without_meter_burn_edge_key2",
+    "without_meter_burn_next_key1",
+    "without_meter_burn_next_key2",
+    "without_meter_burn_next_key4"
+   ]
+  },
+  "theorize": "skipped: 3 surprise(s) pending but only 1 new transition(s) since the last call (want 4). Going to get more.",
+  "turn": 14
+ },
+ {
+  "actions_before": 19,
+  "elapsed_s": 4478.7,
+  "goal": {
+   "absence_is_signed": true,
+   "absence_signature": "the_goal_is_absent_because_no_instance_can_name_the_socket",
+   "distinct_states": 15,
+   "goal_declared": false,
+   "mode": "exploring_no_goal",
+   "plan_status": "no_goal_declared",
+   "proposal": {
+    "checks": [
+     {
+      "check": "the manual declares no winning condition",
+      "ok": true,
+      "read": "exploring_no_goal"
+     },
+     {
+      "check": "there is a compiled predictor for a goal to be written against -- a goal clause naming objects the manual cannot instantiate is not a goal",
+      "ok": true,
+      "read": true
+     },
+     {
+      "check": "enough new world has arrived to change the answer: distinct states since the last proposal (15 now, 12 then) >= 4",
+      "ok": false,
+      "read": 3
+     },
+     {
+      "check": "the leg's proposal budget is not spent (< 3)",
+      "ok": false,
+      "read": 3
+     }
+    ],
+    "due": false,
+    "new_states": 3,
+    "proposals_made": 3,
+    "refused_because": [
+     "enough new world has arrived to change the answer: distinct states since the last proposal (15 now, 12 then) >= 4",
+     "the leg's proposal budget is not spent (< 3)"
+    ]
+   },
+   "protocol": "propose",
+   "turn": 15,
+   "turns_planning": 0,
+   "turns_without_goal": 15,
+   "why": "the manual declares no winning condition, so `is_goal` compiles to False everywhere and NO search can succeed. The arm is exploring. That is a legitimate state -- a goal true in the wrong states stops the planner at the first one -- but it is a state, not a planner failure, and every action spent in it is spent without a target."
+  },
+  "plan": {
+   "backend": null,
+   "detail": "the manual states no winning condition, so `is_goal` is `False` everywhere and no search can succeed. This is a gap in the manual, NOT a proof that the level is unsolvable -- constraint 6 forbids reading a failed search as an unsolvability claim.",
+   "plan": null,
+   "status": "no_goal_declared"
+  },
+  "predictor": "loaded",
+  "probe": {
+   "action": 2,
+   "frontier_vacuous": true,
+   "information_gain_bits": 0.0,
+   "kind": "probe",
+   "manual_survived": false,
+   "probe_id": "P-15",
+   "refuted": [
+    "inert",
+    "manual",
+    "without_key2_body_arrives",
+    "without_key2_body_leaves",
+    "without_key3_inert_below_spawn",
+    "without_key5_body_clears",
+    "without_key5_body_respawns",
+    "without_key5_slot1_dims",
+    "without_key5_slot1_lights",
+    "without_key5_slot2_centre_darkens",
+    "without_key5_slot2_centre_resets",
+    "without_key5_slot2_ring_resets",
+    "without_key5_slot2_row1_lights",
+    "without_key5_slot2_row2_left_lights",
+    "without_key5_slot2_row2_right_lights",
+    "without_key5_slot2_row3_lights",
+    "without_key5_underline1_dims",
+    "without_key5_underline1_lights",
+    "without_key5_underline2_dims",
+    "without_key5_underline2_lights",
+    "without_meter_burn_edge_key2",
+    "without_meter_burn_next_key1",
+    "without_meter_burn_next_key2",
+    "without_meter_burn_next_key4"
+   ]
+  },
+  "theorize": "skipped: 4 surprise(s) pending but only 2 new transition(s) since the last call (want 4). Going to get more.",
+  "turn": 15
+ },
+ {
+  "actions_before": 20,
+  "elapsed_s": 4480.5,
+  "goal": {
+   "absence_is_signed": true,
+   "absence_signature": "the_goal_is_absent_because_no_instance_can_name_the_socket",
+   "distinct_states": 16,
+   "goal_declared": false,
+   "mode": "exploring_no_goal",
+   "plan_status": "no_goal_declared",
+   "proposal": {
+    "checks": [
+     {
+      "check": "the manual declares no winning condition",
+      "ok": true,
+      "read": "exploring_no_goal"
+     },
+     {
+      "check": "there is a compiled predictor for a goal to be written against -- a goal clause naming objects the manual cannot instantiate is not a goal",
+      "ok": true,
+      "read": true
+     },
+     {
+      "check": "enough new world has arrived to change the answer: distinct states since the last proposal (16 now, 12 then) >= 4",
+      "ok": true,
+      "read": 4
+     },
+     {
+      "check": "the leg's proposal budget is not spent (< 3)",
+      "ok": false,
+      "read": 3
+     }
+    ],
+    "due": false,
+    "new_states": 4,
+    "proposals_made": 3,
+    "refused_because": [
+     "the leg's proposal budget is not spent (< 3)"
+    ]
+   },
+   "protocol": "propose",
+   "turn": 16,
+   "turns_planning": 0,
+   "turns_without_goal": 16,
+   "why": "the manual declares no winning condition, so `is_goal` compiles to False everywhere and NO search can succeed. The arm is exploring. That is a legitimate state -- a goal true in the wrong states stops the planner at the first one -- but it is a state, not a planner failure, and every action spent in it is spent without a target."
+  },
+  "plan": {
+   "backend": null,
+   "detail": "the manual states no winning condition, so `is_goal` is `False` everywhere and no search can succeed. This is a gap in the manual, NOT a proof that the level is unsolvable -- constraint 6 forbids reading a failed search as an unsolvability claim.",
+   "plan": null,
+   "status": "no_goal_declared"
+  },
+  "predictor": "loaded",
+  "probe": {
+   "action": 3,
+   "kind": "exploration",
+   "why": "3 probes in a row came back with an empty posterior: every hypothesis refuted, including `inert`, so each eliminated nothing (0.0 bits realised). The frontier is built by ablating the manual, so while the manual is unchanged the next one is vacuous too. Going for evidence the ablation frontier cannot reach instead."
+  },
+  "theorize": "skipped: 5 surprise(s) pending but only 3 new transition(s) since the last call (want 4). Going to get more.",
+  "turn": 16
+ },
+ {
+  "actions_before": 21,
+  "certify": {
+   "cheap_green": false,
+   "proof_layer_available": false,
+   "replay": "16/21 transitions replay exactly",
+   "replay_ok": false,
+   "responsibility_ok": true,
+   "unexplained_cells": 0
+  },
+  "elapsed_s": 4510.3,
+  "goal": {
+   "absence_is_signed": true,
+   "absence_signature": "the_goal_is_absent_because_no_instance_can_name_the_socket",
+   "distinct_states": 16,
+   "goal_declared": false,
+   "mode": "exploring_no_goal",
+   "plan_status": "no_goal_declared",
+   "proposal": {
+    "checks": [
+     {
+      "check": "the manual declares no winning condition",
+      "ok": true,
+      "read": "exploring_no_goal"
+     },
+     {
+      "check": "there is a compiled predictor for a goal to be written against -- a goal clause naming objects the manual cannot instantiate is not a goal",
+      "ok": true,
+      "read": true
+     },
+     {
+      "check": "enough new world has arrived to change the answer: distinct states since the last proposal (16 now, 12 then) >= 4",
+      "ok": true,
+      "read": 4
+     },
+     {
+      "check": "the leg's proposal budget is not spent (< 3)",
+      "ok": false,
+      "read": 3
+     }
+    ],
+    "due": false,
+    "new_states": 4,
+    "proposals_made": 3,
+    "refused_because": [
+     "the leg's proposal budget is not spent (< 3)"
+    ]
+   },
+   "protocol": "propose",
+   "turn": 17,
+   "turns_planning": 0,
+   "turns_without_goal": 17,
+   "why": "the manual declares no winning condition, so `is_goal` compiles to False everywhere and NO search can succeed. The arm is exploring. That is a legitimate state -- a goal true in the wrong states stops the planner at the first one -- but it is a state, not a planner failure, and every action spent in it is spent without a target."
+  },
+  "plan": {
+   "backend": null,
+   "detail": "the manual states no winning condition, so `is_goal` is `False` everywhere and no search can succeed. This is a gap in the manual, NOT a proof that the level is unsolvable -- constraint 6 forbids reading a failed search as an unsolvability claim.",
+   "plan": null,
+   "status": "no_goal_declared"
+  },
+  "predictor": "loaded",
+  "probe": {
+   "action": 5,
+   "frontier_vacuous": true,
+   "information_gain_bits": 0.0,
+   "kind": "probe",
+   "manual_survived": false,
+   "probe_id": "P-17",
+   "refuted": [
+    "inert",
+    "manual",
+    "without_key2_body_arrives",
+    "without_key2_body_leaves",
+    "without_key3_inert_below_spawn",
+    "without_key5_body_clears",
+    "without_key5_body_respawns",
+    "without_key5_slot1_dims",
+    "without_key5_slot1_lights",
+    "without_key5_slot2_centre_darkens",
+    "without_key5_slot2_centre_resets",
+    "without_key5_slot2_ring_resets",
+    "without_key5_slot2_row1_lights",
+    "without_key5_slot2_row2_left_lights",
+    "without_key5_slot2_row2_right_lights",
+    "without_key5_slot2_row3_lights",
+    "without_key5_underline1_dims",
+    "without_key5_underline1_lights",
+    "without_key5_underline2_dims",
+    "without_key5_underline2_lights",
+    "without_meter_burn_edge_key2",
+    "without_meter_burn_next_key1",
+    "without_meter_burn_next_key2",
+    "without_meter_burn_next_key4"
+   ]
+  },
+  "theorize": "stopped repairing after 2 rounds; going back for evidence",
+  "theorize_calls": 1,
+  "theorize_ok": true,
+  "theorize_rounds": 2,
+  "turn": 17
+ },
+ {
+  "actions_before": 22,
+  "elapsed_s": 5508.2,
+  "goal": {
+   "absence_is_signed": true,
+   "absence_signature": "the_goal_is_absent_because_no_instance_can_name_the_socket",
+   "distinct_states": 17,
+   "goal_declared": false,
+   "mode": "exploring_no_goal",
+   "plan_status": "no_goal_declared",
+   "proposal": {
+    "checks": [
+     {
+      "check": "the manual declares no winning condition",
+      "ok": true,
+      "read": "exploring_no_goal"
+     },
+     {
+      "check": "there is a compiled predictor for a goal to be written against -- a goal clause naming objects the manual cannot instantiate is not a goal",
+      "ok": true,
+      "read": true
+     },
+     {
+      "check": "enough new world has arrived to change the answer: distinct states since the last proposal (17 now, 12 then) >= 4",
+      "ok": true,
+      "read": 5
+     },
+     {
+      "check": "the leg's proposal budget is not spent (< 3)",
+      "ok": false,
+      "read": 3
+     }
+    ],
+    "due": false,
+    "new_states": 5,
+    "proposals_made": 3,
+    "refused_because": [
+     "the leg's proposal budget is not spent (< 3)"
+    ]
+   },
+   "protocol": "propose",
+   "turn": 18,
+   "turns_planning": 0,
+   "turns_without_goal": 18,
+   "why": "the manual declares no winning condition, so `is_goal` compiles to False everywhere and NO search can succeed. The arm is exploring. That is a legitimate state -- a goal true in the wrong states stops the planner at the first one -- but it is a state, not a planner failure, and every action spent in it is spent without a target."
+  },
+  "plan": {
+   "backend": null,
+   "detail": "the manual states no winning condition, so `is_goal` is `False` everywhere and no search can succeed. This is a gap in the manual, NOT a proof that the level is unsolvable -- constraint 6 forbids reading a failed search as an unsolvability claim.",
+   "plan": null,
+   "status": "no_goal_declared"
+  },
+  "predictor": "loaded",
+  "probe": {
+   "action": 2,
+   "frontier_vacuous": true,
+   "information_gain_bits": 0.0,
+   "kind": "probe",
+   "manual_survived": false,
+   "probe_id": "P-18",
+   "refuted": [
+    "inert",
+    "manual",
+    "without_key2_body_arrives",
+    "without_key2_body_leaves",
+    "without_key3_inert_below_spawn",
+    "without_key5_body_clears",
+    "without_key5_body_respawns",
+    "without_key5_slot1_dims",
+    "without_key5_slot1_lights",
+    "without_key5_slot2_centre_darkens",
+    "without_key5_slot2_centre_resets",
+    "without_key5_slot2_ring_resets",
+    "without_key5_slot2_row1_lights",
+    "without_key5_slot2_row2_left_lights",
+    "without_key5_slot2_row2_right_lights",
+    "without_key5_slot2_row3_lights",
+    "without_key5_underline1_dims",
+    "without_key5_underline1_lights",
+    "without_key5_underline2_dims",
+    "without_key5_underline2_lights",
+    "without_meter_burn_edge_key2",
+    "without_meter_burn_next_key1",
+    "without_meter_burn_next_key2",
+    "without_meter_burn_next_key4"
+   ]
+  },
+  "theorize": "skipped: 3 surprise(s) pending but only 1 new transition(s) since the last call (want 4). Going to get more.",
+  "turn": 18
+ },
+ {
+  "actions_before": 23,
+  "elapsed_s": 5553.0,
+  "goal": {
+   "absence_is_signed": true,
+   "absence_signature": "the_goal_is_absent_because_no_instance_can_name_the_socket",
+   "distinct_states": 18,
+   "goal_declared": false,
+   "mode": "exploring_no_goal",
+   "plan_status": "no_goal_declared",
+   "proposal": {
+    "checks": [
+     {
+      "check": "the manual declares no winning condition",
+      "ok": true,
+      "read": "exploring_no_goal"
+     },
+     {
+      "check": "there is a compiled predictor for a goal to be written against -- a goal clause naming objects the manual cannot instantiate is not a goal",
+      "ok": true,
+      "read": true
+     },
+     {
+      "check": "enough new world has arrived to change the answer: distinct states since the last proposal (18 now, 12 then) >= 4",
+      "ok": true,
+      "read": 6
+     },
+     {
+      "check": "the leg's proposal budget is not spent (< 3)",
+      "ok": false,
+      "read": 3
+     }
+    ],
+    "due": false,
+    "new_states": 6,
+    "proposals_made": 3,
+    "refused_because": [
+     "the leg's proposal budget is not spent (< 3)"
+    ]
+   },
+   "protocol": "propose",
+   "turn": 19,
+   "turns_planning": 0,
+   "turns_without_goal": 19,
+   "why": "the manual declares no winning condition, so `is_goal` compiles to False everywhere and NO search can succeed. The arm is exploring. That is a legitimate state -- a goal true in the wrong states stops the planner at the first one -- but it is a state, not a planner failure, and every action spent in it is spent without a target."
+  },
+  "plan": {
+   "backend": null,
+   "detail": "the manual states no winning condition, so `is_goal` is `False` everywhere and no search can succeed. This is a gap in the manual, NOT a proof that the level is unsolvable -- constraint 6 forbids reading a failed search as an unsolvability claim.",
+   "plan": null,
+   "status": "no_goal_declared"
+  },
+  "predictor": "loaded",
+  "probe": {
+   "action": 5,
+   "frontier_vacuous": true,
+   "information_gain_bits": 0.0,
+   "kind": "probe",
+   "manual_survived": false,
+   "probe_id": "P-19",
+   "refuted": [
+    "inert",
+    "manual",
+    "without_key2_body_arrives",
+    "without_key2_body_leaves",
+    "without_key3_inert_below_spawn",
+    "without_key5_body_clears",
+    "without_key5_body_respawns",
+    "without_key5_slot1_dims",
+    "without_key5_slot1_lights",
+    "without_key5_slot2_centre_darkens",
+    "without_key5_slot2_centre_resets",
+    "without_key5_slot2_ring_resets",
+    "without_key5_slot2_row1_lights",
+    "without_key5_slot2_row2_left_lights",
+    "without_key5_slot2_row2_right_lights",
+    "without_key5_slot2_row3_lights",
+    "without_key5_underline1_dims",
+    "without_key5_underline1_lights",
+    "without_key5_underline2_dims",
+    "without_key5_underline2_lights",
+    "without_meter_burn_edge_key2",
+    "without_meter_burn_next_key1",
+    "without_meter_burn_next_key2",
+    "without_meter_burn_next_key4"
+   ]
+  },
+  "theorize": "skipped: 4 surprise(s) pending but only 2 new transition(s) since the last call (want 4). Going to get more.",
+  "turn": 19
+ },
+ {
+  "actions_before": 24,
+  "elapsed_s": 5574.6,
+  "goal": {
+   "absence_is_signed": true,
+   "absence_signature": "the_goal_is_absent_because_no_instance_can_name_the_socket",
+   "distinct_states": 19,
+   "goal_declared": false,
+   "mode": "exploring_no_goal",
+   "plan_status": "no_goal_declared",
+   "proposal": {
+    "checks": [
+     {
+      "check": "the manual declares no winning condition",
+      "ok": true,
+      "read": "exploring_no_goal"
+     },
+     {
+      "check": "there is a compiled predictor for a goal to be written against -- a goal clause naming objects the manual cannot instantiate is not a goal",
+      "ok": true,
+      "read": true
+     },
+     {
+      "check": "enough new world has arrived to change the answer: distinct states since the last proposal (19 now, 12 then) >= 4",
+      "ok": true,
+      "read": 7
+     },
+     {
+      "check": "the leg's proposal budget is not spent (< 3)",
+      "ok": false,
+      "read": 3
+     }
+    ],
+    "due": false,
+    "new_states": 7,
+    "proposals_made": 3,
+    "refused_because": [
+     "the leg's proposal budget is not spent (< 3)"
+    ]
+   },
+   "protocol": "propose",
+   "turn": 20,
+   "turns_planning": 0,
+   "turns_without_goal": 20,
+   "why": "the manual declares no winning condition, so `is_goal` compiles to False everywhere and NO search can succeed. The arm is exploring. That is a legitimate state -- a goal true in the wrong states stops the planner at the first one -- but it is a state, not a planner failure, and every action spent in it is spent without a target."
+  },
+  "plan": {
+   "backend": null,
+   "detail": "the manual states no winning condition, so `is_goal` is `False` everywhere and no search can succeed. This is a gap in the manual, NOT a proof that the level is unsolvable -- constraint 6 forbids reading a failed search as an unsolvability claim.",
+   "plan": null,
+   "status": "no_goal_declared"
+  },
+  "predictor": "loaded",
+  "probe": {
+   "action": 4,
+   "kind": "exploration",
+   "why": "3 probes in a row came back with an empty posterior: every hypothesis refuted, including `inert`, so each eliminated nothing (0.0 bits realised). The frontier is built by ablating the manual, so while the manual is unchanged the next one is vacuous too. Going for evidence the ablation frontier cannot reach instead."
+  },
+  "theorize": "skipped: 5 surprise(s) pending but only 3 new transition(s) since the last call (want 4). Going to get more.",
+  "turn": 20
+ }
+]

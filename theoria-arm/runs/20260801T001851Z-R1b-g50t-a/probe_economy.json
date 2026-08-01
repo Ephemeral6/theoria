@@ -1,0 +1,228 @@
+{
+ "config": {
+  "carry_refutations": true,
+  "min_bits": 0.0
+ },
+ "decisions": [
+  {
+   "action": [
+    "key",
+    2
+   ],
+   "allowed": true,
+   "bits": 0.650022421648,
+   "reason": "",
+   "step_idx": 6
+  },
+  {
+   "action": [
+    "key",
+    5
+   ],
+   "allowed": true,
+   "bits": 0.650022421648,
+   "reason": "",
+   "step_idx": 7
+  },
+  {
+   "action": [
+    "key",
+    2
+   ],
+   "allowed": false,
+   "bits": 0.650022421648,
+   "reason": "this is the same experiment as P-01 -- same action, same prediction from every hypothesis, therefore the same partition of the frontier. Re-running it cannot separate anything P-01 did not.",
+   "step_idx": 8
+  },
+  {
+   "action": [
+    "key",
+    2
+   ],
+   "allowed": false,
+   "bits": 0.650022421648,
+   "reason": "this is the same experiment as P-01 -- same action, same prediction from every hypothesis, therefore the same partition of the frontier. Re-running it cannot separate anything P-01 did not.",
+   "step_idx": 9
+  },
+  {
+   "action": [
+    "key",
+    2
+   ],
+   "allowed": true,
+   "bits": 0.5435644432,
+   "reason": "",
+   "step_idx": 10
+  },
+  {
+   "action": [
+    "key",
+    5
+   ],
+   "allowed": true,
+   "bits": 0.994984828186,
+   "reason": "",
+   "step_idx": 11
+  },
+  {
+   "action": [
+    "key",
+    2
+   ],
+   "allowed": true,
+   "bits": 0.5435644432,
+   "reason": "",
+   "step_idx": 12
+  },
+  {
+   "action": [
+    "key",
+    5
+   ],
+   "allowed": false,
+   "bits": 0.918295834054,
+   "reason": "3 probes in a row came back with an empty posterior: every hypothesis refuted, including `inert`, so each eliminated nothing (0.0 bits realised). The frontier is built by ablating the manual, so while the manual is unchanged the next one is vacuous too. Going for evidence the ablation frontier cannot reach instead.",
+   "step_idx": 13
+  },
+  {
+   "action": [
+    "key",
+    5
+   ],
+   "allowed": true,
+   "bits": 0.918295834054,
+   "reason": "",
+   "step_idx": 14
+  },
+  {
+   "action": [
+    "key",
+    2
+   ],
+   "allowed": true,
+   "bits": 0.5435644432,
+   "reason": "",
+   "step_idx": 15
+  },
+  {
+   "action": [
+    "key",
+    5
+   ],
+   "allowed": true,
+   "bits": 0.994984828186,
+   "reason": "",
+   "step_idx": 16
+  },
+  {
+   "action": [
+    "key",
+    2
+   ],
+   "allowed": false,
+   "bits": 0.5435644432,
+   "reason": "3 probes in a row came back with an empty posterior: every hypothesis refuted, including `inert`, so each eliminated nothing (0.0 bits realised). The frontier is built by ablating the manual, so while the manual is unchanged the next one is vacuous too. Going for evidence the ablation frontier cannot reach instead.",
+   "step_idx": 17
+  },
+  {
+   "action": [
+    "key",
+    2
+   ],
+   "allowed": true,
+   "bits": 0.5435644432,
+   "reason": "",
+   "step_idx": 18
+  },
+  {
+   "action": [
+    "key",
+    5
+   ],
+   "allowed": true,
+   "bits": 0.918295834054,
+   "reason": "",
+   "step_idx": 19
+  },
+  {
+   "action": [
+    "key",
+    2
+   ],
+   "allowed": true,
+   "bits": 0.5435644432,
+   "reason": "",
+   "step_idx": 20
+  },
+  {
+   "action": [
+    "key",
+    5
+   ],
+   "allowed": false,
+   "bits": 0.994984828186,
+   "reason": "3 probes in a row came back with an empty posterior: every hypothesis refuted, including `inert`, so each eliminated nothing (0.0 bits realised). The frontier is built by ablating the manual, so while the manual is unchanged the next one is vacuous too. Going for evidence the ablation frontier cannot reach instead.",
+   "step_idx": 21
+  },
+  {
+   "action": [
+    "key",
+    5
+   ],
+   "allowed": true,
+   "bits": 0.994984828186,
+   "reason": "",
+   "step_idx": 22
+  },
+  {
+   "action": [
+    "key",
+    2
+   ],
+   "allowed": true,
+   "bits": 0.5435644432,
+   "reason": "",
+   "step_idx": 23
+  },
+  {
+   "action": [
+    "key",
+    5
+   ],
+   "allowed": true,
+   "bits": 0.918295834054,
+   "reason": "",
+   "step_idx": 24
+  },
+  {
+   "action": [
+    "key",
+    2
+   ],
+   "allowed": false,
+   "bits": 0.5435644432,
+   "reason": "3 probes in a row came back with an empty posterior: every hypothesis refuted, including `inert`, so each eliminated nothing (0.0 bits realised). The frontier is built by ablating the manual, so while the manual is unchanged the next one is vacuous too. Going for evidence the ablation frontier cannot reach instead.",
+   "step_idx": 25
+  },
+  {
+   "action": [
+    "key",
+    2
+   ],
+   "allowed": false,
+   "bits": 0.5435644432,
+   "reason": "3 probes in a row came back with an empty posterior: every hypothesis refuted, including `inert`, so each eliminated nothing (0.0 bits realised). The frontier is built by ablating the manual, so while the manual is unchanged the next one is vacuous too. Going for evidence the ablation frontier cannot reach instead.",
+   "step_idx": 26
+  }
+ ],
+ "enabled": false,
+ "fired_this_generation": 12,
+ "generations": 2,
+ "probes_allowed": 14,
+ "probes_refused": 7,
+ "refusal_reasons": {
+  "3 probes in a row came back with an empty posterior: every h": 5,
+  "this is the same experiment as P-01 -- same action, same pre": 2
+ },
+ "retired_hypotheses": []
+}

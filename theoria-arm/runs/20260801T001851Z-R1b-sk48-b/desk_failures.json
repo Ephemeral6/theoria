@@ -1,0 +1,6 @@
+[
+ {
+  "error": "SpendGateTripped: reservation res-6a1aabbf90f043cb for 'theoria-arm:A3-campaign-devpile:sk48-d8078629:20260801T001851Z-R1b-sk48-b' is at $17.3907 of its $29.0000 cap",
+  "step_idx": 10
+ }
+]

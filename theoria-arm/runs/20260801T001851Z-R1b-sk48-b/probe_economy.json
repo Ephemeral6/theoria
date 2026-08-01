@@ -1,0 +1,67 @@
+{
+ "config": {
+  "carry_refutations": true,
+  "min_bits": 0.0
+ },
+ "decisions": [
+  {
+   "action": [
+    "key",
+    4
+   ],
+   "allowed": true,
+   "bits": 0.918295834054,
+   "reason": "",
+   "step_idx": 6
+  },
+  {
+   "action": [
+    "key",
+    4
+   ],
+   "allowed": false,
+   "bits": 0.918295834054,
+   "reason": "this is the same experiment as P-01 -- same action, same prediction from every hypothesis, therefore the same partition of the frontier. Re-running it cannot separate anything P-01 did not.",
+   "step_idx": 7
+  },
+  {
+   "action": [
+    "key",
+    4
+   ],
+   "allowed": false,
+   "bits": 0.918295834054,
+   "reason": "this is the same experiment as P-01 -- same action, same prediction from every hypothesis, therefore the same partition of the frontier. Re-running it cannot separate anything P-01 did not.",
+   "step_idx": 8
+  },
+  {
+   "action": [
+    "key",
+    4
+   ],
+   "allowed": false,
+   "bits": 0.918295834054,
+   "reason": "this is the same experiment as P-01 -- same action, same prediction from every hypothesis, therefore the same partition of the frontier. Re-running it cannot separate anything P-01 did not.",
+   "step_idx": 9
+  },
+  {
+   "action": [
+    "key",
+    4
+   ],
+   "allowed": false,
+   "bits": 0.918295834054,
+   "reason": "this is the same experiment as P-01 -- same action, same prediction from every hypothesis, therefore the same partition of the frontier. Re-running it cannot separate anything P-01 did not.",
+   "step_idx": 10
+  }
+ ],
+ "enabled": false,
+ "fired_this_generation": 1,
+ "generations": 1,
+ "probes_allowed": 1,
+ "probes_refused": 4,
+ "refusal_reasons": {
+  "this is the same experiment as P-01 -- same action, same pre": 4
+ },
+ "retired_hypotheses": []
+}

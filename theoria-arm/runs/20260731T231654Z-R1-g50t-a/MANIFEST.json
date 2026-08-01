@@ -1,0 +1,545 @@
+{
+ "arm": "theoria",
+ "arm_version": {
+  "files": 75,
+  "sha256": "dbb608c7c94d1cbe56ca8683ac544b045a70df47e173cbff2f52339dce875b17"
+ },
+ "base_commit": null,
+ "branch": null,
+ "classification": {
+  "archive_material": true,
+  "kind": "experiment",
+  "why": "a live run that reached its own end"
+ },
+ "constraint_8": {
+  "bootstrap_calls_allowed": 1,
+  "bootstrap_note": "the first theorize of a run answers no surprise because no manual exists yet for the world to contradict; it is counted as the one permitted bootstrap call and every later call must be covered by a surprise.",
+  "calls_at_forbidden_beats": {},
+  "calls_beyond_bootstrap": 3,
+  "calls_by_beat": {
+   "theorize": 4
+  },
+  "calls_not_covered_by_a_surprise": 0,
+  "holds": true,
+  "model_calls": 4,
+  "note": "probe design spent no model call: the frontier is computed by probe_frontier, which is exact on a deterministic world. Constraint 8 permits a call there; this run did not need one.",
+  "retired_by_kind": {},
+  "retired_note": "a surprise closed with handled_by='retired: ...' was closed without theorizing, so it licences no model call and is excluded from the denominator. It is still counted in `surprises` and in `surprises_by_kind`, because the seven counts are a record of what the world did, not of what was paid for.",
+  "surprises": 9,
+  "surprises_by_kind": {
+   "heuristic_miss": 2,
+   "probe_refutation": 5,
+   "replay_mismatch": 2
+  },
+  "surprises_licensing_a_call": 9,
+  "surprises_retired": 0
+ },
+ "cost": {
+  "cache_ttl_diagnosis": {
+   "cache_creation_1h_tokens": 219744,
+   "cache_creation_5m_tokens": 0,
+   "table": {
+    "sha256": "sha256:27ce4bb488204fb429efff841c4ec7a63c536d717b36b103fe22004eca5b1f42",
+    "table": "pricing_v1"
+   },
+   "under_billed_usd": 0.82404,
+   "verdict": "219744 of this run's cache-creation tokens were 1-hour writes. `proxy/cost.py` priced them at the 5-minute multiplier because it reads the flat usage key and not the nested `cache_creation` object, so the table under-states this run by about $0.8240. The multiplier it needs is already in pricing_v1.json (`cache_creation_input_tokens_1h`); what is missing is the read."
+  },
+  "cli_reported_usd": 7.603419,
+  "delta_usd": -0.114246,
+  "from_price_table": {
+   "missing_usage_keys": null,
+   "model_calls": 4,
+   "per_model": {
+    "claude-opus-5": {
+     "calls": 4,
+     "usd": 7.489173
+    }
+   },
+   "pricing": {
+    "sha256": "sha256:27ce4bb488204fb429efff841c4ec7a63c536d717b36b103fe22004eca5b1f42",
+    "table": "pricing_v1"
+   },
+   "unmeasured_calls": 0,
+   "unpriced_models": null,
+   "unpriced_usage_keys": null,
+   "usd_total": 7.489173
+  },
+  "model_calls": 4,
+  "price_table": {
+   "sha256": "sha256:27ce4bb488204fb429efff841c4ec7a63c536d717b36b103fe22004eca5b1f42",
+   "table": "pricing_v1"
+  },
+  "relative_delta": -0.015,
+  "usage_keys_the_table_cannot_price": null,
+  "usage_total": {
+   "cache_creation_input_tokens": 219744,
+   "cache_read_input_tokens": 37615,
+   "input_tokens": 10,
+   "output_tokens": 210915
+  },
+  "verdict": "the price table and the provider's own arithmetic agree to within 2%: pricing_v1.json is validated against a real bill for the first time"
+ },
+ "elapsed_s": 2984.0,
+ "files": [
+  {
+   "path": "CARRIED.json",
+   "sha256": "050269509fda5b1eecc24fc587f5af63b1fa9e3618337f16de120d657aec614a"
+  },
+  {
+   "path": "RUN_STATE.json",
+   "sha256": "96365e32f710592722ad25f48e5727bae7aa4d1c0afcec006c8125165e3776df"
+  },
+  {
+   "path": "bill_shape.json",
+   "sha256": "0330477e0cc2c2f13fba0c3221c99d71f272e254ebc77549856a8a6b0030244d"
+  },
+  {
+   "path": "books/CARRIED.json",
+   "sha256": "7537ad31d3db227ea2ba3b5455298145f5d1ec3cddaf142cb4c94a5ae36f00f3"
+  },
+  {
+   "path": "books/generated/theory.md",
+   "sha256": "99e905c4ec33028dc35339e3a4f0c107e373dadff3d6f111619f785f3263ac3f"
+  },
+  {
+   "path": "books/generated/theory.py",
+   "sha256": "01e89dc81532a3d03a61a702a8f5670a0eebe94221fcf0c1c80370aab14065ed"
+  },
+  {
+   "path": "books/playbook.dsl",
+   "sha256": "5b5391633529a24b0ac9d25a703fd40ee24f1d7df2dee44ecda8d568d57187d6"
+  },
+  {
+   "path": "books/problem.json",
+   "sha256": "0bbd4303ef0f33e8ce1fc45b510672fb980ec9d8fb20fbc4eda0fef7fdfd2414"
+  },
+  {
+   "path": "books/snapshots/rev01-carried/playbook.dsl",
+   "sha256": "8945e784b0aba80860a9238fb04607d20fdba5be440848797536030bb752fc16"
+  },
+  {
+   "path": "books/snapshots/rev01-carried/theory.dsl",
+   "sha256": "231ae4d7a48783a75704f244310f620b9dc32c141a1b500c35efa6ff28d7a8ef"
+  },
+  {
+   "path": "books/snapshots/rev02-after-cold-certify/playbook.dsl",
+   "sha256": "8945e784b0aba80860a9238fb04607d20fdba5be440848797536030bb752fc16"
+  },
+  {
+   "path": "books/snapshots/rev02-after-cold-certify/problem.json",
+   "sha256": "dc392fcc96fc8d470eeb9d417a7f8cc2996bc8349c2b22223eea54f286fc137b"
+  },
+  {
+   "path": "books/snapshots/rev02-after-cold-certify/theory.dsl",
+   "sha256": "231ae4d7a48783a75704f244310f620b9dc32c141a1b500c35efa6ff28d7a8ef"
+  },
+  {
+   "path": "books/snapshots/rev03-before-theorize/playbook.dsl",
+   "sha256": "8945e784b0aba80860a9238fb04607d20fdba5be440848797536030bb752fc16"
+  },
+  {
+   "path": "books/snapshots/rev03-before-theorize/problem.json",
+   "sha256": "dc392fcc96fc8d470eeb9d417a7f8cc2996bc8349c2b22223eea54f286fc137b"
+  },
+  {
+   "path": "books/snapshots/rev03-before-theorize/theory.dsl",
+   "sha256": "231ae4d7a48783a75704f244310f620b9dc32c141a1b500c35efa6ff28d7a8ef"
+  },
+  {
+   "path": "books/snapshots/rev04-after-theorize/playbook.dsl",
+   "sha256": "e28df7de3e0bd1cd1fa0bc478cb0e403a5a15d8ac61950873b53e8d2d5b94a23"
+  },
+  {
+   "path": "books/snapshots/rev04-after-theorize/problem.json",
+   "sha256": "2a91d501eb84c9edfe25aadb741b291a1899fe43da5d4c0184c1987e8c39892c"
+  },
+  {
+   "path": "books/snapshots/rev04-after-theorize/theory.dsl",
+   "sha256": "1dfd6266acd274b1a005538d07821943c81ec4dc811341af3d41f63f8420aa4b"
+  },
+  {
+   "path": "books/snapshots/rev05-before-theorize/playbook.dsl",
+   "sha256": "e28df7de3e0bd1cd1fa0bc478cb0e403a5a15d8ac61950873b53e8d2d5b94a23"
+  },
+  {
+   "path": "books/snapshots/rev05-before-theorize/problem.json",
+   "sha256": "2a91d501eb84c9edfe25aadb741b291a1899fe43da5d4c0184c1987e8c39892c"
+  },
+  {
+   "path": "books/snapshots/rev05-before-theorize/theory.dsl",
+   "sha256": "1dfd6266acd274b1a005538d07821943c81ec4dc811341af3d41f63f8420aa4b"
+  },
+  {
+   "path": "books/snapshots/rev06-after-theorize/playbook.dsl",
+   "sha256": "d503f257bae6d9067a20476244eef7fefa33ccd18b6512407a83680739cbb4f8"
+  },
+  {
+   "path": "books/snapshots/rev06-after-theorize/problem.json",
+   "sha256": "0bbd4303ef0f33e8ce1fc45b510672fb980ec9d8fb20fbc4eda0fef7fdfd2414"
+  },
+  {
+   "path": "books/snapshots/rev06-after-theorize/theory.dsl",
+   "sha256": "07b2de4f04063f37be102369d5d04424217ee68e89620e01a67ac553b4edb9b5"
+  },
+  {
+   "path": "books/snapshots/rev07-before-theorize/playbook.dsl",
+   "sha256": "d503f257bae6d9067a20476244eef7fefa33ccd18b6512407a83680739cbb4f8"
+  },
+  {
+   "path": "books/snapshots/rev07-before-theorize/problem.json",
+   "sha256": "0bbd4303ef0f33e8ce1fc45b510672fb980ec9d8fb20fbc4eda0fef7fdfd2414"
+  },
+  {
+   "path": "books/snapshots/rev07-before-theorize/theory.dsl",
+   "sha256": "07b2de4f04063f37be102369d5d04424217ee68e89620e01a67ac553b4edb9b5"
+  },
+  {
+   "path": "books/snapshots/rev08-after-theorize/playbook.dsl",
+   "sha256": "5b5391633529a24b0ac9d25a703fd40ee24f1d7df2dee44ecda8d568d57187d6"
+  },
+  {
+   "path": "books/snapshots/rev08-after-theorize/problem.json",
+   "sha256": "0bbd4303ef0f33e8ce1fc45b510672fb980ec9d8fb20fbc4eda0fef7fdfd2414"
+  },
+  {
+   "path": "books/snapshots/rev08-after-theorize/theory.dsl",
+   "sha256": "efb22c873d3c7dca6ea383344b2939d57ce5bfe55b6f824e9249b2af42c37a26"
+  },
+  {
+   "path": "books/snapshots/rev09-before-theorize/playbook.dsl",
+   "sha256": "5b5391633529a24b0ac9d25a703fd40ee24f1d7df2dee44ecda8d568d57187d6"
+  },
+  {
+   "path": "books/snapshots/rev09-before-theorize/problem.json",
+   "sha256": "0bbd4303ef0f33e8ce1fc45b510672fb980ec9d8fb20fbc4eda0fef7fdfd2414"
+  },
+  {
+   "path": "books/snapshots/rev09-before-theorize/theory.dsl",
+   "sha256": "efb22c873d3c7dca6ea383344b2939d57ce5bfe55b6f824e9249b2af42c37a26"
+  },
+  {
+   "path": "books/theory.dsl",
+   "sha256": "efb22c873d3c7dca6ea383344b2939d57ce5bfe55b6f824e9249b2af42c37a26"
+  },
+  {
+   "path": "candidates.jsonl",
+   "sha256": "3b4302b8b0d5f8f7455f57ef73c3a4ec2241e49dc1cc4fa03c109793a2978228"
+  },
+  {
+   "path": "certify.json",
+   "sha256": "9c8398364e9710a0e3643800b299e92659be0353d32eb92aafcaa5f46cf33624"
+  },
+  {
+   "path": "commit.json",
+   "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+  },
+  {
+   "path": "curves.json",
+   "sha256": "aa1a968f80f3e39c0a940f7cc6ad36bccd5c6d5f4d5435772ea593c2ccf36c07"
+  },
+  {
+   "path": "curves/level-01.json",
+   "sha256": "6de34c7cb84f7eb10fe03bcb450000c8bb3144ae274bb9b30dd8eb397b9257a6"
+  },
+  {
+   "path": "desk/call-001-theorize-round1.md",
+   "sha256": "8533552de1908f74d45a8de421df291ad4d8990ac646c665fdd0a2a0c8028f2a"
+  },
+  {
+   "path": "desk/call-002-theorize-round1.md",
+   "sha256": "2a928a8e194b3d90480adb52bfd92ad042a07aa9477ef028b3f3bac825396f05"
+  },
+  {
+   "path": "desk/call-003-theorize-round2.md",
+   "sha256": "9353f1007020e56bbb0301d18b86f0ae3564985f8c3aa6d6ebafaefc0eb9be0a"
+  },
+  {
+   "path": "desk/call-004-theorize-round1.md",
+   "sha256": "07a938e4ab695b47e44eed6a8c1adb6c1487a69530f480034559cbab4361b189"
+  },
+  {
+   "path": "desk_failures.json",
+   "sha256": "18051fc336da023d9c46de05b3b761ba888c49182b53a113fddee114250bf635"
+  },
+  {
+   "path": "desk_log.json",
+   "sha256": "0f0fe2c2b3a9c762a87414cee874416597798ec173037fe4f31bfe170556b77f"
+  },
+  {
+   "path": "engines_online.json",
+   "sha256": "2351f170dd1c15d51d07aebe957428ebc1be74ac2d96ccad9d22d395e74971c8"
+  },
+  {
+   "path": "engines_online.jsonl",
+   "sha256": "aeaa59c70eb8ebfa20b24a93bb7ade3d065723b40361251a900c7738d6f1cd6b"
+  },
+  {
+   "path": "env_proxy.log",
+   "sha256": "062e024e017061c8850324569459647fac7f78ac0e9625e1b119aff7e3a794c3"
+  },
+  {
+   "path": "ledger.jsonl",
+   "sha256": "326643316766eb50049c60e87f7eb1c9de12ab25c7e574390441718bc643557f"
+  },
+  {
+   "path": "ledger.jsonl.lock",
+   "sha256": "72dfcfb0c470ac255cde83fb8fe38de8a128188e03ea5ba5b2a93adbea1062fa"
+  },
+  {
+   "path": "levels.jsonl",
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "path": "plan.json",
+   "sha256": "0e1667a418816ae2ce38b53158abeb77c6ae3eb8a614408b4d2aa7588c1cca8e"
+  },
+  {
+   "path": "probe_economy.json",
+   "sha256": "2b7053b7a98d46826072f687ac377de92d3db6b1d6d9935b8e3347a411164389"
+  },
+  {
+   "path": "probes.jsonl",
+   "sha256": "0724c7bc5262827c3ef655a1cd7de92594e1b17ba72e5cdb981359d45fa82a9b"
+  },
+  {
+   "path": "run.json",
+   "sha256": "605f257bbae3d84f0101e499cd7dcbc38962db63cf978e4ced59c1e333ab4f87"
+  },
+  {
+   "path": "surprises.jsonl",
+   "sha256": "13bc5f239ce7f8681fd509e73cee5cfe20c309370aa865f52abec6e31a068caa"
+  },
+  {
+   "path": "theorize.json",
+   "sha256": "da9b3aaf3e80703638fad30c5d9f3dde54404a7403665e571b8dedb6b746577a"
+  },
+  {
+   "path": "transfer.json",
+   "sha256": "8b33dc3f2e68e22f1effc0f869b863598b22475b0adfdc3611f5dfb780ebfef6"
+  },
+  {
+   "path": "turns.json",
+   "sha256": "9cd25d89291a9b8ec14f234cf0baab52b8413ab4910c15fedf58ee51d50889f9"
+  }
+ ],
+ "game_id": "g50t-5849a774",
+ "guard": {
+  "allow_only": null,
+  "cut_version": "v1",
+  "n_dev": 4,
+  "n_sealed": 21,
+  "piles_path": "arc-recon/data/piles.json",
+  "sha256": "3feca53e5ede695cfa46ae994cb95fd6b43abb9d97295e8c87e6302b41bbc19a",
+  "unknown_policy": "deny"
+ },
+ "ledger": {
+  "format": "LEDGER_FORMAT v1.0",
+  "path": "ledger.jsonl",
+  "records": 229,
+  "records_this_run": 229
+ },
+ "note_at_run_start": null,
+ "outcome": "spend_gate_tripped",
+ "parent_run": {
+  "card_id": "bfb7edf3-343d-4a66-87ea-649e0fa3520f",
+  "parent_run_id_from_scorecard_opaque": "r-6d3607e4c2eb4db9",
+  "parent_slug_from_naming": null,
+  "prompt_id_from_scorecard_opaque": "A3-campaign-devpile"
+ },
+ "prompt_id": "A3-campaign-devpile",
+ "provenance": {
+  "arm_version_lookup": {
+   "arm_sha256": "dbb608c7c94d1cbe56ca8683ac544b045a70df47e173cbff2f52339dce875b17",
+   "commits": [],
+   "detail": "no commit reachable from any ref carries this arm_version, so the run executed against a working tree that was never committed in that state. The run is therefore not reproducible from git alone. (Commits reachable only from the reflog, or dangling, are outside this scan.)",
+   "verdict": "no_match",
+   "window": {
+    "first_commit_after": {
+     "arm_sha256": "a6738d27f991cc9618682d72fd019180c72d2d913dd4076872f53aa8325b8710",
+     "commit": "5e033b2fe990cbb38e82226741e45b6834153c11",
+     "files": 69,
+     "unix": 1785541572
+    },
+    "last_commit_before": {
+     "arm_sha256": "a6738d27f991cc9618682d72fd019180c72d2d913dd4076872f53aa8325b8710",
+     "commit": "af138a0d2302b85f193b9a65f57aadb65c55f95a",
+     "files": 69,
+     "unix": 1785539807
+    },
+    "note": "the run happened between these two commits; its arm_version matches neither, so its sources were uncommitted edits somewhere inside that window"
+   }
+  },
+  "derived_from": {
+   "arm_version": "ledger run_start.arm_version",
+   "game_id": "ledger run_start.game_id",
+   "guard": "ledger run_start.guard",
+   "prompt_id": "scorecard opaque.prompt_id, read back from the API",
+   "reconciliation / cost / constraint_8 / sealing": "armtools.archive, over this run's own ledger records",
+   "run_id": "ledger run_start.run_id",
+   "upstream_pin": "ledger run_start.upstream_pin (NOT the working tree)",
+   "utc": "ledger run_start.ts"
+  },
+  "missing": [
+   {
+    "field": "base_commit",
+    "why": "the arm_version this run recorded (dbb608c7c94d, 75 files) is reconstructed by no commit reachable from any ref: the run executed against uncommitted working-tree edits. The commits it fell between are given under `arm_version_lookup.window`; the exact sources are not recoverable from git."
+   },
+   {
+    "field": "branch",
+    "why": "no ledger record carries a branch name and there is no parent run whose contemporaneous manifest recorded one. `git branch --contains` was considered and rejected: it answers which branches hold the commit today, which changes as unrelated work is pushed."
+   }
+  ],
+  "mode": "backfill",
+  "notes": [],
+  "prompt_id_of_the_backfill": "S8-provenance-backfill",
+  "rule": "every field is derived from this run's own records or from git; nothing is read from the working tree the backfill ran on, and nothing is inferred that the evidence does not carry",
+  "status": "incomplete",
+  "tool": "armtools/backfill.py"
+ },
+ "quota": {
+  "agree": true,
+  "billed_actions_from_ledger": 13,
+  "billed_actions_from_scorecard": [
+   13
+  ],
+  "env_steps": 106,
+  "model_calls": 4,
+  "resets": 1
+ },
+ "reconciliation": {
+  "env_steps": 106,
+  "env_steps_ok": 14,
+  "http_amplification": 8.154,
+  "levels_completed_from_ledger": 0,
+  "resets": 1,
+  "score_reconciliation": "unavailable",
+  "score_reconciliation_detail": "no `score` field appears in any live ARC command response, so the ledger-derived score LEDGER_FORMAT.md \u00a73 asks for cannot be computed. This is a property of the environment, not a failure of the run, and it means the \u00a73 obligation is UNDISCHARGEABLE as written against this API. It is reported, not waived.",
+  "successful_actions": 13
+ },
+ "run_id": "r-6d3607e4c2eb4db9",
+ "scorecards_opened_and_never_closed": [],
+ "scorecards_recovered": [
+  {
+   "card_id": "bfb7edf3-343d-4a66-87ea-649e0fa3520f",
+   "environments": [
+    {
+     "actions": 13,
+     "completed": false,
+     "id": "g50t-5849a774",
+     "level_count": 7,
+     "levels_completed": 0,
+     "resets": 0,
+     "runs": [
+      {
+       "actions": 13,
+       "completed": false,
+       "guid": "8936ca3d-2aa1-4ad2-82e5-18c67166df6e",
+       "level_actions": [
+        13,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ],
+       "level_baseline_actions": [
+        78,
+        175,
+        179,
+        230,
+        96,
+        54,
+        67
+       ],
+       "level_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+       ],
+       "levels_completed": 0,
+       "resets": 0,
+       "score": 0.0,
+       "state": "NOT_FINISHED"
+      }
+     ],
+     "score": 0.0
+    }
+   ],
+   "opaque": {
+    "prompt_id": "A3-campaign-devpile",
+    "run_id": "r-6d3607e4c2eb4db9"
+   },
+   "score": 0.0,
+   "tags": [
+    "R1",
+    "round",
+    "a",
+    "agent"
+   ],
+   "tags_scores": [
+    {
+     "actions": 13,
+     "id": "keyboard",
+     "levels_completed": 0,
+     "number_of_environments": 1,
+     "number_of_levels": 7,
+     "score": 0.0
+    }
+   ],
+   "total_actions": 13,
+   "total_environments": 1,
+   "total_environments_completed": 0,
+   "total_levels": 7,
+   "total_levels_completed": 0
+  }
+ ],
+ "sealing": {
+  "by_kind": {
+   "credential_in_body": 111
+  },
+  "bypass_attempts": 0,
+  "credential_in_body": 111,
+  "cut_integrity": true,
+  "game_ids_anywhere_in_the_records": [
+   "g50t-5849a774"
+  ],
+  "guard_blocks": 0,
+  "incidents": 111,
+  "redacted_markers": 0,
+  "sealed_game_ids_found": [],
+  "sealed_pile_requests": 0,
+  "sealed_pile_untouched": true
+ },
+ "slug": "20260731T231654Z-R1-g50t-a",
+ "upstream_pin": {
+  "CONTRACTS/candidates_schema.md": "<redacted:key-shaped>",
+  "arc-recon/data/piles.json": "<redacted:key-shaped>",
+  "engine-rig/common/candidates.py": "<redacted:key-shaped>",
+  "engine-rig/engines/cegis_miner/__init__.py": "<redacted:key-shaped>",
+  "engine-rig/engines/mdl_segmenter/__init__.py": "<redacted:key-shaped>",
+  "engine-rig/engines/probe_frontier/__init__.py": "<redacted:key-shaped>",
+  "engine-rig/engines/zero_space/__init__.py": "<redacted:key-shaped>",
+  "engine-rig/tools/validate_candidates.py": "<redacted:key-shaped>",
+  "proxy/LEDGER_FORMAT.md": "<redacted:key-shaped>",
+  "proxy/cost.py": "<redacted:key-shaped>",
+  "proxy/env_proxy.py": "<redacted:key-shaped>",
+  "proxy/forward.py": "<redacted:key-shaped>",
+  "proxy/guard.py": "<redacted:key-shaped>",
+  "proxy/ledger.py": "<redacted:key-shaped>",
+  "proxy/model_proxy.py": "<redacted:key-shaped>",
+  "proxy/pricing/pricing_v1.json": "<redacted:key-shaped>",
+  "proxy/redact.py": "<redacted:key-shaped>",
+  "theory-compiler/src/theory_compiler/generators/gen_lean.py": "<redacted:key-shaped>",
+  "theory-compiler/src/theory_compiler/generators/gen_markdown.py": "<redacted:key-shaped>",
+  "theory-compiler/src/theory_compiler/generators/gen_pddl.py": "<redacted:key-shaped>",
+  "theory-compiler/src/theory_compiler/generators/gen_python.py": "<redacted:key-shaped>",
+  "theory-compiler/src/theory_compiler/parser/theory_parser.py": "<redacted:key-shaped>"
+ },
+ "utc": "2026-07-31T23:16:55.354Z"
+}

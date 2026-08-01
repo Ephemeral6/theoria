@@ -1,0 +1,100 @@
+{
+ "calls": [
+  {
+   "actions_at_call": 5,
+   "actions_since_last_call": 5,
+   "beat": "theorize",
+   "call_idx": 0,
+   "elapsed_ms": 1287126,
+   "label": "round1",
+   "output_tokens": 102648,
+   "step_idx": 6,
+   "turn": 2,
+   "usd": 3.362011,
+   "usd_cumulative": 3.362011,
+   "usd_per_action_marginal": 0.672402
+  },
+  {
+   "actions_at_call": 5,
+   "actions_since_last_call": 0,
+   "beat": "theorize",
+   "call_idx": 1,
+   "elapsed_ms": 846016,
+   "label": "round1",
+   "output_tokens": 71360,
+   "step_idx": 6,
+   "turn": 2,
+   "usd": 2.791139,
+   "usd_cumulative": 6.15315,
+   "usd_per_action_marginal": null
+  },
+  {
+   "actions_at_call": 5,
+   "actions_since_last_call": 0,
+   "beat": "theorize",
+   "call_idx": 2,
+   "elapsed_ms": 882008,
+   "label": "round2",
+   "output_tokens": 75581,
+   "step_idx": 6,
+   "turn": 2,
+   "usd": 2.89813,
+   "usd_cumulative": 9.05128,
+   "usd_per_action_marginal": null
+  },
+  {
+   "actions_at_call": 5,
+   "actions_since_last_call": 0,
+   "beat": "theorize",
+   "call_idx": 3,
+   "elapsed_ms": 771362,
+   "label": "round3",
+   "output_tokens": 67034,
+   "step_idx": 6,
+   "turn": 2,
+   "usd": 2.684454,
+   "usd_cumulative": 11.735734,
+   "usd_per_action_marginal": null
+  },
+  {
+   "actions_at_call": 5,
+   "actions_since_last_call": 0,
+   "beat": "theorize",
+   "call_idx": 4,
+   "elapsed_ms": 824567,
+   "label": "round1",
+   "output_tokens": 67020,
+   "step_idx": 10,
+   "turn": 6,
+   "usd": 2.694148,
+   "usd_cumulative": 14.429882,
+   "usd_per_action_marginal": null
+  },
+  {
+   "actions_at_call": 5,
+   "actions_since_last_call": 0,
+   "beat": "theorize",
+   "call_idx": 5,
+   "elapsed_ms": 924184,
+   "label": "round2",
+   "output_tokens": 77627,
+   "step_idx": 10,
+   "turn": 6,
+   "usd": 2.960839,
+   "usd_cumulative": 17.390721,
+   "usd_per_action_marginal": null
+  }
+ ],
+ "reading": "`actions_at_call` counts BILLED actions; `commands_sent` counts HTTP requests, and the two differ by this API's 400-wave retry envelope. A curve against one is not a curve against the other.",
+ "totals": {
+  "actions_billed": 5,
+  "commands_sent": 206,
+  "desk_calls": 6,
+  "elapsed_s": 7502.4,
+  "http_amplification": 41.2,
+  "transitions_observed": 5,
+  "usd": 17.390721,
+  "usd_per_billed_action": 3.478144,
+  "usd_per_transition": 3.478144
+ }
+}
