@@ -1,0 +1,86 @@
+{
+  "artifacts": {
+    "theoria-arm/DECISIONS.md": {
+      "bytes": 71757,
+      "sha256": "ca5e9f6e2609edfa41fed0940b27e4e8dc0438475f8630392009701f43e1f6d2"
+    },
+    "theoria-arm/harness/run.py": {
+      "bytes": 38117,
+      "sha256": "39d99da96d19b619712fbc6743747ea1d291a06b1a1c2309a4c3fd608d8e7869"
+    },
+    "theoria-arm/runs/2026-08-01T045542Z-A18/NOTES.md": {
+      "bytes": 559,
+      "sha256": "2f7c4b7d678110534eab786ca87d8f6ef9ea777a555edcb83cc373148b813ee4"
+    },
+    "theoria-arm/runs/2026-08-01T045542Z-A18/RUN_STATE.md": {
+      "bytes": 8542,
+      "sha256": "c689b81d51faa6f178bfb1b8cd05a2f245e90edf3779d612c797b57bb6e75d1f"
+    },
+    "theoria-arm/runs/2026-08-01T045542Z-A18/evidence/INDEX.json": {
+      "bytes": 1805,
+      "sha256": "d7e6d6caec66b5b28c5ff9b4e333e11c6cf55b295a8fe78b37f35a317aec8260"
+    },
+    "theoria-arm/runs/2026-08-01T045542Z-A18/evidence/score_clean.json": {
+      "bytes": 4207,
+      "sha256": "a4c91b3772f0b8c0b32535f37dc4c4bd3d20d551b92b100206bb0147d88f24f8"
+    },
+    "theoria-arm/runs/2026-08-01T045542Z-A18/evidence/score_forged.json": {
+      "bytes": 4218,
+      "sha256": "26abdbe8e61ca1df83987678254b70e8fe020ce211837391218804657c557d1e"
+    },
+    "theoria-arm/runs/2026-08-01T045542Z-A18/make_evidence.py": {
+      "bytes": 5524,
+      "sha256": "e41c62a4632cbc15d830256e8332ccdcaeb0de395d6858ee8c589f6ba40abf55"
+    },
+    "theoria-arm/runs/2026-08-01T045542Z-A18/results.json": {
+      "bytes": 549,
+      "sha256": "8f4b11333420e05e3b9dbddc1910faac8c20b1803da7f7d01b5e34c7771efaec"
+    },
+    "theoria-arm/runs/2026-08-01T045542Z-A18/suite_after.txt": {
+      "bytes": 5599,
+      "sha256": "6044e375bb5e77517258aaf5a33dd848e6077cae0da57c83644fe06f8180b892"
+    },
+    "theoria-arm/tests/test_score_at_run_end.py": {
+      "bytes": 18395,
+      "sha256": "3efdb58ee9e3df4068c3c411a7ae6806705b03cd732858eb3f8f3833e4f302b1"
+    }
+  },
+  "base_commit": "4c08ea6be6ff480d9b7cfcd6be8bd17c2e9e3749",
+  "branch": "agent/a18-scorer-at-run-end",
+  "determinism": "No stochastic step; seed is null.",
+  "prompt": null,
+  "prompt_id": "A18",
+  "results": {
+    "scoring_at_run_end": {
+      "clean_leg": {
+        "S-1_ledger": 6,
+        "S-1_scorecard": 6,
+        "incidents": [],
+        "verdict": "PASS"
+      },
+      "evidence": "runs/2026-08-01T045542Z-A18/evidence/INDEX.json",
+      "forged_leg": {
+        "S-1_ledger": 6,
+        "S-1_scorecard": 9,
+        "failed_checks": [
+          "S-1"
+        ],
+        "incidents": [
+          "score_mismatch"
+        ],
+        "verdict": "FAIL"
+      },
+      "new_tests": 11,
+      "scorer": {
+        "frozen_at": "2026-07-28",
+        "id": "arc_v1",
+        "version": "1.0.0"
+      }
+    }
+  },
+  "run_dir": "theoria-arm/runs/2026-08-01T045542Z-A18",
+  "seed": null,
+  "t": "2026-08-01T05:36:05Z",
+  "tests": "new tests 11/11 green; full suite carries exactly the 2 pre-existing master reds (test_arm archive accountability, test_desk_gate ceiling table), 0 new -- filed as A22",
+  "title": "A18: the run scores itself at run_end; ledger_path forwarded (DELIVERY_RULING s4 axis 1)"
+}

@@ -1114,3 +1114,83 @@ answer 5 times of 52 and generation 43.
    the world's frame is the actual fix, and it would make certify's replay
    trivially green -- destroying the only instrument that currently detects a
    wrong manual. That is somebody else's call, made deliberately, not skipped.
+
+## D-A18-001 · The run scores itself, in production mode, and an unscoreable run says so
+
+Phase 1 (5) asks for 逐局跑完即打分入库、与 scorecard 对账 and `Theoria.md:371`
+for 跑完一局即打分. Half of it was true and had been for a while: the frozen
+scorer works, and a monitor replay put 37 archived runs through it — 26 PASS,
+0 FAIL, 11 with no surviving card, this arm's four live legs all PASS. The
+other half had never happened. **No arm had ever called the scorer from a
+run.** The only live run that went through `proxy/runner.py` crashed before
+`run_end`, and every number anybody quoted came from a sweep afterwards — which
+is precisely the reading `Theoria.md:371` forbids, because Phase 3 audits the
+order results arrive in and a batch scored later is a batch somebody could have
+scored after seeing it.
+
+So `proxy.scoring.score_run` is called from `play()`'s `finally`, between
+`run_end` and `run.json`. Three calls inside that, each of which could have
+gone the other way:
+
+**Production semantics, not audit semantics.** `write_incident` and
+`write_artifact` are both left on. `proxy/DELIVERY_RULING.md` §5 is a warning
+about the opposite mistake — running the *auditor* with incidents on twice put
+six duplicate `score_mismatch` records into the shared ledger, and the flags
+exist so that looking at a ledger does not modify it. A **run** with them off
+is the more expensive error: the mismatch it found would be recorded nowhere,
+and the run would be over by the time anyone noticed.
+`tests/test_score_at_run_end.py` asserts the two arguments at the call itself
+rather than grepping the source, because the spelling is not the property.
+
+**The verdict is filed, never raised.** A scorer whose freeze no longer
+verifies, a ledger that cannot be read, a scorecard that never arrived: each
+lands as `UNDETERMINED` in `runs/<slug>/score.json` with the reason attached,
+and the first two also file a `score_unreconciled` incident. `UNDETERMINED` is
+not `PASS` — `baseline-arms` lost 22 of 23 scorecards to a transient 404 and
+**the loss was silent**, so the reconciliation obligation was quietly not being
+performed at all. A harness that let a scoring failure take down a run that had
+already spent its actions would be the same defect wearing a louder coat.
+
+**The score is not written into the ledger.** `LEDGER_FORMAT.md` §5 and D-004's
+argument about dollars: a derived number in an append-only file is wrong the
+day the rule that produced it changes and cannot be corrected. `score.json`
+beside `run.json`, the scorer's fingerprint inside both, and the *failure* —
+not the score — in the ledger as an `incident`.
+
+One consequence worth stating because it looks like an omission: a run that is
+not archive material keeps its copy out of `proxy/var/scores/`
+(`_scores_dir_for`). The artefact is still written — that directory is the
+index that accompanies the shared ledger, and a rehearsal's score beside the real
+ones is indistinguishable from the score of a game that cost money. It is
+`FIXTURE_RUNS_DIR`'s argument, one directory over.
+
+## D-A18-002 · A live leg bills into the shared ledger; a rehearsal does not
+
+`proxy/DELIVERY_RULING.md` §4 lists axis 1 — arms billing into the shared
+ledger — as needing **configuration only** from this territory: `Run` and
+`play()` have taken `ledger_path` since they were written, and `main()` never
+forwarded it. So there was no way to invoke this arm that put its records in
+`proxy/var/ledger.jsonl`, and axis 1's zero was a plumbing gap rather than a
+finding. `main()` now forwards it, with `--ledger` to override.
+
+The default is asymmetric on purpose: **the shared ledger for a live leg, the
+run's own directory under `--mock`.** The symmetric choice — everything into
+the shared file — is the tempting one and it is wrong for the reason
+`DELIVERY_RULING.md` was written about, running in the other direction.
+`tools/audit_delivery.py` counts axis 1 by `arm` alone (`REAL_ARMS`, incidents
+filtered out) and counts liveness as a *separate* axis that it never sums with
+it. A mock run writes `arm: theoria` records exactly like a live one, so
+defaulting rehearsals into the shared file would make "this arm's records reach
+the shared ledger" read as satisfied by a run that never left this machine —
+one number that is nonzero for the wrong reason, which is the same failure as
+the one number that was zero for two reasons.
+
+Nothing is hidden by this: `run_start` records which ledger the run wrote to,
+`run.json` carries its absolute path, and `--ledger` puts a rehearsal in the
+shared file for anyone who actually wants that. What the default protects is
+the reading of a census nobody has re-run yet.
+
+This closes the configuration half only. Axis 2 — a run whose `run_start` names
+a non-localhost upstream — costs money and is not this item's to authorise; the
+first live leg after this lands is where "跑完即打分" produces its first live
+evidence, and it will produce it without anyone remembering to ask.

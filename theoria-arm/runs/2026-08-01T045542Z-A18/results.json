@@ -1,0 +1,28 @@
+{
+  "scoring_at_run_end": {
+    "clean_leg": {
+      "S-1_ledger": 6,
+      "S-1_scorecard": 6,
+      "incidents": [],
+      "verdict": "PASS"
+    },
+    "evidence": "runs/2026-08-01T045542Z-A18/evidence/INDEX.json",
+    "forged_leg": {
+      "S-1_ledger": 6,
+      "S-1_scorecard": 9,
+      "failed_checks": [
+        "S-1"
+      ],
+      "incidents": [
+        "score_mismatch"
+      ],
+      "verdict": "FAIL"
+    },
+    "new_tests": 11,
+    "scorer": {
+      "frozen_at": "2026-07-28",
+      "id": "arc_v1",
+      "version": "1.0.0"
+    }
+  }
+}

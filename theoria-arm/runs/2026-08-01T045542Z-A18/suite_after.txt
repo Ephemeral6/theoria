@@ -1,0 +1,82 @@
+.............................................................F.......... [ 10%]
+........................................................................ [ 21%]
+........................................................................ [ 32%]
+........................F............................................... [ 42%]
+........................................................................ [ 53%]
+........................................................................ [ 64%]
+........................................................................ [ 75%]
+........................................................................ [ 85%]
+........................................................................ [ 96%]
+......................                                                   [100%]
+================================== FAILURES ===================================
+_____________________ test_the_archive_stays_accountable ______________________
+
+    def test_the_archive_stays_accountable():
+        """`verify_provenance`'s ten checks, run as part of the suite.
+    
+        The archive is the thing Phase 4 reads back to account for every ARC action
+        this arm spent. A check that only runs when somebody remembers to run it is
+        not a guarantee.
+    
+        The count is asserted so that a check cannot quietly disappear -- a suite
+        that runs nine checks and a suite that runs eight both print green. It went
+        from nine to ten with check 10 ("every file a manifest lists is in the clone
+        or excluded by the repository's own rules"), which exists because check 8
+        dispatches and therefore cannot see a stale `files[]` in an `amend`
+        manifest.
+        """
+        from armtools import verify_provenance               # noqa: PLC0415
+    
+        checks = verify_provenance.run()
+>       assert not checks.failed, [
+            "%s: %s" % (r["check"], r["detail"]) for r in checks.failed]
+E       AssertionError: ["re-deriving every manifest reproduces it byte for byte: drifted: ['20260731T231654Z-R1-g50t-a', '20260731T231654Z-R1-sk48-b', '20260801T001851Z-R1b-g50t-a', '20260801T001851Z-R1b-sk48-b']"]
+E       assert not [{'check': 're-deriving every manifest reproduces it byte for byte', 'detail': "drifted: ['20260731T231654Z-R1-g50t-a', '20260731T231654Z-R1-sk48-b', '20260801T001851Z-R1b-g50t-a', '20260801T001851Z-R1b-sk48-b']", 'ok': False}]
+E        +  where [{'check': 're-deriving every manifest reproduces it byte for byte', 'detail': "drifted: ['20260731T231654Z-R1-g50t-a', '20260731T231654Z-R1-sk48-b', '20260801T001851Z-R1b-g50t-a', '20260801T001851Z-R1b-sk48-b']", 'ok': False}] = <armtools.verify_provenance.Checks object at 0x000001CD17BD4830>.failed
+
+tests\test_arm.py:1023: AssertionError
+_______________ test_the_ceiling_table_still_covers_the_archive _______________
+
+    def test_the_ceiling_table_still_covers_the_archive():
+        """Re-derive the sizing inputs from the logs; do not re-read the constants.
+    
+        The test above checks the ceilings against `OBSERVED_USD_PER_SECOND`. That
+        catches a ceiling lowered under a correct rate, and nothing else -- a rate
+        constant that is itself too low sails through it, and drags the ceiling down
+        with it. Both happened at once on opus-5: the rate was taken as the worst
+        *call* divided by its own duration (the dearest call is a long one, so that
+        ratio is middling; the costliest second belongs to a shorter call), which
+        read 17% low, and the ceiling was set to $5.00 while `4 x $1.489011 = $5.96`
+        was already the binding half of the documented rule. Every existing test was
+        green throughout.
+    
+        So this one goes back to the archive for both maximands. It is the only
+        check here that would have failed before the correction.
+        """
+        worst_rate, worst_call = _archive_worst_per_model()
+        assert worst_rate, "no desk logs in the archive: this test checked nothing"
+    
+        for model, rate in sorted(worst_rate.items()):
+            recorded = spend_mod.OBSERVED_USD_PER_SECOND.get(model)
+            assert recorded is not None, (
+                "%s appears in the archive with no recorded rate" % model)
+            assert recorded >= rate, (
+                "%s: the recorded rate $%.7f/s is below the worst rate in the "
+                "archive, $%.7f/s. A rate that understates makes every ceiling "
+                "derived from it understate too." % (model, recorded, rate))
+    
+            implied = max(rate * spend_mod.MODEL_CALL_TIMEOUT_S,
+                          4 * worst_call[model])
+            ceiling = spend_mod.model_call_ceiling_for(model)
+>           assert ceiling >= implied, (
+                "%s: ceiling $%.2f is below $%.4f, which is what this table's own "
+                "stated rule -- max(timeout x rate, 4x worst call) -- produces from "
+                "the archive." % (model, ceiling, implied))
+E           AssertionError: claude-opus-5: ceiling $12.00 is below $13.4480, which is what this table's own stated rule -- max(timeout x rate, 4x worst call) -- produces from the archive.
+E           assert 12.0 >= 13.448042000000001
+
+tests\test_desk_gate.py:1002: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_arm.py::test_the_archive_stays_accountable - AssertionError...
+FAILED tests/test_desk_gate.py::test_the_ceiling_table_still_covers_the_archive
+A18-suite exit=1
