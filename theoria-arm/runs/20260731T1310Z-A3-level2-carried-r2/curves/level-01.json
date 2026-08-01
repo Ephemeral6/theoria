@@ -12,6 +12,7 @@
   "usd_cumulative_in_level",
   "usd_cumulative_in_leg",
   "surprise_total",
+  "turn_record_missing",
   "surprise_replay_mismatch",
   "surprise_render_mismatch",
   "surprise_proof_failure",
@@ -21,7 +22,7 @@
   "surprise_heuristic_miss"
  ],
  "first_turn": 0,
- "last_turn": 8,
+ "last_turn": 9,
  "level": 1,
  "run_id": "r-70fa98dd8f4d4506",
  "schema": "theoria-arm/curves v1",
@@ -36,10 +37,12 @@
   1,
   1,
   1,
-  2
+  1,
+  1
  ],
  "surprises": {
   "execution_mismatch": [
+   0,
    0,
    0,
    0,
@@ -61,6 +64,7 @@
    0,
    0,
    0,
+   0,
    0
   ],
   "probe_refutation": [
@@ -73,9 +77,11 @@
    1,
    1,
    1,
-   1
+   1,
+   0
   ],
   "proof_failure": [
+   0,
    0,
    0,
    0,
@@ -97,6 +103,7 @@
    0,
    0,
    0,
+   0,
    0
   ],
   "replay_mismatch": [
@@ -109,9 +116,11 @@
    0,
    0,
    0,
+   0,
    1
   ],
   "search_timeout": [
+   0,
    0,
    0,
    0,
@@ -134,7 +143,8 @@
   1,
   0,
   0,
-  0
+  0,
+  1
  ],
  "totals": {
   "http_commands": 99,
@@ -147,9 +157,9 @@
    "replay_mismatch": 4,
    "search_timeout": 0
   },
-  "theorize_rounds": 3,
-  "turns": 10,
-  "usd": 7.926367
+  "theorize_rounds": 4,
+  "turns": 11,
+  "usd": 9.556852
  },
  "turns": [
   0,
@@ -161,7 +171,8 @@
   5,
   6,
   7,
-  8
+  8,
+  9
  ],
  "usd": [
   0.0,
@@ -173,7 +184,8 @@
   4.775528,
   0.0,
   0.0,
-  0.0
+  0.0,
+  1.630485
  ],
  "usd_cumulative": [
   0.0,
@@ -185,6 +197,7 @@
   7.926367,
   7.926367,
   7.926367,
-  7.926367
+  7.926367,
+  9.556852
  ]
 }

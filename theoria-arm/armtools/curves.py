@@ -37,13 +37,28 @@ reads it to *count records*, not to derive a quantity.
 
 ## The self-check: no accounting gap goes unnoticed
 
+Three strict equalities, against three numbers counted straight out of the
+ledger: **commands**, **billed calls**, and **dollars**.
+
 `turn_series` rows carry `http_commands`, the number of environment commands
 the turn issued. Summed over every row in this file's curves, that must equal
 the number of `env_step` records in the leg's ledger. Measured on the archive:
 `20260728T025503Z-g50t-e08-fixed` 146 = 146 over 3 turns,
 `20260729T004020Z-leg01` 104 = 104 over 52 turns.
 
-It is a strict equality and a mismatch **raises**. The failure it catches is a
+**The command equality alone was not enough, and the gap it missed was
+measured.** `20260731T1310Z-A3-level2-carried-r2` and
+`...T1430Z-...-r3` both ended `spend_gate_tripped`. In each, the final desk
+call was billed by the pool and landed in no turn row, because
+`inner/loop.py` appends a turn's record only *after* the turn's last ARC
+command and the gate killed the turn before it sent one. The vanished turn had
+therefore issued no command at all -- so `http_commands` balanced perfectly,
+99 = 99 and 234 = 234, while the curve understated r2 by $1.63 of $9.56 (17%)
+and r3 by $1.68 of $13.44 (12.5%). A check that watches only commands cannot
+see money go missing; the two are counted separately here because a hole can
+open in either without moving the other.
+
+Each is a strict equality and a mismatch **raises**. The failure they catch is a
 segmentation that silently dropped turns -- a level whose boundary was
 mis-placed, a leg whose rows were filtered by a predicate that was one off. A
 gap like that is invisible in the plot (the curve simply looks shorter) and it
@@ -64,6 +79,21 @@ are not equally serious: nothing played, versus the join lost every row a
 ledger full of commands should have produced. `theoria-arm/verify.py` opens by
 naming this failure mode with the same example, `figures/verify.sh` printing
 "ok" when both of its builds produced nothing at all.
+
+## A call with no turn is recorded, not dropped
+
+The corollary of the money equality: a billed call whose turn the run never
+wrote down still has to appear. `archive._unrecorded_turn_rows` gives it a row
+flagged `turn_record_missing`, carrying its calls and its dollars and owning no
+ARC command, with `turn_source` and `turn_record_missing_why` saying in full
+why no record exists. `turn_record_missing` is a declared column, False on
+every ordinary row, so the flag is a measurement on every turn rather than a
+key that materialises only when something has gone wrong.
+
+The join's own confidence stays `degraded` for such a leg -- the row is the
+archive's reconstruction, not the run's record, and that distinction must not
+be laundered by the fact that the money now adds up. Absence is recorded as
+absence. A cost that vanishes is worse than a cost with no turn number.
 
 ## Format
 
@@ -113,8 +143,15 @@ SCHEMA = "theoria-arm/curves v1"
 COLUMNS = (["level", "turn", "campaign_turn_in_leg", "step_idx",
             "http_commands", "actions_taken", "theorize_rounds",
             "model_calls", "usd", "usd_cumulative_in_level",
-            "usd_cumulative_in_leg", "surprise_total"]
+            "usd_cumulative_in_leg", "surprise_total", "turn_record_missing"]
            + ["surprise_%s" % kind for kind in archive.KINDS])
+
+#: How far apart two dollar figures may be before the difference is real.
+#: `battery/audit/live_economy.py` uses the same number for the same
+#: comparison, and it is three orders of magnitude coarser than the 9-decimal
+#: rounding every producer here applies -- so anything above it is a missing
+#: call, not a float artefact.
+USD_TOLERANCE = 1e-06
 
 
 class CurveGap(Exception):
@@ -172,11 +209,65 @@ def _boundary_turns(levels: Dict[str, Any]) -> List[int]:
     return sorted(turns)
 
 
-def _env_steps(run_dir: str, records: Optional[List[Dict[str, Any]]] = None) -> int:
-    """How many environment commands the ledger records. A count, not a join."""
+def _this_run(run_dir: str, records: List[Dict[str, Any]]
+              ) -> List[Dict[str, Any]]:
+    """`records` narrowed to this run, the way `archive.turn_series` narrows.
+
+    A ledger may hold more than one run (`runs/a3-gate-mock` holds three), and
+    a self-check that counts the file while the join counts the run would
+    compare two different runs and call the difference a defect.
+    """
+    for name in ("run.json", "RUN_STATE.json"):
+        doc = None
+        path = os.path.join(run_dir, name)
+        if os.path.exists(path):
+            try:
+                with open(path, encoding="utf-8") as fh:
+                    doc = json.load(fh)
+            except ValueError:
+                doc = None
+        if isinstance(doc, dict):
+            summary = doc.get("summary") or {}
+            run_id = summary.get("run_id") or doc.get("run_id")
+            if run_id:
+                return [r for r in records if r.get("run_id") == run_id]
+    return list(records)
+
+
+def _ledger_facts(run_dir: str,
+                  records: Optional[List[Dict[str, Any]]] = None
+                  ) -> Dict[str, Any]:
+    """What the ledger *says*, counted. Three numbers, no join, no derivation.
+
+    `env_steps` is what the original self-check compared against. `billed_calls`
+    and `usd` are the two the original did not have, and their absence is what
+    let a leg lose its last desk call in silence: the command count balanced
+    perfectly, because the missing turn had issued no command -- it was killed
+    before it could. A check that can only see commands is blind to money, and
+    money is what the curve is for.
+    """
     if records is None:
         records = archive.read_ledger(os.path.join(run_dir, "ledger.jsonl"))
-    return sum(1 for r in records if r.get("event") == "env_step")
+    mine = _this_run(run_dir, records)
+    calls = [r for r in mine if r.get("event") == "model_call"]
+    usd = 0.0
+    for record in calls:
+        response = record.get("response") or {}
+        if isinstance(response, dict):
+            usd += float(response.get("total_cost_usd") or 0.0)
+    return {
+        "env_steps": sum(1 for r in mine if r.get("event") == "env_step"),
+        "billed_calls": len(calls),
+        "usd": usd,
+    }
+
+
+#: `_env_steps()` was the whole of this module's ledger reading and is now
+#: `_ledger_facts()["env_steps"]`. It is gone rather than kept as a one-line
+#: forwarder: it is private, nothing else in the repository called it, and a
+#: second door onto the same count is how two callers end up reading the ledger
+#: two different ways -- which is exactly the defect the money equality above
+#: exists to catch, one layer down.
 
 
 def curves(run_dir: str, *, doc: Optional[Dict[str, Any]] = None
@@ -235,6 +326,12 @@ def curves(run_dir: str, *, doc: Optional[Dict[str, Any]] = None
             "usd_cumulative_in_level": round(in_level[level], 9),
             "usd_cumulative_in_leg": round(in_leg, 9),
             "surprise_total": row.get("surprise_total"),
+            # A turn the loop opened, billed, and never wrote to `turns.json`.
+            # False on every recorded turn, so the column is a measurement on
+            # every row rather than a key that appears only when something went
+            # wrong -- and a reader of the CSV can see at a glance which row
+            # carries money the run itself never attributed.
+            "turn_record_missing": bool(row.get("turn_record_missing")),
         }
         for kind in archive.KINDS:
             record["surprise_%s" % kind] = int(counts.get(kind) or 0)
@@ -245,7 +342,11 @@ def curves(run_dir: str, *, doc: Optional[Dict[str, Any]] = None
               for level in sorted(per_level)]
 
     accounted = sum(r["http_commands"] for r in flat)
-    ledger_env_steps = _env_steps(run_dir)
+    ledger = _ledger_facts(run_dir)
+    ledger_env_steps = ledger["env_steps"]
+    billed = sum(int(r["model_calls"] or 0) for r in flat)
+    curve_usd = sum(float(r["usd"] or 0.0) for r in flat)
+    unrecorded = [r for r in flat if r["turn_record_missing"]]
 
     out = {
         "schema": SCHEMA,
@@ -270,15 +371,44 @@ def curves(run_dir: str, *, doc: Optional[Dict[str, Any]] = None
             "http_commands_over_the_curves": accounted,
             "env_step_records_in_the_ledger": ledger_env_steps,
             "accounts_for_every_env_step": accounted == ledger_env_steps,
+            "billed_calls_over_the_curves": billed,
+            "model_call_records_in_the_ledger": ledger["billed_calls"],
+            "accounts_for_every_billed_call": billed == ledger["billed_calls"],
+            "usd_over_the_curves": round(curve_usd, 9),
+            "usd_in_the_ledger": round(ledger["usd"], 9),
+            "usd_tolerance": USD_TOLERANCE,
+            "accounts_for_every_dollar": (abs(curve_usd - ledger["usd"])
+                                          <= USD_TOLERANCE),
+            "turns_with_no_record_of_their_own": [
+                {"turn": r["turn"], "step_idx": r["step_idx"],
+                 "model_calls": r["model_calls"], "usd": r["usd"]}
+                for r in unrecorded],
             "why": ("a curve is allowed to have fewer turns than the ledger "
                     "has commands -- a turn issues several -- but it is never "
                     "allowed to account for fewer commands than were issued. "
                     "That difference is a hole in the accounting, and it is "
                     "invisible in the plot: the curve just looks shorter."),
+            "why_money_too": (
+                "the command equality above is blind to money, and that "
+                "blindness had a cost. Two live legs ended on a tripped spend "
+                "gate; the final desk call of each was billed by the pool and "
+                "landed in no turn row, because inner/loop.py appends a turn "
+                "record only after the turn's last ARC command and the gate "
+                "killed the turn before it sent one. The missing turn had "
+                "issued no command, so `http_commands` balanced exactly -- and "
+                "the curve understated the leg by 17% and 12.5%. Commands and "
+                "dollars are counted separately because a hole can open in "
+                "either without moving the other."),
             "floor": ("zero turns is refused outright. 0 == 0 satisfies the "
                       "equality above, so an empty leg would otherwise write a "
                       "file of zeros that reads exactly like a leg that was "
                       "cheap."),
+            "unattributed": (
+                "a turn the loop opened and never wrote down still gets a row "
+                "-- flagged `turn_record_missing`, carrying its calls and its "
+                "dollars, owning no ARC command. Absence is recorded as "
+                "absence; a cost that vanishes is worse than a cost with no "
+                "turn number."),
         },
         "reading": (
             "Three curves per level: `theorize_rounds` (expected to fall "
@@ -312,6 +442,28 @@ def curves(run_dir: str, *, doc: Optional[Dict[str, Any]] = None
             "join and the cut, and the missing cost would never be noticed in "
             "the figure."
             % (accounted, ledger_env_steps, run_dir, len(flat), len(blocks)))
+    # The two the command equality cannot see. Same class of failure, same
+    # refusal: a curve that does not account for every billed call is a *wrong*
+    # curve, and it is wrong in the direction that makes the campaign look
+    # cheaper than it was.
+    if billed != ledger["billed_calls"]:
+        raise CurveGap(
+            "the curves account for %d billed model call(s) but the ledger "
+            "records %d model_call(s) in %s. %d turn(s) were reduced. A call "
+            "with no turn is still a call that was paid for: it belongs in the "
+            "curve as an unattributed row with its reason, never as a gap. "
+            "(This is exactly what a leg killed by the spend gate looks like "
+            "-- the last call is billed and its turn is never written down.)"
+            % (billed, ledger["billed_calls"], run_dir, len(flat)))
+    if abs(curve_usd - ledger["usd"]) > USD_TOLERANCE:
+        raise CurveGap(
+            "the curves total $%.6f over %d turn(s) but the ledger's "
+            "model_call records total $%.6f in %s -- a difference of $%.6f, "
+            "past the $%g the producers' own 9-dp rounding can explain. The "
+            "curve is the raw material for figure 2 and for C2; a bill shape "
+            "drawn from it would be the shape of a bill nobody was sent."
+            % (curve_usd, len(flat), ledger["usd"], run_dir,
+               ledger["usd"] - curve_usd, USD_TOLERANCE))
     return out
 
 

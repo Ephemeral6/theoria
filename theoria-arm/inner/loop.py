@@ -334,6 +334,11 @@ class TheoriaArm:
 
         self.desk_failures: List[Dict[str, Any]] = []
         self.turns: List[Dict[str, Any]] = []
+
+        #: The turn currently being played, parked here between the moment it
+        #: is opened and the moment its record is appended to `self.turns`.
+        #: `_adopt_the_turn_in_flight` is why it exists.
+        self._turn_in_flight: Optional[Dict[str, Any]] = None
         self.theorize_reports: List[Dict[str, Any]] = []
         self.certify_reports: List[Dict[str, Any]] = []
         self.plan_reports: List[Dict[str, Any]] = []
@@ -869,6 +874,13 @@ class TheoriaArm:
             record: Dict[str, Any] = {"turn": turn,
                                       "actions_before": self.budget.actions_ok,
                                       "elapsed_s": round(self._elapsed(), 1)}
+            # The turn is open. It is *not* in `self.turns` yet -- both appends
+            # are at the bottom of this body, and `_desk_context` reads
+            # `len(self.turns)` as the index the record will occupy, so putting
+            # it in here would shift that published number by one. It is parked
+            # instead, and `_save_all` adopts it if the run dies before the
+            # append. See `_adopt_the_turn_in_flight`.
+            self._turn_in_flight = record
 
             # 1 + 2. theorize (only on surprise, or when there is no manual
             #        at all), then certify.
@@ -904,11 +916,13 @@ class TheoriaArm:
                     and plan_report.get("plan")):
                 self._commit(namespace, plan_report, record)
                 self.turns.append(record)
+                self._turn_in_flight = None
                 continue
 
             # 4. probe, or honest exploration.
             self._probe_or_explore(namespace, record)
             self.turns.append(record)
+            self._turn_in_flight = None
 
     def _theorize_and_certify(self, record: Dict[str, Any]) -> None:
         # The evidence gate, checked once per turn. A surprise says the manual
@@ -1565,8 +1579,41 @@ class TheoriaArm:
         out["desk_calls_after_carry"] = self.desk.calls
         return out
 
+    def _adopt_the_turn_in_flight(self) -> None:
+        """A turn the run died inside is still a turn. Write it down.
+
+        Both `self.turns.append(record)` calls sit at the *bottom* of the main
+        loop's body, after `_commit` or `_probe_or_explore`. Both of those send
+        an ARC command, and `ArcThroughProxy` raises `SpendGateStopped` when
+        the shared pool has gone red -- so the exception unwinds past the
+        append, out of `_main_loop`, into `play()`'s handler, and `turns.json`
+        was written with no row for the turn that was in flight.
+
+        That turn had already spent a desk call. Two live legs
+        (`20260731T1310Z-A3-level2-carried-r2`, `...T1430Z-...-r3`) lost their
+        final and most expensive call to this, and because the killed turn had
+        issued no ARC command, every command-based check on the archive
+        balanced exactly while the cost curve understated the legs by 17% and
+        12.5%.
+
+        `armtools/archive.py` now reconstructs such a turn rather than dropping
+        it, but a reconstruction is a `degraded` join and a number this run did
+        not record. This is the same fact recorded at the source, where the
+        turn number is the loop's own. The record carries `turn_aborted` so
+        nobody reads a half-played turn as a completed one.
+        """
+        record = getattr(self, "_turn_in_flight", None)
+        if record is None or any(r is record for r in self.turns):
+            return
+        record["turn_aborted"] = (
+            self.stopped_because
+            or "the run ended inside this turn, before its record was appended")
+        self.turns.append(record)
+        self._turn_in_flight = None
+
     def _save_all(self) -> None:
         from world import adapt                        # noqa: PLC0415
+        self._adopt_the_turn_in_flight()
         out = self.dir
         self.store.to_jsonl(os.path.join(out, "trace.jsonl"))
         self.register.to_jsonl(os.path.join(out, "surprises.jsonl"))

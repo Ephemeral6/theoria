@@ -13,11 +13,21 @@ Two things are worth testing and they are not the same thing:
   that is off by one turn, or that silently puts every row in level 1, would
   still produce a plausible-looking file from symmetric input.
 
-* **the refusal.** The self-check is a strict equality between the commands
-  the curves account for and the `env_step` records in the ledger, and it
+* **the refusal.** The self-check is three strict equalities against the
+  ledger -- environment commands, billed model calls, and dollars -- and each
   raises. A test that only ever feeds it consistent input proves nothing about
-  it, so the mismatch is constructed here in both directions -- a dropped turn
-  and an extra ledger command.
+  it, so the mismatches are constructed here in both directions: a dropped
+  turn, an extra ledger command, a billed call no turn row claims, and a call
+  the curve prices differently from the ledger.
+
+  The second and third of those equalities exist because the first was not
+  enough, and the shortfall was measured rather than imagined. Two live legs
+  ended on a tripped spend gate; each one's final desk call was billed by the
+  pool and landed in no turn row, because `inner/loop.py` appends a turn's
+  record only after that turn's last ARC command and the gate killed the turn
+  before it sent one. The vanished turn had therefore issued no command, so
+  the command equality balanced exactly -- 99 = 99 and 234 = 234 -- while the
+  curves understated the legs by 17% and 12.5%.
 
 The pipeline is also exercised against the **real** archive, which is the only
 place the join's own quirks live (146 environment commands over 3 turns on one
@@ -57,6 +67,16 @@ def _leg(tmp_path, rows, *, boundaries=(), env_steps=None, slug="leg-fixture"):
     """
     run_dir = tmp_path / slug
     run_dir.mkdir()
+
+    # Money in a curve means a billed call in the ledger. The self-check is a
+    # three-way equality now -- commands, billed calls, and dollars -- and a
+    # fixture carrying cost with no `model_call` record would describe a run
+    # that cannot exist, then fail the check for being impossible rather than
+    # for being wrong. A row with cost and no declared call count gets one.
+    for row in rows:
+        if float(row.get("usd") or 0.0) and not row.get("model_calls"):
+            row["model_calls"] = 1
+
     doc = {"schema": "theoria-arm/turn_series v1", "run_id": "fixture-run",
            "game_id": "g50t-5849a774", "slug": slug,
            "join": {"join_confidence": "exact"}, "rows": rows}
@@ -85,6 +105,21 @@ def _leg(tmp_path, rows, *, boundaries=(), env_steps=None, slug="leg-fixture"):
         for i in range(total):
             fh.write(json.dumps({"v": LEDGER_VERSION, "event": "env_step",
                                  "step_idx": i}) + "\n")
+        idx = 0
+        for row in rows:
+            n = int(row.get("model_calls") or 0)
+            usd = float(row.get("usd") or 0.0)
+            for k in range(n):
+                # The last call of a turn carries the remainder, so the ledger
+                # sums to the row's own figure exactly rather than to within a
+                # float's worth of it.
+                share = (usd - (usd / n) * (n - 1) if k == n - 1
+                         else usd / n)
+                fh.write(json.dumps(
+                    {"v": LEDGER_VERSION, "event": "model_call",
+                     "run_id": "fixture-run", "call_idx": idx,
+                     "response": {"total_cost_usd": share}}) + "\n")
+                idx += 1
     return str(run_dir)
 
 
@@ -455,3 +490,125 @@ def test_the_pipeline_does_not_re_derive_the_join(tmp_path, monkeypatch):
     monkeypatch.setattr(archive, "turn_series", boom)
     out = curves.curves(run_dir)
     assert out["totals"]["turns"] == 2
+
+
+# -- the two equalities the command count could not see ---------------------
+
+def _extra_call(run_dir, usd):
+    """One more `model_call` in the ledger than the curves account for."""
+    from proxy.ledger import LEDGER_VERSION             # noqa: PLC0415
+
+    with open(os.path.join(run_dir, "ledger.jsonl"), "a", encoding="utf-8",
+              newline="\n") as fh:
+        fh.write(json.dumps({"v": LEDGER_VERSION, "event": "model_call",
+                             "run_id": "fixture-run", "call_idx": 99,
+                             "response": {"total_cost_usd": usd}}) + "\n")
+
+
+def test_a_billed_call_the_curves_do_not_account_for_raises(tmp_path):
+    """The defect the command equality was blind to.
+
+    A leg killed inside a turn spends its last desk call and issues no
+    environment command afterwards -- so `http_commands` balances exactly while
+    the money does not. Two live legs shipped that way (r2 lost $1.63 of $9.56,
+    r3 lost $1.68 of $13.44) and every check on the archive was green.
+    """
+    run_dir = _leg(tmp_path, [_turn(0, http=4, usd=1.0, calls=1)])
+    _extra_call(run_dir, 9.0)
+
+    with pytest.raises(curves.CurveGap) as caught:
+        curves.curves(run_dir)
+    message = str(caught.value)
+    assert "1 billed model call" in message and "2 model_call" in message
+    assert "spend gate" in message
+
+
+def test_a_dollar_the_curves_do_not_account_for_raises_too(tmp_path):
+    """Counting calls is not counting money.
+
+    A curve can hold the right *number* of calls and the wrong total -- a
+    misattributed retry, a response read from the wrong field -- and a bill
+    shape drawn from it is the shape of a bill nobody was sent.
+    """
+    run_dir = _leg(tmp_path, [_turn(0, http=4, usd=1.0, calls=1)])
+    path = os.path.join(run_dir, "ledger.jsonl")
+    with open(path, encoding="utf-8") as fh:
+        lines = fh.readlines()
+    lines[-1] = lines[-1].replace('"total_cost_usd": 1.0',
+                                  '"total_cost_usd": 4.5')
+    with open(path, "w", encoding="utf-8", newline="\n") as fh:
+        fh.writelines(lines)
+
+    with pytest.raises(curves.CurveGap) as caught:
+        curves.curves(run_dir)
+    assert "$1.000000" in str(caught.value) and "$4.500000" in str(caught.value)
+
+
+def test_nothing_is_written_when_a_call_is_missing_from_the_curve(tmp_path):
+    """Same refusal as the command gap: a missing file is a question somebody
+    asks, an understated cost curve is not."""
+    run_dir = _leg(tmp_path, [_turn(0, http=4, usd=1.0, calls=1)])
+    _extra_call(run_dir, 9.0)
+
+    with pytest.raises(curves.CurveGap):
+        curves.write_curves(run_dir)
+    assert not os.path.exists(os.path.join(run_dir, "curves.json"))
+
+
+def test_the_money_self_check_is_reported_as_well_as_enforced(tmp_path):
+    """A reader of a good file should see all three equalities ran."""
+    out = curves.curves(_leg(tmp_path, [_turn(0, http=4, usd=2.0, calls=1),
+                                        _turn(1, http=6, usd=0.5, calls=2)]))
+    check = out["self_check"]
+
+    assert check["billed_calls_over_the_curves"] == 3
+    assert check["model_call_records_in_the_ledger"] == 3
+    assert check["accounts_for_every_billed_call"] is True
+    assert check["usd_over_the_curves"] == pytest.approx(2.5)
+    assert check["usd_in_the_ledger"] == pytest.approx(2.5)
+    assert check["accounts_for_every_dollar"] is True
+    assert check["turns_with_no_record_of_their_own"] == []
+
+
+def test_turn_record_missing_is_a_column_on_every_row(tmp_path):
+    """False on an ordinary turn, never an absent key.
+
+    The same rule the seven surprise counts follow: a flag that appears only
+    when something went wrong makes "this turn was recorded" and "this arm did
+    not measure whether it was" the same bytes.
+    """
+    out = curves.curves(_leg(tmp_path, [_turn(0), _turn(1)]))
+    assert "turn_record_missing" in out["columns"]
+    assert [r["turn_record_missing"] for r in out["rows"]] == [False, False]
+
+
+@pytest.mark.parametrize("slug,rows,calls,usd", [
+    ("20260731T1310Z-A3-level2-carried-r2", 11, 5, 9.556852),
+    ("20260731T1430Z-A3-level2-carried-r3", 31, 8, 13.439862),
+])
+def test_the_gate_tripped_legs_carry_their_last_call(slug, rows, calls, usd):
+    """End to end on the material the defect was found in.
+
+    Before the fix r2 reduced to 10 rows / 4 calls / $7.926367 and r3 to 30 /
+    7 / $11.761053, and both self-checks were green because the missing turn
+    had issued no environment command.
+    """
+    import _bootstrap                                   # noqa: PLC0415
+
+    run_dir = _bootstrap.path("runs", slug)
+    if not os.path.exists(os.path.join(run_dir, "ledger.jsonl")):
+        pytest.skip("%s is not in this checkout" % slug)
+    out = curves.curves(run_dir)
+
+    assert out["totals"]["turns"] == rows
+    assert out["totals"]["usd"] == pytest.approx(usd)
+    assert out["self_check"]["accounts_for_every_billed_call"] is True
+    assert out["self_check"]["accounts_for_every_dollar"] is True
+    assert out["self_check"]["billed_calls_over_the_curves"] == calls
+
+    orphan = [r for r in out["rows"] if r["turn_record_missing"]]
+    assert len(orphan) == 1
+    assert orphan[0]["model_calls"] == 1
+    assert orphan[0]["http_commands"] == 0
+    # The lost turn is on the level it died in, not banished to level 1.
+    assert orphan[0]["level"] == out["rows"][-2]["level"]

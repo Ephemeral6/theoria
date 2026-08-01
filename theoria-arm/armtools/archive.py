@@ -497,6 +497,18 @@ def cost_curve(records: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
 # carry milliseconds, so a surprise landing inside a second that straddles a
 # turn boundary is genuinely ambiguous. Those are counted and reported rather
 # than assigned quietly.
+#
+# **A turn can be billed and never written down, and it still gets a row.**
+# `loop.py` appends a turn's record only after that turn's last ARC command,
+# and the spend gate raises on that command -- so a leg killed by the pool has
+# a `turns.json` with no row for the turn it died inside, while the ledger
+# holds that turn's desk call and the pool holds its charge. The dealing loop
+# above cannot hand such an invocation to anything, and it used to be reported
+# as `unclaimed` and then dropped, which removed the most expensive call of
+# every gate-tripped leg from the cost curve. `_unrecorded_turn_rows` now
+# reconstructs the turn: it carries the calls and the money, owns no command,
+# is flagged `turn_record_missing`, and does not raise the join's confidence
+# above `degraded`. See that function for the full account.
 # ---------------------------------------------------------------------------
 
 #: The seven kinds, imported rather than re-listed. `inner/surprise.py` holds
@@ -653,6 +665,108 @@ def _base_commit_check(arm_version: Dict[str, Any],
                 "detail": "%s: %s" % (type(exc).__name__, exc)}
 
 
+def _next_turn_number(rows: List[Dict[str, Any]]) -> int:
+    """The number `inner/loop.py` would have given the turn after `rows`.
+
+    `_main_loop` increments one counter per iteration and writes it into the
+    turn record, so the turn after the last recorded one is that number plus
+    one. A level boundary is recorded as `"<turn>-boundary"` (`loop.py:463`)
+    and carries the same counter, so it answers the question too.
+
+    This is arithmetic on a recorded number, not a reconstruction of a turn
+    that was never numbered -- but it is still an inference, and every row it
+    numbers says so in `turn_source` and carries `turn_record_missing`.
+    """
+    for row in reversed(rows):
+        turn = row.get("turn")
+        if isinstance(turn, int):
+            return turn + 1
+        if isinstance(turn, str):
+            head = turn.split("-", 1)[0]
+            if head.isdigit():
+                return int(head) + 1
+    return 1
+
+
+def _unrecorded_turn_rows(queue: List[Dict[str, Any]],
+                          rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """Rows for billed invocations that no turn record claimed.
+
+    **The failure this exists for, and how it happens.** `inner/loop.py` builds
+    a turn's `record` at the top of the turn (`loop.py:869`), spends the desk
+    call at `loop.py:875`, and appends the record to `self.turns` only at the
+    *bottom*, after `_commit` or `_probe_or_explore` (`loop.py:906`/`911`).
+    Both of those send an ARC command, and `ArcThroughProxy` raises
+    `SpendGateStopped` when the pool has gone red -- the exception unwinds past
+    the append, out of `_main_loop`, into `play()`'s handler at `loop.py:639`,
+    and `_save_all()` then writes a `turns.json` with no row for the turn that
+    was in flight. The turn was opened and never closed.
+
+    The dealing loop above hands invocations to recorded turns
+    `theorize_rounds` at a time, so an invocation belonging to a turn with no
+    record has nothing to be handed to and is left in `queue`. It used to be
+    *reported* there (the check is still emitted, and it still lowers the
+    join's confidence) and then dropped -- and dropping it meant the leg's most
+    expensive call, the one that tripped the gate, vanished from the series,
+    from `curves.json`, from figure 2 and from C2. Two live legs understated
+    themselves by 17% and 12.5% that way.
+
+    **A cost with no turn number is recorded; a cost that vanishes is not.**
+    So the leftovers become rows. They are cut at `step_idx`, which is the
+    module's own turn boundary (see the header: within a turn the step index
+    cannot move, between turns it must), numbered by continuing the recorded
+    sequence, and flagged `turn_record_missing` so nothing reads them as turns
+    the loop wrote down. They own **no** ARC command: the leg died before its
+    turn issued one, and inventing an owner for commands already attributed to
+    a recorded turn would trade a hole in the money for a hole in the count.
+    """
+    last_step = None
+    for row in reversed(rows):
+        if row.get("step_idx") is not None:
+            last_step = row["step_idx"]
+            break
+
+    groups: List[List[Dict[str, Any]]] = []
+    for inv in queue:
+        if groups and inv["step_idx"] == groups[-1][0]["step_idx"]:
+            groups[-1].append(inv)
+        else:
+            groups.append([inv])
+
+    out: List[Dict[str, Any]] = []
+    number = _next_turn_number(rows)
+    for offset, group in enumerate(groups):
+        step_idx = group[0]["step_idx"]
+        trailing = (last_step is None or step_idx is None
+                    or step_idx > last_step)
+        why = (
+            "turns.json carries no record for this turn. Its billed call(s) "
+            "%s were made at step_idx %s, %s the last step index any recorded "
+            "turn carries (%s), which is what a leg killed inside a turn looks "
+            "like: inner/loop.py appends the turn record only after the turn's "
+            "last ARC command, so a turn that spent a desk call and then hit "
+            "the spend gate is billed and never written down. The number above "
+            "continues the recorded sequence; it is not a number this run "
+            "recorded."
+            % ([i["call_idx"] for i in group], step_idx,
+               "after" if trailing else "at or before", last_step))
+        out.append({
+            "turn": number + offset,
+            "actions_before": None,
+            "elapsed_s": None,
+            "theorize_rounds": sum(1 for i in group
+                                   if i["beat"] == "theorize"),
+            "step_idx": step_idx,
+            "invocations": group,
+            "goal": goal_beat.turn_row_fields(None),
+            "turn_record_missing": True,
+            "turn_is_trailing": trailing,
+            "from": "unrecorded turn (billed, never written to turns.json)",
+            "why": why,
+        })
+    return out
+
+
 def _turn_spine(turns_json, invocations, budget) -> Dict[str, Any]:
     """Decide what the turns were, and say how confident that is.
 
@@ -716,7 +830,16 @@ def _turn_spine(turns_json, invocations, budget) -> Dict[str, Any]:
                          "from": "turns.json"})
         checks.append({
             "check": "every billed theorize invocation was claimed by a turn",
-            "ok": not queue, "unclaimed": [i["call_idx"] for i in queue]})
+            "ok": not queue, "unclaimed": [i["call_idx"] for i in queue],
+            "unclaimed_are_recorded_anyway": bool(queue),
+            "note": ("a leftover lowers the confidence and is *kept*: it "
+                     "becomes a row flagged `turn_record_missing`. Dropping it "
+                     "removed the leg's last and most expensive call from the "
+                     "cost curve, which is the one direction an accounting "
+                     "error must never go.")})
+
+        # A leftover is a turn the loop opened and never closed. It gets a row.
+        rows.extend(_unrecorded_turn_rows(queue, rows))
 
         # The arithmetic bridge, usable only when nothing failed: without a
         # per-turn `actions_failed` the offset between the two indexes is not
@@ -886,12 +1009,20 @@ def turn_series(run_dir: str, *, records: Optional[List[Dict[str, Any]]] = None
             value = 0 if i == 0 else ab[-1]
         ab.append(int(value))
 
+    # A turn with no record of its own owns no command. `_unrecorded_turn_rows`
+    # says why in full: the leg died inside that turn, before it sent one, and
+    # the commands it might otherwise be handed are already attributed to a
+    # turn that *was* recorded. Reassigning them would trade the money hole
+    # this fix closes for a hole in `http_commands`, which `curves.py`'s
+    # self-check would then refuse -- correctly.
     steps = [r for r in mine if r.get("event") == "env_step"]
     owner: Dict[int, int] = {}
     done = 0
     for pos, step in enumerate(steps):
         turn_of = 0
         for i in range(len(ab)):
+            if spine["rows"][i].get("turn_record_missing"):
+                continue
             if done >= ab[i]:
                 turn_of = i
         owner[pos] = turn_of
@@ -1002,6 +1133,17 @@ def turn_series(run_dir: str, *, records: Optional[List[Dict[str, Any]]] = None
                 "computational": sum(counts[k] for k in COMPUTATIONAL)},
             "surprise_seqs": seqs,
             "turn_source": row["from"],
+            # -- was this turn written down at all? -------------------------
+            #
+            # False on every turn `inner/loop.py` recorded, which is nearly all
+            # of them. True means the loop opened this turn, spent money in it,
+            # and died before it could append the record -- so the row is the
+            # archive's, not the run's. It carries the calls and the dollars
+            # because those were really billed; it carries this flag because
+            # its `turn` number is the archive continuing a sequence rather
+            # than a number the run wrote down.
+            "turn_record_missing": bool(row.get("turn_record_missing")),
+            "turn_record_missing_why": row.get("why"),
             # -- the goal columns (change B) --------------------------------
             #
             # `goal_mode` is the scoreboard column that separates "this leg
@@ -1119,6 +1261,11 @@ def turn_series(run_dir: str, *, records: Optional[List[Dict[str, Any]]] = None
                              "cannot address a turn",
             "surprises_within_1s_of_a_turn_boundary": ambiguous_surprises,
             "billed_calls_outside_their_own_turn_window": stray_calls,
+            "turns_with_no_record_of_their_own": [
+                {"turn": r["turn"], "step_idx": r["step_idx"],
+                 "model_calls": r["model_calls"], "usd": r["usd"],
+                 "call_idx": r["call_idx"], "why": r["turn_record_missing_why"]}
+                for r in rows if r["turn_record_missing"]],
             "checks": checks,
         },
         "totals": {

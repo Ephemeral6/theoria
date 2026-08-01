@@ -12,6 +12,7 @@
   "usd_cumulative_in_level",
   "usd_cumulative_in_leg",
   "surprise_total",
+  "turn_record_missing",
   "surprise_replay_mismatch",
   "surprise_render_mismatch",
   "surprise_proof_failure",
@@ -115,6 +116,7 @@
    "surprise_total": 0,
    "theorize_rounds": 0,
    "turn": 0,
+   "turn_record_missing": false,
    "usd": 0.0,
    "usd_cumulative_in_leg": 0.0,
    "usd_cumulative_in_level": 0.0
@@ -136,6 +138,7 @@
    "surprise_total": 1,
    "theorize_rounds": 0,
    "turn": 0,
+   "turn_record_missing": false,
    "usd": 0.0,
    "usd_cumulative_in_leg": 0.0,
    "usd_cumulative_in_level": 0.0
@@ -144,12 +147,22 @@
  "run_id": "r-a80a4383312d408d",
  "schema": "theoria-arm/curves v1",
  "self_check": {
+  "accounts_for_every_billed_call": true,
+  "accounts_for_every_dollar": true,
   "accounts_for_every_env_step": true,
+  "billed_calls_over_the_curves": 0,
   "env_step_records_in_the_ledger": 60,
   "floor": "zero turns is refused outright. 0 == 0 satisfies the equality above, so an empty leg would otherwise write a file of zeros that reads exactly like a leg that was cheap.",
   "http_commands_over_the_curves": 60,
+  "model_call_records_in_the_ledger": 0,
   "turns": 2,
-  "why": "a curve is allowed to have fewer turns than the ledger has commands -- a turn issues several -- but it is never allowed to account for fewer commands than were issued. That difference is a hole in the accounting, and it is invisible in the plot: the curve just looks shorter."
+  "turns_with_no_record_of_their_own": [],
+  "unattributed": "a turn the loop opened and never wrote down still gets a row -- flagged `turn_record_missing`, carrying its calls and its dollars, owning no ARC command. Absence is recorded as absence; a cost that vanishes is worse than a cost with no turn number.",
+  "usd_in_the_ledger": 0.0,
+  "usd_over_the_curves": 0.0,
+  "usd_tolerance": 1e-06,
+  "why": "a curve is allowed to have fewer turns than the ledger has commands -- a turn issues several -- but it is never allowed to account for fewer commands than were issued. That difference is a hole in the accounting, and it is invisible in the plot: the curve just looks shorter.",
+  "why_money_too": "the command equality above is blind to money, and that blindness had a cost. Two live legs ended on a tripped spend gate; the final desk call of each was billed by the pool and landed in no turn row, because inner/loop.py appends a turn record only after the turn's last ARC command and the gate killed the turn before it sent one. The missing turn had issued no command, so `http_commands` balanced exactly -- and the curve understated the leg by 17% and 12.5%. Commands and dollars are counted separately because a hole can open in either without moving the other."
  },
  "slug": "20260731T1240Z-A3-level2-carried",
  "totals": {

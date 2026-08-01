@@ -981,3 +981,73 @@ and the resolved `inner/loop.py` differs from master only by the branch's four
 edits and from the branch only by master's. The claim each side made separately,
 that its default is today's arm, is re-asserted for the conjunction rather than
 inherited from the three halves.
+
+## D-A8-001 · A billed call with no turn is recorded as one, never dropped
+
+`battery/audit/live_economy.py`'s live-economy rung found two legs whose
+`curves.json` billed fewer calls than the proxy ledger did:
+`20260731T1310Z-A3-level2-carried-r2` accounted for 4 of 5 calls and $7.926367
+of $9.556852; `...T1430Z-...-r3` for 7 of 8 and $11.761053 of $13.439862. Both
+ended `spend_gate_tripped`.
+
+**The mechanism, at the record level.** `inner/loop.py` builds a turn's
+`record` at the top of the loop body (`loop.py:869`) and appends it to
+`self.turns` only at the bottom, after `_commit` or `_probe_or_explore`
+(`906`/`911`). Both send an ARC command; `ArcThroughProxy` raises
+`SpendGateStopped` once the pool is red. So the last turn of a gate-tripped leg
+runs its theorize, is billed, and dies on the next command -- above the append.
+The turn was **opened and never closed**: not "never opened" (the desk call and
+`desk_failures.json`'s `SpendGateTripped` at the same `step_idx` prove it ran)
+and not "closed before the call was recorded" (the ledger's `model_call` is
+`seq=205` for r2, the last `env_step` is `seq=204`, and nothing but scorecard
+traffic follows).
+
+`archive._turn_spine` then deals invocations to recorded turns
+`theorize_rounds` at a time. The orphan had no turn to be dealt to, landed in
+the `unclaimed` queue -- which it *reported*, correctly lowering
+`join_confidence` to `degraded` -- and was then discarded.
+
+**Why the A8 self-check did not catch it.** `curves.py` compared
+`http_commands` summed over the curves against `env_step` records in the
+ledger. The vanished turn had issued no environment command, because the gate
+killed it before it could. The equality therefore held exactly (99 = 99 and
+234 = 234) while 17% and 12.5% of the money was missing. A check on commands is
+blind to a hole in the money; the two are now counted separately, along with
+billed calls, and each raises.
+
+**The call.** Three positions, and the third is the one worth arguing.
+
+1. *The archive reconstructs the lost turn* rather than dropping it
+   (`archive._unrecorded_turn_rows`). The row carries the calls and the
+   dollars, owns **no** ARC command -- reassigning commands already attributed
+   to a recorded turn would trade the money hole for a count hole, and
+   `curves.py`'s first equality would then refuse the file -- and is flagged
+   `turn_record_missing` on a column present, `False`, on every ordinary row.
+
+2. *The confidence is not laundered.* A leg with such a row stays `degraded`.
+   Making the money add up is not the same as having the run's own record, and
+   the check that lowered the verdict is still emitted; it now says the
+   leftover was kept rather than dropped.
+
+3. *The row carries an integer `turn`, continuing the recorded sequence, rather
+   than `null`.* `null` was the first instinct and it is wrong twice over.
+   `_desk_context` stamps every desk call with `len(self.turns)` and
+   `bill_shape.json` publishes it, so the archive can be checked against an
+   independent artefact: r2's orphan is `turn: 10` there, its row is the
+   eleventh, and 2 turn-0 rows + turns 1..8 puts the loop's own counter at 9 --
+   which is what the reconstruction writes. And `null` is not free: at least
+   one downstream reader does `int(row["turn"])`
+   (`battery/adapters/theoria_live._turn_map`) and would raise on it. A crash
+   is not a better record than a labelled inference. What makes it honest is
+   that the label travels with it -- `turn_record_missing`,
+   `turn_record_missing_why`, `turn_source`, and a
+   `turns_with_no_record_of_their_own` block in the join.
+
+**And the same fact is recorded at the source.** `inner/loop.py` now parks the
+open turn in `_turn_in_flight` and `_save_all` adopts it
+(`_adopt_the_turn_in_flight`), stamping `turn_aborted` with
+`stopped_because`. Future gate-tripped legs record their own turn with their
+own number and need no reconstruction. The record is not appended at the top of
+the loop body, which would have been simpler: `_desk_context` publishes
+`len(self.turns)` as the index the record will occupy, and that number is
+already on disk in four legs' `bill_shape.json`.
