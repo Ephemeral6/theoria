@@ -1,0 +1,1585 @@
+{
+ "calls": 89,
+ "counts": {
+  "empty": 1,
+  "lost_continuation": 11,
+  "provider_refusal": 24,
+  "well_formed": 53
+ },
+ "legs": [
+  {
+   "calls": [
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- Theoria manual, round 1\n#\n# Observed: 6 state",
+     "call": 1,
+     "chars": 16288,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "transcript": "call-001-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    }
+   ],
+   "counts": {
+    "empty": 0,
+    "lost_continuation": 0,
+    "provider_refusal": 0,
+    "well_formed": 1
+   },
+   "has_transcripts": true,
+   "leg": "20260728T012311Z-g50t-first-contact-aborted",
+   "usd_lost": 0,
+   "usd_total": 0.0
+  },
+  {
+   "calls": [
+    {
+     "begins_with": "",
+     "call": 1,
+     "chars": 1,
+     "chars_per_output_token": 0.0001,
+     "cost_usd": 0.7304849999999998,
+     "has_theory_marker_anywhere": false,
+     "markers_present": [],
+     "output_tokens": 19957,
+     "transcript": "call-001-theorize-round1.md",
+     "verdict": "empty",
+     "why": "the CLI returned an empty result. Nothing was received, so nothing was lost in transit -- this is a failed call, not a truncated one."
+    }
+   ],
+   "counts": {
+    "empty": 1,
+    "lost_continuation": 0,
+    "provider_refusal": 0,
+    "well_formed": 0
+   },
+   "has_transcripts": true,
+   "leg": "20260728T014402Z-g50t-first-contact-aborted",
+   "usd_lost": 0,
+   "usd_total": 0.730485
+  },
+  {
+   "calls": [
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- Theoria manual, first draft. Six observed tra",
+     "call": 1,
+     "chars": 16573,
+     "chars_per_output_token": 0.3584,
+     "cost_usd": 1.3329529999999998,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 46248,
+     "transcript": "call-001-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    },
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- Theoria manual, second draft. Six observed tr",
+     "call": 2,
+     "chars": 21803,
+     "chars_per_output_token": 0.8322,
+     "cost_usd": 0.868224,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 26200,
+     "transcript": "call-002-theorize-round2.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    },
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- Theoria manual, third draft. Six observed tra",
+     "call": 3,
+     "chars": 23270,
+     "chars_per_output_token": 0.502,
+     "cost_usd": 1.425431,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 46357,
+     "transcript": "call-003-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    },
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- fourth draft. Seven states (t0-t6), six comma",
+     "call": 4,
+     "chars": 31111,
+     "chars_per_output_token": 0.6462,
+     "cost_usd": 1.489011,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 48144,
+     "transcript": "call-004-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    },
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- fifth draft. Seven states (t0-t6), six comman",
+     "call": 5,
+     "chars": 33454,
+     "chars_per_output_token": 0.9359,
+     "cost_usd": 1.202039,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 35745,
+     "transcript": "call-005-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    }
+   ],
+   "counts": {
+    "empty": 0,
+    "lost_continuation": 0,
+    "provider_refusal": 0,
+    "well_formed": 5
+   },
+   "has_transcripts": true,
+   "leg": "20260728T015354Z-g50t-first-contact",
+   "usd_lost": 0,
+   "usd_total": 6.317658
+  },
+  {
+   "calls": [
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- world observed for 5 transitions (RESET + ACT",
+     "call": 1,
+     "chars": 18176,
+     "chars_per_output_token": 0.3083,
+     "cost_usd": 1.6599960000000002,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 58962,
+     "transcript": "call-001-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    },
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- world observed for 5 transitions (RESET + ACT",
+     "call": 2,
+     "chars": 23857,
+     "chars_per_output_token": 0.5983,
+     "cost_usd": 1.25345,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 39874,
+     "transcript": "call-002-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    },
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- world observed for 9 commands (RESET + ACTION",
+     "call": 3,
+     "chars": 25205,
+     "chars_per_output_token": 0.5322,
+     "cost_usd": 1.461651,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 47363,
+     "transcript": "call-003-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    },
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- world observed for 9 commands (RESET + ACTION",
+     "call": 4,
+     "chars": 30293,
+     "chars_per_output_token": 1.0803,
+     "cost_usd": 0.993743,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 28042,
+     "transcript": "call-004-theorize-round2.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    },
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- world observed for 9 commands (RESET + ACTION",
+     "call": 5,
+     "chars": 35641,
+     "chars_per_output_token": 0.6171,
+     "cost_usd": 1.7258360000000001,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 57752,
+     "transcript": "call-005-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    }
+   ],
+   "counts": {
+    "empty": 0,
+    "lost_continuation": 0,
+    "provider_refusal": 0,
+    "well_formed": 5
+   },
+   "has_transcripts": true,
+   "leg": "20260728T025503Z-g50t-e08-fixed",
+   "usd_lost": 0,
+   "usd_total": 7.094676
+  },
+  {
+   "calls": [
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- FIRST DRAFT AGAINST THIS WORLD. The manual I ",
+     "call": 1,
+     "chars": 28284,
+     "chars_per_output_token": 0.6037,
+     "cost_usd": 1.493268,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 46851,
+     "transcript": "call-001-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    },
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- SECOND DRAFT. The first draft was written bli",
+     "call": 2,
+     "chars": 32109,
+     "chars_per_output_token": 0.6748,
+     "cost_usd": 1.4834100000000003,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 47585,
+     "transcript": "call-002-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    },
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- THIRD DRAFT. Four more commands arrived (t6..",
+     "call": 3,
+     "chars": 37741,
+     "chars_per_output_token": 0.9014,
+     "cost_usd": 1.416019,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 41871,
+     "transcript": "call-003-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    },
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- FOURTH DRAFT.\n#\n# NO NEW TRANSITIONS ARRIVED ",
+     "call": 4,
+     "chars": 40415,
+     "chars_per_output_token": 1.4391,
+     "cost_usd": 1.0474379999999999,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 28084,
+     "transcript": "call-004-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    },
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- FIFTH DRAFT.\n#\n# FOUR NEW TRANSITIONS ARRIVED",
+     "call": 5,
+     "chars": 43167,
+     "chars_per_output_token": 0.839,
+     "cost_usd": 1.742637,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 51452,
+     "transcript": "call-005-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    },
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- SIXTH DRAFT.\n#\n# NO NEW TRANSITIONS ARRIVED T",
+     "call": 6,
+     "chars": 49989,
+     "chars_per_output_token": 1.4643,
+     "cost_usd": 1.222096,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 34139,
+     "transcript": "call-006-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    },
+    {
+     "begins_with": "You've hit your session limit \u00b7 resets 8:20pm (Asia/Shanghai)",
+     "call": 7,
+     "chars": 62,
+     "chars_per_output_token": null,
+     "cost_usd": 0.0,
+     "has_theory_marker_anywhere": false,
+     "markers_present": [],
+     "output_tokens": 0,
+     "transcript": "call-007-theorize-round1.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text, not the desk's answer. The desk never ran; there is no answer to have lost."
+    },
+    {
+     "begins_with": "You've hit your session limit \u00b7 resets 8:20pm (Asia/Shanghai)",
+     "call": 8,
+     "chars": 62,
+     "chars_per_output_token": null,
+     "cost_usd": 0.0,
+     "has_theory_marker_anywhere": false,
+     "markers_present": [],
+     "output_tokens": 0,
+     "transcript": "call-008-theorize-round2.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text, not the desk's answer. The desk never ran; there is no answer to have lost."
+    },
+    {
+     "begins_with": "You've hit your session limit \u00b7 resets 8:20pm (Asia/Shanghai)",
+     "call": 9,
+     "chars": 62,
+     "chars_per_output_token": null,
+     "cost_usd": 0.0,
+     "has_theory_marker_anywhere": false,
+     "markers_present": [],
+     "output_tokens": 0,
+     "transcript": "call-009-theorize-round3.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text, not the desk's answer. The desk never ran; there is no answer to have lost."
+    },
+    {
+     "begins_with": "You've hit your session limit \u00b7 resets 8:20pm (Asia/Shanghai)",
+     "call": 10,
+     "chars": 62,
+     "chars_per_output_token": null,
+     "cost_usd": 0.0,
+     "has_theory_marker_anywhere": false,
+     "markers_present": [],
+     "output_tokens": 0,
+     "transcript": "call-010-theorize-round1.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text, not the desk's answer. The desk never ran; there is no answer to have lost."
+    },
+    {
+     "begins_with": "You've hit your session limit \u00b7 resets 8:20pm (Asia/Shanghai)",
+     "call": 11,
+     "chars": 62,
+     "chars_per_output_token": null,
+     "cost_usd": 0.0,
+     "has_theory_marker_anywhere": false,
+     "markers_present": [],
+     "output_tokens": 0,
+     "transcript": "call-011-theorize-round2.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text, not the desk's answer. The desk never ran; there is no answer to have lost."
+    },
+    {
+     "begins_with": "You've hit your session limit \u00b7 resets 8:20pm (Asia/Shanghai)",
+     "call": 12,
+     "chars": 62,
+     "chars_per_output_token": null,
+     "cost_usd": 0.0,
+     "has_theory_marker_anywhere": false,
+     "markers_present": [],
+     "output_tokens": 0,
+     "transcript": "call-012-theorize-round3.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text, not the desk's answer. The desk never ran; there is no answer to have lost."
+    },
+    {
+     "begins_with": "You've hit your session limit \u00b7 resets 8:20pm (Asia/Shanghai)",
+     "call": 13,
+     "chars": 62,
+     "chars_per_output_token": null,
+     "cost_usd": 0.0,
+     "has_theory_marker_anywhere": false,
+     "markers_present": [],
+     "output_tokens": 0,
+     "transcript": "call-013-theorize-round1.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text, not the desk's answer. The desk never ran; there is no answer to have lost."
+    },
+    {
+     "begins_with": "You've hit your session limit \u00b7 resets 8:20pm (Asia/Shanghai)",
+     "call": 14,
+     "chars": 62,
+     "chars_per_output_token": null,
+     "cost_usd": 0.0,
+     "has_theory_marker_anywhere": false,
+     "markers_present": [],
+     "output_tokens": 0,
+     "transcript": "call-014-theorize-round2.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text, not the desk's answer. The desk never ran; there is no answer to have lost."
+    },
+    {
+     "begins_with": "You've hit your session limit \u00b7 resets 8:20pm (Asia/Shanghai)",
+     "call": 15,
+     "chars": 62,
+     "chars_per_output_token": null,
+     "cost_usd": 0.0,
+     "has_theory_marker_anywhere": false,
+     "markers_present": [],
+     "output_tokens": 0,
+     "transcript": "call-015-theorize-round3.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text, not the desk's answer. The desk never ran; there is no answer to have lost."
+    },
+    {
+     "begins_with": "You've hit your session limit \u00b7 resets 8:20pm (Asia/Shanghai)",
+     "call": 16,
+     "chars": 62,
+     "chars_per_output_token": null,
+     "cost_usd": 0.0,
+     "has_theory_marker_anywhere": false,
+     "markers_present": [],
+     "output_tokens": 0,
+     "transcript": "call-016-theorize-round1.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text, not the desk's answer. The desk never ran; there is no answer to have lost."
+    },
+    {
+     "begins_with": "You've hit your session limit \u00b7 resets 8:20pm (Asia/Shanghai)",
+     "call": 17,
+     "chars": 62,
+     "chars_per_output_token": null,
+     "cost_usd": 0.0,
+     "has_theory_marker_anywhere": false,
+     "markers_present": [],
+     "output_tokens": 0,
+     "transcript": "call-017-theorize-round2.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text, not the desk's answer. The desk never ran; there is no answer to have lost."
+    },
+    {
+     "begins_with": "You've hit your session limit \u00b7 resets 8:20pm (Asia/Shanghai)",
+     "call": 18,
+     "chars": 62,
+     "chars_per_output_token": null,
+     "cost_usd": 0.0,
+     "has_theory_marker_anywhere": false,
+     "markers_present": [],
+     "output_tokens": 0,
+     "transcript": "call-018-theorize-round3.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text, not the desk's answer. The desk never ran; there is no answer to have lost."
+    },
+    {
+     "begins_with": "You've hit your session limit \u00b7 resets 8:20pm (Asia/Shanghai)",
+     "call": 19,
+     "chars": 62,
+     "chars_per_output_token": null,
+     "cost_usd": 0.0,
+     "has_theory_marker_anywhere": false,
+     "markers_present": [],
+     "output_tokens": 0,
+     "transcript": "call-019-theorize-round1.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text, not the desk's answer. The desk never ran; there is no answer to have lost."
+    },
+    {
+     "begins_with": "You've hit your session limit \u00b7 resets 8:20pm (Asia/Shanghai)",
+     "call": 20,
+     "chars": 62,
+     "chars_per_output_token": null,
+     "cost_usd": 0.0,
+     "has_theory_marker_anywhere": false,
+     "markers_present": [],
+     "output_tokens": 0,
+     "transcript": "call-020-theorize-round2.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text, not the desk's answer. The desk never ran; there is no answer to have lost."
+    },
+    {
+     "begins_with": "You've hit your session limit \u00b7 resets 8:20pm (Asia/Shanghai)",
+     "call": 21,
+     "chars": 62,
+     "chars_per_output_token": null,
+     "cost_usd": 0.0,
+     "has_theory_marker_anywhere": false,
+     "markers_present": [],
+     "output_tokens": 0,
+     "transcript": "call-021-theorize-round3.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text, not the desk's answer. The desk never ran; there is no answer to have lost."
+    },
+    {
+     "begins_with": "You've hit your session limit \u00b7 resets 8:20pm (Asia/Shanghai)",
+     "call": 22,
+     "chars": 62,
+     "chars_per_output_token": null,
+     "cost_usd": 0.0,
+     "has_theory_marker_anywhere": false,
+     "markers_present": [],
+     "output_tokens": 0,
+     "transcript": "call-022-theorize-round1.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text, not the desk's answer. The desk never ran; there is no answer to have lost."
+    },
+    {
+     "begins_with": "You've hit your session limit \u00b7 resets 8:20pm (Asia/Shanghai)",
+     "call": 23,
+     "chars": 62,
+     "chars_per_output_token": null,
+     "cost_usd": 0.0,
+     "has_theory_marker_anywhere": false,
+     "markers_present": [],
+     "output_tokens": 0,
+     "transcript": "call-023-theorize-round2.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text, not the desk's answer. The desk never ran; there is no answer to have lost."
+    },
+    {
+     "begins_with": "You've hit your session limit \u00b7 resets 8:20pm (Asia/Shanghai)",
+     "call": 24,
+     "chars": 62,
+     "chars_per_output_token": null,
+     "cost_usd": 0.0,
+     "has_theory_marker_anywhere": false,
+     "markers_present": [],
+     "output_tokens": 0,
+     "transcript": "call-024-theorize-round3.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text, not the desk's answer. The desk never ran; there is no answer to have lost."
+    },
+    {
+     "begins_with": "You've hit your session limit \u00b7 resets 8:20pm (Asia/Shanghai)",
+     "call": 25,
+     "chars": 62,
+     "chars_per_output_token": null,
+     "cost_usd": 0.0,
+     "has_theory_marker_anywhere": false,
+     "markers_present": [],
+     "output_tokens": 0,
+     "transcript": "call-025-theorize-round1.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text, not the desk's answer. The desk never ran; there is no answer to have lost."
+    },
+    {
+     "begins_with": "You've hit your session limit \u00b7 resets 8:20pm (Asia/Shanghai)",
+     "call": 26,
+     "chars": 62,
+     "chars_per_output_token": null,
+     "cost_usd": 0.0,
+     "has_theory_marker_anywhere": false,
+     "markers_present": [],
+     "output_tokens": 0,
+     "transcript": "call-026-theorize-round2.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text, not the desk's answer. The desk never ran; there is no answer to have lost."
+    },
+    {
+     "begins_with": "You've hit your session limit \u00b7 resets 8:20pm (Asia/Shanghai)",
+     "call": 27,
+     "chars": 62,
+     "chars_per_output_token": null,
+     "cost_usd": 0.0,
+     "has_theory_marker_anywhere": false,
+     "markers_present": [],
+     "output_tokens": 0,
+     "transcript": "call-027-theorize-round3.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text, not the desk's answer. The desk never ran; there is no answer to have lost."
+    },
+    {
+     "begins_with": "You've hit your session limit \u00b7 resets 8:20pm (Asia/Shanghai)",
+     "call": 28,
+     "chars": 62,
+     "chars_per_output_token": null,
+     "cost_usd": 0.0,
+     "has_theory_marker_anywhere": false,
+     "markers_present": [],
+     "output_tokens": 0,
+     "transcript": "call-028-theorize-round1.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text, not the desk's answer. The desk never ran; there is no answer to have lost."
+    },
+    {
+     "begins_with": "You've hit your session limit \u00b7 resets 8:20pm (Asia/Shanghai)",
+     "call": 29,
+     "chars": 62,
+     "chars_per_output_token": null,
+     "cost_usd": 0.0,
+     "has_theory_marker_anywhere": false,
+     "markers_present": [],
+     "output_tokens": 0,
+     "transcript": "call-029-theorize-round2.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text, not the desk's answer. The desk never ran; there is no answer to have lost."
+    },
+    {
+     "begins_with": "You've hit your session limit \u00b7 resets 8:20pm (Asia/Shanghai)",
+     "call": 30,
+     "chars": 62,
+     "chars_per_output_token": null,
+     "cost_usd": 0.0,
+     "has_theory_marker_anywhere": false,
+     "markers_present": [],
+     "output_tokens": 0,
+     "transcript": "call-030-theorize-round3.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text, not the desk's answer. The desk never ran; there is no answer to have lost."
+    }
+   ],
+   "counts": {
+    "empty": 0,
+    "lost_continuation": 0,
+    "provider_refusal": 24,
+    "well_formed": 6
+   },
+   "has_transcripts": true,
+   "leg": "20260728T083400Z-E3-sk48-carried-v2",
+   "usd_lost": 0,
+   "usd_total": 8.404868
+  },
+  {
+   "calls": [
+    {
+     "begins_with": "=== THEORY ===\n```\nsemantics:\n  frame persist\n  conflict exclusive\n  cascade sin",
+     "call": 1,
+     "chars": 2640,
+     "chars_per_output_token": 0.156,
+     "cost_usd": 0.11425599999999998,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 16925,
+     "transcript": "call-001-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    },
+    {
+     "begins_with": "=== THEORY ===\n```\nsemantics:\n  frame persist\n  conflict exclusive\n  cascade sin",
+     "call": 2,
+     "chars": 3602,
+     "chars_per_output_token": 0.1593,
+     "cost_usd": 0.14629199999999998,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 22614,
+     "transcript": "call-002-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    },
+    {
+     "begins_with": "=== THEORY ===\n```\nsemantics:\n  frame persist\n  conflict exclusive\n  cascade sin",
+     "call": 3,
+     "chars": 3964,
+     "chars_per_output_token": 0.2043,
+     "cost_usd": 0.132608,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 19406,
+     "transcript": "call-003-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    }
+   ],
+   "counts": {
+    "empty": 0,
+    "lost_continuation": 0,
+    "provider_refusal": 0,
+    "well_formed": 3
+   },
+   "has_transcripts": true,
+   "leg": "20260729T0035Z-a3-desk-live-proof2",
+   "usd_lost": 0,
+   "usd_total": 0.393156
+  },
+  {
+   "calls": [
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- world re-observed for 6 states / 5 transition",
+     "call": 1,
+     "chars": 40066,
+     "chars_per_output_token": 0.8482,
+     "cost_usd": 1.487855,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 47235,
+     "transcript": "call-001-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    },
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- world observed for 6 states / 5 transitions (",
+     "call": 2,
+     "chars": 48850,
+     "chars_per_output_token": 0.9199,
+     "cost_usd": 1.662984,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 53106,
+     "transcript": "call-002-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    },
+    {
+     "begins_with": "ION4 burned the meter and ACTION3 did not. Under action-keying that asymmetry is",
+     "call": 3,
+     "chars": 22220,
+     "chars_per_output_token": 0.3051,
+     "cost_usd": 2.86115,
+     "has_theory_marker_anywhere": false,
+     "markers_present": [
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 72821,
+     "transcript": "call-003-theorize-round1.md",
+     "verdict": "lost_continuation",
+     "why": "the reply is substantial and begins somewhere other than '=== THEORY ==='. The contract puts that marker first, so what is on disk starts inside an answer whose beginning the arm never received: `envelope['result']` carries only the CLI's LAST assistant message."
+    },
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- world observed for 10 states / 9 transitions\n",
+     "call": 4,
+     "chars": 44681,
+     "chars_per_output_token": 0.7298,
+     "cost_usd": 1.9143780000000001,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 61227,
+     "transcript": "call-004-theorize-round2.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    },
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- world observed for 14 states / 13 transitions",
+     "call": 5,
+     "chars": 45372,
+     "chars_per_output_token": 0.9169,
+     "cost_usd": 1.630485,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 49485,
+     "transcript": "call-005-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    }
+   ],
+   "counts": {
+    "empty": 0,
+    "lost_continuation": 1,
+    "provider_refusal": 0,
+    "well_formed": 4
+   },
+   "has_transcripts": true,
+   "leg": "20260731T1310Z-A3-level2-carried-r2",
+   "usd_lost": 2.86115,
+   "usd_total": 9.556852
+  },
+  {
+   "calls": [
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- world observed for 6 states / 5 transitions\n#",
+     "call": 1,
+     "chars": 47060,
+     "chars_per_output_token": 1.002,
+     "cost_usd": 1.554791,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 46967,
+     "transcript": "call-001-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    },
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- world observed for 10 states / 9 transitions\n",
+     "call": 2,
+     "chars": 49385,
+     "chars_per_output_token": 0.8276,
+     "cost_usd": 1.8813019999999998,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 59673,
+     "transcript": "call-002-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    },
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- world observed for 14 states / 13 transitions",
+     "call": 3,
+     "chars": 56171,
+     "chars_per_output_token": 1.2095,
+     "cost_usd": 1.569824,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 46440,
+     "transcript": "call-003-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    },
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- world observed for 18 states / 17 transitions",
+     "call": 4,
+     "chars": 60280,
+     "chars_per_output_token": 1.2249,
+     "cost_usd": 1.6656859999999998,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 49213,
+     "transcript": "call-004-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    },
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- world observed for 22 states / 21 transitions",
+     "call": 5,
+     "chars": 60241,
+     "chars_per_output_token": 1.2236,
+     "cost_usd": 1.68914,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 49233,
+     "transcript": "call-005-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    },
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- world observed for 26 states / 25 transitions",
+     "call": 6,
+     "chars": 67520,
+     "chars_per_output_token": 1.1764,
+     "cost_usd": 1.9071440000000002,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 57396,
+     "transcript": "call-006-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    },
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- world observed for 30 states / 29 transitions",
+     "call": 7,
+     "chars": 71228,
+     "chars_per_output_token": 1.7905,
+     "cost_usd": 1.4931659999999998,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 39782,
+     "transcript": "call-007-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    },
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- world observed for 34 states / 33 transitions",
+     "call": 8,
+     "chars": 62924,
+     "chars_per_output_token": 1.3423,
+     "cost_usd": 1.6788090000000002,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 46877,
+     "transcript": "call-008-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    }
+   ],
+   "counts": {
+    "empty": 0,
+    "lost_continuation": 0,
+    "provider_refusal": 0,
+    "well_formed": 8
+   },
+   "has_transcripts": true,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "usd_lost": 0,
+   "usd_total": 13.439862
+  },
+  {
+   "calls": [
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- SEVENTH DRAFT.\n#\n# THE RECORD SHRANK, AND THA",
+     "call": 1,
+     "chars": 48275,
+     "chars_per_output_token": 1.4811,
+     "cost_usd": 1.20151,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 32595,
+     "transcript": "call-001-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    },
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- EIGHTH DRAFT.\n#\n# 0. NOTHING NEW CAME IN. The",
+     "call": 2,
+     "chars": 50759,
+     "chars_per_output_token": 1.2768,
+     "cost_usd": 1.368456,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 39754,
+     "transcript": "call-002-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    },
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- NINTH DRAFT.\n#\n# 0. THIS ROUND HAS REAL NEW E",
+     "call": 3,
+     "chars": 47652,
+     "chars_per_output_token": 0.9674,
+     "cost_usd": 1.630981,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 49257,
+     "transcript": "call-003-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    },
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- TENTH DRAFT.\n#\n# 0. WHAT IS NEW THIS ROUND IS",
+     "call": 4,
+     "chars": 55573,
+     "chars_per_output_token": 1.6801,
+     "cost_usd": 1.2194720000000001,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 33078,
+     "transcript": "call-004-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    },
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- ELEVENTH DRAFT.\n#\n# 0. FOUR COMMANDS WERE PRE",
+     "call": 5,
+     "chars": 51648,
+     "chars_per_output_token": 1.1587,
+     "cost_usd": 1.5395870000000003,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 44573,
+     "transcript": "call-005-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    },
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- TWELFTH DRAFT.\n#\n# 0. NO WORLD COMMAND WAS PR",
+     "call": 6,
+     "chars": 56461,
+     "chars_per_output_token": 1.7225,
+     "cost_usd": 1.227827,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 32779,
+     "transcript": "call-006-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    },
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- THIRTEENTH DRAFT.\n#\n# 0. THIS ROUND HAS EXACT",
+     "call": 7,
+     "chars": 56340,
+     "chars_per_output_token": 2.5188,
+     "cost_usd": 0.9877729999999999,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 22368,
+     "transcript": "call-007-theorize-round2.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    },
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- FOURTEENTH DRAFT.\n#\n# 0. FOUR COMMANDS WERE F",
+     "call": 8,
+     "chars": 59580,
+     "chars_per_output_token": 1.2606,
+     "cost_usd": 1.6367500000000001,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 47265,
+     "transcript": "call-008-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    },
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- FIFTEENTH DRAFT.\n#\n# 0. NO COMMAND WAS PRESSE",
+     "call": 9,
+     "chars": 61189,
+     "chars_per_output_token": 1.5382,
+     "cost_usd": 1.439363,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 39779,
+     "transcript": "call-009-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    }
+   ],
+   "counts": {
+    "empty": 0,
+    "lost_continuation": 0,
+    "provider_refusal": 0,
+    "well_formed": 9
+   },
+   "has_transcripts": true,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "usd_lost": 0,
+   "usd_total": 12.251719
+  },
+  {
+   "calls": [
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- world observed for 6 states / 5 transitions\n#",
+     "call": 1,
+     "chars": 54786,
+     "chars_per_output_token": 1.1245,
+     "cost_usd": 1.651009,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 48721,
+     "transcript": "call-001-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    },
+    {
+     "begins_with": "```json\n[\n  {\"id\": \"L-07\", \"subject\": \"the heuristic_miss demand for a goal\", \"v",
+     "call": 2,
+     "chars": 5457,
+     "chars_per_output_token": 0.0826,
+     "cost_usd": 2.7157635,
+     "has_theory_marker_anywhere": false,
+     "markers_present": [],
+     "output_tokens": 66102,
+     "transcript": "call-002-theorize-round1.md",
+     "verdict": "lost_continuation",
+     "why": "the reply is substantial and begins somewhere other than '=== THEORY ==='. The contract puts that marker first, so what is on disk starts inside an answer whose beginning the arm never received: `envelope['result']` carries only the CLI's LAST assistant message."
+    },
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- world observed for 10 states / 9 transitions\n",
+     "call": 3,
+     "chars": 63381,
+     "chars_per_output_token": 1.2028,
+     "cost_usd": 1.7225759999999999,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 52696,
+     "transcript": "call-003-theorize-round2.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    },
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- world observed for 10 states / 9 transitions\n",
+     "call": 4,
+     "chars": 64003,
+     "chars_per_output_token": 1.4749,
+     "cost_usd": 1.514071,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 43396,
+     "transcript": "call-004-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    }
+   ],
+   "counts": {
+    "empty": 0,
+    "lost_continuation": 1,
+    "provider_refusal": 0,
+    "well_formed": 3
+   },
+   "has_transcripts": true,
+   "leg": "20260731T231654Z-R1-g50t-a",
+   "usd_lost": 2.715763,
+   "usd_total": 7.603419
+  },
+  {
+   "calls": [
+    {
+     "begins_with": "pressed key(4) with the arm ERASED and drew it back in exactly the original patt",
+     "call": 1,
+     "chars": 27395,
+     "chars_per_output_token": 0.3659,
+     "cost_usd": 2.961837,
+     "has_theory_marker_anywhere": false,
+     "markers_present": [
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 74879,
+     "transcript": "call-001-theorize-round1.md",
+     "verdict": "lost_continuation",
+     "why": "the reply is substantial and begins somewhere other than '=== THEORY ==='. The contract puts that marker first, so what is on disk starts inside an answer whose beginning the arm never received: `envelope['result']` carries only the CLI's LAST assistant message."
+    },
+    {
+     "begins_with": "=== PLAYBOOK ===\n```\n# playbook.dsl -- what to buy with the next command, not a ",
+     "call": 2,
+     "chars": 12520,
+     "chars_per_output_token": 0.1814,
+     "cost_usd": 2.8166415000000002,
+     "has_theory_marker_anywhere": false,
+     "markers_present": [
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 69014,
+     "transcript": "call-002-theorize-round2.md",
+     "verdict": "lost_continuation",
+     "why": "the reply is substantial and begins somewhere other than '=== THEORY ==='. The contract puts that marker first, so what is on disk starts inside an answer whose beginning the arm never received: `envelope['result']` carries only the CLI's LAST assistant message."
+    },
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- rebuilt from scratch this round.\n#\n# WHY IT I",
+     "call": 3,
+     "chars": 34142,
+     "chars_per_output_token": 0.61,
+     "cost_usd": 1.830049,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 55975,
+     "transcript": "call-003-theorize-round3.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    }
+   ],
+   "counts": {
+    "empty": 0,
+    "lost_continuation": 2,
+    "provider_refusal": 0,
+    "well_formed": 1
+   },
+   "has_transcripts": true,
+   "leg": "20260731T231654Z-R1-sk48-b",
+   "usd_lost": 5.778479,
+   "usd_total": 7.608528
+  },
+  {
+   "calls": [
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- world observed for 6 states / 5 transitions\n#",
+     "call": 1,
+     "chars": 54649,
+     "chars_per_output_token": 1.2378,
+     "cost_usd": 1.536699,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 44150,
+     "transcript": "call-001-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    },
+    {
+     "begins_with": "```json\n[\n  {\"id\": \"P-02\", \"subject\": \"ACTION5 at spawn\", \"verdict\": \"probe-pend",
+     "call": 2,
+     "chars": 3831,
+     "chars_per_output_token": 0.0586,
+     "cost_usd": 2.6960810000000004,
+     "has_theory_marker_anywhere": false,
+     "markers_present": [],
+     "output_tokens": 65414,
+     "transcript": "call-002-theorize-round1.md",
+     "verdict": "lost_continuation",
+     "why": "the reply is substantial and begins somewhere other than '=== THEORY ==='. The contract puts that marker first, so what is on disk starts inside an answer whose beginning the arm never received: `envelope['result']` carries only the CLI's LAST assistant message."
+    },
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- world observed for 10 states / 9 transitions\n",
+     "call": 3,
+     "chars": 52525,
+     "chars_per_output_token": 0.8657,
+     "cost_usd": 1.919613,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 60674,
+     "transcript": "call-003-theorize-round2.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    },
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- world observed for 14 states / 13 transitions",
+     "call": 4,
+     "chars": 58224,
+     "chars_per_output_token": 0.9389,
+     "cost_usd": 1.961036,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 62014,
+     "transcript": "call-004-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    },
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- world observed for 18 states / 17 transitions",
+     "call": 5,
+     "chars": 68384,
+     "chars_per_output_token": 1.1214,
+     "cost_usd": 1.961056,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 60981,
+     "transcript": "call-005-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    },
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- world observed for 18 states / 17 transitions",
+     "call": 6,
+     "chars": 65069,
+     "chars_per_output_token": 1.4051,
+     "cost_usd": 1.6152959999999998,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 46310,
+     "transcript": "call-006-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    },
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- world observed for 22 states / 21 transitions",
+     "call": 7,
+     "chars": 68858,
+     "chars_per_output_token": 1.378,
+     "cost_usd": 1.7192910000000001,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 49971,
+     "transcript": "call-007-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    },
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- world observed for 22 states / 21 transitions",
+     "call": 8,
+     "chars": 67152,
+     "chars_per_output_token": 1.8546,
+     "cost_usd": 1.368904,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 36208,
+     "transcript": "call-008-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    },
+    {
+     "begins_with": "=== PLAYBOOK ===\n```\n# playbook.dsl -- what to buy with the next command, not a ",
+     "call": 9,
+     "chars": 22090,
+     "chars_per_output_token": 0.3022,
+     "cost_usd": 2.9711305,
+     "has_theory_marker_anywhere": false,
+     "markers_present": [
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 73099,
+     "transcript": "call-009-theorize-round1.md",
+     "verdict": "lost_continuation",
+     "why": "the reply is substantial and begins somewhere other than '=== THEORY ==='. The contract puts that marker first, so what is on disk starts inside an answer whose beginning the arm never received: `envelope['result']` carries only the CLI's LAST assistant message."
+    }
+   ],
+   "counts": {
+    "empty": 0,
+    "lost_continuation": 2,
+    "provider_refusal": 0,
+    "well_formed": 7
+   },
+   "has_transcripts": true,
+   "leg": "20260801T001851Z-R1b-g50t-a",
+   "usd_lost": 5.667212,
+   "usd_total": 17.749106
+  },
+  {
+   "calls": [
+    {
+     "begins_with": "=== THEORY ===\n```\n# theory.dsl -- REWRITTEN FROM ZERO. World observed for 6 sta",
+     "call": 1,
+     "chars": 39496,
+     "chars_per_output_token": 0.3848,
+     "cost_usd": 3.3620105000000002,
+     "has_theory_marker_anywhere": true,
+     "markers_present": [
+      "=== THEORY ===",
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 102648,
+     "transcript": "call-001-theorize-round1.md",
+     "verdict": "well_formed",
+     "why": "the reply begins with '=== THEORY ===', which is the first thing the contract asks for, so the whole of it reached the arm."
+    },
+    {
+     "begins_with": "=== THEORY (continued \u2014 the remainder of theory.dsl, appended to the block above",
+     "call": 2,
+     "chars": 17990,
+     "chars_per_output_token": 0.2521,
+     "cost_usd": 2.7911395,
+     "has_theory_marker_anywhere": false,
+     "markers_present": [
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 71360,
+     "transcript": "call-002-theorize-round1.md",
+     "verdict": "lost_continuation",
+     "why": "the reply is substantial and begins somewhere other than '=== THEORY ==='. The contract puts that marker first, so what is on disk starts inside an answer whose beginning the arm never received: `envelope['result']` carries only the CLI's LAST assistant message."
+    },
+    {
+     "begins_with": "it verbatim.\n    [probe: passed]\n\n  theorem the_twentyfour_pixels_the_refutation",
+     "call": 3,
+     "chars": 28901,
+     "chars_per_output_token": 0.3824,
+     "cost_usd": 2.89813,
+     "has_theory_marker_anywhere": false,
+     "markers_present": [
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 75581,
+     "transcript": "call-003-theorize-round2.md",
+     "verdict": "lost_continuation",
+     "why": "the reply is substantial and begins somewhere other than '=== THEORY ==='. The contract puts that marker first, so what is on disk starts inside an answer whose beginning the arm never received: `envelope['result']` carries only the CLI's LAST assistant message."
+    },
+    {
+     "begins_with": "```json\n[\n  {\"id\": \"R-08\", \"subject\": \"key4_burn_right_end\", \"verdict\": \"probe-p",
+     "call": 4,
+     "chars": 7849,
+     "chars_per_output_token": 0.1171,
+     "cost_usd": 2.684454,
+     "has_theory_marker_anywhere": false,
+     "markers_present": [],
+     "output_tokens": 67034,
+     "transcript": "call-004-theorize-round3.md",
+     "verdict": "lost_continuation",
+     "why": "the reply is substantial and begins somewhere other than '=== THEORY ==='. The contract puts that marker first, so what is on disk starts inside an answer whose beginning the arm never received: `envelope['result']` carries only the CLI's LAST assistant message."
+    },
+    {
+     "begins_with": "```json\n[\n  {\"id\": \"R-02\", \"subject\": \"the fifteen key(1) rules (a1_*)\", \"verdic",
+     "call": 5,
+     "chars": 7872,
+     "chars_per_output_token": 0.1175,
+     "cost_usd": 2.694148,
+     "has_theory_marker_anywhere": false,
+     "markers_present": [],
+     "output_tokens": 67020,
+     "transcript": "call-005-theorize-round1.md",
+     "verdict": "lost_continuation",
+     "why": "the reply is substantial and begins somewhere other than '=== THEORY ==='. The contract puts that marker first, so what is on disk starts inside an answer whose beginning the arm never received: `envelope['result']` carries only the CLI's LAST assistant message."
+    },
+    {
+     "begins_with": "ditional repaint of the four mark cells. That is a cheap, bounded, priced-in-adv",
+     "call": 6,
+     "chars": 34191,
+     "chars_per_output_token": 0.4405,
+     "cost_usd": 2.960839,
+     "has_theory_marker_anywhere": false,
+     "markers_present": [
+      "=== PLAYBOOK ===",
+      "=== LOG ==="
+     ],
+     "output_tokens": 77627,
+     "transcript": "call-006-theorize-round2.md",
+     "verdict": "lost_continuation",
+     "why": "the reply is substantial and begins somewhere other than '=== THEORY ==='. The contract puts that marker first, so what is on disk starts inside an answer whose beginning the arm never received: `envelope['result']` carries only the CLI's LAST assistant message."
+    }
+   ],
+   "counts": {
+    "empty": 0,
+    "lost_continuation": 5,
+    "provider_refusal": 0,
+    "well_formed": 1
+   },
+   "has_transcripts": true,
+   "leg": "20260801T001851Z-R1b-sk48-b",
+   "usd_lost": 14.028711,
+   "usd_total": 17.390721
+  }
+ ],
+ "legs_with_transcripts": 13,
+ "reading": "11 of 89 archived desk replies begin somewhere other than the marker the contract asks for first. Each was billed in full: $31.0513 of a $108.5410 desk bill, 28.6%. `inner/theorize.py` recorded every one of them as `no THEORY block in the reply`, which reads as a desk that answered badly and is in fact a harness that kept only the CLI's last assistant message.",
+ "share_of_desk_spend_lost": 0.2861,
+ "usd_lost_to_lost_continuation": 31.051315,
+ "usd_total": 108.54105
+}

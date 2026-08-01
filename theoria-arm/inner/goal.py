@@ -250,7 +250,15 @@ class GoalState:
             "read": len(self.proposals),
         })
 
-        refusals = [c["check"] for c in checks if not c["ok"]]
+        # Each check is phrased as the condition that must HOLD, so quoting it
+        # verbatim as a refusal reads as its own opposite. R1b's records are
+        # full of lines saying `refused_because: ["enough new world has
+        # arrived to change the answer: distinct states since the last
+        # proposal (5 now, 4 then) >= 4"]` -- an affirmative sentence given as
+        # the reason nothing happened. The check text is kept (callers match on
+        # substrings of it) and negated in front, with the number it read.
+        refusals = ["NO -- %s [read: %s]" % (c["check"], c["read"])
+                    for c in checks if not c["ok"]]
         return {
             "due": not refusals,
             "checks": checks,
@@ -331,9 +339,34 @@ class GoalState:
         """
         entry = {"proposal_idx": len(self.proposals) + 1, "turn": turn,
                  "distinct_states": distinct_states, "reason": reason,
+                 "delivered_on_turn": None,
                  "answered": None}
         self.proposals.append(entry)
         self.states_at_last_proposal = distinct_states
+        return entry
+
+    def mark_delivered(self, *, turn: int) -> Optional[Dict[str, Any]]:
+        """The ask left the peg and went out with a theorize call.
+
+        Booking and posting are separate events and R1b is the reason they now
+        have separate fields. `20260801T001851Z-R1b-sk48-b` booked one ask on
+        turn 1; the next three turns skipped theorize under the
+        new-transitions gate, the beat after that lost all five of its replies
+        in transit, and the leg then hit its spend reservation. The ask was
+        never sent. The record said `"answered": null` -- true, and read by
+        every later summary as "the desk gave no answer", which is not what
+        happened, because the desk was never asked.
+
+        `answered is None` therefore now means one of two things and the pair
+        distinguishes them: `delivered_on_turn is None` is an ask that never
+        went out, and `delivered_on_turn` set with `answered` still null is an
+        ask that went out and whose reply the beat never got to read.
+        """
+        if not self.proposals:
+            return None
+        entry = self.proposals[-1]
+        if entry.get("delivered_on_turn") is None:
+            entry["delivered_on_turn"] = turn
         return entry
 
     def answer_proposal(self, *, theory_text: Optional[str]) -> Optional[Dict[str, Any]]:
@@ -377,6 +410,11 @@ class GoalState:
             "plan_status_counts": dict(sorted(self.plan_status_counts.items())),
             "proposals": list(self.proposals),
             "proposals_made": len(self.proposals),
+            "proposals_delivered": sum(
+                1 for p in self.proposals
+                if p.get("delivered_on_turn") is not None),
+            "proposals_answered": sum(
+                1 for p in self.proposals if p.get("answered")),
             "criterion": {"min_new_states": self.min_new_states,
                           "max_proposals": self.max_proposals},
             "reading": _reading(self),
@@ -425,14 +463,34 @@ def _reading(state: "GoalState") -> str:
                  "it. Silence and a considered refusal read identically in "
                  "the old record and are not the same thing.")
     if state.proposals:
-        answered = [p.get("answered") for p in state.proposals]
-        line += (" %d proposal(s) were made; answers: %s."
-                 % (len(state.proposals),
-                    ", ".join(str(a) for a in answered)))
+        delivered = [p for p in state.proposals
+                     if p.get("delivered_on_turn") is not None]
+        answered = [p.get("answered") for p in delivered if p.get("answered")]
+        line += (" %d proposal(s) were BOOKED and %d were DELIVERED; answers: %s."
+                 % (len(state.proposals), len(delivered),
+                    ", ".join(answered) if answered else "none"))
+        if len(delivered) < len(state.proposals):
+            line += (" %d ask(s) never left the peg -- the rider rides on the "
+                     "next theorize call a surprise pays for, and no such call "
+                     "completed before the leg ended. NOTHING HERE IS EVIDENCE "
+                     "ABOUT THE DESK: it was not asked."
+                     % (len(state.proposals) - len(delivered)))
+        if delivered and not answered:
+            line += (" Every delivered ask came back unread -- the call raised, "
+                     "or the reply did not survive the transport "
+                     "(armtools/replyloss.py). The desk's position on a goal is "
+                     "UNKNOWN on this leg, not negative.")
     elif state.protocol == "propose":
         line += (" No proposal was made: the criterion refused every turn, "
                  "which is the criterion working, not the criterion missing.")
     return line
+
+
+#: The name the third channel asks the desk to use for the target it believes
+#: in but cannot compile. Fixed rather than free-form so `armtools/
+#: goal_forensics.py` can find it without guessing, and narrow enough that a
+#: theorem about something else cannot be mistaken for one.
+TARGET_THEOREM_PREFIX = "the_goal_i_cannot_write_is"
 
 
 def prompt_rider(state: "GoalState", proposal: Dict[str, Any],
@@ -440,11 +498,39 @@ def prompt_rider(state: "GoalState", proposal: Dict[str, Any],
     """The ask, as Markdown, to ride along on a theorize call already paid for.
 
     Deliberately does NOT tell the desk to invent a goal. It states the cost of
-    the current position in the arm's own numbers and asks for one of two
-    things back -- a goal clause, or a theorem saying why not. Both are
-    answers; only silence is not. The manuals that produced this finding chose
-    the second, with good arguments, and a rider that made that choice harder
-    to take would be a rider that bought a bad goal.
+    the current position in the arm's own numbers and asks for one of three
+    things back. Only silence is not an answer. The manuals that produced this
+    finding declined, with good arguments, and a rider that made that choice
+    harder to take would be a rider that bought a bad goal.
+
+    **What R1b's records changed here.** The first two channels below are the
+    original pair, and on `20260801T001851Z-R1b-g50t-a` the desk took the
+    second one three times out of three, each time with the theorem
+    `the_goal_is_absent_because_no_instance_can_name_the_socket`. Reading those
+    arguments settles the question the round could not: **the rider engages
+    half of the desk's case and talks past the other half.**
+
+    The half it engages is soundness. Both carried manuals argued that a wrong
+    goal sends the searcher after a fiction, and the rider agrees with them in
+    so many words -- "it must be false in the states you have already seen".
+
+    The half it talks past is *reach*. The desk's refusal is not a worry about
+    being wrong; it is a demonstration that this grammar cannot say the thing.
+    The goal section admits `Cart.pos = <landmark>` and `count(<Type>, color =
+    c) = n`, one equation, no conjunction. The position the desk believes wins
+    is a 5x5 body seated in a socket whose cells have never changed -- so they
+    are board, so `arc-instances: all` seats nothing on them, so no `count`
+    ranges over them and no landmark names them. Four candidate forms, each
+    refuted against the frame, three times running. That is the same wall
+    `20260801T0900Z-R2-frontier-by-generation` measured from the other side:
+    12 of 47 off-frontier probes missed by exactly one never-before-changed
+    cell.
+
+    A rider offering only "write one" or "argue why not" forces the desk to
+    smuggle its actual target into free prose -- which it did, unprompted, in
+    `the_socket_is_a_keyhole_and_names_the_winning_position`, where nothing
+    reads it. The third channel gives that answer a name and a place. It buys
+    no model call: it is the same rider on the same already-paid-for turn.
     """
     return "\n".join([
         "## The manual has no goal section, and that has a price",
@@ -462,7 +548,7 @@ def prompt_rider(state: "GoalState", proposal: Dict[str, Any],
         % (state.turns_without_goal, state.actions_without_goal,
            distinct_states, state.min_new_states),
         "",
-        "Two answers are acceptable and one is not.",
+        "Three answers are acceptable and one is not.",
         "",
         "1. **A `goal` clause**, if the evidence now supports one. It must be "
         "false in the states you have already seen -- a goal satisfied by the "
@@ -472,6 +558,17 @@ def prompt_rider(state: "GoalState", proposal: Dict[str, Any],
         "contain both `goal` and one of %s) and whose body gives the argument "
         "and the evidence that would settle it. Declining is a position; the "
         "record will carry it as one." % (", ".join(_ABSENCE_WORDS),),
+        "3. **If, and only if, you decline because the goal section cannot "
+        "SAY what you believe wins** -- not because you are unsure -- add a "
+        "second `theorem` named `%s_...` whose body states, in your own "
+        "words, the winning position you do believe in, and then names which "
+        "of the section's forms you tried against it and what each one lacked. "
+        "This arm has read your last three refusals and they are arguments "
+        "about reach, not about confidence; the target you named in prose is "
+        "the most valuable thing in the manual and there is currently nowhere "
+        "for it to go. Answer 3 is not a substitute for answer 2 and does not "
+        "soften it. It is the part of your case the record has been throwing "
+        "away." % (TARGET_THEOREM_PREFIX,),
         "",
         "What is not acceptable is silence: a manual with neither a goal nor "
         "an argument about its absence leaves the arm exploring without "
