@@ -1,0 +1,67 @@
+{
+  "clean": {
+    "S-1": {
+      "ledger": 6,
+      "scorecard": 6,
+      "verdict": "PASS"
+    },
+    "actions_ok_in_ledger": 6,
+    "events": [
+      "env_step",
+      "env_meta",
+      "run_end"
+    ],
+    "failed_checks": null,
+    "incidents": [],
+    "scorer": {
+      "depends_on": {
+        "canon.py": "sha256:135f2f0cfcab4488277aeb7f351adeaec1dec90dd887a2cab6a2c13ffb684da4",
+        "tools/validate_ledger.py": "sha256:1114d35d8acbf9c5d069b82fbdb832b5ff8ef5cb90a190240c031c5430f597de"
+      },
+      "frozen_at": "2026-07-28",
+      "id": "arc_v1",
+      "sha256": "sha256:b7d2e810ac4d0cc5ba135b086963365f4b457bef1fc8da253398d99aaaac8ed2",
+      "source": "proxy/scoring/arc_v1.py",
+      "version": "1.0.0"
+    },
+    "summary_score_verdict": "PASS",
+    "undetermined_checks": null,
+    "verdict": "PASS"
+  },
+  "forged": {
+    "S-1": {
+      "ledger": 6,
+      "scorecard": 9,
+      "verdict": "FAIL"
+    },
+    "actions_ok_in_ledger": 6,
+    "events": [
+      "env_meta",
+      "run_end",
+      "incident"
+    ],
+    "failed_checks": [
+      "S-1"
+    ],
+    "incidents": [
+      {
+        "detail": "S-1 FAIL: scorecard total_actions == successful non-RESET commands",
+        "kind": "score_mismatch"
+      }
+    ],
+    "scorer": {
+      "depends_on": {
+        "canon.py": "sha256:135f2f0cfcab4488277aeb7f351adeaec1dec90dd887a2cab6a2c13ffb684da4",
+        "tools/validate_ledger.py": "sha256:1114d35d8acbf9c5d069b82fbdb832b5ff8ef5cb90a190240c031c5430f597de"
+      },
+      "frozen_at": "2026-07-28",
+      "id": "arc_v1",
+      "sha256": "sha256:b7d2e810ac4d0cc5ba135b086963365f4b457bef1fc8da253398d99aaaac8ed2",
+      "source": "proxy/scoring/arc_v1.py",
+      "version": "1.0.0"
+    },
+    "summary_score_verdict": "FAIL",
+    "undetermined_checks": null,
+    "verdict": "FAIL"
+  }
+}

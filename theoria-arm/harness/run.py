@@ -63,6 +63,29 @@ The binding is attached to the `RunLedger` so `ModelDesk` can reach it without
 `inner/loop.py` -- another agent's file -- having to change. It is released in
 `__exit__`, i.e. from `play()`'s `with`, so a crash in `arm.play()` cannot
 strand the shared pool's headroom for the lease's whole duration.
+
+## The score is taken when the game ends, not afterwards
+
+`Theoria.md:371` asks for 跑完一局即打分 and Phase 1 (5) for 逐局跑完即打分入库、与
+scorecard 对账. Both are about *when*, and both were half-kept: the frozen
+scorer existed and reconciled 37 archived runs correctly, but no arm had ever
+called it from a run. A sweep afterwards is the thing those lines forbid --
+Phase 3 audits the order results arrive in, and a batch scored later is a batch
+somebody could have scored after seeing it.
+
+So `proxy.scoring.score_run` runs inside `play()`'s `finally`, between
+`run_end` and `run.json`, under **production** semantics: incidents on,
+artefact on. `--no-incident/--no-artifact` are for a read-only audit of an
+existing ledger and are not what a run does (`proxy/DELIVERY_RULING.md` §5 --
+running the auditor with incidents on twice is how six duplicate records got
+into the shared ledger; running a *run* with them off is how a mismatch goes
+unrecorded, which is worse).
+
+Scoring cannot fail the run. A scorer whose freeze no longer verifies, a ledger
+that cannot be read, a scorecard that never arrived: each of them lands as
+`UNDETERMINED` in `score.json` with the reason attached. `UNDETERMINED` is not
+`PASS` (`proxy/SCORING.md` §4) -- baseline-arms lost 22 of 23 scorecards
+silently, and a harness that swallowed the loss would reproduce exactly that.
 """
 
 import json
@@ -79,7 +102,7 @@ import _bootstrap                                     # noqa: F401  (sys.path)
 
 from proxy.guard import SealedPileGuard
 from proxy.ledger import Ledger, RunLedger, canonical
-from proxy.paths import UPSTREAM_ARC
+from proxy.paths import LEDGER_PATH, UPSTREAM_ARC
 
 from harness import freeze_gate
 from harness import spend as spend_mod
@@ -102,6 +125,13 @@ RUNS_DIR = _bootstrap.path("runs")
 #: `armtools.verify_provenance` fails if one reappears under `runs/`.
 FIXTURE_RUNS_DIR = _bootstrap.path(".pytest-runs")
 
+#: The reconciliation verdict, in the run's own directory, beside `run.json`.
+#: The score itself is a *derived* quantity and never goes into the ledger
+#: (`proxy/LEDGER_FORMAT.md` §5): a number written into an append-only file is
+#: wrong the day the rule that produced it changes and cannot be corrected.
+#: What goes into the ledger is the failure, as an `incident`.
+SCORE_ARTEFACT = "score.json"
+
 
 def new_run_id() -> str:
     return "r-" + uuid.uuid4().hex[:16]
@@ -111,6 +141,99 @@ def run_dir(slug: str, root: Optional[str] = None) -> str:
     path = os.path.join(root or RUNS_DIR, slug)
     os.makedirs(path, exist_ok=True)
     return path
+
+
+def _scores_dir_for(runs_root: Optional[str]) -> Optional[str]:
+    """Where the scoring layer files its own copy of the report.
+
+    `None` means its default, `proxy/var/scores/` -- the index that accompanies
+    the shared ledger, per `proxy/SCORING.md` §5. A run that is not archive
+    material keeps out of it for `FIXTURE_RUNS_DIR`'s reason, restated one
+    directory over: a fixture's score filed beside the real ones is
+    indistinguishable, by directory listing, from the score of a game that cost
+    money. The artefact is still written -- production semantics -- it is just
+    not written into the shared index by a rehearsal.
+    """
+    if runs_root and os.path.abspath(runs_root) != os.path.abspath(RUNS_DIR):
+        return os.path.join(os.path.abspath(runs_root), "scores")
+    return None
+
+
+def score_at_end(run_id: str, ledger_path: str, out_dir: str, *,
+                 write_incident: bool = True,
+                 write_artifact: bool = True,
+                 scores_dir: Optional[str] = None) -> Dict[str, Any]:
+    """Reconcile one finished run against its scorecard, and file the verdict.
+
+    Called from `play()` the moment `run_end` is on disk. Returns the report and
+    writes it to `<out_dir>/score.json` whatever happens -- including when the
+    scorer could not run at all, because a reconciliation that was silently not
+    performed is the failure `proxy/SCORING.md` §4 exists to prevent.
+
+    The three ways this degrades instead of raising, each landing as
+    `UNDETERMINED` rather than as a traceback out of the harness:
+
+      * the freeze no longer verifies (`ScorerDriftError`) -- the rule that
+        would produce the number is not the rule the run was recorded under;
+      * the ledger holds no records for this run, or cannot be read;
+      * anything else the scoring layer raises.
+
+    Each of them is also filed as a `score_unreconciled` incident, because an
+    obligation that could not be discharged is exactly what Phase 1 asks to be
+    recorded. (The fourth case -- the scorer ran and found nothing to compare,
+    e.g. no scorecard was captured -- is `score_run`'s own `UNDETERMINED`, and
+    it files the same incident itself.) `run_end` is already written by the
+    time this runs, so the incident lands after it: the ledger is append-only
+    and a verdict that arrived later must not be able to overwrite an earlier
+    one.
+    """
+    report: Dict[str, Any]
+    try:
+        from proxy import scoring                       # noqa: PLC0415
+        extra: Dict[str, Any] = {}
+        if scores_dir is not None:
+            extra["scores_dir"] = scores_dir
+        report = scoring.score_run(run_id, ledger_path=ledger_path,
+                                   write_incident=write_incident,
+                                   write_artifact=write_artifact, **extra)
+    except Exception as exc:                            # noqa: BLE001
+        detail = "%s: %s" % (type(exc).__name__, exc)
+        report = {
+            "run_id": run_id,
+            "verdict": "UNDETERMINED",
+            "scorer": None,
+            "checks": [{"id": "S-H0",
+                        "claim": "the frozen scorer could be run at all",
+                        "verdict": "UNDETERMINED", "detail": detail}],
+            "failed_checks": None,
+            "undetermined_checks": ["S-H0"],
+            "error": detail,
+        }
+        if write_incident:
+            report["incident_filed"] = _file_unreconciled(
+                run_id, ledger_path, detail)
+
+    path = os.path.join(out_dir, SCORE_ARTEFACT)
+    with open(path, "w", encoding="utf-8", newline="\n") as fh:
+        json.dump(report, fh, indent=2, sort_keys=True, default=str)
+        fh.write("\n")
+    return report
+
+
+def _file_unreconciled(run_id: str, ledger_path: str, detail: str) -> bool:
+    """Record, in the ledger, that this run's score could not be reconciled.
+
+    Best effort by construction: the reason the scorer failed may well be that
+    the ledger is unreadable, and an incident that cannot be written must not
+    turn into the exception the caller was avoiding. Whether it landed is
+    reported in `score.json` rather than assumed.
+    """
+    try:
+        RunLedger(Ledger(ledger_path), run_id, ARM).incident(
+            "score_unreconciled", detail)
+        return True
+    except Exception:                                   # noqa: BLE001
+        return False
 
 
 class Run:
@@ -272,7 +395,8 @@ class Run:
             **fields,
         )
 
-    def write_run_json(self, summary: Dict[str, Any]) -> str:
+    def write_run_json(self, summary: Dict[str, Any],
+                       score: Optional[Dict[str, Any]] = None) -> str:
         record = {
             "run_id": self.run_id,
             "arm": ARM,
@@ -283,6 +407,10 @@ class Run:
             "arm_version": _bootstrap.arm_version(),
             "spend": self.spend.describe(),
             "summary": summary,
+            # `proxy/SCORING.md` §1: the fingerprint is in the artefact, so a
+            # number can always be traced to the rule that produced it. `None`
+            # only for a run that never reached its own ending.
+            "score": score,
         }
         path = os.path.join(self.dir, "run.json")
         with open(path, "w", encoding="utf-8", newline="\n") as fh:
@@ -300,7 +428,9 @@ def play(game_id: str, slug: str, arm_factory: Callable[[str, "Run"], Any], *,
          expect_pool: Optional[Dict[str, Any]] = None,
          ledger_path: Optional[str] = None,
          start_extra: Optional[Dict[str, Any]] = None,
-         runs_root: Optional[str] = None) -> Dict[str, Any]:
+         runs_root: Optional[str] = None,
+         score: bool = True,
+         scores_dir: Optional[str] = None) -> Dict[str, Any]:
     """Drive one run to completion, and write `run_end` whatever happens.
 
     The `with` is what brackets the claim on the shared pool: `Run.__exit__`
@@ -317,6 +447,12 @@ def play(game_id: str, slug: str, arm_factory: Callable[[str, "Run"], Any], *,
 
     `runs_root` defaults to the archive. A caller whose run is not archive
     material -- a test, a smoke -- passes `FIXTURE_RUNS_DIR` and keeps it out.
+
+    `score` is on. It exists as a switch only so a test can prove the wiring is
+    what produces the verdict, and it is never turned off on a path that plays
+    a game: scoring afterwards is the batch Phase 3 forbids, and scoring not at
+    all is the state this arm was in until A18. `scores_dir` follows
+    `runs_root` by default (`_scores_dir_for`).
     """
     outcome: Dict[str, Any] = {"outcome": "not_started"}
     with Run(game_id, slug, run_id=run_id, env_upstream=env_upstream,
@@ -351,7 +487,24 @@ def play(game_id: str, slug: str, arm_factory: Callable[[str, "Run"], Any], *,
             run.end_record(**{k: v for k, v in merged.items()
                               if k in ("outcome", "steps", "model_calls",
                                        "score", "levels_completed", "scorecard")})
-            run.write_run_json(merged)
+            # 跑完一局即打分: here, with `run_end` on disk and before the run
+            # record is written, so the archive carries the verdict this run
+            # reached rather than one a later pass reached knowing the answer.
+            # Guarded: nothing in the scoring layer may prevent `run.json` from
+            # being written, and nothing in it may mask the arm's own exception
+            # on the path where `arm.play()` raised.
+            report: Optional[Dict[str, Any]] = None
+            if score:
+                try:
+                    report = score_at_end(
+                        run.run_id, run.ledger_path, run.dir,
+                        scores_dir=(scores_dir if scores_dir is not None
+                                    else _scores_dir_for(runs_root)))
+                except Exception as exc:             # noqa: BLE001
+                    report = {"verdict": "UNDETERMINED", "run_id": run.run_id,
+                              "error": "%s: %s" % (type(exc).__name__, exc)}
+            merged["score_verdict"] = (report or {}).get("verdict")
+            run.write_run_json(merged, score=report)
             outcome = merged
     return outcome
 
@@ -420,6 +573,15 @@ def main(argv=None) -> int:
                          "fixture found under it. Pass "
                          "`harness.run.FIXTURE_RUNS_DIR` (.pytest-runs/) for a "
                          "throwaway.")
+    ap.add_argument("--ledger", default=None, metavar="PATH",
+                    help="write this run's records here. Default: the SHARED "
+                         "ledger (proxy/var/ledger.jsonl) for a live run, and "
+                         "the run's own directory under --mock. `play()` and "
+                         "`Run` have taken this since they were written and "
+                         "`main()` never forwarded it, which is the whole of "
+                         "the config-only gap in proxy/DELIVERY_RULING.md §4 "
+                         "axis 1: this arm's records could not reach the "
+                         "ledger the three arms are supposed to share.")
     ap.add_argument("--pool", default=None,
                     help="draw on a SCRATCH spend pool at this path instead of "
                          "the shared one. For offline proofs only: fictional "
@@ -558,16 +720,26 @@ def main(argv=None) -> int:
                     "ledger_abspath": os.path.abspath(gate.ledger_path)}
                    if args.pool else None)
 
+    # D-A18-002. A live leg bills into the shared ledger by default; a `--mock`
+    # rehearsal keeps writing into its own run directory. The two are not
+    # symmetric: `tools/audit_delivery.py` counts axis 1 by `arm` alone, so a
+    # mock run in the shared file would make "this arm's records reach the
+    # shared ledger" read as satisfied by a rehearsal -- the same defect as the
+    # one DELIVERY_RULING.md was written about, in the other direction.
+    # `--ledger` overrides either way, and `run_start` records which file.
+    ledger_path = args.ledger or (None if args.mock else LEDGER_PATH)
+
     if args.mock:
         from proxy.mock.arc_mock import DEFAULT_KEY, MockArc   # noqa: PLC0415
         with MockArc(api_key=DEFAULT_KEY, games=[args.game]) as arc:
             summary = play(args.game, slug, factory, env_upstream=arc.base_url,
                            env_key=DEFAULT_KEY, require_key=False,
                            caps=caps, spend_gate=gate, expect_pool=expect_pool,
-                           runs_root=args.runs_root)
+                           runs_root=args.runs_root, ledger_path=ledger_path)
     else:
         summary = play(args.game, slug, factory, caps=caps, spend_gate=gate,
-                       expect_pool=expect_pool, runs_root=args.runs_root)
+                       expect_pool=expect_pool, runs_root=args.runs_root,
+                       ledger_path=ledger_path)
 
     print(canonical({k: v for k, v in summary.items() if k != "frames"}))
     return 0

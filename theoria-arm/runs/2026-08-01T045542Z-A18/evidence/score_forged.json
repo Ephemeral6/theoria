@@ -1,0 +1,168 @@
+{
+  "arm": "theoria",
+  "checks": [
+    {
+      "claim": "the records are canonical and internally consistent",
+      "id": "S-12",
+      "n_problems": 0,
+      "problems": null,
+      "verdict": "PASS"
+    },
+    {
+      "arms": [
+        "theoria"
+      ],
+      "claim": "the run belongs to exactly one arm",
+      "id": "S-11",
+      "note": "one run is one arm playing one game once; records from a second arm under the same run_id are somebody appending to somebody else's run",
+      "verdict": "PASS"
+    },
+    {
+      "claim": "every step can be classified",
+      "id": "S-13",
+      "verdict": "PASS"
+    },
+    {
+      "claim": "a scorecard was captured for this run",
+      "id": "S-0",
+      "shape": "arc_live",
+      "verdict": "PASS"
+    },
+    {
+      "claim": "scorecard total_actions == successful non-RESET commands",
+      "id": "S-1",
+      "ledger": 6,
+      "note": "calibrated: refused 400/500 requests are not billed and RESET is counted separately (CALIBRATION)",
+      "scorecard": 9,
+      "verdict": "FAIL"
+    },
+    {
+      "claim": "scorecard levels_completed == ledger's",
+      "id": "S-2",
+      "ledger": 0,
+      "scorecard": 0,
+      "verdict": "PASS"
+    },
+    {
+      "claim": "a positive score iff a level was completed",
+      "id": "S-3",
+      "levels_completed": 0,
+      "note": "the only relation between score and levels this corpus pins down; the partial-credit formula is not reimplemented here",
+      "score": 0.0,
+      "verdict": "PASS"
+    },
+    {
+      "bound": 1.0,
+      "claim": "the card's score is within any reading of it",
+      "id": "S-9",
+      "levels_completed": 0,
+      "score": 0.0,
+      "verdict": "PASS"
+    },
+    {
+      "claim": "the card's totals agree with its own environments",
+      "id": "S-10",
+      "verdict": "PASS"
+    },
+    {
+      "claim": "the scorecard covers the game the ledger played",
+      "id": "S-4",
+      "ledger": [
+        "g50t-5849a774"
+      ],
+      "scorecard": [
+        "g50t-5849a774"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "claim": "the steps counted against this very card",
+      "id": "S-5",
+      "ledger": [
+        "card-d97ed1b92b6e4e77"
+      ],
+      "scorecard": "card-d97ed1b92b6e4e77",
+      "verdict": "PASS"
+    },
+    {
+      "boundaries": 0,
+      "claim": "level boundaries recompute from the step sequence",
+      "id": "S-6",
+      "levels_completed": 0,
+      "verdict": "PASS"
+    },
+    {
+      "claim": "the run has exactly one run_end",
+      "id": "S-7",
+      "verdict": "PASS"
+    }
+  ],
+  "failed_checks": [
+    "S-1"
+  ],
+  "game_ids": [
+    "g50t-5849a774"
+  ],
+  "ledger": {
+    "actions_failed": 0,
+    "actions_ok": 6,
+    "actions_refused": 0,
+    "arms": [
+      "theoria"
+    ],
+    "card_ids": [
+      "card-d97ed1b92b6e4e77"
+    ],
+    "game_ids": [
+      "g50t-5849a774"
+    ],
+    "level_boundaries": 0,
+    "level_count": null,
+    "levels_completed": 0,
+    "levels_reported": 7,
+    "malformed": null,
+    "max_step_score": 0,
+    "model_calls": 0,
+    "resets": 1,
+    "status_missing": 0,
+    "steps": 7
+  },
+  "ledger_health": {
+    "detail": null,
+    "unreadable_lines": 0
+  },
+  "run_id": "r-f6451fdf1cce414d",
+  "score": {
+    "basis": "scorecard",
+    "level_count": 3,
+    "levels_completed": 0,
+    "partial_credit_formula": "not reimplemented; see the module docstring -- no scorecard in this corpus has a completed level",
+    "value": 0.0
+  },
+  "scorecard": {
+    "aggregate_errors": null,
+    "card_id": "card-d97ed1b92b6e4e77",
+    "game_ids": [
+      "g50t-5849a774"
+    ],
+    "level_count": 3,
+    "levels_completed": 0,
+    "score": 0.0,
+    "shape": "arc_live",
+    "state": "NOT_FINISHED",
+    "total_actions": 9
+  },
+  "scorer": {
+    "depends_on": {
+      "canon.py": "sha256:135f2f0cfcab4488277aeb7f351adeaec1dec90dd887a2cab6a2c13ffb684da4",
+      "tools/validate_ledger.py": "sha256:1114d35d8acbf9c5d069b82fbdb832b5ff8ef5cb90a190240c031c5430f597de"
+    },
+    "frozen_at": "2026-07-28",
+    "id": "arc_v1",
+    "sha256": "sha256:b7d2e810ac4d0cc5ba135b086963365f4b457bef1fc8da253398d99aaaac8ed2",
+    "source": "proxy/scoring/arc_v1.py",
+    "version": "1.0.0"
+  },
+  "undetermined_checks": null,
+  "verdict": "FAIL"
+}

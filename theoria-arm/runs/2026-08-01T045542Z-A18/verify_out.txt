@@ -1,0 +1,43 @@
+== verify.sh :: A18 :: agent/a18-scorer-at-run-end ==
+[FAIL] tests -- theoria-arm
+       |     
+       |         So this one goes back to the archive for both maximands. It is the only
+       |         check here that would have failed before the correction.
+       |         """
+       |         worst_rate, worst_call = _archive_worst_per_model()
+       |         assert worst_rate, "no desk logs in the archive: this test checked nothing"
+       |     
+       |         for model, rate in sorted(worst_rate.items()):
+       |             recorded = spend_mod.OBSERVED_USD_PER_SECOND.get(model)
+       |             assert recorded is not None, (
+       |                 "%s appears in the archive with no recorded rate" % model)
+       |             assert recorded >= rate, (
+       |                 "%s: the recorded rate $%.7f/s is below the worst rate in the "
+       |                 "archive, $%.7f/s. A rate that understates makes every ceiling "
+       |                 "derived from it understate too." % (model, recorded, rate))
+       |     
+       |             implied = max(rate * spend_mod.MODEL_CALL_TIMEOUT_S,
+       |                           4 * worst_call[model])
+       |             ceiling = spend_mod.model_call_ceiling_for(model)
+       | >           assert ceiling >= implied, (
+       |                 "%s: ceiling $%.2f is below $%.4f, which is what this table's own "
+       |                 "stated rule -- max(timeout x rate, 4x worst call) -- produces from "
+       |                 "the archive." % (model, ceiling, implied))
+       | E           AssertionError: claude-opus-5: ceiling $12.00 is below $13.4480, which is what this table's own stated rule -- max(timeout x rate, 4x worst call) -- produces from the archive.
+       | E           assert 12.0 >= 13.448042000000001
+       | 
+       | tests\test_desk_gate.py:1002: AssertionError
+       | =========================== short test summary info ===========================
+       | FAILED tests/test_arm.py::test_the_archive_stays_accountable - AssertionError...
+       | FAILED tests/test_desk_gate.py::test_the_ceiling_table_still_covers_the_archive
+[PASS] MANIFEST hashes reproduce
+[PASS] boundary -- only theoria-arm changed
+[PASS] sealed pile untouched
+[PASS] credential never entered a tracked file
+[PASS] delivered: theoria-arm/runs/2026-08-01T045542Z-A18/MANIFEST.json
+-- 5/6 green  <<< NOT GREEN (1 red)
+running theoria-arm/runs/2026-08-01T045542Z-A18/verify.sh  (C:\Program Files\Git\usr\bin\bash.EXE)
+
+NOT GREEN. The checklist above is the report: fix the red lines, or if one
+cannot be fixed inside this ticket, carry it verbatim into RUN_STATE 的 gap
+清单 and PARTNER_SYNC 的阻塞 line. 验收标准是合同,不许自降。
