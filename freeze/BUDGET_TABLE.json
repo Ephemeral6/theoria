@@ -1,22 +1,22 @@
 {
   "balance": {
     "action_ceiling": 24000,
-    "actions_remaining": 16575,
-    "actions_spent_on_test_traffic": 5543,
-    "actions_used": 7425,
+    "actions_remaining": 14510,
+    "actions_spent_on_test_traffic": 6540,
+    "actions_used": 9490,
     "ceiling_usd": 214.9,
-    "gate_blind_spot_usd": 86.3357,
-    "gate_visible_headroom_usd": 178.7577,
-    "gate_visible_usd": 36.1423,
-    "pool_only_measured_usd": 0.4133,
-    "pool_only_placeholder_usd": 4.0,
-    "pricing_v1_vs_self_reported_theoria_pct": -3.07,
-    "programme_measured_usd": 122.478,
-    "programme_nominal_usd": 126.478,
-    "remaining_measured_usd": 92.422,
-    "remaining_nominal_usd": 88.422,
+    "gate_blind_spot_usd": 136.7861,
+    "gate_visible_headroom_usd": 101.6174,
+    "gate_visible_usd": 113.2826,
+    "pool_only_measured_usd": 77.5437,
+    "pool_only_placeholder_usd": 4.0099,
+    "pricing_v1_vs_self_reported_theoria_pct": -2.12,
+    "programme_measured_usd": 250.0687,
+    "programme_nominal_usd": 254.0786,
+    "remaining_measured_usd": -35.1687,
+    "remaining_nominal_usd": -39.1786,
     "tracked_bare_cc_usd": 97.8161,
-    "tracked_theoria_usd": 24.2486
+    "tracked_theoria_usd": 74.7089
   },
   "citations": {
     "absent": [],
@@ -140,7 +140,7 @@
   "format": "theoria/freeze-budget-table/1",
   "generated_from": {
     "branch": "master",
-    "commit": "45cd6ebd0426f94c19b1fb4a109c2eac46aa5322",
+    "commit": "3eee2d824130112c42dd6b03170d617872253895",
     "dirty": true
   },
   "policy": {
@@ -154,8 +154,8 @@
   },
   "pool": {
     "abspath_is_main_checkout": false,
-    "actions": 7425,
-    "actions_test_like": 5543,
+    "actions": 9490,
+    "actions_test_like": 6540,
     "by_campaign_nonzero": {
       "phase3-unit-price-recheck": {
         "actions": 33,
@@ -181,11 +181,65 @@
         "unpriced_usd": 0.0,
         "usd": 0.0201
       },
+      "pool-hygiene-price-unpriced-20260731": {
+        "actions": 0,
+        "lines": 2,
+        "unpriced_usd": 0.0,
+        "usd": 0.1563
+      },
+      "s31-live-arm-probe": {
+        "actions": 2,
+        "lines": 3,
+        "unpriced_usd": 0.0099,
+        "usd": 0.0099
+      },
       "theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T0035Z-a3-desk-live-proof2": {
         "actions": 15,
         "lines": 19,
         "unpriced_usd": 4.0,
         "usd": 4.3932
+      },
+      "theoria-arm:A3-campaign-devpile:g50t-5849a774:20260731T1310Z-A3-level2-carried-r2": {
+        "actions": 106,
+        "lines": 111,
+        "unpriced_usd": 0.0,
+        "usd": 9.5569
+      },
+      "theoria-arm:A3-campaign-devpile:g50t-5849a774:20260731T1430Z-A3-level2-carried-r3": {
+        "actions": 239,
+        "lines": 247,
+        "unpriced_usd": 0.0,
+        "usd": 13.4399
+      },
+      "theoria-arm:A3-campaign-devpile:g50t-5849a774:20260731T231654Z-R1-g50t-a": {
+        "actions": 112,
+        "lines": 116,
+        "unpriced_usd": 0.0,
+        "usd": 7.6034
+      },
+      "theoria-arm:A3-campaign-devpile:g50t-5849a774:20260801T001851Z-R1b-g50t-a": {
+        "actions": 108,
+        "lines": 116,
+        "unpriced_usd": 0.0,
+        "usd": 14.778
+      },
+      "theoria-arm:A3-campaign-devpile:sk48-d8078629:20260731T1500Z-A3-sk48-carried-l1": {
+        "actions": 181,
+        "lines": 190,
+        "unpriced_usd": 0.0,
+        "usd": 12.2517
+      },
+      "theoria-arm:A3-campaign-devpile:sk48-d8078629:20260731T231654Z-R1-sk48-b": {
+        "actions": 50,
+        "lines": 53,
+        "unpriced_usd": 0.0,
+        "usd": 7.6085
+      },
+      "theoria-arm:A3-campaign-devpile:sk48-d8078629:20260801T001851Z-R1b-sk48-b": {
+        "actions": 207,
+        "lines": 211,
+        "unpriced_usd": 0.0,
+        "usd": 11.7357
       }
     },
     "by_model": {
@@ -198,12 +252,12 @@
         "usd": 16.2891
       },
       "claude-opus-5": {
-        "calls": 70,
-        "max": 0.125015,
-        "mean": 0.1168,
-        "median": 0.115574,
+        "calls": 111,
+        "max": 3.362011,
+        "mean": 0.767118,
+        "median": 0.121513,
         "min": 0.111983,
-        "usd": 8.176
+        "usd": 85.1501
       },
       "claude-sonnet-5": {
         "calls": 102,
@@ -222,19 +276,33 @@
         "usd": 0.0
       }
     },
-    "campaigns": 111,
+    "campaigns": 122,
     "kinds": {
-      "release": 2903,
-      "reserve": 2903,
-      "spend": 8882,
+      "price_correction": 2,
+      "release": 3090,
+      "reserve": 3092,
+      "spend": 10415,
       "trip": 1
     },
-    "lines": 14689,
-    "max_seq": 14689,
+    "lines": 16600,
+    "max_seq": 16600,
     "path": "proxy/var/spend_gate.jsonl",
     "present": true,
-    "price_corrections": [],
-    "sha256": "55df95cdfaab2121f0d57359002f8900c4508fbcd8f711d97b838ec610b272bb",
+    "price_corrections": [
+      {
+        "reason": "a3-desk-live-proof2 call 4 raised before a price. Measured truth: the run CLI total $0.393156 equals the sum of its three recorded calls to the cent (0.114256+0.146292+0.132608), so the raised call billed about zero. Booked at the run own worst observed haiku call $0.1463 as a deliberate upper bound, because the gate rightly refuses zero-dollar corrections. Sources: theoria-arm/runs/20260729T0035Z-a3-desk-live-proof2/ledger.jsonl and RUN_STATE.json desk.cli_cost_usd.",
+        "resolves": 1,
+        "seq": 14785,
+        "usd": 0.1463
+      },
+      {
+        "reason": "s31-live-arm-probe /v1/messages raised RemoteDisconnected from the LOOPBACK MockProvider (rung 1 keeps the model half on loopback); no real provider was contacted and no tokens were billed. Booked at the probe plan rung-2 per-call ceiling $0.009688 rounded up, an upper bound for a call whose true cost is zero, because the gate refuses zero. See proxy/runs/20260731T104757Z-S31/FIRED.md.",
+        "resolves": 1,
+        "seq": 14786,
+        "usd": 0.01
+      }
+    ],
+    "sha256": "e902ebc4d1673cc6939d06b80499696bdb32ac683b343005edaed84d2d903505",
     "unpriced": [
       {
         "actions": 0,
@@ -245,12 +313,22 @@
         "seq": 7418,
         "usd": 4.0,
         "why": "the CLI raised before an envelope carrying a price came back"
+      },
+      {
+        "actions": 0,
+        "beat": null,
+        "campaign": "s31-live-arm-probe",
+        "model": null,
+        "outcome": null,
+        "seq": 14715,
+        "usd": 0.0099,
+        "why": null
       }
     ],
-    "unpriced_calls": 1,
-    "unpriced_usd": 4.0,
-    "usd": 36.1423,
-    "usd_measured": 32.1423
+    "unpriced_calls": 2,
+    "unpriced_usd": 4.0099,
+    "usd": 113.2826,
+    "usd_measured": 109.2727
   },
   "pricing": {
     "cache_multipliers": {
@@ -415,7 +493,7 @@
         "arc_requests": 15253,
         "basis": "nominal",
         "episodes": 114,
-        "fits_action_ceiling": true,
+        "fits_action_ceiling": false,
         "fits_remaining_measured": false,
         "n": 2,
         "scenario": "envelope-30",
@@ -583,7 +661,7 @@
     "usd_self_reported": 97.8161
   },
   "tracked_theoria": {
-    "calls": 45,
+    "calls": 74,
     "cross_file_duplicate_keys": 0,
     "files": {
       "theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted/ledger.jsonl": {
@@ -706,7 +784,49 @@
         "usd_pricing_v1": 0.0,
         "usd_self_reported": 0.0
       },
+      "theoria-arm/runs/20260731T1240Z-A3-level2-carried/ledger.jsonl": {
+        "calls": 0,
+        "unpriceable_calls": 0,
+        "usd_pricing_v1": 0.0,
+        "usd_self_reported": 0.0
+      },
+      "theoria-arm/runs/20260731T1310Z-A3-level2-carried-r2/ledger.jsonl": {
+        "calls": 5,
+        "unpriceable_calls": 0,
+        "usd_pricing_v1": 9.4323,
+        "usd_self_reported": 9.5569
+      },
+      "theoria-arm/runs/20260731T1430Z-A3-level2-carried-r3/ledger.jsonl": {
+        "calls": 8,
+        "unpriceable_calls": 0,
+        "usd_pricing_v1": 13.1934,
+        "usd_self_reported": 13.4399
+      },
+      "theoria-arm/runs/20260731T1500Z-A3-sk48-carried-l1/ledger.jsonl": {
+        "calls": 9,
+        "unpriceable_calls": 0,
+        "usd_pricing_v1": 11.9888,
+        "usd_self_reported": 12.2517
+      },
+      "theoria-arm/runs/20260731T231654Z-R1-g50t-a/ledger.jsonl": {
+        "calls": 4,
+        "unpriceable_calls": 0,
+        "usd_pricing_v1": 7.4892,
+        "usd_self_reported": 7.6034
+      },
+      "theoria-arm/runs/20260731T231654Z-R1-sk48-b/ledger.jsonl": {
+        "calls": 3,
+        "unpriceable_calls": 0,
+        "usd_pricing_v1": 7.5194,
+        "usd_self_reported": 7.6085
+      },
       "theoria-arm/runs/a3-gate-mock/ledger.jsonl": {
+        "calls": 0,
+        "unpriceable_calls": 0,
+        "usd_pricing_v1": 0.0,
+        "usd_self_reported": 0.0
+      },
+      "theoria-arm/runs/audit-smoke/ledger.jsonl": {
         "calls": 0,
         "unpriceable_calls": 0,
         "usd_pricing_v1": 0.0,
@@ -731,10 +851,10 @@
         "usd_self_reported": 0.0
       }
     },
-    "runs": 6,
+    "runs": 11,
     "unpriceable_calls": 3,
-    "usd_pricing_v1": 23.5033,
-    "usd_self_reported": 24.2486
+    "usd_pricing_v1": 73.1264,
+    "usd_self_reported": 74.7089
   },
   "unit_prices": [
     {
@@ -768,6 +888,6 @@
   "verdict": {
     "fitting_scenarios": [],
     "sealed_table_fits": false,
-    "statement": "Of 12 enumerated scenarios for the sealed main table (19 claim games x 3 arms), 0 fit both the remaining measured balance ($92.42) and the remaining action headroom (16575 requests). At the only measured episode death rate (q=47/48) a nominal n=2 table yields 0.78 live cells of 19, so a projection over nominal cells is not a projection over observations."
+    "statement": "Of 12 enumerated scenarios for the sealed main table (19 claim games x 3 arms), 0 fit both the remaining measured balance ($-35.17) and the remaining action headroom (14510 requests). At the only measured episode death rate (q=47/48) a nominal n=2 table yields 0.78 live cells of 19, so a projection over nominal cells is not a projection over observations."
   }
 }

@@ -38,7 +38,7 @@
           "hashed_from": "git-blob",
           "kind": "dir",
           "path": "theoria-arm/inner",
-          "sha256": "b0fe77449fb0e842126f65e6f97f40fc7cb25860220ad2516c6aab1de2eb240a",
+          "sha256": "7eaccc50f3ab7f0464b56cfe7d4c2c629f717a3fffe295deb95e15a14d88b952",
           "tracked": true
         },
         {
@@ -46,7 +46,7 @@
           "hashed_from": "git-blob",
           "kind": "dir",
           "path": "theoria-arm/harness",
-          "sha256": "71a1a0fcce371a4bd5f6a744e21798a68d4e8303b50e1861cb1eb462dfdb12b1",
+          "sha256": "77f0ecf5136ad8216663e84078a21ec9001a55c80378928a792b20176230c191",
           "tracked": true
         },
         {
@@ -58,11 +58,11 @@
           "tracked": true
         },
         {
-          "files": 14,
+          "files": 15,
           "hashed_from": "git-blob",
           "kind": "dir",
           "path": "theoria-arm/armtools",
-          "sha256": "4ebe89585f2f99b63502375314555f97481cc8e14a309b70da586cc5b217794d",
+          "sha256": "78616ebe2ac9065948bf51d40aa51e27d7fd54aa9a513a392ae6c5a6b3f9b277",
           "tracked": true
         },
         {
@@ -267,7 +267,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "theoria-arm/inner/probe.py",
-          "sha256": "6777af47df9d4659132b5765e4ac1efb015dfa052c411249a87c9b96ac7ef604",
+          "sha256": "726d9261964183a5637cffe18febfcfea33d4f6e0af4e77fed425661510b2d65",
           "tracked": true
         },
         {
@@ -661,9 +661,9 @@
   ],
   "format": "theoria/freeze-manifest/1",
   "generated_from": {
-    "branch": "r2/freeze-e2",
-    "commit": "5e033b2fe990cbb38e82226741e45b6834153c11",
-    "dirty": false
+    "branch": "master",
+    "commit": "3eee2d824130112c42dd6b03170d617872253895",
+    "dirty": true
   },
   "source": "Theoria.md:368 冻结清单（13 项）+ 两项清单外补录",
   "verdict": {

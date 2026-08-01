@@ -129,6 +129,12 @@
    "reason": "write-once provenance record"
   },
   {
+   "dir": "arc-recon/runs/20260731T1830Z-P12-freeze-loop",
+   "dated": "2026-08-01",
+   "files": 1,
+   "reason": "write-once run record; landed 2026-07-31/08-01 by the phase 1/2 closeout and the R1 round, after this allowlist was last generated"
+  },
+  {
    "dir": "baseline-arms/runs/20260728T103135Z-a7",
    "dated": "2026-07-31",
    "files": 3,
@@ -495,6 +501,18 @@
    "reason": "write-once provenance record"
   },
   {
+   "dir": "proxy/runs/20260731T104757Z-S31",
+   "dated": "2026-08-01",
+   "files": 1,
+   "reason": "write-once run record; landed 2026-07-31/08-01 by the phase 1/2 closeout and the R1 round, after this allowlist was last generated"
+  },
+  {
+   "dir": "proxy/runs/20260731T154336Z-P1-replay-spotcheck-2",
+   "dated": "2026-08-01",
+   "files": 10,
+   "reason": "write-once run record; landed 2026-07-31/08-01 by the phase 1/2 closeout and the R1 round, after this allowlist was last generated"
+  },
+  {
    "dir": "proxy/runs/p9-shell-harden",
    "dated": "2026-07-31",
    "files": 3,
@@ -633,10 +651,70 @@
    "reason": "write-once provenance record"
   },
   {
+   "dir": "theoria-arm/runs/20260731T1050Z-A17",
+   "dated": "2026-08-01",
+   "files": 1,
+   "reason": "write-once run record; landed 2026-07-31/08-01 by the phase 1/2 closeout and the R1 round, after this allowlist was last generated"
+  },
+  {
+   "dir": "theoria-arm/runs/20260731T1240Z-A3-level2-carried",
+   "dated": "2026-08-01",
+   "files": 6,
+   "reason": "write-once run record; landed 2026-07-31/08-01 by the phase 1/2 closeout and the R1 round, after this allowlist was last generated"
+  },
+  {
+   "dir": "theoria-arm/runs/20260731T1310Z-A3-level2-carried-r2",
+   "dated": "2026-08-01",
+   "files": 12,
+   "reason": "write-once run record; landed 2026-07-31/08-01 by the phase 1/2 closeout and the R1 round, after this allowlist was last generated"
+  },
+  {
+   "dir": "theoria-arm/runs/20260731T1430Z-A3-level2-carried-r3",
+   "dated": "2026-08-01",
+   "files": 15,
+   "reason": "write-once run record; landed 2026-07-31/08-01 by the phase 1/2 closeout and the R1 round, after this allowlist was last generated"
+  },
+  {
+   "dir": "theoria-arm/runs/20260731T1500Z-A3-sk48-carried-l1",
+   "dated": "2026-08-01",
+   "files": 7,
+   "reason": "write-once run record; landed 2026-07-31/08-01 by the phase 1/2 closeout and the R1 round, after this allowlist was last generated"
+  },
+  {
+   "dir": "theoria-arm/runs/20260731T1745Z-NOISE",
+   "dated": "2026-08-01",
+   "files": 1,
+   "reason": "write-once run record; landed 2026-07-31/08-01 by the phase 1/2 closeout and the R1 round, after this allowlist was last generated"
+  },
+  {
+   "dir": "theoria-arm/runs/20260731T231654Z-R1-g50t-a",
+   "dated": "2026-08-01",
+   "files": 11,
+   "reason": "write-once run record; landed 2026-07-31/08-01 by the phase 1/2 closeout and the R1 round, after this allowlist was last generated"
+  },
+  {
+   "dir": "theoria-arm/runs/20260731T231654Z-R1-sk48-b",
+   "dated": "2026-08-01",
+   "files": 7,
+   "reason": "write-once run record; landed 2026-07-31/08-01 by the phase 1/2 closeout and the R1 round, after this allowlist was last generated"
+  },
+  {
+   "dir": "theoria-arm/runs/20260801T0200Z-P12-probe-economics",
+   "dated": "2026-08-01",
+   "files": 3,
+   "reason": "write-once run record; landed 2026-07-31/08-01 by the phase 1/2 closeout and the R1 round, after this allowlist was last generated"
+  },
+  {
    "dir": "theoria-arm/runs/a3-gate-mock",
    "dated": "2026-07-31",
    "files": 3,
    "reason": "write-once provenance record"
+  },
+  {
+   "dir": "theoria-arm/runs/audit-smoke",
+   "dated": "2026-08-01",
+   "files": 4,
+   "reason": "write-once run record; landed 2026-07-31/08-01 by the phase 1/2 closeout and the R1 round, after this allowlist was last generated"
   },
   {
    "dir": "theoria-arm/runs/campaign-a3-g50t",

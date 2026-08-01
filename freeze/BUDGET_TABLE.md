@@ -56,19 +56,19 @@
 |---|---|---|
 | 池上限 | $214.90 | `proxy/spend_policy.json:4` |
 | 动作上限 | 24,000 | `proxy/spend_policy.json:5` |
-| 闸门可见已花 | **$36.1423** | `proxy/var/spend_gate.jsonl` seq 1–14689（14689 行，sha256 `55df95cdfaab…`）|
-| 闸门可见余额 | $178.7577 | 上两行相减 |
-| 其中未计价占位 | $4.0000（1 笔）| 见 C1 |
-| 动作已用 | 7,425 / 24,000 | 同上 |
-| 其中测试/离线流量 | 5,543（74.7%）| 见 C6 |
+| 闸门可见已花 | **$113.2826** | `proxy/var/spend_gate.jsonl` seq 1–16600（16600 行，sha256 `e902ebc4d167…`）|
+| 闸门可见余额 | $101.6174 | 上两行相减 |
+| 其中未计价占位 | $4.0099（2 笔）| 见 C1 |
+| 动作已用 | 9,490 / 24,000 | 同上 |
+| 其中测试/离线流量 | 6,540（68.9%）| 见 C6 |
 | 已追踪账本 · `bare_cc` 轨道 | **$97.8161**（2851 次调用 / 99 run / 17 文件）| `baseline-arms/ledger.jsonl` + `out/shards/ledger.*.jsonl` |
-| 已追踪账本 · Theoria 臂 | **$24.2486**（45 次调用 / 6 run）| `theoria-arm/runs/**/ledger.jsonl` |
-| 仅在池里、无追踪账本 | $0.4133 + $4.0000 占位 | 见 C1 / C3 |
-| **全项目已花（实测）** | **$122.4780** | 上四行之并，每一元只计一次 |
-| **全项目已花（含占位）** | $126.4780 | 同上 + 占位 |
-| **真实余额（实测口径）** | **$92.4220** | 上限 − 实测 |
-| **闸门盲区** | **$86.3357** | 实测已花 − 闸门可见已花 |
-| `pricing_v1` 对 Theoria 臂重算 vs 实际账单 | **-3.07%** | 见 C4 |
+| 已追踪账本 · Theoria 臂 | **$74.7089**（74 次调用 / 11 run）| `theoria-arm/runs/**/ledger.jsonl` |
+| 仅在池里、无追踪账本 | $77.5437 + $4.0099 占位 | 见 C1 / C3 |
+| **全项目已花（实测）** | **$250.0687** | 上四行之并，每一元只计一次 |
+| **全项目已花（含占位）** | $254.0786 | 同上 + 占位 |
+| **真实余额（实测口径）** | **$-35.1687** | 上限 − 实测 |
+| **闸门盲区** | **$136.7861** | 实测已花 − 闸门可见已花 |
+| `pricing_v1` 对 Theoria 臂重算 vs 实际账单 | **-2.12%** | 见 C4 |
 
 ### G2 · 已追踪账本逐文件（自报 `total_cost_usd`）
 
@@ -113,31 +113,47 @@
 | `theoria-arm/runs/20260729T004020Z-leg01/ledger.jsonl` | 0.0000 | 0.0000 | 0 | — |
 | `theoria-arm/runs/20260729T105653Z-leg01/ledger.jsonl` | 0.0000 | 0.0000 | 0 | — |
 | `theoria-arm/runs/20260729T105729Z-leg01/ledger.jsonl` | 0.0000 | 0.0000 | 0 | — |
+| `theoria-arm/runs/20260731T1240Z-A3-level2-carried/ledger.jsonl` | 0.0000 | 0.0000 | 0 | — |
+| `theoria-arm/runs/20260731T1310Z-A3-level2-carried-r2/ledger.jsonl` | 9.5569 | 9.4323 | 5 | — |
+| `theoria-arm/runs/20260731T1430Z-A3-level2-carried-r3/ledger.jsonl` | 13.4399 | 13.1934 | 8 | — |
+| `theoria-arm/runs/20260731T1500Z-A3-sk48-carried-l1/ledger.jsonl` | 12.2517 | 11.9888 | 9 | — |
+| `theoria-arm/runs/20260731T231654Z-R1-g50t-a/ledger.jsonl` | 7.6034 | 7.4892 | 4 | — |
+| `theoria-arm/runs/20260731T231654Z-R1-sk48-b/ledger.jsonl` | 7.6085 | 7.5194 | 3 | — |
 | `theoria-arm/runs/a3-gate-mock/ledger.jsonl` | 0.0000 | 0.0000 | 0 | — |
+| `theoria-arm/runs/audit-smoke/ledger.jsonl` | 0.0000 | 0.0000 | 0 | — |
 | `theoria-arm/runs/preflight-20260728T012031Z/ledger.jsonl` | 0.0000 | 0.0000 | 0 | — |
 | `theoria-arm/runs/preflight-20260728T012057Z/ledger.jsonl` | 0.0000 | 0.0000 | 0 | — |
 | `theoria-arm/runs/preflight-20260728T074237Z/ledger.jsonl` | 0.0000 | 0.0000 | 0 | — |
-| **合计** | **122.0647** | 50.5752（仅可计价的 323 笔）| **2896** | **2573（88.8%）** |
+| **合计** | **172.5250** | 100.1983（仅可计价的 352 笔）| **2925** | **2573（88.0%）** |
 
 跨文件重复记录键：**0**（0 = 无双计）。
-**两列不可相减当差额**：自报一列是全部 2896 笔，`pricing_v1` 一列只是可计价的 323 笔。唯一可比的一对是 Theoria 臂那 7 笔（G1 末行、C4）。
+**两列不可相减当差额**：自报一列是全部 2925 笔，`pricing_v1` 一列只是可计价的 352 笔。唯一可比的一对是 Theoria 臂那 7 笔（G1 末行、C4）。
 
-### G3 · 池内有钱的战役（$0 的 106 个战役省略）
+### G3 · 池内有钱的战役（$0 的 108 个战役省略）
 
 | 战役 | $ | 其中占位 $ | 动作 |
 |---|---|---|---|
 | `phase3-unit-price-remeasure` | 19.8332 | 0.0000 | 487 |
+| `theoria-arm:A3-campaign-devpile:g50t-5849a774:20260801T001851Z-R1b-g50t-a` | 14.7780 | 0.0000 | 108 |
+| `theoria-arm:A3-campaign-devpile:g50t-5849a774:20260731T1430Z-A3-level2-carried-r3` | 13.4399 | 0.0000 | 239 |
+| `theoria-arm:A3-campaign-devpile:sk48-d8078629:20260731T1500Z-A3-sk48-carried-l1` | 12.2517 | 0.0000 | 181 |
+| `theoria-arm:A3-campaign-devpile:sk48-d8078629:20260801T001851Z-R1b-sk48-b` | 11.7357 | 0.0000 | 207 |
 | `phase3-variance-envelope` | 10.5364 | 0.0000 | 504 |
+| `theoria-arm:A3-campaign-devpile:g50t-5849a774:20260731T1310Z-A3-level2-carried-r2` | 9.5569 | 0.0000 | 106 |
+| `theoria-arm:A3-campaign-devpile:sk48-d8078629:20260731T231654Z-R1-sk48-b` | 7.6085 | 0.0000 | 50 |
+| `theoria-arm:A3-campaign-devpile:g50t-5849a774:20260731T231654Z-R1-g50t-a` | 7.6034 | 0.0000 | 112 |
 | `theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T0035Z-a3-desk-live-proof2` | 4.3932 | 4.0000 | 15 |
 | `phase3-unit-price-recheck` | 1.3595 | 0.0000 | 33 |
+| `pool-hygiene-price-unpriced-20260731` | 0.1563 | 0.0000 | 0 |
 | `phase3-variance-envelope-quota-probe` | 0.0201 | 0.0000 | 0 |
+| `s31-live-arm-probe` | 0.0099 | 0.0099 | 2 |
 
 ### G4 · 池内逐模型每次调用的散布（点估计之外）
 
 | model | n 次调用 | 合计 $ | 均值 | 中位 | min | max |
 |---|---|---|---|---|---|---|
 | `claude-haiku-4-5-20251001` | 306 | 16.2891 | 0.053232 | 0.036804 | 0.000000 | 4.000000 |
-| `claude-opus-5` | 70 | 8.1760 | 0.116800 | 0.115574 | 0.111983 | 0.125015 |
+| `claude-opus-5` | 111 | 85.1501 | 0.767118 | 0.121513 | 0.111983 | 3.362011 |
 | `claude-sonnet-5` | 102 | 11.6572 | 0.114286 | 0.111818 | 0.088163 | 0.244602 |
 | `mock-model-1` | 28 | 0.0000 | 0.000000 | 0.000000 | 0.000000 | 0.000000 |
 
@@ -171,7 +187,7 @@
 | `claude-opus-5` | envelope-30 | 30.0 | 64 | 3648 | 4.3800 | 15,978.24 | **18,854.32** | 340,358 | ❌ | ❌ |
 | `claude-opus-5` | S1-baseline-actions | 672.4 | 2 | 114 | 98.1746 | 11,191.9 | **13,206.44** | 238,403 | ❌ | ❌ |
 | `claude-opus-5` | S1-baseline-actions | 672.4 | 64 | 3648 | 98.1746 | 358,140.84 | **422,606.19** | 7,628,890 | ❌ | ❌ |
-| `claude-sonnet-5` | envelope-30 | 30.0 | 2 | 114 | 5.3790 | 613.21 | **723.58** | 15,253 | ❌ | ✅ |
+| `claude-sonnet-5` | envelope-30 | 30.0 | 2 | 114 | 5.3790 | 613.21 | **723.58** | 15,253 | ❌ | ❌ |
 | `claude-sonnet-5` | envelope-30 | 30.0 | 64 | 3648 | 5.3790 | 19,622.59 | **23,154.66** | 488,102 | ❌ | ❌ |
 | `claude-sonnet-5` | S1-baseline-actions | 672.4 | 2 | 114 | 120.5664 | 13,744.57 | **16,218.6** | 341,890 | ❌ | ❌ |
 | `claude-sonnet-5` | S1-baseline-actions | 672.4 | 64 | 3648 | 120.5664 | 439,826.38 | **518,995.13** | 10,940,467 | ❌ | ❌ |
@@ -200,7 +216,7 @@ q = 47/48 = 0.979167，**争用条件下的实测值**（`STATS_RULES.md` §5.2 
 
 ### G9 · 裁决
 
-> Of 12 enumerated scenarios for the sealed main table (19 claim games x 3 arms), 0 fit both the remaining measured balance ($92.42) and the remaining action headroom (16575 requests). At the only measured episode death rate (q=47/48) a nominal n=2 table yields 0.78 live cells of 19, so a projection over nominal cells is not a projection over observations.
+> Of 12 enumerated scenarios for the sealed main table (19 claim games x 3 arms), 0 fit both the remaining measured balance ($-35.17) and the remaining action headroom (14510 requests). At the only measured episode death rate (q=47/48) a nominal n=2 table yields 0.78 live cells of 19, so a projection over nominal cells is not a projection over observations.
 
 装得下的情景：**一个都没有**
 
