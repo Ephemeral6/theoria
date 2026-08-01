@@ -2,6 +2,7 @@
   "canon": {
     "additive_safe": true,
     "arms": [
+      "ablation",
       "bare_cc",
       "mock_arm",
       "probe",
@@ -210,6 +211,6 @@
       }
     }
   },
-  "fingerprint": "sha256:188706860c457bcb3e5a9aaebde840356592e377b8dcda4c6442ce7a3c68ba51",
+  "fingerprint": "sha256:574a3dbff31d673b14443d27a2c63153f6c3d4ad166485d330abc8198b0ccea7",
   "note": "The shared ledger contract, pinned. Regenerate with `python -m proxy.tools.contract --update`, and read proxy/CONTRACT_CHANGES.md before you do -- a diff here that narrows what the proxies accept is a breaking change for every track that imports proxy/ as a library."
 }

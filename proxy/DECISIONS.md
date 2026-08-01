@@ -971,3 +971,103 @@ Two consequences of the design, both deliberate:
   on every call and bury the signal the record exists to carry — which is how a
   real bypass gets ignored. A *second* credential header carrying something
   else is still recorded, which is the interesting case.
+
+## D-A20-001 · What the seal's right conjunct means on the model side, now that the transport is a subscription
+
+`Theoria.md` Phase 1 seals the arm behind two proxies, and the right conjunct of
+the sealing test — *going around the proxy must fail* — had only ever been given
+an environment-side negative sample (`tests/test_seal.py`, and `theoria-arm`'s
+`tests/test_bypass_negative.py`). The model side had no negative sample at all,
+and until 2026-08-01 it was not obvious what one would even assert.
+
+**What changed.** The owner answered the funding question that had been open
+since S32: model calls run on the Claude subscription, and no vendor API key
+will be configured (recorded in `monitor/spec.py` p1-proxy-model, closing
+paragraph; the transport is `theoria-arm` D-P8-002's `claude -p` CLI envelope).
+That settles the reading. On the environment side the seal is *the proxy holds a
+key the arm does not*. On the model side there is no such key to hold, so the
+same conjunct reads:
+
+> **CLI envelope + no vendor credential anywhere in the repo or arm environment.**
+
+**Why this is a decision and not a definition.** The tempting move is to call the
+obligation discharged because the transport is now a CLI. That is the move the
+board explicitly refused when it kept `p1-proxy-model` at `partial` under the
+owner's own ruling: `Theoria.md:290` says model traffic is *recorded through the
+proxy*, the CLI envelope achieves the recording and not the proxying, and
+rewriting the obligation to match what was achieved is the failure this
+repository names elsewhere and declines here too. So this entry does not touch
+the board colour. It fixes a narrower and entirely real gap: the sealed reading
+had no executable form, which meant nothing anywhere would notice if it stopped
+being true.
+
+**The executable form** is `tests/test_model_side_seal.py`, in two halves that
+fail for different reasons on purpose:
+
+1. **Credential hygiene, by variable name.** `.env` is parsed line by line for
+   variable **names** and the set must stay inside `{ARC_API_KEY}`. A silently
+   added `ANTHROPIC_API_KEY` turns it red. This is aimed at drift rather than at
+   malice: somebody debugging a model call adds one line, and the repository is
+   back on an API transport with the sealing claim quietly false and every other
+   test still green. Values are never read, compared, returned or printed — a
+   hygiene check that could put a key into a CI log on failure would be a worse
+   defect than the one it detects.
+2. **Stripping, asserted at the vendor.** A client that presents its own
+   credential to the model proxy gets it removed, so the call reaches an
+   unauthenticated upstream and fails 401 — reproducing offline what
+   `verify-lab/DUAL_PROXY.md` S32 measured live: **65 of 65** `model_call`
+   records at HTTP 401, **0** at 2xx. The sharpest case is asserted too: a client
+   presenting the vendor's *valid* key still fails, because the proxy will not
+   launder a credential it did not inject.
+
+**Both halves, or neither is worth much.** The name check alone would pass on a
+repository whose proxy happily forwarded a client's key. The 401 check alone
+would pass on a repository that had grown a vendor key, since a configured proxy
+answers 200. Read together they say: there is no vendor credential here, and if
+one arrived by another route the transport would not carry it.
+
+**Two things deliberately not done.** The 401 assertions run against a loopback
+`http.server`, never a vendor — the point is the shape of the refusal, and
+buying a real 401 would cost money to learn nothing. And `verify-lab/` is not
+edited: S32 is its finding and this entry cites it rather than annotating it.
+
+## D-A21-001 · The ablation arm gets a ledger name, and it is not the one that was requested
+
+`ledger.ARMS` is a closed vocabulary and `append` refuses an unregistered `arm`
+outright — one of only two hard refusals in the format (§5 of
+`LEDGER_FORMAT.md`), on the reasoning that it fires on a run's first record
+rather than after money has been spent. It had no name for an ablation arm.
+
+That was not a neutral omission. `ablation-arm` could not write a record at all
+without one, and adding one meant editing this territory's file, which every arm
+README forbids. Its D-AB-004 resolved the deadlock honestly — ship under
+`arm: "theoria"`, carry the wanted name as `requested_arm_name` metadata, and
+register the whole thing as a known wrinkle rather than patch around it. The
+consequence is a denominator: Phase 1's 同壳 claim is that three arms write the
+same ledger through the same proxies, and two of those three identities were
+indistinguishable in the stream meant to demonstrate it. The vocabulary is this
+territory's to define, and only this territory could fix it.
+
+So `ablation` is registered.
+
+**Not `theoria_ablate`, which is what D-AB-004 records as requested.** Every
+other name in the set says what the arm *is* — `bare_cc`, `theoria`, `probe`,
+`replay` — and a `theoria_`-prefixed name reads as a variant of `theoria`, which
+is precisely the confusion the register exists to end: any group-by that treats
+the prefix as a family silently re-merges the two arms this change exists to
+separate. The requested spelling stays refused, and `tests/test_ledger.py` pins
+that refusal so an arm that switches to its own metadata name meets a loud error
+with instructions rather than a silent mis-attribution.
+
+**This is a vocabulary change, not an instruction.** D-AB-004's *premise* is now
+false — there is a name — but when and whether to adopt it is that arm's call,
+and superseding its own decision is its own business. Nothing under
+`ablation-arm/` is touched here; the handover goes on `PARTNER_SYNC.md`.
+
+**A second gap found while doing it.** The canon's `arm` row listed five names
+while `ARMS` held six: `mock_arm` had been registered in code and never written
+into the document, and nothing had ever compared the two. Both are now listed,
+and `tests/test_ledger_format_sync.py` gained an arm-vocabulary check with
+negative controls in both directions — a name in the code and not the document,
+and a name in the document the writer would refuse. F-16 makes
+`LEDGER_FORMAT.md` the canon; a canon nothing checks is a description.

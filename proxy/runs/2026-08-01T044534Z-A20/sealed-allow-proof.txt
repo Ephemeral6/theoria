@@ -1,0 +1,12 @@
+why PARTNER_SYNC.md is --allow'ed on this branch
+base commit         : 4c08ea6be6ff480d9b7cfcd6be8bd17c2e9e3749
+added lines         : 6
+removed lines       : 0 (0 == pure append; this branch rewrote nothing)
+sealed ids in ADDED : 0
+sealed stems in ADDED: 0
+sealed ids PRE-EXISTING in the file: 4
+
+Conclusion: every sealed id the gate reports in PARTNER_SYNC.md predates
+this branch and belongs to other tracks' historic paragraphs. This ticket
+appended 6 lines and none of them contains a sealed id or stem. Ids are
+counted here, never written down.

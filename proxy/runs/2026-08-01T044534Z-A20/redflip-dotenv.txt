@@ -1,0 +1,20 @@
+        the file is absent the declared set is empty, which is a *stricter* state
+        than the one being asserted -- a proxy started against no dotenv has nothing
+        to inject, which is the 65-of-65 condition itself. Both states pass, and
+        they pass for the same reason. A worktree checkout is the absent case; the
+        main checkout is the present one.
+        """
+        names = dotenv_names(DOTENV)
+    
+>       assert offending_names(names) == [], (
+            "the repository's dotenv declares variable name(s) outside the "
+            "allowlist. Names only are reported here, never values.")
+E       AssertionError: the repository's dotenv declares variable name(s) outside the allowlist. Names only are reported here, never values.
+E       assert ['ANTHROPIC_API_KEY'] == []
+E         
+E         Left contains one more item: 'ANTHROPIC_API_KEY'
+E         Use -v to get more diff
+
+tests\test_model_side_seal.py:236: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_model_side_seal.py::test_this_repositorys_dotenv_declares_no_vendor_credential

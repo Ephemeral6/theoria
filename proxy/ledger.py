@@ -36,6 +36,25 @@ EVENTS = frozenset({
 
 ARMS = frozenset({
     "bare_cc", "schema_repro", "theoria", "probe", "replay", "mock_arm",
+    # The ablation arm's own name, registered 2026-08-01 (D-A21-001).
+    #
+    # Its absence was not a neutral gap. `ablation-arm` needs a name to write a
+    # record at all -- `append` refuses an unregistered `arm` outright -- and
+    # adding one meant editing this file, which every arm README forbids. So
+    # that arm ships under `arm: "theoria"` with the name it wanted carried as
+    # `requested_arm_name` metadata (its D-AB-004). The consequence is a
+    # denominator: Phase 1's 同壳 claim is that three arms write the same
+    # ledger, and two of the three identities were distinguishable. The
+    # vocabulary is this territory's to define and only this territory could
+    # fix it.
+    #
+    # Registered as `ablation` rather than the `theoria_ablate` that D-AB-004
+    # records as requested: every other name here says what the arm *is*, and a
+    # `theoria_`-prefixed name reads as a variant of `theoria` -- which is the
+    # exact confusion the register exists to end. The divergence is deliberate
+    # and was handed to that arm's owner rather than decided for them; when
+    # they supersede D-AB-004 they change one string and this accepts it.
+    "ablation",
 })
 
 INCIDENT_KINDS = frozenset({
