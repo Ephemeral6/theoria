@@ -142,7 +142,16 @@ PHASES = [
                         "DELIVERY_RULING.md §4（两行 open·unassigned，与 p1-same-shell "
                         "同源）；ablation 臂无活账本（D-AB-004），通吃至多 2/3 臂。"
                         "若所有者裁『一台冻结打分器读遍各臂账本+有卡处处相等』即为"
-                        "达成，本项可绿——此收窄须明判，不得静默（S32 先例）。",
+                        "达成，本项可绿——此收窄须明判，不得静默（S32 先例）。\n\n"
+                        "2026-08-01 A18 落地（merge 7c61d107）：『跑完一局即打分』"
+                        "接线完成——harness/run.py 在 run_end 后调冻结打分器"
+                        "（生产语义：incident/artifact 全开，判定入 run 目录与 "
+                        "run.json 带指纹，漂移降级 UNDETERMINED 不抛栈），负控为"
+                        "连贯伪造（卡总数同改、唯账本拆穿，FAIL 证真），--ledger "
+                        "转发落地且默认真腿入共享账本（D-A18-002）。未成的只剩"
+                        "**活证据**：下一条真腿的 score.json 是第一条『跑完即打分』"
+                        "的活记录，届时本项复裁。臂领地套件既有 2 红与本项无涉"
+                        "（A29 在案）。",
             },
             {
                 "id": "p1-determinism",
@@ -263,16 +272,28 @@ PHASES = [
                 "id": "p1-seal-test",
                 "label": "密封测试（臂内无凭据；绕开双代理的出网必须失败）",
                 "clause": "Phase 1 验收单",
-                "status": "partial",
-                "note": "左合取项（臂内无凭据）2026-07-31 起**按构造成立**："
-                        "merge b375a9bd 把 EnvProxy 移入子进程，"
-                        "theoria-arm/tests/test_seal_process.py 证明父进程无钥匙也能整局"
-                        "跑通 mock 对局；模型路径另有封存堆护栏（21 个 ID + 词干，"
-                        "SealedPileBreach 在循环层致死）。右合取项（绕开双代理出网必须"
-                        "失败）仍是 partial：test_bypass_negative.py 只覆盖臂内绕环境"
-                        "代理一侧；模型侧按设计不经代理（D-P8-002，proxied: false），"
-                        "『双代理』在活路径上只有一半；bare_cc 臂记为裁决前状态"
-                        "（GAP-5，baseline-arms/STATUS.md）——未做同样拆分前不得再飞。"
+                "status": "green",
+                "note": "改判 2026-08-01（A19/A20 交付后，均已并入 master 且套件"
+                        "在合并树上复验绿：baseline-arms 552、proxy 497）。"
+                        "**左合取项（臂内无凭据）三臂俱清**：theoria 按构造"
+                        "（merge b375a9bd，EnvProxy 入子进程，test_seal_process.py）；"
+                        "bare_cc 由 A19 照同一模板拆分（merge f9a61c0c：凭据只在"
+                        "转发子进程，19 个 mock 测试证父进程环境无 ARC_API_KEY、"
+                        "旧直读路径抛错、哨兵仍经子进程达 mock 上游；GAP-5 从只登记"
+                        "改为已拆分，**bare_cc 恢复飞行资格——本条即该裁决**）；"
+                        "ablation 无活客户端，从不持环境凭据（空满足）。供应商凭据："
+                        "仓库与 .env 一律不存在，A20 的变量名白名单测试塞入即变红。"
+                        "**右合取项（绕开双代理出网必须失败）两侧俱有负样本**："
+                        "环境侧 test_bypass_negative.py 照旧；bare_cc 侧 A19 双闸"
+                        "（无钥客户端拒非回环目标于 socket 前，子进程对带钥请求答 "
+                        "400 ARM_SENT_A_KEY 而非转发）；模型侧 A20 "
+                        "test_model_side_seal.py 在所有者已批的订阅传输读法下"
+                        "（2026-08-01 裁决，见 p1-proxy-model 注记）：代理剥凭据必 "
+                        "401（65-of-65 史实入档），无凭据出网不可能通过认证。"
+                        "残差如实：各臂证据是 mock 负样本而非活体红队；ablation 为"
+                        "空满足；vendor 侧认证按 D-P8-002 活在 CLI 层臂外——臂读不"
+                        "读得到 CLI 自己的凭据库未被测试；封存堆护栏"
+                        "（21 ID+词干，SealedPileBreach 致死）照旧。"
                         "凭据卫生干净：密钥只在 .env（本监视器每轮复验）。",
                 "probe": "credential_hygiene",
                 # The item is a conjunction and this probe tests one half: it
@@ -318,7 +339,16 @@ PHASES = [
                         "存在』作废。仍 partial 的理由：一条探针记录 ≠ 三臂例行经由"
                         "（FIRED.md 自己写明 DELIVERY_RULING.md §4 的三领地接线缺口"
                         "仍开放）；模型侧 CLI 直连使『双代理』只有一半（D-P8-002）；"
-                        "打分器通吃仍待 p1-scorer。",
+                        "打分器通吃仍待 p1-scorer。\n\n"
+                        "2026-08-01 推进（仍 partial，但缺口在收窄）：A18 把 theoria "
+                        "真腿计费默认接进共享账本（--ledger 转发，§4 axis 1 的 "
+                        "theoria 份，D-A18-002）；A21 给 ablation 记账名（ledger.ARMS "
+                        "收 ablation，合同变更 C-008——『三臂』在词汇表层首次可能，"
+                        "D-AB-004 前提消解、改名归其属主，名字分歧 theoria_ablate "
+                        "vs ablation 已在 D-A21-001 挑明交属主）；bare_cc 经 A19 "
+                        "封印但按其 D-026 走自有转发子进程与自有账本（双重计费与"
+                        "双帐格式之虑，在案不隐）——『三臂经双代理落同一账本』"
+                        "照字面仍未达，例行活腿与 ablation 换名是剩余两步。",
             },
         ],
     },

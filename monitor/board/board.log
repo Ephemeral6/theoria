@@ -476,3 +476,12 @@
 2026-07-31T12:07:37Z DONE A8-campaign-ledger-pipeline by W-1800
 2026-07-31T13:56:45Z CLAIM A3-campaign-level2 by W-1800
 2026-07-31T13:56:45Z DONE A3-campaign-level2 by W-1800
+2026-08-01T04:38:56Z CLAIM A18-scorer-at-run-end by W-A18
+2026-08-01T04:38:57Z CLAIM A19-bare-cc-seal-split by W-A19
+2026-08-01T04:38:57Z CLAIM A20-model-side-bypass-negative by W-A20
+2026-08-01T05:51:05Z DONE A18-scorer-at-run-end by W-A18
+2026-08-01T05:51:05Z DONE A19-bare-cc-seal-split by W-A19
+2026-08-01T05:51:06Z DONE A20-model-side-bypass-negative by W-A20
+2026-08-01T05:51:06Z CLAIM A23-anchor-drift-on-the-default-leg by W-A21
+2026-08-01T05:51:25Z RELEASE A23-anchor-drift-on-the-default-leg by W-A21 (claimed by mistake while doing A21 bookkeeping; item untouched, no work done)
+2026-08-01T05:51:41Z DONE A21-ablation-arm-name by W-A21

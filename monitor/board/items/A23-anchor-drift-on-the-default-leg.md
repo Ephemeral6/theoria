@@ -3,6 +3,7 @@ cell: A23
 territory: theoria-arm
 deps: none
 spend: none
+released_by: W-A21
 
 # A23-anchor-drift-on-the-default-leg · 最会漂的那条腿，恰好是报不了漂移的那条
 
@@ -42,3 +43,5 @@ R2 已量过的四条腿用同一工具复算，必须逐数等于 `MEASUREMENT.
 3. `trace.jsonl` 被 `theoria-arm/.gitignore` 排除。在没有 trace 的克隆里，
    工具必须**逐腿打印拒绝**并测量为 `null`，**不得报 0**
    （`measure_frontier.py` 已经是这个形状，照抄它；缺席记为缺席，永不记为零）。
+
+> **W-A21 于 2026-08-01T05:51:25Z 交回**：claimed by mistake while doing A21 bookkeeping; item untouched, no work done
