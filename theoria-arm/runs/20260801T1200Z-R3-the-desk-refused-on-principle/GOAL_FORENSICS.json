@@ -1,0 +1,563 @@
+{
+ "legs": [
+  {
+   "absence_signature": null,
+   "answers": [],
+   "confounded_by_transport": false,
+   "goal_declared_ever": null,
+   "leg": "20260728T083400Z-E3-sk48-carried-v2",
+   "plan_status_counts": null,
+   "proposals_booked": 0,
+   "proposals_delivered": null,
+   "protocol": null,
+   "refusal_theorems": [
+    {
+     "argument": "all fourteen states returned NOT_FINISHED and nothing in thirteen transitions indicates what finishing means. The live candidates are that a lane's texture must be brought to agree with the badge at its far end, that every slot in the column must be visited or solved, or that the objective lives in the rows I have never been shown. An absent goal compiles to is_goal -> False, which under-claims and costs a round; a wrong goal sends the searcher after a fiction and costs the level. I previously wrote here that the bar running out is a deadline; I withdraw that sentence, because I cannot tell a deadline from a progress meter, and the playbook now ranks on neither.",
+     "theorem": "no_goal_section_on_purpose"
+    }
+   ],
+   "rider_deliveries": [],
+   "target_theorems": [],
+   "transport": {
+    "counts": {
+     "empty": 0,
+     "lost_continuation": 0,
+     "provider_refusal": 24,
+     "well_formed": 6
+    },
+    "has_transcripts": true,
+    "usd_lost": 0,
+    "usd_total": 8.404868
+   },
+   "turns_with_a_goal_block": 0,
+   "verdict": "not_measured",
+   "what_it_means": "the leg carries no per-turn goal block: it ran before inner/goal.py existed, or on the `off` rung. Nothing here is evidence about the rider either way."
+  },
+  {
+   "absence_signature": null,
+   "answers": [],
+   "confounded_by_transport": false,
+   "goal_declared_ever": null,
+   "leg": "20260728T235841Z-leg01",
+   "plan_status_counts": null,
+   "proposals_booked": 0,
+   "proposals_delivered": null,
+   "protocol": null,
+   "refusal_theorems": [],
+   "rider_deliveries": [],
+   "target_theorems": [],
+   "transport": {
+    "counts": null,
+    "has_transcripts": false,
+    "usd_lost": null,
+    "usd_total": null
+   },
+   "turns_with_a_goal_block": 0,
+   "verdict": "not_measured",
+   "what_it_means": "the leg carries no per-turn goal block: it ran before inner/goal.py existed, or on the `off` rung. Nothing here is evidence about the rider either way."
+  },
+  {
+   "absence_signature": null,
+   "answers": [],
+   "confounded_by_transport": false,
+   "goal_declared_ever": null,
+   "leg": "20260728T235842Z-leg02",
+   "plan_status_counts": null,
+   "proposals_booked": 0,
+   "proposals_delivered": null,
+   "protocol": null,
+   "refusal_theorems": [],
+   "rider_deliveries": [],
+   "target_theorems": [],
+   "transport": {
+    "counts": null,
+    "has_transcripts": false,
+    "usd_lost": null,
+    "usd_total": null
+   },
+   "turns_with_a_goal_block": 0,
+   "verdict": "not_measured",
+   "what_it_means": "the leg carries no per-turn goal block: it ran before inner/goal.py existed, or on the `off` rung. Nothing here is evidence about the rider either way."
+  },
+  {
+   "absence_signature": null,
+   "answers": [],
+   "confounded_by_transport": false,
+   "goal_declared_ever": null,
+   "leg": "20260728T235843Z-leg01",
+   "plan_status_counts": null,
+   "proposals_booked": 0,
+   "proposals_delivered": null,
+   "protocol": null,
+   "refusal_theorems": [],
+   "rider_deliveries": [],
+   "target_theorems": [],
+   "transport": {
+    "counts": null,
+    "has_transcripts": false,
+    "usd_lost": null,
+    "usd_total": null
+   },
+   "turns_with_a_goal_block": 0,
+   "verdict": "not_measured",
+   "what_it_means": "the leg carries no per-turn goal block: it ran before inner/goal.py existed, or on the `off` rung. Nothing here is evidence about the rider either way."
+  },
+  {
+   "absence_signature": null,
+   "answers": [],
+   "confounded_by_transport": false,
+   "goal_declared_ever": null,
+   "leg": "20260729T0030Z-a3-desk-live-proof",
+   "plan_status_counts": null,
+   "proposals_booked": 0,
+   "proposals_delivered": null,
+   "protocol": null,
+   "refusal_theorems": [],
+   "rider_deliveries": [],
+   "target_theorems": [],
+   "transport": {
+    "counts": null,
+    "has_transcripts": false,
+    "usd_lost": null,
+    "usd_total": null
+   },
+   "turns_with_a_goal_block": 0,
+   "verdict": "not_measured",
+   "what_it_means": "the leg carries no per-turn goal block: it ran before inner/goal.py existed, or on the `off` rung. Nothing here is evidence about the rider either way."
+  },
+  {
+   "absence_signature": null,
+   "answers": [],
+   "confounded_by_transport": false,
+   "goal_declared_ever": null,
+   "leg": "20260729T0035Z-a3-desk-live-proof2",
+   "plan_status_counts": null,
+   "proposals_booked": 0,
+   "proposals_delivered": null,
+   "protocol": null,
+   "refusal_theorems": [],
+   "rider_deliveries": [],
+   "target_theorems": [],
+   "transport": {
+    "counts": {
+     "empty": 0,
+     "lost_continuation": 0,
+     "provider_refusal": 0,
+     "well_formed": 3
+    },
+    "has_transcripts": true,
+    "usd_lost": 0,
+    "usd_total": 0.393156
+   },
+   "turns_with_a_goal_block": 0,
+   "verdict": "not_measured",
+   "what_it_means": "the leg carries no per-turn goal block: it ran before inner/goal.py existed, or on the `off` rung. Nothing here is evidence about the rider either way."
+  },
+  {
+   "absence_signature": null,
+   "answers": [],
+   "confounded_by_transport": false,
+   "goal_declared_ever": null,
+   "leg": "20260729T004020Z-leg01",
+   "plan_status_counts": null,
+   "proposals_booked": 0,
+   "proposals_delivered": null,
+   "protocol": null,
+   "refusal_theorems": [],
+   "rider_deliveries": [],
+   "target_theorems": [],
+   "transport": {
+    "counts": null,
+    "has_transcripts": false,
+    "usd_lost": null,
+    "usd_total": null
+   },
+   "turns_with_a_goal_block": 0,
+   "verdict": "not_measured",
+   "what_it_means": "the leg carries no per-turn goal block: it ran before inner/goal.py existed, or on the `off` rung. Nothing here is evidence about the rider either way."
+  },
+  {
+   "absence_signature": null,
+   "answers": [],
+   "confounded_by_transport": false,
+   "goal_declared_ever": null,
+   "leg": "20260729T105653Z-leg01",
+   "plan_status_counts": null,
+   "proposals_booked": 0,
+   "proposals_delivered": null,
+   "protocol": null,
+   "refusal_theorems": [],
+   "rider_deliveries": [],
+   "target_theorems": [],
+   "transport": {
+    "counts": null,
+    "has_transcripts": false,
+    "usd_lost": null,
+    "usd_total": null
+   },
+   "turns_with_a_goal_block": 0,
+   "verdict": "not_measured",
+   "what_it_means": "the leg carries no per-turn goal block: it ran before inner/goal.py existed, or on the `off` rung. Nothing here is evidence about the rider either way."
+  },
+  {
+   "absence_signature": null,
+   "answers": [],
+   "confounded_by_transport": false,
+   "goal_declared_ever": null,
+   "leg": "20260729T105729Z-leg01",
+   "plan_status_counts": null,
+   "proposals_booked": 0,
+   "proposals_delivered": null,
+   "protocol": null,
+   "refusal_theorems": [],
+   "rider_deliveries": [],
+   "target_theorems": [],
+   "transport": {
+    "counts": null,
+    "has_transcripts": false,
+    "usd_lost": null,
+    "usd_total": null
+   },
+   "turns_with_a_goal_block": 0,
+   "verdict": "not_measured",
+   "what_it_means": "the leg carries no per-turn goal block: it ran before inner/goal.py existed, or on the `off` rung. Nothing here is evidence about the rider either way."
+  },
+  {
+   "absence_signature": null,
+   "answers": [],
+   "confounded_by_transport": false,
+   "goal_declared_ever": null,
+   "leg": "20260731T1240Z-A3-level2-carried",
+   "plan_status_counts": null,
+   "proposals_booked": 0,
+   "proposals_delivered": null,
+   "protocol": null,
+   "refusal_theorems": [
+    {
+     "argument": "There is no goal: section, so is_goal is False, and that is deliberate. The socket interior, rows 50-54 cols 44-48, is floor that has never changed, so it is board and has no instances -- there is nothing there for a goal to name. `Cart.pos = exit_cell` needs a single named instance and arc-instances: all gives me Glyph9_r8c14 and 38 siblings instead. `count(Vacated, color = 9) = 24` is true of the body standing anywhere off spawn, which is most of the maze and not a win. A goal true in the wrong states is worse than none, because the planner stops at the first one. The manual will be able to state its goal only after the body has once stood in the socket and those pixels have become dynamic; until then the playbook steers by lattice distance.",
+     "theorem": "the_goal_section_is_absent_on_purpose"
+    }
+   ],
+   "rider_deliveries": [],
+   "target_theorems": [],
+   "transport": {
+    "counts": null,
+    "has_transcripts": false,
+    "usd_lost": null,
+    "usd_total": null
+   },
+   "turns_with_a_goal_block": 0,
+   "verdict": "not_measured",
+   "what_it_means": "the leg carries no per-turn goal block: it ran before inner/goal.py existed, or on the `off` rung. Nothing here is evidence about the rider either way."
+  },
+  {
+   "absence_signature": null,
+   "answers": [],
+   "confounded_by_transport": false,
+   "goal_declared_ever": null,
+   "leg": "20260731T1310Z-A3-level2-carried-r2",
+   "plan_status_counts": null,
+   "proposals_booked": 0,
+   "proposals_delivered": null,
+   "protocol": null,
+   "refusal_theorems": [
+    {
+     "argument": "Still absent, and the reason has not weakened. `Cart.pos = exit_cell` needs one named instance and arc-instances: all gives me Glyph9_r8c14 and forty siblings. The socket interior has never changed, so it is board and count() has nothing to range over there, and the pip (52,46) will never become dynamic because the body's aperture leaves it rendering 9. The 24 ring cells do become dynamic on first entry, but `count(Vacated, color = 9) = 24` would then be true of the body standing anywhere it has already been, which is not a win -- a goal true in the wrong states is worse than no goal, because it stops a planner at its first step. Until the body has stood in (8,7) once, the playbook steers by lattice distance.",
+     "theorem": "the_goal_section_is_absent_on_purpose"
+    }
+   ],
+   "rider_deliveries": [],
+   "target_theorems": [],
+   "transport": {
+    "counts": {
+     "empty": 0,
+     "lost_continuation": 1,
+     "provider_refusal": 0,
+     "well_formed": 4
+    },
+    "has_transcripts": true,
+    "usd_lost": 2.86115,
+    "usd_total": 9.556852
+   },
+   "turns_with_a_goal_block": 0,
+   "verdict": "not_measured",
+   "what_it_means": "the leg carries no per-turn goal block: it ran before inner/goal.py existed, or on the `off` rung. Nothing here is evidence about the rider either way."
+  },
+  {
+   "absence_signature": null,
+   "answers": [],
+   "confounded_by_transport": false,
+   "goal_declared_ever": null,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "plan_status_counts": null,
+   "proposals_booked": 0,
+   "proposals_delivered": null,
+   "protocol": null,
+   "refusal_theorems": [],
+   "rider_deliveries": [],
+   "target_theorems": [],
+   "transport": {
+    "counts": {
+     "empty": 0,
+     "lost_continuation": 0,
+     "provider_refusal": 0,
+     "well_formed": 8
+    },
+    "has_transcripts": true,
+    "usd_lost": 0,
+    "usd_total": 13.439862
+   },
+   "turns_with_a_goal_block": 0,
+   "verdict": "not_measured",
+   "what_it_means": "the leg carries no per-turn goal block: it ran before inner/goal.py existed, or on the `off` rung. Nothing here is evidence about the rider either way."
+  },
+  {
+   "absence_signature": null,
+   "answers": [],
+   "confounded_by_transport": false,
+   "goal_declared_ever": null,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "plan_status_counts": null,
+   "proposals_booked": 0,
+   "proposals_delivered": null,
+   "protocol": null,
+   "refusal_theorems": [
+    {
+     "argument": "all eighteen states returned NOT_FINISHED and nothing in seventeen transitions indicates what finishing means. An absent goal compiles to is_goal implies False, which under-claims and costs a round; a wrong goal sends the searcher after a fiction and costs the level. The bar is the only monotone quantity and the most tempting goal, and the evidence has moved toward BUDGET, the reading under which filling the bar is the opposite of winning -- so the tilt argues against signing the tempting goal, not for it. Live candidates unchanged: that a lane must be brought into some relation with the badge at its far end, that every slot in the column must be visited or solved, or that the objective lives in the twenty-nine rows I have never been shown. There is no goal section, and this theorem is where the silence is recorded.",
+     "theorem": "no_goal_is_signed_and_that_is_deliberate"
+    }
+   ],
+   "rider_deliveries": [],
+   "target_theorems": [],
+   "transport": {
+    "counts": {
+     "empty": 0,
+     "lost_continuation": 0,
+     "provider_refusal": 0,
+     "well_formed": 9
+    },
+    "has_transcripts": true,
+    "usd_lost": 0,
+    "usd_total": 12.251719
+   },
+   "turns_with_a_goal_block": 0,
+   "verdict": "not_measured",
+   "what_it_means": "the leg carries no per-turn goal block: it ran before inner/goal.py existed, or on the `off` rung. Nothing here is evidence about the rider either way."
+  },
+  {
+   "absence_signature": null,
+   "answers": [],
+   "confounded_by_transport": false,
+   "goal_declared_ever": null,
+   "leg": "20260731T231654Z-R1-g50t-a",
+   "plan_status_counts": null,
+   "proposals_booked": 0,
+   "proposals_delivered": null,
+   "protocol": null,
+   "refusal_theorems": [
+    {
+     "argument": "With no goal: section is_goal compiles to False, plan never returns sat, commit never runs, and every action this arm spends is a probe. I would rather say that than write a goal that is true in the wrong states, because a false goal stops a planner at its first step while a missing one merely leaves it probing. I have enumerated the three forms the grammar admits and every one fails on this arm. FORM ONE, instance.pos = landmark: needs one named instance, and arc-instances: all gives me Glyph9_r8c14 and thirty-eight siblings, none of them the body as such -- the body is not an instance in this manual, it is a colour pattern over 24 of them. FORM TWO, count(Type) = k: instance counts are fixed by the level construction and do not vary with state, so every such goal is either always true or always false. FORM THREE, count(Type, color = c) = k: the socket interior at rows 50-54 cols 44-48 has never changed, so it is board, has no instances, and count() has nothing to range over there; the pip (52,46) will never become dynamic because the body's aperture leaves it rendering 9; the 24 ring cells DO become instances on first entry, but their frame-0 colour is 5, so they would type as Vacated and be indistinguishable from the 24 Vacated cells at rows 14-18, and count(Vacated, color = 9) = 24 is exactly the state of the body standing one cell south of spawn, which is not a win. count(Glyph9, color = 5) = 24 is true of every state in which the body is anywhere but home. count(Glyph9, color = 1) = 64 is the meter fully spent, which is a LOSS, and note that this is now the ONE goal-shaped quantity that actually varies with state and it points the wrong way. THE ONE ROUTE TO AN EXPRESSIBLE GOAL: if the body ever enters lattice (8,7), those 24 floor cells become dynamic and a later manual can name them -- but that is the win itself, so the goal becomes expressible one step after it stops being needed. No plan terminates, nothing ranks one command above another except what the playbook says, and the playbook is therefore doing all the work.",
+     "theorem": "the_goal_section_is_absent_on_purpose"
+    }
+   ],
+   "rider_deliveries": [],
+   "target_theorems": [],
+   "transport": {
+    "counts": {
+     "empty": 0,
+     "lost_continuation": 1,
+     "provider_refusal": 0,
+     "well_formed": 3
+    },
+    "has_transcripts": true,
+    "usd_lost": 2.715763,
+    "usd_total": 7.603419
+   },
+   "turns_with_a_goal_block": 0,
+   "verdict": "not_measured",
+   "what_it_means": "the leg carries no per-turn goal block: it ran before inner/goal.py existed, or on the `off` rung. Nothing here is evidence about the rider either way."
+  },
+  {
+   "absence_signature": null,
+   "answers": [],
+   "confounded_by_transport": false,
+   "goal_declared_ever": null,
+   "leg": "20260731T231654Z-R1-sk48-b",
+   "plan_status_counts": null,
+   "proposals_booked": 0,
+   "proposals_delivered": null,
+   "protocol": null,
+   "refusal_theorems": [
+    {
+     "argument": "Nothing in six frames has announced a win: state is NOT_FINISHED throughout, no cell has behaved like a scoreboard except the bar, and the bar moved once. The candidates all fail. count(Tok1) = 0 is never true -- the arm counts instances, not drawn cells. count(Tok1, color = 4) = 8 is true of every blanked-slot state including the current one, which is plainly not a win. The colour-14 block at rows 31-34 x cols 42-45 is the most goal-shaped thing on the board and it is CONSTANT, so it has no instance and count() has nothing to range over there. A goal true in the wrong state is worse than no goal because it halts a planner at its first step. So is_goal compiles to False, no plan terminates, and command choice falls back entirely on what the manual predicts will change -- which today is key(4) and nothing else, and that is a trap I name in the playbook.",
+     "theorem": "the_goal_section_is_absent_on_purpose"
+    }
+   ],
+   "rider_deliveries": [],
+   "target_theorems": [],
+   "transport": {
+    "counts": {
+     "empty": 0,
+     "lost_continuation": 2,
+     "provider_refusal": 0,
+     "well_formed": 1
+    },
+    "has_transcripts": true,
+    "usd_lost": 5.778479,
+    "usd_total": 7.608528
+   },
+   "turns_with_a_goal_block": 0,
+   "verdict": "not_measured",
+   "what_it_means": "the leg carries no per-turn goal block: it ran before inner/goal.py existed, or on the `off` rung. Nothing here is evidence about the rider either way."
+  },
+  {
+   "absence_signature": "the_goal_is_absent_because_no_instance_can_name_the_socket",
+   "answers": [
+    "declined_with_argument",
+    "declined_with_argument",
+    "declined_with_argument"
+   ],
+   "confounded_by_transport": false,
+   "goal_declared_ever": false,
+   "leg": "20260801T001851Z-R1b-g50t-a",
+   "plan_status_counts": {
+    "no_goal_declared": 21
+   },
+   "proposals_booked": 3,
+   "proposals_delivered": null,
+   "protocol": "propose",
+   "refusal_theorems": [
+    {
+     "argument": "I decline a goal clause again, and the price is measured rather than estimated. THE PRICE: is_goal compiles to False, plan returns no_goal_declared, commit has never run, all twenty-two commands have been probes, and roughly 108 commands remain on the meter. THE REASON, unchanged and still binding. (1) Cart.pos = exit_cell needs ONE named instance; arc-instances: all gives me Glyph9_r8c14 and forty-four siblings and there is no instance called Glyph9, and a second colour-9 type would be indistinguishable to an arm that looks objects up by colour alone. (2) A count over the socket interior has nothing to range over: rows 49-55 cols 43-49 have never changed, so they are board. (3) Counts over the four types I have are either already true in some observed state -- count(Vacated, color = 9) = 0 holds in half of them, count(Dark, color = 9) = 3 is one ACTION5 away and means nothing -- or false everywhere and unreachable. A goal the planner can satisfy by pressing one key is worse than no goal, because commit would then spend the level winning it. I also reject count(Glyph9, color = 1) = 64: it says 'the clock has run out', so a planner given it would race to lose. (4) The goal cannot be conjunctive; the section takes one equation. THE OBSERVATION THAT ENDS THIS: a goal becomes writable the moment any pixel of the bracket rows 49-55 cols 43-49, or the pip (52,46), or any colour-8 pixel of the comb changes colour, because that pixel becomes dynamic and acquires an instance. THE GOAL IS DOWNSTREAM OF REACH, AND REACH IS DOWNSTREAM OF ONE PRESS OF THE DOWN KEY FROM WHERE THE BODY IS STANDING.",
+     "theorem": "the_goal_is_absent_because_no_instance_can_name_the_socket"
+    }
+   ],
+   "rider_deliveries": [
+    {
+     "answered": "declined_with_argument",
+     "raw": "answered: declined_with_argument",
+     "turn": 5
+    },
+    {
+     "answered": "declined_with_argument",
+     "raw": "answered: declined_with_argument",
+     "turn": 9
+    },
+    {
+     "answered": "declined_with_argument",
+     "raw": "answered: declined_with_argument",
+     "turn": 13
+    }
+   ],
+   "target_theorems": [],
+   "transport": {
+    "counts": {
+     "empty": 0,
+     "lost_continuation": 2,
+     "provider_refusal": 0,
+     "well_formed": 7
+    },
+    "has_transcripts": true,
+    "usd_lost": 5.667212,
+    "usd_total": 17.749106
+   },
+   "turns_with_a_goal_block": 20,
+   "verdict": "declined_with_argument",
+   "what_it_means": "the desk answered, refused, and signed the refusal with a named theorem. This is a position, not a miss. The fix -- if the position is wrong -- is the argument, which means the rider's wording or the goal grammar, and NOT the plumbing."
+  },
+  {
+   "absence_signature": "the_goal_section_is_absent_on_purpose_and_it_costs_me_a_planner",
+   "answers": [],
+   "confounded_by_transport": true,
+   "goal_declared_ever": false,
+   "leg": "20260801T001851Z-R1b-sk48-b",
+   "plan_status_counts": {
+    "no_goal_declared": 5
+   },
+   "proposals_booked": 1,
+   "proposals_delivered": null,
+   "protocol": "propose",
+   "refusal_theorems": [
+    {
+     "argument": "There is no goal section, so is_goal compiles to False and no plan can terminate. I could have invented one and I decline, because a goal true in the wrong states is worse than no goal: it stops a planner at its first step and it is a claim about winning that six frames cannot support. Nothing in the history has shown a win, a score, or a state change other than NOT_FINISHED. The candidate predicates all fail on inspection. `count(Ink2, color = 3) = 1` is true right now, in a state that is plainly not a win. `count(Ink1, color = 4) = 8` is true in every blanked-strip state including the current one. There is no instance I could name for a positional goal because arc-instances: all yields Ink1_r38c18 and eight siblings rather than anything called Ink1. The price is explicit: nothing ranks one command above another except whether it is predicted to change pixels and what it would witness, so the playbook does the ranking and it does it on epistemic value, not on distance to a target.",
+     "theorem": "the_goal_section_is_absent_on_purpose_and_it_costs_me_a_planner"
+    }
+   ],
+   "rider_deliveries": [],
+   "target_theorems": [],
+   "transport": {
+    "counts": {
+     "empty": 0,
+     "lost_continuation": 5,
+     "provider_refusal": 0,
+     "well_formed": 1
+    },
+    "has_transcripts": true,
+    "usd_lost": 14.028711,
+    "usd_total": 17.390721
+   },
+   "turns_with_a_goal_block": 4,
+   "verdict": "booked_never_delivered",
+   "what_it_means": "the criterion fired and the ask never reached the desk: it parks for the next theorize call a surprise pays for, and no such call completed before the leg ended. The fix is in DELIVERY, not in the wording -- the desk has said nothing about a question it was never asked."
+  },
+  {
+   "absence_signature": null,
+   "answers": [],
+   "confounded_by_transport": false,
+   "goal_declared_ever": null,
+   "leg": "a3-gate-mock",
+   "plan_status_counts": null,
+   "proposals_booked": 0,
+   "proposals_delivered": null,
+   "protocol": null,
+   "refusal_theorems": [],
+   "rider_deliveries": [],
+   "target_theorems": [],
+   "transport": {
+    "counts": null,
+    "has_transcripts": false,
+    "usd_lost": null,
+    "usd_total": null
+   },
+   "turns_with_a_goal_block": 0,
+   "verdict": "not_measured",
+   "what_it_means": "the leg carries no per-turn goal block: it ran before inner/goal.py existed, or on the `off` rung. Nothing here is evidence about the rider either way."
+  },
+  {
+   "absence_signature": null,
+   "answers": [],
+   "confounded_by_transport": false,
+   "goal_declared_ever": null,
+   "leg": "audit-smoke",
+   "plan_status_counts": null,
+   "proposals_booked": 0,
+   "proposals_delivered": null,
+   "protocol": null,
+   "refusal_theorems": [],
+   "rider_deliveries": [],
+   "target_theorems": [],
+   "transport": {
+    "counts": null,
+    "has_transcripts": false,
+    "usd_lost": null,
+    "usd_total": null
+   },
+   "turns_with_a_goal_block": 0,
+   "verdict": "not_measured",
+   "what_it_means": "the leg carries no per-turn goal block: it ran before inner/goal.py existed, or on the `off` rung. Nothing here is evidence about the rider either way."
+  }
+ ],
+ "legs_measured": 2,
+ "legs_read": 19,
+ "reading": "19 legs read, 2 measured. 1 leg(s) -- 20260801T001851Z-R1b-g50t-a -- were answered and REFUSED, with a named theorem carrying the argument. On those legs the mechanism connected; what did not move is the desk's mind, and the record now carries its reasons verbatim instead of a False. 1 leg(s) -- 20260801T001851Z-R1b-sk48-b -- booked an ask that was never posted. Nothing on those legs is evidence about the rider's wording. 1 of them (20260801T001851Z-R1b-sk48-b) also lost desk replies in transit, so their negative reading is confounded and must not be quoted as the desk declining.",
+ "verdicts": {
+  "booked_never_delivered": 1,
+  "declined_with_argument": 1,
+  "delivered_answer_lost": 0,
+  "never_booked": 0,
+  "not_measured": 17,
+  "recorded_only": 0,
+  "signed": 0,
+  "silent": 0
+ }
+}

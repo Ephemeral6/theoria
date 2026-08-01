@@ -369,3 +369,49 @@ arm extrapolates lands on a *different* board cell than the world burned.
 Raising the chain cap catches more of them and costs every other action some
 split entropy; four edges is where the replay stops paying for itself. The
 residue is real and is not closed here.
+
+
+## GAP R3-1 · The transport is diagnosed and not repaired
+
+11 archived desk replies begin somewhere other than `=== THEORY ===`, which is
+the first thing the theorize contract asks for. `harness/modelcall.py:561`
+reads `envelope["result"]` -- the CLI's LAST assistant message -- so a reply
+that spans messages arrives with its front torn off. $31.05 of a $108.54
+lifetime desk bill, 28.6%; $19.70 of R1b's own $35.14.
+
+`armtools/replyloss.py` **detects** it, over the archive, with a structural
+discriminator and negative controls. It does not fix it. The two candidate
+fixes -- `--output-format stream-json`, or accumulating messages inside
+`_invoke` -- both change what comes back from a live subprocess and neither can
+be validated without one. Filed rather than attempted, and the detector is
+deliberately in `armtools/` rather than in the live path: a change to
+`modelcall.py` that nothing offline can exercise is a change nobody can check.
+
+**Consequence for every A/B this arm has run.** `20260801T001851Z-R1b-sk48-b`
+lost 5 of its 6 desk replies. Any knob under test on that leg would have
+"failed", and the round record attributes its outcome to `goal_protocol`. No
+comparison across R1/R1b legs is safe until this is closed.
+
+## GAP R3-2 · The desk's refusal is a grammar finding this territory cannot act on
+
+`R1b-g50t-a` declined a goal three times, each time with a refutation of all
+four forms the goal section admits, each time resting on the same fact: the
+cells that name the winning position have never changed, so they are board, so
+`arc-instances: all` seats no instance on them, so no `count(<Type>, ...)`
+ranges over them and no landmark denotes them.
+
+That is `20260801T0900Z-R2-frontier-by-generation`'s GAP R2-2 arriving from the
+other direction -- 12 of 47 off-frontier probes missed by exactly one
+never-before-changed cell. Probe expressivity and goal expressivity are one
+missing feature seen twice, and it belongs to `theory-compiler`. Nothing in
+this territory can close it; the rider's third channel only makes the arm able
+to *record* what it cannot compile.
+
+## GAP R3-3 · The third channel is unjudged
+
+`inner/goal.prompt_rider` now offers a third answer. Its reading half is
+fixture-tested and its base rate is measured from the archive (the desk
+produced the artefact unprompted on 2 of 2 legs that got that far). Whether a
+desk given somewhere to put its target uses it is **not** settled and cannot be
+settled offline. One carried `g50t-5849a774` leg at leg ceiling $25 -- $17-25,
+~9 desk calls, ~25 ARC actions -- would settle it. None was run.

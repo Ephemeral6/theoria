@@ -1,0 +1,123 @@
+Gate outputs, verbatim. Run from theoria-arm/ on branch z/r1b-goal-rider,
+base_commit e8345affa0d500b8358e19fab65b8e25f615c7f9.
+Re-run: python -m pytest -q ; python verify.py ; python -m armtools.verify_provenance
+
+READ THIS FIRST — TWO GATES WERE ALREADY RED ON MASTER
+------------------------------------------------------
+Before anything on this branch was written, master e8345aff was checked out
+into a detached pristine worktree and the same two tests were run there. Both
+failed there too:
+
+    FAILED tests/test_arm.py::test_the_archive_stays_accountable
+    FAILED tests/test_desk_gate.py::test_the_ceiling_table_still_covers_the_archive
+
+They are inherited, not introduced. They are reproduced below unedited rather
+than filtered out, because a gate block that hides the red lines is worth
+nothing. Neither touches anything this branch changed:
+
+  * test_the_archive_stays_accountable fails on verify_provenance check 8,
+    manifest re-derivation drift on the four R1/R1b LIVE legs, all of which
+    predate this branch and none of which it writes to.
+  * test_the_ceiling_table_still_covers_the_archive fails because the
+    opus-5 per-call ceiling ($12.00) is below what the table's own rule
+    derives from the archive ($13.4480). A spend-table sizing question, and
+    this session had zero spend authority to act on it.
+
+Every other test passes, including all 44 added here.
+
+
+=== python -m pytest -q  (via verify.py rung 1, full summary) ===
+FAILED tests/test_arm.py::test_the_archive_stays_accountable - AssertionError...
+FAILED tests/test_desk_gate.py::test_the_ceiling_table_still_covers_the_archive
+2 failed, 701 passed in 698.60s (0:11:38)
+
+    collected on this branch: 703
+    collected on master e8345aff:   659   (measured on the pristine worktree)
+    added:                           44   = 17 tests/test_reply_loss.py
+                                          + 18 tests/test_goal_forensics.py
+                                          +  9 tests/test_goal_state.py
+    lost: 0
+
+
+=== python -m pytest -q tests/test_reply_loss.py tests/test_goal_forensics.py ===
+.................                                                        [100%]
+..................                                                       [100%]
+(17 + 18, all green)
+
+
+=== python verify.py ===
+[1/3] suite
+   FAIL  suite red (exit 1)
+[2/3] one real run -- the whole arm, offline against proxy/mock
+   ok    game g50t-5849a774, budget 6 actions, no key, no network
+[3/3] artefact self-check
+
+theoria-arm: RED (1 problem(s))
+
+    The one problem is rung 1, i.e. the two inherited failures above. Rung 2
+    is green. Rung 3 printed its header and no detail line under redirection;
+    it contributed 0 of the 1 counted problem, so it did not fail. That
+    missing line is recorded as unexplained rather than as a pass.
+
+
+=== python -m armtools.verify_provenance ===
+Run BEFORE this run's MANIFEST.json existed, so its counts are the archive
+without this directory. Re-running after the manifest is written adds one run
+and one manifest to lines 2 and 10 and changes nothing else.
+
+PASS  runs/ contains no test or smoke fixture                                                       every directory under runs/ is archive material or a process record
+PASS  every run has a MANIFEST.json                                                                 25 runs, 25 manifests
+PASS  prompt_id / branch / base_commit / utc are present or explicitly accounted for                every manifest either carries the four or names what it lost
+PASS  billed actions reconcile: ledgers vs closed scorecards                                        ledgers say 204 = 186 reconciled against 16 closed cards + 18 declared unreconcilable (cards opened and never closed; closed cards 404, so the API-side total is unobtainable by construction) [20260728T025503Z-g50t-e08-fixed: 13 against 3d6e68e3-d571-4592-86dc-857dadd39572; 20260801T001851Z-R1b-sk48-b: 5 against 3e8dce96-02cf-4f4d-8e68-36a79de599e1; preflight-20260728T012031Z: 0 against bbbd5b57-de5d-4f14-aa0e-adaedb234fef]
+PASS  every run that spent actions can point at its scorecard                                       each of the 24 runs that spent an action carries its scorecard or names the salvage holding it
+PASS  every scorecard opened and never closed is declared as such                                   3 orphan(s), all declared in the manifest of the run that opened them
+PASS  no sealed-pile game appears anywhere in the archive                                           every manifest's sealing check is clean
+FAIL  re-deriving every manifest reproduces it byte for byte                                        drifted: ['20260731T231654Z-R1-g50t-a', '20260731T231654Z-R1-sk48-b', '20260801T001851Z-R1b-g50t-a', '20260801T001851Z-R1b-sk48-b']
+PASS  every recorded base_commit carries its verification verdict                                   each base_commit is either derived from the recorded arm_version or carries a check that says it is not
+PASS  every file a shipped manifest lists is shipped too or excluded by the repository's own rules  60 manifests this commit ships, 972 listed paths: every one is shipped too, or named by a `.gitignore` rule that says why it is not
+
+FAILED: 1 of 10
+
+    Identical, line for line, to the run on pristine master. This branch adds
+    no drift and removes none.
+
+
+=== python -m armtools.replyloss ===
+20260731T1310Z-A3-level2-carried-r2        1 lost, $2.8611
+    call 3    $ 2.8611  out_tok 72821   begins 'ION4 burned the meter and ACTION3 did not. Under action-'
+20260731T231654Z-R1-g50t-a                 1 lost, $2.7158
+    call 2    $ 2.7158  out_tok 66102   begins '```json\n[\n  {"id": "L-07", "subject": "the heuristic_mis'
+20260731T231654Z-R1-sk48-b                 2 lost, $5.7785
+    call 1    $ 2.9618  out_tok 74879   begins 'pressed key(4) with the arm ERASED and drew it back in e'
+    call 2    $ 2.8166  out_tok 69014   begins '=== PLAYBOOK ===\n```\n# playbook.dsl -- what to buy with '
+20260801T001851Z-R1b-g50t-a                2 lost, $5.6672
+    call 2    $ 2.6961  out_tok 65414   begins '```json\n[\n  {"id": "P-02", "subject": "ACTION5 at spawn"'
+    call 9    $ 2.9711  out_tok 73099   begins '=== PLAYBOOK ===\n```\n# playbook.dsl -- what to buy with '
+20260801T001851Z-R1b-sk48-b                5 lost, $14.0287
+    call 2    $ 2.7911  out_tok 71360   begins '=== THEORY (continued ?? the remainder of theory.dsl, app'
+    call 3    $ 2.8981  out_tok 75581   begins 'it verbatim.\n    [probe: passed]\n\n  theorem the_twentyfo'
+    call 4    $ 2.6845  out_tok 67034   begins '```json\n[\n  {"id": "R-08", "subject": "key4_burn_right_e'
+    call 5    $ 2.6941  out_tok 67020   begins '```json\n[\n  {"id": "R-02", "subject": "the fifteen key(1'
+    call 6    $ 2.9608  out_tok 77627   begins 'ditional repaint of the four mark cells. That is a cheap'
+
+{"empty": 1, "lost_continuation": 11, "provider_refusal": 24, "well_formed": 53}
+11 of 89 archived desk replies begin somewhere other than the marker the contract asks for first. Each was billed in full: $31.0513 of a $108.5410 desk bill, 28.6%. `inner/theorize.py` recorded every one of them as `no THEORY block in the reply`, which reads as a desk that answered badly and is in fact a harness that kept only the CLI's last assistant message.
+
+    (the `??` in call 2 of sk48-b is this console's rendering of an em dash in
+    the desk's own continuation header; the file on disk is UTF-8 and intact.)
+
+
+=== python -m armtools.goal_forensics ===
+20260801T001851Z-R1b-g50t-a                declined_with_argument   booked 3, answers ['declined_with_argument', 'declined_with_argument', 'declined_with_argument']
+    theorem the_goal_is_absent_because_no_instance_can_name_the_socket
+20260801T001851Z-R1b-sk48-b                booked_never_delivered   booked 1, answers []
+    theorem the_goal_section_is_absent_on_purpose_and_it_costs_me_a_planner
+
+{"booked_never_delivered": 1, "declined_with_argument": 1, "not_measured": 17}
+19 legs read, 2 measured. 1 leg(s) -- 20260801T001851Z-R1b-g50t-a -- were answered and REFUSED, with a named theorem carrying the argument. On those legs the mechanism connected; what did not move is the desk's mind, and the record now carries its reasons verbatim instead of a False. 1 leg(s) -- 20260801T001851Z-R1b-sk48-b -- booked an ask that was never posted. Nothing on those legs is evidence about the rider's wording. 1 of them (20260801T001851Z-R1b-sk48-b) also lost desk replies in transit, so their negative reading is confounded and must not be quoted as the desk declining.
+
+
+=== spend ===
+$0.00. No ARC action, no model call, no network, no ledger written. The only
+ARC game ids read are the two development-pile games already named in
+committed run slugs. Sealed pile: zero contact.

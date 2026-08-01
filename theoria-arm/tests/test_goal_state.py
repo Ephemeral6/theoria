@@ -496,3 +496,141 @@ def test_the_same_manual_without_its_goal_stops_planning_and_the_state_says_so(
                           actions_spent=2, has_predictor=True)
     assert block["mode"] == "exploring_no_goal"
     assert block["proposal"]["due"] is True
+
+
+# ---------------------------------------------------- R1b: what the records
+# said, and the three things they could not say.
+#
+# `20260801T001851Z-R1b-g50t-a` delivered the rider three times and was refused
+# three times with an argument; `20260801T001851Z-R1b-sk48-b` booked one ask
+# that never left the peg. Both legs' summaries read `goal_declared_ever:
+# False` with `answered: null` or `declined_with_argument`, and no field
+# separated "was not asked" from "was asked and said no". These are the fields
+# that separate them.
+
+def test_a_failed_check_does_not_read_as_an_assertion():
+    """`refused_because` used to quote the check verbatim.
+
+    Every check is worded as the condition that must HOLD, so R1b's records
+    say `refused_because: ["enough new world has arrived to change the answer
+    ... >= 4"]` -- the reason nothing happened, phrased as though something
+    had. The substring is still there for callers that match on it; what
+    changed is that a reader can now tell which way it went.
+    """
+    state = _state("propose")
+    state.observe(turn=1, theory_text="semantics:\n",
+                  plan_report={"status": "no_goal_declared"},
+                  distinct_states=1, actions_spent=1, has_predictor=True)
+    verdict = state.proposal_due(mode="exploring_no_goal", distinct_states=1,
+                                 has_predictor=True)
+    assert verdict["due"] is False
+    assert len(verdict["refused_because"]) == 1
+    refusal = verdict["refused_because"][0]
+    assert refusal.startswith("NO -- ")
+    assert "enough new world has arrived" in refusal      # the old substring
+    assert "[read: 1]" in refusal                          # and the number
+
+
+def test_every_refusal_is_negated_and_every_passing_check_is_absent():
+    """The negative control on the negation itself: a due proposal must have
+    an EMPTY refusal list, not a list of negated passing checks."""
+    state = _state("propose")
+    verdict = state.proposal_due(mode="exploring_no_goal", distinct_states=9,
+                                 has_predictor=True)
+    assert verdict["due"] is True
+    assert verdict["refused_because"] == []
+    assert all(c["ok"] for c in verdict["checks"])
+
+
+def test_booked_and_delivered_are_separate_facts():
+    state = _state("propose")
+    state.record_proposal(turn=1, distinct_states=8, reason="t")
+    assert state.summary()["proposals_made"] == 1
+    assert state.summary()["proposals_delivered"] == 0
+    assert state.proposals[0]["delivered_on_turn"] is None
+
+    state.mark_delivered(turn=3)
+    assert state.summary()["proposals_delivered"] == 1
+    assert state.proposals[0]["delivered_on_turn"] == 3
+    # Still unanswered: delivery is not an answer.
+    assert state.summary()["proposals_answered"] == 0
+
+
+def test_an_ask_that_never_left_the_peg_says_so_in_the_reading():
+    """The sk48-b sentence. The old reading called this "1 proposal(s) were
+    made", which a reader takes as a question the desk answered badly."""
+    state = _state("propose")
+    state.observe(turn=1, theory_text="semantics:\n",
+                  plan_report={"status": "no_goal_declared"},
+                  distinct_states=9, actions_spent=5, has_predictor=True)
+    state.record_proposal(turn=1, distinct_states=9, reason="t")
+    reading = state.summary()["reading"]
+    assert "1 proposal(s) were BOOKED and 0 were DELIVERED" in reading
+    assert "NOTHING HERE IS EVIDENCE ABOUT THE DESK" in reading
+
+
+def test_a_delivered_ask_with_no_reply_says_unknown_not_negative():
+    state = _state("propose")
+    state.observe(turn=1, theory_text="semantics:\n",
+                  plan_report={"status": "no_goal_declared"},
+                  distinct_states=9, actions_spent=5, has_predictor=True)
+    state.record_proposal(turn=1, distinct_states=9, reason="t")
+    state.mark_delivered(turn=2)
+    reading = state.summary()["reading"]
+    assert "1 proposal(s) were BOOKED and 1 were DELIVERED" in reading
+    assert "UNKNOWN on this leg, not negative" in reading
+    assert "never left the peg" not in reading
+
+
+def test_a_refused_ask_reads_as_a_position():
+    state = _state("propose")
+    state.observe(turn=1, theory_text="semantics:\n",
+                  plan_report={"status": "no_goal_declared"},
+                  distinct_states=9, actions_spent=5, has_predictor=True)
+    state.record_proposal(turn=1, distinct_states=9, reason="t")
+    state.mark_delivered(turn=2)
+    state.answer_proposal(theory_text=(
+        "laws:\n  theorem the_goal_is_absent_because_reach \"x\"\n"))
+    reading = state.summary()["reading"]
+    assert "answers: declined_with_argument" in reading
+    assert "UNKNOWN on this leg" not in reading
+
+
+def test_mark_delivered_on_a_leg_that_booked_nothing_is_a_no_op():
+    state = _state("propose")
+    assert state.mark_delivered(turn=1) is None
+    assert state.summary()["proposals_delivered"] == 0
+
+
+# ------------------------------------------- the rider's third channel (R1b)
+def test_the_rider_now_asks_about_reach_and_not_only_about_confidence():
+    """R1b's three refusals were arguments about what the goal section can
+    SAY. The rider engaged the soundness half and had no channel for the
+    other, so the desk put its actual target in a theorem of its own naming
+    where nothing reads it."""
+    state = _state("propose")
+    state.observe(turn=1, theory_text="semantics:\n",
+                  plan_report={"status": "no_goal_declared"},
+                  distinct_states=9, actions_spent=5, has_predictor=True)
+    entry = state.record_proposal(turn=1, distinct_states=9, reason="t")
+    rider = goal_beat.prompt_rider(state, entry, 9)
+
+    assert "Three answers are acceptable" in rider
+    assert goal_beat.TARGET_THEOREM_PREFIX in rider
+    assert "cannot SAY what you believe wins" in rider
+    # It must not read as permission to decline more easily.
+    assert "not a substitute for answer 2" in rider
+    # And the first two channels survive unchanged.
+    assert "A `goal` clause" in rider
+    assert "A `theorem`" in rider
+    assert "not acceptable is silence" in rider
+
+
+def test_the_target_theorem_name_is_not_an_absence_signature():
+    """A manual that names its target has not thereby argued for having no
+    goal. If `absence_signature` matched the third channel's prefix, answering
+    3 would silently satisfy 2."""
+    name = goal_beat.TARGET_THEOREM_PREFIX + "_the_body_in_the_socket"
+    text = 'laws:\n  theorem %s "the 5x5 body seated at (8,7)"\n' % name
+    assert goal_beat.absence_signature(text) is None
+    assert goal_beat.read_manual(text)["absence_is_signed"] is False

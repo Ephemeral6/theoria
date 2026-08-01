@@ -979,6 +979,12 @@ class TheoriaArm:
             rider, self._goal_rider = self._goal_rider, None
             if rider:
                 record["goal_rider"] = "delivered"
+                # Booked and posted are different events; `GoalState` used to
+                # record only the first, so an ask that never left the peg and
+                # an ask the desk refused both read as `"answered": null`.
+                # R1b-sk48-b was the first, R1b-g50t-a was the second, and the
+                # round record could not tell them apart.
+                self.goal.mark_delivered(turn=record.get("turn"))
             try:
                 report = theorize.run(
                     self.desk, self.books, self._level_store(),

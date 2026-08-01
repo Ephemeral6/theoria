@@ -1114,3 +1114,90 @@ answer 5 times of 52 and generation 43.
    the world's frame is the actual fix, and it would make certify's replay
    trivially green -- destroying the only instrument that currently detects a
    wrong manual. That is somebody else's call, made deliberately, not skipped.
+
+
+## D-R3-001 · `no THEORY block in the reply` named three events, and only one of them was the desk
+
+R1b was read to establish which of four things happened to the goal rider, and
+the reading turned up a fifth thing that was not being looked for.
+
+`inner/theorize.py` writes one error for a reply it cannot use. It has written
+it 32 times. Against the transcripts it separates into a provider refusal (24
+-- `You've hit your session limit`, the desk never ran), an empty reply (1), and
+**11 replies that were complete and arrived with their beginning missing**.
+`harness/modelcall.py:561` keeps `envelope["result"]`, which is the CLI's last
+assistant message; a reply spanning messages loses the earlier ones.
+`R1b-sk48-b/desk/call-002` begins at `=== THEORY (continued -- the remainder of
+theory.dsl, appended to the block above) ===` and `call-006` begins mid-word.
+
+**The discriminator is structural and the arithmetic one was tried and
+rejected.** Output tokens against reply characters is the obvious test; it does
+not work, because `claude -p` bills thinking tokens that never reach `result`
+and the ratio sits under 1.0 on 39 of 88 archived calls, most of which parsed
+perfectly. What separates them exactly: all 53 accepted replies begin with the
+marker, and none of the 35 rejected do. `tests/test_reply_loss.py` asserts both
+halves and attaches the same useless ratio to a good reply and a bad one, so
+the threshold is not reintroduced.
+
+**Why the detector is in `armtools/` and the fix is not attempted.** Both
+candidate repairs change what a live subprocess returns and neither can be
+exercised offline. A change to the live path that no test can reach is worth
+less than a measurement that runs on every suite.
+
+## D-R3-002 · Booked is not posted, and `answered: null` was saying both
+
+`GoalState` recorded when an ask was created and never when it went out, so
+`"answered": null` covered an ask the desk refused to answer and an ask the
+desk was never shown. R1b's two legs are one of each -- `g50t-a` delivered
+three and was refused three, `sk48-b` booked one that never left the peg -- and
+the round reported a single outcome for the pair.
+
+`record_proposal` now writes `delivered_on_turn: null`; `mark_delivered` fills
+it from `inner/loop.py` at the one place the rider is taken off the peg; and
+`summary()` carries `proposals_delivered` and `proposals_answered` beside
+`proposals_made`. `_reading` says which happened, in words, including the case
+where nothing was delivered: *NOTHING HERE IS EVIDENCE ABOUT THE DESK: it was
+not asked.*
+
+The same pass fixed `refused_because`, which quoted each failed check verbatim
+-- and every check is phrased as the condition that must HOLD, so R1b's records
+give `enough new world has arrived to change the answer ... >= 4` as the reason
+nothing happened. The substring is kept for callers that match on it and the
+verdict is now negated in front of it, with the number it read.
+
+## D-R3-003 · The rider engaged half the desk's argument, and the missing half was the whole case
+
+The two manuals sign the goal's absence with good arguments, and the ticket
+asked whether the rider engages them or talks past them. It does both, and the
+split is clean.
+
+**Engaged: soundness.** "It must be false in the states you have already seen
+-- a goal satisfied by the current board stops the planner at the first node
+and is worse than no goal at all." That is the manuals' own argument in their
+own terms, and the desk quotes it back approvingly and uses it to reject
+`count(Glyph9, color = 9) = 11`.
+
+**Talked past: reach.** All three refusals are demonstrations that the section
+*cannot say the thing*: `Cart.pos = <landmark>` and `count(<Type>, color = c) =
+n`, `=` only, one equation, no conjunction, against a target whose cells are
+board and carry no instance. Offered only "write one" or "argue why not", the
+desk put its actual target in prose of its own naming --
+`the_socket_is_a_keyhole_and_names_the_winning_position`, verified cell by cell
+against the frame -- where nothing in the arm reads it. The most valuable claim
+either manual made was written down and never picked up.
+
+So a third channel, under a fixed prefix `the_goal_i_cannot_write_is` so it can
+be found, asking for the target and for which forms were tried and what each
+lacked. It is explicitly not a substitute for the second channel and does not
+soften it; it buys no model call, riding the same already-paid-for turn.
+
+**How a prompt change is judged with no live leg, since `Theoria.md:355` says
+it is movable and does not say it is free.** Three things are settled offline:
+the channel asks for a `theorem`, which is the DSL's own home for a belief that
+is not an equation, so it cannot request a form the compiler refuses; its base
+rate is measured rather than assumed, because the desk produced the artefact
+unprompted on 2 of 2 legs that reached that point; and the reading half --
+`goal_forensics.extract_target_theorems`, fixture-tested, correctly returning
+`[]` on both R1b manuals -- improves the record whether or not the desk ever
+adopts the prefix. What is **not** settled is whether the desk uses it, and
+that needs one carried leg. It was not run.
