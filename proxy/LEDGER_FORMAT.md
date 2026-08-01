@@ -55,7 +55,7 @@ Every record, whatever its type, carries:
 | `seq` | int | monotonic within the file, assigned by the writer under a lock. Gaps are impossible; duplicates are a corrupt file. |
 | `ts` | string | ISO-8601 UTC, millisecond precision, `Z` suffix |
 | `run_id` | string | one run = one arm playing one game once |
-| `arm` | string | which arm produced it (`bare_cc`, `schema_repro`, `theoria`, `probe`, `replay`) |
+| `arm` | string | which arm produced it. The vocabulary is closed and is exactly `ledger.ARMS`: `ablation`, `bare_cc`, `mock_arm`, `probe`, `replay`, `schema_repro`, `theoria` |
 | `prev` | string or null | **optional.** sha256 of the previous line's bytes as written, including that line's own `prev`. `null` on the first record of a file. |
 
 `ts` is wall-clock and therefore **not** part of any hash or comparison. Replay

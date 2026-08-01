@@ -167,3 +167,52 @@ def test_red_a_leg_added_to_the_code_and_not_the_document_is_caught():
     constant, so this is the shape a future leg would arrive in."""
     found = problems(section(), RECONCILIATION_KEY + ("turns",), gap_keys())
     assert found and "RECONCILIATION_KEY" in found[0], found
+
+
+# -- the same obligation, applied to the arm vocabulary ----------------------
+#
+# Added with D-A21-001, and not speculatively: the `arm` row listed five names
+# while `ledger.ARMS` held six. `mock_arm` had been registered in code and never
+# written into the canon, and nothing noticed for as long as the row existed.
+# `arm` is one of the two **hard refusals** in the whole format (§5), so the
+# document being wrong about it is the document being wrong about the only part
+# of the vocabulary that can stop a run on its first record.
+
+def arms_named(text=None):
+    """The arm names the `arm` row of §2's table declares.
+
+    Read out of the row's own prose with a backtick scan rather than a
+    hand-maintained list, so a name added to the table in any phrasing counts
+    and a name deleted from it stops counting.
+    """
+    text = open(DOC, encoding="utf-8").read() if text is None else text
+    for line in text.splitlines():
+        if line.startswith("| `arm` |"):
+            return set(re.findall(r"`([a-z0-9_]+)`", line)) - {"arm", "string"}
+    raise AssertionError("%s no longer has an `arm` row in its field table" % DOC)
+
+
+def test_the_document_lists_exactly_the_registered_arm_names():
+    from proxy.ledger import ARMS                            # noqa: PLC0415
+
+    declared = arms_named()
+    assert declared == set(ARMS), (
+        "the canon and `ledger.ARMS` disagree about the arm vocabulary; "
+        "only in the document: %s; only in the code: %s"
+        % (sorted(declared - set(ARMS)), sorted(set(ARMS) - declared)))
+
+
+@pytest.mark.parametrize("mutate", [
+    # A name registered in code and never written into the canon. This is the
+    # exact drift that was found and fixed when the check was written.
+    lambda t: t.replace("`mock_arm`, ", ""),
+    # A name in the document that the writer would refuse.
+    lambda t: t.replace("`ablation`,", "`ablation`, `theoria_ablate`,"),
+])
+def test_red_an_arm_vocabulary_that_drifts_is_caught(mutate):
+    from proxy.ledger import ARMS                            # noqa: PLC0415
+
+    text = mutate(open(DOC, encoding="utf-8").read())
+    assert text != open(DOC, encoding="utf-8").read(), (
+        "the mutation did not apply; the check is vacuous")
+    assert arms_named(text) != set(ARMS)

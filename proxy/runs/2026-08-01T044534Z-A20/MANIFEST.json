@@ -1,0 +1,111 @@
+{
+  "artifacts": {
+    "proxy/CONTRACT_CHANGES.md": {
+      "bytes": 17885,
+      "sha256": "f381cae5b997a4e4d58f32a56a04dd2c886159f7055b0ccacd4710f3265a8140"
+    },
+    "proxy/DECISIONS.md": {
+      "bytes": 63006,
+      "sha256": "1f3405d6fd3113c4d8a102340961b9d621ecea58a4d48b1c6c14bae1ca887c8f"
+    },
+    "proxy/LEDGER_FORMAT.md": {
+      "bytes": 37918,
+      "sha256": "2cab3a3975e8789a1c5de0d87330346c7d05a9d2049620ce6eab28524b384219"
+    },
+    "proxy/canon_contract.json": {
+      "bytes": 6223,
+      "sha256": "0c4b8da64c257d735fb0ca3251c97fad296157612b88481cf22230599b8f4c6b"
+    },
+    "proxy/ledger.py": {
+      "bytes": 31606,
+      "sha256": "4b10268fdeea58f1e5929eed1551e8eff400f0c9a5f54c13a006b974c5895d43"
+    },
+    "proxy/runs/2026-08-01T044534Z-A20/NOTES.md": {
+      "bytes": 4220,
+      "sha256": "5b246b2a9c21cc9e1329f9897b15b6c01681c8c90b4550e91e6dc60b313a52a8"
+    },
+    "proxy/runs/2026-08-01T044534Z-A20/RUN_STATE.md": {
+      "bytes": 11551,
+      "sha256": "963754ae548d89d65da1f27eb1b76e0560ae2d9560fad580e681a4b47f4d57a0"
+    },
+    "proxy/runs/2026-08-01T044534Z-A20/contract-update.txt": {
+      "bytes": 157,
+      "sha256": "2257ea7c3f204a33571df8d8f8b01579384d980d663817ad9dca9db6321ca8ba"
+    },
+    "proxy/runs/2026-08-01T044534Z-A20/contract-verdict-before.txt": {
+      "bytes": 283,
+      "sha256": "da9e4ff14169408f8699866c563d1fe43994ee2539ac4f6547db5d98f07b2ee2"
+    },
+    "proxy/runs/2026-08-01T044534Z-A20/redflip-dotenv.txt": {
+      "bytes": 1157,
+      "sha256": "c9f03f7d18aa3abc5857c787d55cd978ffaa4d814749f7cde598f7a554d3eed7"
+    },
+    "proxy/runs/2026-08-01T044534Z-A20/results.json": {
+      "bytes": 1000,
+      "sha256": "431f5d4c8cd75caa59cd56b90e47253ca2aae8a372a12b2661c6c146f0cd3770"
+    },
+    "proxy/runs/2026-08-01T044534Z-A20/sealed-allow-proof.txt": {
+      "bytes": 562,
+      "sha256": "c71b67ef8564963d2d5191eff45e63410ed3e7a9b088140d22b2a47299e2f957"
+    },
+    "proxy/runs/2026-08-01T044534Z-A20/verify.sh": {
+      "bytes": 2175,
+      "sha256": "b92fcfc3c7377745b94d2de44563638813931d9fa43da469669845e6c4f2559f"
+    },
+    "proxy/tests/test_ledger.py": {
+      "bytes": 7694,
+      "sha256": "f9e3ad2da0a36c898c93751a752f82dc08d13d3219ff3d4a0865c8b7d0231bcd"
+    },
+    "proxy/tests/test_ledger_format_sync.py": {
+      "bytes": 9616,
+      "sha256": "1294719bda67d01202ff36e100d64b303ccfae7988882ad1b36e4e630b93300f"
+    },
+    "proxy/tests/test_model_side_seal.py": {
+      "bytes": 24993,
+      "sha256": "3f68b29cfefc289e24c058dee10055026ec2d3a4dbb4d35ab4dd199b41313f33"
+    }
+  },
+  "base_commit": "4c08ea6be6ff480d9b7cfcd6be8bd17c2e9e3749",
+  "branch": "agent/a20-a21-proxy-seal-pair",
+  "determinism": "No stochastic step; seed is null.",
+  "prompt": null,
+  "prompt_id": "A20",
+  "results": {
+    "a20_model_side": {
+      "file": "proxy/tests/test_model_side_seal.py",
+      "halves": [
+        "dotenv name hygiene",
+        "model proxy 401 + credential stripping"
+      ],
+      "live_history_cited": "65-of-65 401s, verify-lab/DUAL_PROXY.md S32",
+      "network_calls": 0,
+      "tests": 19,
+      "usd": 0.0
+    },
+    "a21_arm_name": {
+      "arms_added": "ablation",
+      "arms_now": 7,
+      "contract_row": "C-008",
+      "contract_verdict": "ADDITIVE: arms gained ablation",
+      "doc_gap_found": "LEDGER_FORMAT arm row was missing mock_arm",
+      "tests_added": 12
+    },
+    "redflip": {
+      "dotenv_live_check": "red on a temporary gitignored .env declaring ANTHROPIC_API_KEY; NAME only in the failure output; file removed",
+      "stripping_assertion": "red when PASSTHROUGH_REQUEST_HEADERS is widened by authorization (test_the_stripping_assertion_has_teeth)"
+    },
+    "suite": {
+      "added": 31,
+      "after": 497,
+      "baseline": 466,
+      "cmd": "cd proxy && python -m pytest",
+      "exit": 0,
+      "failed": 0
+    }
+  },
+  "run_dir": "proxy/runs/2026-08-01T044534Z-A20",
+  "seed": null,
+  "t": "2026-08-01T05:13:24Z",
+  "tests": "proxy suite 497 passed, 0 failed, exit 0 (baseline 466)",
+  "title": "A20+A21: the model side of the seal gets negative samples, and the ablation arm gets a ledger name"
+}

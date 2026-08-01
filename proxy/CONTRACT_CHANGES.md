@@ -207,6 +207,7 @@ Append-only. Newest last.
 | C-005 | 2026-07-29 | `canon.ENVELOPE` gains `prev`, the ledger's hash chain link (S15, D-029): the writer owns it and **a caller that sets it is now refused** | tightening | no — see below |
 | C-006 | 2026-07-29 | `INCIDENT_KINDS` gains `variant_degenerate`; `win_tighten`'s `applied` record gains `reason`, `degenerate`, `occurrence` and (once per session) `note` (V22, D-032) | additive | n/a |
 | C-007 | 2026-08-01 | **`model_proxy` request semantics** (P-12, D-P12-001/002/003): its default guard becomes `unknown_policy="allow"`; a **development**-pile id in a model request is refused `game_id_in_prompt`; `ModelProxyConfig` gains an optional `client_token` that, when set, makes an unauthenticated caller 401 | widening + tightening — see below | this file; `runs/20260801T0000Z-P12-model-proxy-cli/FINDING.md` |
+| C-008 | 2026-08-01 | `ARMS` gains `ablation`, the ablation arm's own ledger name (A21, D-A21-001). `LEDGER_FORMAT.md`'s `arm` row now lists the vocabulary in full — it had been missing `mock_arm` since that name was registered | additive | n/a |
 
 C-007 is §6's third bullet arriving in person: it changes **the guard's verdict
 semantics**, which §2's rule covers by its own terms and which §4's detector

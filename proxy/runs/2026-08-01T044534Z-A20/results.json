@@ -1,0 +1,33 @@
+{
+  "a20_model_side": {
+    "file": "proxy/tests/test_model_side_seal.py",
+    "halves": [
+      "dotenv name hygiene",
+      "model proxy 401 + credential stripping"
+    ],
+    "live_history_cited": "65-of-65 401s, verify-lab/DUAL_PROXY.md S32",
+    "network_calls": 0,
+    "tests": 19,
+    "usd": 0.0
+  },
+  "a21_arm_name": {
+    "arms_added": "ablation",
+    "arms_now": 7,
+    "contract_row": "C-008",
+    "contract_verdict": "ADDITIVE: arms gained ablation",
+    "doc_gap_found": "LEDGER_FORMAT arm row was missing mock_arm",
+    "tests_added": 12
+  },
+  "redflip": {
+    "dotenv_live_check": "red on a temporary gitignored .env declaring ANTHROPIC_API_KEY; NAME only in the failure output; file removed",
+    "stripping_assertion": "red when PASSTHROUGH_REQUEST_HEADERS is widened by authorization (test_the_stripping_assertion_has_teeth)"
+  },
+  "suite": {
+    "added": 31,
+    "after": 497,
+    "baseline": 466,
+    "cmd": "cd proxy && python -m pytest",
+    "exit": 0,
+    "failed": 0
+  }
+}

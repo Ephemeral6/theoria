@@ -4,7 +4,8 @@ import os
 import pytest
 
 from proxy import LEDGER_VERSION
-from proxy.ledger import Ledger, RunLedger, canonical, frame_hash, read_ledger
+from proxy.ledger import (ARMS, Ledger, RunLedger, canonical, frame_hash,
+                          read_ledger)
 from proxy.redact import VAULT, Vault, mask
 
 
@@ -47,6 +48,59 @@ def test_unknown_event_and_arm_are_refused(tmp_path):
         ledger.append("something_else", "r1", "probe")
     with pytest.raises(ValueError, match="unknown arm"):
         ledger.append("env_meta", "r1", "not_an_arm", http={})
+
+
+# -- the arm vocabulary ------------------------------------------------------
+
+def test_the_ablation_arm_has_a_name_of_its_own(tmp_path):
+    """D-A21-001. Registered 2026-08-01; before that there was no name for it.
+
+    This is a denominator fix, not a cosmetic one. `append` refuses an
+    unregistered `arm` outright, so an ablation arm could not write a record at
+    all -- and `ablation-arm`'s D-AB-004 resolved that by shipping under
+    `arm: "theoria"`, which made two of Phase 1's three arms indistinguishable
+    in the stream that is supposed to demonstrate they are the same shell.
+
+    The record has to *validate*, not merely be accepted by the writer: a name
+    the writer takes and the validator rejects would be worse than no name,
+    because the failure would appear one layer downstream of the change.
+    """
+    from proxy.tools.validate_ledger import validate_records     # noqa: PLC0415
+
+    path = str(tmp_path / "l.jsonl")
+    run = RunLedger(Ledger(path), "r-abl", "ablation", game_id="ar25-0c556536")
+    run.run_start(game_id="ar25-0c556536")
+    run.env_step("ar25-0c556536", {"name": "RESET", "id": None, "data": None},
+                 frames=[[[0]]], http={"status": 200})
+
+    records = read_ledger(path)
+    assert [r["arm"] for r in records] == ["ablation", "ablation"]
+    assert validate_records(records) == []
+
+
+@pytest.mark.parametrize("arm", sorted(ARMS))
+def test_every_registered_arm_writes_a_record_the_validator_accepts(tmp_path, arm):
+    """The register and the validator must agree about all of it, not just the
+    name added today. A name in `ARMS` that fails validation is a trap set for
+    whoever adopts it next."""
+    from proxy.tools.validate_ledger import validate_records     # noqa: PLC0415
+
+    path = str(tmp_path / "l.jsonl")
+    Ledger(path).append("env_meta", "r1", arm, http={})
+    assert validate_records(read_ledger(path)) == []
+
+
+def test_the_spelling_d_ab_004_requested_is_not_silently_accepted(tmp_path):
+    """`theoria_ablate` is the name `ablation-arm` asked for; `ablation` is the
+    name that was registered, and the difference is deliberate (see `ARMS`).
+
+    Pinned so the divergence cannot be discovered at runtime by an arm that
+    switched to its own requested spelling and got a hard refusal on its first
+    record. It is refused, loudly, and the message says where to register it.
+    """
+    ledger = Ledger(str(tmp_path / "l.jsonl"))
+    with pytest.raises(ValueError, match="unknown arm"):
+        ledger.append("env_meta", "r1", "theoria_ablate", http={})
 
 
 def test_cost_may_not_be_written_into_the_ledger(tmp_path):

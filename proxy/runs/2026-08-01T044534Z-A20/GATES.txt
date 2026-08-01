@@ -1,0 +1,11 @@
+== verify.sh :: A20 :: agent/a20-a21-proxy-seal-pair ==
+[PASS] tests -- proxy
+[PASS] MANIFEST hashes reproduce
+[PASS] boundary -- only proxy changed
+[PASS] sealed pile untouched
+[PASS] credential never entered a tracked file
+[PASS] delivered: proxy/runs/2026-08-01T044534Z-A20/MANIFEST.json
+-- 6/6 green
+running proxy/runs/2026-08-01T044534Z-A20/verify.sh  (C:\Program Files\Git\usr\bin\bash.EXE)
+
+green. 收工 -> skill handoff-close
