@@ -46,8 +46,20 @@ D2. **`u3.expand_targets()` descends exactly one level.**  Books nested deeper
     (`cold-start-a3/runs/<run>/generated/<variant>/theory.lean`) are never
     reached.  The census walks.
 
-Both are reported as findings, not patched here -- `freeze/u3.py` is not this
+Both were reported as findings, not patched here -- `freeze/u3.py` is not this
 territory's file.  See `exam/runs/<utc>-U3-CENSUS/RUN_STATE.md`.
+
+**Both were repaired in freeze on 2026-08-01**, along with F1 (the (c) gate
+keyed on theorem NAMES).  `u3.find_books` now takes any `.lean` that states a
+theorem and `u3.expand_targets` walks to depth 12, so the adjudicator alone can
+now see a `Level.lean` and a book four levels down.  The census's own discovery
+and its direct-source fallback are kept anyway, and kept tested: they are
+belt-and-braces on a **primary endpoint**, they cost nothing when the walker
+works, and a census whose enumeration is the adjudicator's enumeration cannot
+be the independent check on it that catching D1/D2 required.  What changed is
+the tests' claim, not the code's job -- `test_u3_census.py` no longer asserts
+that E1 is blind, it asserts that the census agrees with E1 and would still
+find the books if E1 went blind again.
 
 Exclusions are declared, never silent
 -------------------------------------
@@ -87,6 +99,7 @@ if REPO not in sys.path:
     sys.path.insert(0, REPO)
 
 from freeze import u3  # noqa: E402  -- the frozen adjudicator, by import only
+from freeze import theorem_shape as _shape  # noqa: E402  -- its kind vocabulary
 
 __all__ = [
     "BookSite",
@@ -346,31 +359,60 @@ def discover_claimants(root: Path,
     return sorted(out)
 
 
+#: The kinds E1 writes a §1.2.1 (c) check for, read from freeze's own frozen
+#: constant rather than restated here.  Reading it is the whole point: the
+#: previous version of this table sniffed for the substring `"no executable"`
+#: in E1's `why` text, and when freeze repaired the adjudicator on 2026-08-01
+#: that sentence stopped being written.  The table did not go red.  It went
+#: **empty** -- `kinds_that_can_never_attain: []`, a clean bill of health
+#: manufactured by a lookup miss, which is precisely the failure a coverage
+#: report may not have.  Keying on an exported name means the next such change
+#: is an ImportError, not a silent all-clear.
+CHECKED_KINDS = frozenset(_shape.KINDS_WITH_A_C_CHECK)
+
+#: Kinds with no (c) check that will never get one, and should not.  A
+#: `point_claim` (`I s₀ = true`) and a `witness` (`∃ s, …`) are *supporting
+#: obligations* -- material for another theorem's (c), not claims about the
+#: world -- and §1.2.1 writes no non-vacuity requirement for either.  They are
+#: permanent non-attainers by design, so reporting them in the same list as a
+#: genuine gap would make the gap unfindable.  (freeze → exam, 2026-08-01: "for
+#: the first two that is correct and permanent".)
+PERMANENT_NON_ATTAINERS = frozenset({_shape.POINT_KIND, _shape.WITNESS_KIND})
+
+
 def kind_coverage(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
     """Which theorem KINDS exist on disk, and which have no (c) check at all.
 
     This is the census's most load-bearing output and the reason it is worth
-    running before 开跑.  `u3.classify_theorem` is a **prefix name-matcher**
-    over theorem names, and `u3.judge_nonvacuity` fails closed on the kinds it
-    does not implement (`prune`, `unknown`).  Failing closed is the right
-    safety direction.  What it costs is that a real, fully discharged theorem
-    whose name the matcher does not recognise is reported with label
-    `vacuous` -- and `vacuous` is the word §1.2.1 reserves for a manual that
-    proved a tautology.  In a paper that difference is the whole claim.
+    running before 开跑.  It answers one question: if the sealed campaign emits
+    theorems of kind K, can E1 ever award U3 for them?
 
-    Concretely, on this repo today: the sokoban deadlock development at
-    `theory-compiler/runs/20260728T080019Z-C4-deadlock-lean/verify/` compiles,
-    reports an EMPTY axiom set for all nine theorems, and carries its own
-    non-vacuity witness (`pat_witness`) and a solvable witness with a recorded
-    plan (`level_is_winnable`).  E1 labels it `vacuous`, because its theorems
-    are named `dead`, `pat_no_goal`, `closed_pinned` and so on -- kind
-    `unknown`.  Naming them `deadlock_*` would not help: the `prune` kind
-    fails closed too.  STATS_RULES.md:123 names *this class of theorem* as
-    what U3 means.
+    **History, because the answer changed today and the table's meaning changed
+    with it.**  Until 2026-08-01 E1 decided (c) with a prefix matcher over
+    theorem NAMES (`u3.classify_theorem`), so a fully discharged theorem whose
+    name the matcher did not recognise came back kind `unknown` and its
+    development was labelled `vacuous` -- the word §1.2.1 reserves for a manual
+    that proved a tautology.  The sokoban deadlock development at
+    `theory-compiler/runs/20260728T080019Z-C4-deadlock-lean/verify/` was the
+    case that made it undeniable: it compiles, reports an EMPTY axiom set on all
+    nine theorems, carries `pat_witness` and `level_is_winnable`, and
+    STATS_RULES.md:123 names it as the *paradigm* of what U3 means.  E1 called
+    it vacuous.  freeze repaired it (`freeze/theorem_shape.py`): the kind is now
+    read off the STATEMENT, `unknown` no longer exists, and that development
+    reads `discharged`.
 
-    So this table answers: if the sealed campaign emits theorems of kind K,
-    can E1 ever award U3 for them?  For K in {prune, unknown} the answer is
-    no, whatever the proof contains.
+    So this table no longer reports a name-matching hazard.  What it reports now
+    is a two-way split, and the split is the point:
+
+    * `coverage_gaps` -- kinds E1 could not classify at all (`unclassified`).
+      A theorem here fails closed and its development cannot attain through it,
+      whatever the proof contains.  **This is the only entry that is a defect.**
+    * `permanent_non_attainers` -- `point_claim` and `witness`.  No check, no
+      gap: §1.2.1 asks nothing of a supporting obligation, and it never will.
+
+    `kinds_that_can_never_attain` is retained as the union of the two, because
+    the field is read by the report renderer and by the 2026-08-01 run record,
+    and a field that quietly narrows is worse than one that is renamed.
     """
     kinds: Dict[str, Dict[str, Any]] = {}
     for r in rows:
@@ -379,33 +421,50 @@ def kind_coverage(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
         # which renders as "no kind is unreachable", i.e. a clean bill of
         # health produced by a lookup miss.  That is exactly the failure a
         # coverage report must not have, and it is why
-        # `test_kind_coverage_names_the_kinds_that_can_never_attain` asserts on
-        # a populated table rather than on the absence of problems.
+        # `test_kind_coverage_splits_permanent_non_attainers_from_gaps`
+        # asserts on a populated table rather than on the absence of problems.
         per_theorem = (r.get("criteria") or {}).get("per_theorem") or {}
         for tname, t in per_theorem.items():
-            k = t.get("kind", "unknown")
+            # `unclassified` is E1's own word for "the shape could not be
+            # read", and is the right default for a row that carries no kind
+            # at all.  It used to be `unknown`, a kind E1 no longer produces.
+            k = t.get("kind") or _shape.UNCLASSIFIED_KIND
             slot = kinds.setdefault(k, {"theorems": 0, "c_ok": 0,
-                                        "no_check_implemented": False,
+                                        "c_unchecked": 0,
+                                        "no_check_implemented":
+                                            k not in CHECKED_KINDS,
+                                        "permanent": k in PERMANENT_NON_ATTAINERS,
                                         "examples": []})
             slot["theorems"] += 1
             c = t.get("c") or {}
-            if c.get("ok"):
+            if c.get("ok") is True:
                 slot["c_ok"] += 1
-            if "no executable" in (c.get("why") or ""):
-                slot["no_check_implemented"] = True
+            elif c.get("ok") is None and (t.get("b") or {}).get("ok"):
+                # (b) passed and (c) still returned neither yes nor no: nothing
+                # ran.  Counted, so the table shows the gap in theorems and not
+                # only in vocabulary.
+                slot["c_unchecked"] += 1
             if len(slot["examples"]) < 4:
                 slot["examples"].append("%s::%s" % (r["run"], tname))
+
     unreachable = sorted(k for k, v in kinds.items()
                          if v["no_check_implemented"] and v["c_ok"] == 0)
+    gaps = sorted(k for k in unreachable if k not in PERMANENT_NON_ATTAINERS)
+    permanent = sorted(k for k in unreachable if k in PERMANENT_NON_ATTAINERS)
     return {
         "kinds": dict(sorted(kinds.items())),
+        "kinds_with_a_c_check": sorted(CHECKED_KINDS),
         "kinds_that_can_never_attain": unreachable,
+        "coverage_gaps": gaps,
+        "permanent_non_attainers": permanent,
         "note": (
-            "A kind in `kinds_that_can_never_attain` has no implemented "
-            "§1.2.1 (c) check in freeze/u3.py, so every theorem of that kind "
-            "fails closed and its development is labelled `vacuous` no matter "
-            "what it proves. Reporting that as `vacuous` conflates 'proved a "
-            "tautology' with 'we have no checker for this shape'."
+            "A kind in `coverage_gaps` has no implemented §1.2.1 (c) check in "
+            "freeze/u3.py, so every theorem of that kind fails closed and "
+            "cannot carry its development to `discharged`, no matter what it "
+            "proves. A kind in `permanent_non_attainers` (`point_claim`, "
+            "`witness`) is a supporting obligation rather than a claim about "
+            "the world; §1.2.1 writes no requirement for it and none is "
+            "missing. Only the first list is a defect."
         ),
     }
 
@@ -504,16 +563,23 @@ def to_markdown(result: Dict[str, Any]) -> str:
         out.append("* `%s` — %d" % (k, v))
     kc = result.get("kind_coverage") or {}
     out += ["", "## theorem-kind coverage of the (c) check", "",
-            "| kind | theorems seen | (c) passed | check implemented? |",
-            "|---|---|---|---|"]
+            "| kind | theorems seen | (c) passed | (c) never ran | "
+            "check implemented? |",
+            "|---|---|---|---|---|"]
     for k, v in (kc.get("kinds") or {}).items():
-        out.append("| `%s` | %d | %d | %s |" % (
-            k, v["theorems"], v["c_ok"],
-            "no — fails closed" if v["no_check_implemented"] else "yes"))
-    never = kc.get("kinds_that_can_never_attain") or []
-    if never:
-        out += ["", "**Kinds that can never attain U3 as E1 stands: %s.** %s"
-                % (", ".join("`%s`" % k for k in never), kc.get("note", "")), ""]
+        out.append("| `%s` | %d | %d | %d | %s |" % (
+            k, v["theorems"], v["c_ok"], v.get("c_unchecked", 0),
+            ("no — permanent, §1.2.1 asks nothing of this shape"
+             if v.get("permanent") else
+             "no — fails closed") if v["no_check_implemented"] else "yes"))
+    gaps = kc.get("coverage_gaps") or []
+    permanent = kc.get("permanent_non_attainers") or []
+    out += ["", "**Coverage gaps (a defect): %s.**"
+            % (", ".join("`%s`" % k for k in gaps) if gaps else "none"), ""]
+    if permanent:
+        out += ["**Permanent non-attainers (not a defect): %s.**"
+                % ", ".join("`%s`" % k for k in permanent), ""]
+    out += [kc.get("note", ""), ""]
     bc = result.get("bookless_claimants") or {}
     if bc:
         out += ["", "## runs that reached certify with no book", "",
