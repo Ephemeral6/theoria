@@ -708,3 +708,41 @@ model_call 里任何位置不得出现金额、幂等（跑两次逐字节相同
 而不是让未来某个会话把它当成神秘红灯顺手调大 cap。同理，
 `test_the_live_gate_is_green_and_says_why` 原先把「实时闸门是绿的」钉成套件不变量
 ——一个止损装置的反面——已改为只断言非时钟子句。
+
+## D-026 凭据拆进本轨道自己的转发子进程，而不是接 `proxy/` 的环境代理
+
+**决策**（A19，2026-08-01，结清 GAP-5）：`ARC_API_KEY` 由一个本轨道自己写的
+**透明转发子进程** `harness/key_proxy_server.py` 持有；父进程侧的监管者
+`harness/key_proxy.py` 里**没有任何读凭据的代码**。臂把 base URL 指向
+`http://127.0.0.1:<port>`，其余一切不变。`arc_client.load_api_key()` 改为抛错，
+`ArcClient` 默认无钥，无钥且指向真上游时在开 socket 前抛 `UnproxiedEgressError`。
+
+**工单允许接 `proxy/env_proxy.py`，没有接，三条理由**：
+
+1. **会重复计费。** `proxy/env_proxy.py` 自己向 `proxy/spend_gate.py` 计费，而
+   `ArcClient.request()` 已经通过 `harness/spend.py` 向**同一个共享池**计费。
+   接上去，每一个 ARC 动作会被这个池数两次——INC-BA-003 之后本轨道最不能再犯的
+   就是记账类缺陷。
+2. **会造出两本账。** 它写的是 proxy 正典格式的 `env_step`；本轨道的对账读的是
+   `ledger.jsonl` 与 `probe_log.jsonl`。一场战役会留下两本互不兼容的账。
+3. **它不是透明的。** 它自己实现 ARC 命令语义、套 variants。而本轨道的 cookie jar
+   是 BUDGET_REPORT 每一个数将要重新推导的那个传输层（arc-recon INC-007：
+   带 jar 20/20 首发 RESET，不带 0/20）。在路径里再塞一个行为不同的 HTTP 客户端，
+   等于又一次悄悄换掉传输层——D-019 已经用一整个战役的代价演示过这种错误。
+
+**所以：动的只有凭据的位置，别的都没动。** jar、probe log、spend 闸门、封存堆守卫
+全部留在臂里。这不是保守，是因为「本轨道的数是在这些东西上测的」。
+
+**代价，如实记下**：本轨道因此**没有**共用 `theoria-arm` 的
+`EnvProxyProcess`，Windows 那套形状（不 fork、无 SIGTERM、握手用文件不用
+stdout、`ctypes` 而非 `os.kill(pid,0)`）在本轨道重写了一遍。这与
+`arc_client.py` 开头对 `arc-recon/client.py` 的那句话是同一个判断：
+**跨领地的耦合改不动，重复六十行比耦合便宜。** 若将来两处的看门狗要一起改，
+这就是要付的税，写在这里以免被当成疏忽。
+
+**一个设计教训，来自本单自己踩的坑**：`resolve_key` 第一版是「先读 `.env`，
+读不到再退到无钥」。于是那条专门证明「无钥代理什么都不注入」的负样本，在任何
+存在 `.env` 的机器上都会起一个**握着真凭据**的子进程。是负样本自己抓到的
+（断言先失败，没有打印也没有落盘任何值）。**「可选的凭据」不是凭据策略**：
+`--no-require-key` 现在表示明确无钥、根本不看 `.env`，并有一条与机器无关的
+`resolve_key` 单测钉住。

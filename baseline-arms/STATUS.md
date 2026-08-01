@@ -305,6 +305,56 @@ F-15 要求的「degraded 单独一行」；`audit_cells` 的封存前缀是子�
 * `harness/bare_cc.py:186` 已经在起 `claude -p` 之前 `env.pop("ARC_API_KEY")`，
   那一行是对的，**保留**。它挡的是模型子进程，不是本条说的臂进程常驻。
 
+#### GAP-5 结清（A19，2026-08-01）：**已拆分**，不再是「只登记」
+
+上面那一段是登记，这一段是处置。凭据已经出臂进程，做法与
+[`DECISIONS.md`](DECISIONS.md) D-026 记的一致：一个本轨道自己的**透明转发子进程**，
+不是接 `proxy/env_proxy.py`（理由见 D-026，一句话是接了会把同一笔 ARC 动作
+向共享池计两次费，并给一场战役造出两本互不兼容的账）。
+
+落地的东西，逐条可查：
+
+* **新增** `harness/key_proxy_server.py` —— 全轨道**唯一**还会读 `.env` 的代码，
+  且它只在子进程里跑。注入 `X-API-Key`，其余（方法、路径、查询串、body、
+  cookie、状态码、响应体）原样转发。
+* **新增** `harness/key_proxy.py` —— 父进程侧的监管者，**里面没有任何读凭据的代码**。
+  子进程握手用文件不用 stdout（本机 cp936 会把 banner 搞成乱码），
+  停止先 HTTP 后 `TerminateProcess`，父进程被硬杀时子进程有自己的看门狗。
+* **`arc_client.py:137` 的 `load_api_key()` 现在抛 `CredentialInArmError`**，
+  函数保留不删：GAP-5 上一段是按行号点名它的，顺着指针来的人应当落在解释上，
+  而不是落在一个「找不到这个名字」的报错上。
+* **`arc_client.py:199` 的 `self._key = api_key or load_api_key()` 变成
+  `self._key = api_key`**，没有回退读取。臂默认无钥。
+* **第二个合取项也补上了**：无钥客户端指向真上游时抛 `UnproxiedEgressError`，
+  在开 socket 之前、在向共享池计费之前。反过来，子进程收到带 `X-API-Key`
+  的请求一律 `400 ARM_SENT_A_KEY` 拒转 —— 代理不能变成替 GAP-5 遮丑的东西。
+* **五个花钱入口全部接上**：`run_pilot.py`、`run_campaign.py`、`campaign.py`、
+  `probe_api.py`、`probe_action_variants.py`。
+
+**没有动的东西，是刻意的**：cookie jar、probe log、spend 闸门、封存堆守卫全部留在臂里，
+因为 BUDGET_REPORT 要重新推导的每一个数都是在它们上面测的。jar 能跨这一跳存活，
+靠的是子进程把 `Set-Cookie` 的 `Domain=` 与 `Secure` 两个属性去掉
+（回环这一跳既不是那个域名也不是 https），其余属性原样保留。
+`probe_log.jsonl` 的 `url` 字段仍写规范上游地址，新增 `wire_url` / `proxied`
+两个字段记实际那一跳 —— 否则本单之后写的每一行都会与之前的行不可比。
+
+验收：`tests/test_seal_process.py`，19 条，全 mock 零花费零网络。
+其中第一条在**全新解释器**里把 `ARC_API_KEY` 从环境里删掉后跑完一整局
+mock 游戏（开卡 / RESET / 三个 ACTION / 关卡），`claude -p` 由罐头信封替代。
+套件 552 passed / 1 skipped / 0 failed。
+
+**一处自己踩到的坑，记下来**：`resolve_key` 第一版写成「先读 `.env`，读不到再退到无钥」，
+于是那条**专门用来证明「无钥代理什么都不注入」的负样本**，在任何存在 `.env` 的机器上
+都会起一个握着真凭据的子进程。是这条负样本自己在一小时内抓到的（断言先失败，
+没有打印也没有落盘任何值）。现已改为 `--no-require-key` 即**明确无钥、根本不看 `.env`**，
+并补了一条与机器无关的 `resolve_key` 单测钉住它。**「可选的凭据」不是凭据策略。**
+
+commit：见本仓库 `agent/a19-bare-cc-seal-split`（tag `a19-bare-cc-seal-split`），
+留痕在 [`runs/2026-08-01T044513Z-A19/`](runs/2026-08-01T044513Z-A19/)。
+
+**复飞资格不由本工单裁定。** 本单交付的是拆分与证据；`bare_cc` 是否恢复线上飞行、
+`p1-seal-test` 左合取项是否对三臂成立，是监控方的再裁决。
+
 ### GAP-4（新，A14 发现）：战役重启会把已花的钱从账上抹掉
 
 四份检查点每份的 `episodes[]` 只列 12 个 run，而对应的分片账本里有 **14** 个。

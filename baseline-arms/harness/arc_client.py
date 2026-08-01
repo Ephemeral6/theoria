@@ -2,8 +2,22 @@
 
 Two things are structural here, not advisory:
 
-  * **The credential never leaves this module.** Read from the gitignored
-    `.env`, sent only as `X-API-Key`, redacted in everything written to disk.
+  * **The credential is not in this module, or in this process** (A19,
+    2026-08-01; `STATUS.md` GAP-5, `DECISIONS.md` D-026). This paragraph used
+    to say "the credential never leaves this module", and that was true and
+    insufficient: `load_api_key()` opened `.env` here and `__init__` parked the
+    value in `self._key` for the whole run, inside the interpreter that also
+    runs `claude -p` and the retry envelope. `Theoria.md` Phase 1 states the
+    seal as a conjunction -- no credential inside the arm, **and** egress
+    around the proxy fails -- and neither half held.
+
+    Now: `load_api_key()` raises, the only `.env` reader in this track lives in
+    `harness/key_proxy_server.py` (a child process this module does not
+    import), and a keyless client refuses to open a socket to anything but the
+    loopback proxy. Injection happens in the child. What changed is *where the
+    key lives* and nothing else -- the jar, the probe log, the spend gate and
+    the sealed-pile guard are untouched, because every campaign figure this
+    track publishes was measured on them.
   * **Sealed-pile games cannot be reached.** `piles.json` is loaded at import
     and any call naming a sealed game raises before the socket is opened.
     Reading a sealed game's first frame teaches its mechanics as surely as
@@ -75,6 +89,7 @@ import os
 import re
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -88,9 +103,46 @@ PILES_PATH = os.path.join(REPO, "arc-recon", "data", "piles.json")
 BASE_URL = "https://three.arcprize.org"
 REDACTED = "<redacted>"
 
+#: Where the credential child publishes its loopback URL for this process to
+#: pick up. Set by `key_proxy.sealed_upstream()`; a base URL, never a secret.
+PROXY_BASE_ENV = "ARC_BASE_URL"
+
+#: Hosts that count as "the proxy is in front of me". A keyless client may only
+#: talk to one of these -- see `UnproxiedEgressError`.
+LOOPBACK_HOSTS = ("127.0.0.1", "::1", "localhost")
+
+#: Two headers the credential child adds, defined here rather than there so the
+#: arm can read them without importing the module that holds the reader.
+#: `X-Upstream-Final-Url` carries the *upstream's* final URL, since the arm now
+#: only sees the loopback one; `X-Upstream-Transport-Error` distinguishes "the
+#: upstream could not be reached" from "the upstream answered", which is the
+#: difference between `-1` and a status in `probe_log.jsonl`.
+UPSTREAM_FINAL_URL_HEADER = "X-Upstream-Final-Url"
+UPSTREAM_TRANSPORT_ERROR_HEADER = "X-Upstream-Transport-Error"
+
 
 class SealedGameError(RuntimeError):
     """Raised before any network call that would touch the sealed pile."""
+
+
+class CredentialInArmError(RuntimeError):
+    """Raised by the old `load_api_key()` path, which no longer exists.
+
+    Kept as a raising stub rather than deleted: a caller that still expects the
+    arm to be able to read `.env` should be told where the reader went, and a
+    silent `AttributeError` months later would not say that.
+    """
+
+
+class UnproxiedEgressError(RuntimeError):
+    """A keyless client tried to reach the real upstream directly.
+
+    `Theoria.md` Phase 1's second conjunct: egress that bypasses the proxy must
+    fail. Without the credential such a call would fail anyway -- with a 401,
+    after opening a socket and spending an action against the shared pool. This
+    makes it fail here instead, before either happens, and with a message that
+    names the fix.
+    """
 
 
 class ArcApiError(RuntimeError):
@@ -135,19 +187,59 @@ def env_file() -> str:
 
 
 def load_api_key(env_path: Optional[str] = None) -> str:
-    path = env_path or env_file()
-    if not os.path.exists(path):
-        raise RuntimeError(
-            "%s not found. Copy .env.example to .env and set ARC_API_KEY." % path
-        )
-    for line in open(path, encoding="utf-8"):
-        line = line.strip()
-        if not line or line.startswith("#") or "=" not in line:
-            continue
-        name, value = line.split("=", 1)
-        if name.strip() == "ARC_API_KEY" and value.strip():
-            return value.strip()
-    raise RuntimeError("ARC_API_KEY is not set in %s" % path)
+    """The removed path. It raises, and that is the deliverable.
+
+    This function used to open `.env` and hand `ARC_API_KEY` back to the arm
+    process. Its body now lives in `harness/key_proxy_server.read_api_key()`,
+    which runs in a child process; nothing the arm imports can reach a
+    credential any more.
+
+    Kept and made loud rather than deleted because `STATUS.md` GAP-5 names this
+    function by line number as the defect, and a reader following that pointer
+    should land on the explanation instead of on a missing name.
+    """
+    raise CredentialInArmError(
+        "the arm process does not read credentials any more (STATUS.md GAP-5, "
+        "DECISIONS.md D-026). ARC_API_KEY is read only by "
+        "harness/key_proxy_server.py, in a child process; start one with "
+        "harness.key_proxy.sealed_upstream() and point ArcClient at its "
+        "base_url. Nothing in this process is supposed to be able to obtain "
+        "the value -- that is the seal, not an inconvenience.")
+
+
+def default_base_url() -> str:
+    """The proxy's URL when a run has started one, the real upstream otherwise.
+
+    Returning the real upstream when unset is not a hole: a client with no key
+    refuses to talk to it (`UnproxiedEgressError`). It keeps the constant
+    meaningful for the many places that only want to *name* the upstream.
+    """
+    return os.environ.get(PROXY_BASE_ENV) or BASE_URL
+
+
+def is_loopback(url: str) -> bool:
+    """Whether `url` addresses this machine, i.e. the credential child."""
+    try:
+        host = urllib.parse.urlsplit(url).hostname
+    except ValueError:                                       # malformed URL
+        return False
+    return (host or "").lower() in LOOPBACK_HOSTS
+
+
+def _header(headers: Any, name: str) -> Optional[str]:
+    """One header, case-insensitively, from either an HTTPMessage or a dict.
+
+    The fakes this track's tests install expose a plain lowercase dict, whose
+    `.get` is case-sensitive; the real `HTTPMessage.get` is not. Both have to
+    work or the tests would be exercising a different code path from the runs.
+    """
+    getter = getattr(headers, "get", None)
+    if not callable(getter):
+        return None
+    value = getter(name)
+    if value is None:
+        value = getter(name.lower())
+    return value
 
 
 # RFC 6265 cookie-name is a token: no separators, no whitespace.
@@ -193,15 +285,35 @@ def issued_cookie_names(headers: Any) -> List[str]:
 
 
 class ArcClient:
-    def __init__(self, api_key: Optional[str] = None, base_url: str = BASE_URL,
+    def __init__(self, api_key: Optional[str] = None,
+                 base_url: Optional[str] = None,
                  timeout: int = 30, cookies: bool = True,
-                 spend_binding: Optional["spend.SpendBinding"] = None):
-        self._key = api_key or load_api_key()
+                 spend_binding: Optional["spend.SpendBinding"] = None,
+                 upstream: Optional[str] = None):
+        #: No fallback read. It used to be `api_key or load_api_key()`, which
+        #: is the line `STATUS.md` GAP-5 cited: it put the live credential in
+        #: this process for the whole run. A caller may still pass a literal --
+        #: the tests do, as `"x"` -- but nothing in this track can *obtain* the
+        #: real one from here, because the reader is in a child process now.
+        #: `request()` refuses to send a key-bearing header through the proxy
+        #: and refuses to reach the real upstream without one, so neither half
+        #: of a stub can turn into live egress by accident.
+        self._key = api_key
         #: The claim on the shared pool this client spends against. There is no
         #: default and no way to switch it off: `request()` refuses without one.
         #: See `harness/spend.py` and `proxy/SPEND_GATE.md`.
         self.spend = spend_binding
-        self.base_url = base_url.rstrip("/")
+        self.base_url = (base_url or default_base_url()).rstrip("/")
+        #: Whether the credential child is in front of this client.
+        self.proxied = is_loopback(self.base_url)
+        #: The host the run is *logically* talking to, which stays
+        #: `https://three.arcprize.org` even when the wire hop is the loopback
+        #: proxy. `probe_log.jsonl`'s `url` field is written from this, so a
+        #: line recorded after the split is still comparable with every line
+        #: recorded before it. Unproxied, it is the base URL itself, which is
+        #: exactly what that field has always held.
+        self.upstream = (upstream
+                         or (BASE_URL if self.proxied else self.base_url)).rstrip("/")
         self.timeout = timeout
         self.sealed = sealed_pile()
         self.calls = 0
@@ -265,15 +377,34 @@ class ArcClient:
                 "harness/spend.py and proxy/SPEND_GATE.md." % path)
         self.spend.check_action(1)                # refuses before the socket
 
-        url = self.base_url + path
-        headers = {"X-API-Key": self._key, "Accept": "application/json"}
+        # Phase 1's second conjunct, made local. Without a key this call would
+        # reach the real upstream and come back 401 -- after opening a socket
+        # and charging an action to the shared pool. Refusing here costs
+        # neither, and says what to do instead.
+        if self._key is None and not self.proxied:
+            raise UnproxiedEgressError(
+                "this client holds no credential and %s is not the loopback "
+                "proxy, so the request to %s would leave the machine "
+                "unauthenticated. Start the credential child first: "
+                "`with harness.key_proxy.sealed_upstream(run_id=...) as p:` "
+                "and pass `base_url=p.base_url` (see STATUS.md GAP-5)."
+                % (self.base_url, path))
+
+        # What the run is talking to, and the hop it takes to get there. The
+        # two differ only when the credential child is in front.
+        url = self.upstream + path
+        wire_url = self.base_url + path
+        headers = {"Accept": "application/json"}
+        if self._key is not None:
+            headers["X-API-Key"] = self._key
         payload = None
         if body is not None:
             payload = json.dumps(body).encode("utf-8")
             headers["Content-Type"] = "application/json"
 
         started = time.time()
-        request = urllib.request.Request(url, data=payload, headers=headers, method=method)
+        request = urllib.request.Request(wire_url, data=payload, headers=headers,
+                                         method=method)
         # Snapshot the jar BEFORE the call: HTTPCookieProcessor absorbs the
         # response's cookies during `open()`, so a snapshot taken afterwards
         # would describe what the call produced, not what it sent -- and the
@@ -281,22 +412,38 @@ class ArcClient:
         # logged as though it had.
         sent = self.cookies_held()
         final_url = url
+        response_headers: Any = None
         try:
             with self._opener.open(request, timeout=self.timeout) as response:
                 status = response.status
                 text = response.read().decode("utf-8", "replace")
+                response_headers = response.headers
                 issued = issued_cookie_names(response.headers)
-                final_url = response.geturl() or url
+                final_url = response.geturl() or wire_url
         except urllib.error.HTTPError as exc:
             status = exc.code
             text = exc.read().decode("utf-8", "replace")
+            response_headers = exc.headers
             issued = issued_cookie_names(exc.headers)
-            final_url = exc.geturl() or url
+            final_url = exc.geturl() or wire_url
         except Exception as exc:                       # transport-level failure
             status = -1
             text = "%s: %s" % (type(exc).__name__, exc)
             issued = []
         self.calls += 1
+
+        # Undo the loopback hop for the record. The child knows the upstream's
+        # own final URL and whether the upstream was reachable at all; without
+        # this the probe log would describe the proxy instead of ARC, and the
+        # `-1` that has always meant "transport failure" would silently become
+        # a 599 that no historical line uses.
+        upstream_final = _header(response_headers, UPSTREAM_FINAL_URL_HEADER)
+        if upstream_final:
+            final_url = upstream_final
+        elif self.proxied and status >= 0:
+            final_url = url
+        if _header(response_headers, UPSTREAM_TRANSPORT_ERROR_HEADER):
+            status = -1
 
         try:
             parsed: Any = json.loads(text)
@@ -311,6 +458,15 @@ class ArcClient:
             # follows them, and the log previously could not show that at all.
             "final_url": final_url,
             "redirected": final_url != url,
+            # The seal, in the record. `wire_url` is the hop this process
+            # actually made -- the loopback credential child on a sealed run,
+            # the upstream itself otherwise -- so an audit can tell the two
+            # apart afterwards instead of inferring it from a date.
+            "proxied": self.proxied,
+            "wire_url": wire_url,
+            # There is normally no `X-API-Key` key in this dict at all now,
+            # which is the point: the redaction is the belt for a caller that
+            # passed a literal, not the mechanism.
             "request_headers": {k: (REDACTED if k == "X-API-Key" else v)
                                 for k, v in headers.items()},
             "request_body": body,

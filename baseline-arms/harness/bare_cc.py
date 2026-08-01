@@ -281,7 +281,8 @@ def play(game_id: str, model: str, budget: int, card_id: Optional[str] = None,
          action_retries: int = 8, model_retries: int = 3,
          cost_ceiling: Optional[float] = None, on_step=None,
          verbose: bool = True,
-         spend_binding: Optional["spend.SpendBinding"] = None) -> Dict[str, Any]:
+         spend_binding: Optional["spend.SpendBinding"] = None,
+         base_url: Optional[str] = None) -> Dict[str, Any]:
     """`cost_ceiling` aborts mid-episode. This matters: the full run gives one
     episode a budget of up to 1070 actions, so a ceiling checked only between
     episodes would not be checked for eleven hours. `on_step(summary)` is
@@ -291,6 +292,14 @@ def play(game_id: str, model: str, budget: int, card_id: Optional[str] = None,
     is required, not optional: an episode spends on both axes the pool counts --
     ARC requests through the client, dollars through `claude -p` -- and neither
     goes through the proxy that the gate was already wired to.
+
+    `base_url` is the credential child's loopback URL
+    (`harness/key_proxy.sealed_upstream()`). Without it -- and without the
+    `ARC_BASE_URL` that helper also sets -- the client this function builds is
+    keyless and pointed at the real upstream, so its first request raises
+    `UnproxiedEgressError` rather than leaving the machine unauthenticated.
+    That is the intended failure: `STATUS.md` GAP-5 and `BUDGET_REPORT.md` 9
+    both say this arm does not fly again unproxied.
     """
     """One episode: one game, one model. Returns the run summary."""
     if spend_binding is None:
@@ -301,7 +310,8 @@ def play(game_id: str, model: str, budget: int, card_id: Optional[str] = None,
             "ARC actions and model dollars, and both are counted by "
             "proxy/spend_gate.py. Open one with "
             "harness.spend.open_binding(campaign, usd_cap, action_cap).")
-    client = client or arc_client.ArcClient(spend_binding=spend_binding)
+    client = client or arc_client.ArcClient(spend_binding=spend_binding,
+                                            base_url=base_url)
     client.assert_playable(game_id)                     # fails closed on sealed
     run_id = "bare_cc-%s-%s-%s" % (game_id.split("-")[0], model, uuid.uuid4().hex[:8])
 

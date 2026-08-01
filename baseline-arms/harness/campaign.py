@@ -25,9 +25,9 @@ import json
 import os
 import sys
 import time
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
-from . import arc_client, bare_cc, interlock, ledger
+from . import arc_client, bare_cc, interlock, key_proxy, ledger
 
 TRACK = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT_DIR = os.path.join(TRACK, "out")
@@ -75,7 +75,25 @@ def load(game_id: str) -> Dict[str, Any]:
 
 def run_game(game_id: str, model: str, total_budget: int, ceiling_usd: float,
              max_episodes: int, resume: bool) -> Dict[str, Any]:
-    client = arc_client.ArcClient()
+    """The credential child wraps the whole game, then `_run_game` plays it.
+
+    Split in two only so the sixteen-hour body below keeps its indentation and
+    stays diffable: everything this adds is one child process, started before
+    the first episode and stopped after the last one whatever happens in
+    between (STATUS.md GAP-5, DECISIONS.md D-026). One child per game, not per
+    episode -- the arm's cookie jar already spans episodes, and so should the
+    hop in front of it.
+    """
+    with key_proxy.sealed_upstream(
+            run_id="campaign-%s" % game_id.split("-")[0]) as proxy:
+        return _run_game(game_id, model, total_budget, ceiling_usd,
+                         max_episodes, resume, base_url=proxy.base_url)
+
+
+def _run_game(game_id: str, model: str, total_budget: int, ceiling_usd: float,
+              max_episodes: int, resume: bool,
+              base_url: Optional[str] = None) -> Dict[str, Any]:
+    client = arc_client.ArcClient(base_url=base_url)
     client.assert_playable(game_id)                    # fails closed on sealed
 
     state: Dict[str, Any] = load(game_id) if resume else {}

@@ -2009,3 +2009,9 @@ claimed 悬挂），测试可加不会撞。三条如实登记的缺口：(1) `r
 测试：工单 verify.sh **6/6 绿**（monitor 套件 525 passed/2 xfailed exit 0；MANIFEST 9 工件哈希复现；边界仅 monitor；封存红线 --allow 三镜像路径同 P1REPLAYLIVE 披露；凭据零泄漏——所有者裁决段仅记变量名与订阅事实，无任何值）。scan exit 0 逐字 `Phase 1: 12/16 green`（裁决不改色，属预期）。`board.candidates()` 复算四件可领。零 API、$0.00、零封存堆接触。
 阻塞：none。
 下一步：A18/A19 priority 1 先领；A18 交付后下一条真腿自然产出「跑完即打分」首条活证据，届时 p1-scorer 复裁；若所有者对封存读法有异议，一句话回滚（注记与 RUN_STATE 都写明触发词）。
+
+## [baseline-arms] 2026-08-01T05:40:00Z a19-bare-cc-seal-split
+状态：GAP-5 结清，凭据已出 bare_cc 臂进程。新增 `harness/key_proxy_server.py`（全轨道唯一还读 `.env` 的代码，只在子进程里跑，透明转发并注入 `X-API-Key`）与 `harness/key_proxy.py`（父进程监管者，里面没有任何读凭据的代码）；`arc_client.load_api_key()` 改为抛错，`ArcClient` 默认无钥，无钥指向真上游时在开 socket 与计费之前抛 `UnproxiedEgressError`，子进程反过来拒转任何自带 `X-API-Key` 的请求；五个花钱入口全部接上。cookie jar / probe log / spend 闸门 / 封存堆守卫刻意留在臂里未动——BUDGET_REPORT 要重推的每个数都是在它们上面测的。判据与「为什么不接 `proxy/env_proxy.py`」见 DECISIONS.md D-026。
+测试：552 passed, 1 skipped, 0 failed（本单前 533 passed）；新增 19 条全在 `tests/test_seal_process.py`，全 mock、零网络、零花费。头一条在全新解释器里删掉 `ARC_API_KEY` 后跑完一整局 mock 游戏（开卡 / RESET / 三个 ACTION / 关卡），`claude -p` 由罐头信封替代。验收 6/6 green。
+阻塞：none（对本轨道）。三条须知：(1) verify.sh 用了 `--allow baseline-arms/STATUS.md`，因为该文件在本分支之前就含封存标识（INC-BA-001 登记段，即豁免情形）——已机械验证：本分支 26 个改动文件的**新增行**里含封存标识的条数为 0；(2) start_ritual 报的红基线是 worktree 假象不是 master：`schema_traces/**` 被 gitignore 所以 worktree 取不到（用 `THEORIA_SCHEMA_TRACES` 指向主 checkout 即绿），且 `runs/MANIFEST.json` 的证据哈希是在主 checkout 的 CRLF 工作树上算的，新 worktree 取到 LF，首跑必红后自愈——**本单刻意不提交那次重建**，否则会把 worktree 私有的 provenance 推上 master；(3) 本单自己踩到并抓住一个坑：`resolve_key` 初版「先读 .env 再退无钥」会让那条证明「无钥代理不注入」的负样本在任何有 `.env` 的机器上起一个握着真凭据的子进程，已改为 `--no-require-key` 即明确无钥，未打印未落盘任何值。
+下一步：**复飞资格由监控方再裁决，不由本单裁定**——本单交付的是拆分与证据，`bare_cc` 是否恢复线上飞行、`p1-seal-test` 左合取项是否对三臂成立，请监控方判。另建议单独开单修两个先存缺陷：`test_schema_column.py` 的 skip 守卫应看载荷而不是看容器目录，以及 `baseline-arms/runs/` 归档对 worktree 不可复现（CRLF）。

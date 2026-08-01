@@ -35,7 +35,7 @@ import threading
 import time
 from typing import Any, Dict, List, Optional
 
-from . import arc_client, bare_cc, ledger, spend
+from . import arc_client, bare_cc, key_proxy, ledger, spend
 
 TRACK = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT_DIR = os.path.join(TRACK, "out")
@@ -429,7 +429,8 @@ def cell_caps(model: str, budget: int) -> Dict[str, Any]:
 
 def run_repeat(game_id: str, model: str, budget: int, rep: int,
                results: Dict[int, Dict[str, Any]], lock: threading.Lock,
-               campaign: str = CAMPAIGN_NAME) -> None:
+               campaign: str = CAMPAIGN_NAME,
+               base_url: Optional[str] = None) -> None:
     started = time.time()
     caps = cell_caps(model, budget)
     binding = None
@@ -460,7 +461,7 @@ def run_repeat(game_id: str, model: str, budget: int, rep: int,
                     "budget": budget, "runner": "run_campaign"},
             ttl_seconds=7200)
         summary = bare_cc.play(game_id, model, budget, verbose=False,
-                               spend_binding=binding)
+                               spend_binding=binding, base_url=base_url)
     except arc_client.SealedGameError:
         raise
     except spend.SpendGateError as exc:
@@ -491,7 +492,8 @@ def run_repeat(game_id: str, model: str, budget: int, rep: int,
 
 
 def run_game(game_id: str, model: str, repeats: int, budget: int,
-             campaign: str = CAMPAIGN_NAME) -> List[Dict[str, Any]]:
+             campaign: str = CAMPAIGN_NAME,
+             base_url: Optional[str] = None) -> List[Dict[str, Any]]:
     """The `repeats` episodes of one cell, concurrently.
 
     Concurrent because the whole point is repeated *identical* cells: running
@@ -504,9 +506,12 @@ def run_game(game_id: str, model: str, repeats: int, budget: int,
           % (game_id, model, repeats, budget, campaign), flush=True)
     results: Dict[int, Dict[str, Any]] = {}
     lock = threading.Lock()
+    # One credential child for all `repeats` threads, not one each: the key is
+    # out of this process either way, and a child per thread would multiply
+    # ports and log files for no gain. The threads share nothing but a base URL.
     threads = [threading.Thread(target=run_repeat,
                                 args=(game_id, model, budget, rep, results, lock,
-                                      campaign))
+                                      campaign, base_url))
                for rep in range(1, repeats + 1)]
     for t in threads:
         t.start()
@@ -556,8 +561,15 @@ def main(argv=None) -> int:
         return 3
 
     print_pool("before %s" % game_id)
-    cells = run_game(game_id, args.model, args.repeats, args.budget,
-                     campaign=args.campaign)
+    # STATUS.md GAP-5: this arm does not fly again with the credential inside
+    # it. The child is started here, around the whole cell, and stopped on the
+    # way out whatever happens to the cell.
+    with key_proxy.sealed_upstream(
+            run_id="%s-%s" % (args.campaign, game_id.split("-")[0])) as proxy:
+        cells = run_game(game_id, args.model, args.repeats, args.budget,
+                         campaign=args.campaign, base_url=proxy.base_url)
+        ledger.probe("campaign_key_proxy",
+                     dict(proxy.state(), campaign=args.campaign, game_id=game_id))
     for cell in cells:
         append_cell(cell)
 

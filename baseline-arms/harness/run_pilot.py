@@ -19,9 +19,9 @@ import json
 import os
 import sys
 import time
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
-from . import arc_client, bare_cc, interlock, ledger
+from . import arc_client, bare_cc, interlock, key_proxy, ledger
 
 TRACK = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT_DIR = os.path.join(TRACK, "out")
@@ -34,11 +34,12 @@ PILOT_MODELS = [
 PILOT_BUDGET = 25
 
 
-def run_cell(game_id: str, model: str, budget: int) -> Dict[str, Any]:
+def run_cell(game_id: str, model: str, budget: int,
+             base_url: Optional[str] = None) -> Dict[str, Any]:
     print("=== %s x %s (budget %d) ===" % (game_id, model, budget), flush=True)
     started = time.time()
     try:
-        summary = bare_cc.play(game_id, model, budget)
+        summary = bare_cc.play(game_id, model, budget, base_url=base_url)
     except arc_client.SealedGameError:
         raise
     except Exception as exc:                       # a dead cell must not kill the run
@@ -93,12 +94,19 @@ def main(argv=None) -> int:
     out_path = args.out or os.path.join(
         OUT_DIR, "pilot_%s.json" % (args.only_game or "all"))
 
+    # The credential child, started once for the whole pilot and stopped on the
+    # way out. Every cell below runs in a process that has never read `.env`;
+    # the key is injected one hop away (STATUS.md GAP-5, DECISIONS.md D-026).
     results = []
-    for game_id in games:
-        for model in models:
-            results.append(run_cell(game_id, model, args.budget))
-            with open(out_path, "w", encoding="utf-8") as fh:
-                json.dump(results, fh, indent=2, sort_keys=True)
+    with key_proxy.sealed_upstream(run_id="pilot-%s" % (args.only_game or "all")) as proxy:
+        for game_id in games:
+            for model in models:
+                results.append(run_cell(game_id, model, args.budget,
+                                        base_url=proxy.base_url))
+                with open(out_path, "w", encoding="utf-8") as fh:
+                    json.dump(results, fh, indent=2, sort_keys=True)
+        proxy_state = proxy.state()
+    ledger.probe("pilot_key_proxy", proxy_state)
 
     ledger.probe("pilot_complete", {"games": games, "models": models,
                                     "budget": args.budget, "cells": len(results)})
