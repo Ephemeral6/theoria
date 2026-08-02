@@ -1,0 +1,24 @@
+A28 -- baseline arm, the zero examined
+
+1. IS THE SCORE READ?
+   gameplay response carries a score field .... False
+   it carries instead ......................... state, levels_completed, win_levels
+   authoritative source ....................... scorecard body (open-GET / close)
+   run dirs that persist a score .............. 0 of 43
+
+2. IS IT GENUINELY ZERO?
+   authoritative observations ................. 63 (57 distinct run_ids)
+   with nonzero card score .................... 0
+   with nonzero run score ..................... 0
+   with any nonzero level_score ............... 0
+   with levels_completed > 0 .................. 0
+
+3. WAS THE BUDGET ENOUGH FOR LEVEL 1?
+   game              base_L1     best      pct   median   n>=L1  terminal states
+   ar25-0c556536          32       67   209.4%       19       4  GAME_OVER,NOT_FINISHED
+   g50t-5849a774          78       73    93.6%       30       0  NOT_FINISHED
+   sk48-d8078629          61       38    62.3%       27       0  NOT_FINISHED
+   tn36-ef4dde99          32       32   100.0%       18       2  NOT_FINISHED
+
+   budgets configured ......................... [20, 30]
+   runs whose budget < level-1 baseline ....... 36 of 36
