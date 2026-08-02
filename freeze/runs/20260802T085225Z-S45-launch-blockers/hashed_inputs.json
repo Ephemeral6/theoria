@@ -1,0 +1,74 @@
+[
+ {
+  "path": "exam/endpoint.py",
+  "sha256": "957505d499555e13f9e7f643e6c430e2a7e170e30d3e5b7161a4e17597475116",
+  "exists": true,
+  "bytes": 19721
+ },
+ {
+  "path": "exam/tools/endpoint_verdict.py",
+  "sha256": "b0208f9d38e0f5e740d2458b19dbbc2033011f071a43df157a53878897057a47",
+  "exists": true,
+  "bytes": 11225
+ },
+ {
+  "path": "exam/grading/confusion_matrix.py",
+  "sha256": "65cfc208c905f8e1a2049b537a3545ba3275f73c9728cbb367cedb5a89157e34",
+  "exists": true,
+  "bytes": 20273
+ },
+ {
+  "path": "exam/grading/mark.py",
+  "sha256": "9ce0a66824c770d4b5eaa63163ba23602aa52d191b007f7a9340d411966dedf9",
+  "exists": true,
+  "bytes": 7737
+ },
+ {
+  "path": "exam/artifacts/endpoint_controls/oracle.answers.json",
+  "sha256": "235e10b9789840b574afa4d68bce30f8a0c6867c5571418960e16c8468a74f2e",
+  "exists": true,
+  "bytes": 25131
+ },
+ {
+  "path": "exam/artifacts/endpoint_controls/abstainer.answers.json",
+  "sha256": "ce7a73471946f67c6a67b4ca4d76e7a62a15719af6879a75228aa345aa1b6d44",
+  "exists": true,
+  "bytes": 1206
+ },
+ {
+  "path": "exam/artifacts/endpoint_controls/memoriser.answers.json",
+  "sha256": "4aba5b11fe5524229bee72a879c65cce9167503f4b8585fc632ba55025e293e4",
+  "exists": true,
+  "bytes": 4501
+ },
+ {
+  "path": "exam/artifacts/endpoint_controls/bluffer.answers.json",
+  "sha256": "efd33c136da4354467886d6de986afa1e5609f007e7871951c7b6547a537253e",
+  "exists": true,
+  "bytes": 1253
+ },
+ {
+  "path": "exam/artifacts/endpoint_controls/denier.answers.json",
+  "sha256": "d7abcc1e4c7c45f3678d96d95825c8d4c6b63d5593a7ca839d17f776e5316856",
+  "exists": true,
+  "bytes": 1217
+ },
+ {
+  "path": "exam/artifacts/endpoint_controls/overclaimer.answers.json",
+  "sha256": "544364810ed12f57b226ca7fe5f079857ae828c7d3e5a5f5d3059e29dcae3f75",
+  "exists": true,
+  "bytes": 1255
+ },
+ {
+  "path": "exam/artifacts/endpoint_controls/null.answers.json",
+  "sha256": "7e21a67f82e5a3ffb7c32004cb73c90acd213d513622aad6c797a3e0f1ec80ca",
+  "exists": true,
+  "bytes": 242
+ },
+ {
+  "path": "exam/artifacts/answers/p15-verdict-a2.cheater-v4.answers.json",
+  "sha256": "322c21514a8ac07a424e53317ab5f3e0dca076209d7df4b38a69eb00d184718b",
+  "exists": true,
+  "bytes": 2695
+ }
+]

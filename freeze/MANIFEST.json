@@ -7,10 +7,10 @@
     ],
     "over_ceiling": true,
     "present": true,
-    "programme_measured_usd": 250.0687,
+    "programme_measured_usd": 371.9131,
     "reading": "as frozen. `verify.sh` stage [15b] re-derives this table from the ledgers and is the only thing that can say whether it is stale; while [15b] is red for a moved balance, the number here is a FLOOR on the overspend, not the overspend.",
-    "remaining_measured_usd": -35.1687,
-    "remaining_nominal_usd": -39.1786,
+    "remaining_measured_usd": -157.0131,
+    "remaining_nominal_usd": -161.023,
     "source": "freeze/BUDGET_TABLE.json"
   },
   "endpoints": {
@@ -26,7 +26,7 @@
         "name": "判决题准确率（含特异度）",
         "slot": 2,
         "status": "in-family, not computable",
-        "why": "the marks are produced by `exam`'s grader against ground truth, not written by the arm. Blocked on STATS_RULES.md 9.15 / 9.16; 9.16 is a DISCRIMINATION defect (`memoriser` scores identically to ground truth), not a gaming one."
+        "why": "the marks are produced by `exam`'s grader against ground truth, not written by the arm. 9.15 and 9.16 CLEARED 2026-08-02 (S45) -- freeze ran both commands itself and the exit codes come apart, 3 for the abstainer and 4 for the memoriser. The slot still does not become computable, and the reason is bigger than the two rows that just closed: **§2.2/§2.2.1's confirmatory statistic has no implementation at all** -- it is a paired test over <m> per-game BA differences, and no code computes a per-game BA (the verdict paper is one hard-coded paper on synthetic world a2), no Wilcoxon signed-rank exists anywhere in the tree, and freeze/tier_conj.py:134 takes claim_sig/clean_sig as booleans that nothing produces. That is the same defect 9.14 registers for slot 1, and it had no row until S45 filed 9.28. Also outstanding on this slot: 9.25 (evaluation order -- withholding class-(ii) items converts 不成立 into 不可结论 at zero cost), 9.26 (the reason floor: `oracle` and `cheater-v4` are identical on every gated number and both credited), and 9.22 (which of §4.1.0's two boundaries is meant -- registered 2026-07-30 against this slot and never named here). 9.16 was a DISCRIMINATION defect, not a gaming one; its symptom no longer reproduces under 弃权计错 plus the class split, which is not the same as it having been closed."
       },
       {
         "name": "前载指数配对差",
@@ -37,7 +37,7 @@
     ],
     "family_divisor": 3,
     "in_confirmatory_family": 2,
-    "note": "Holm's divisor is 3 and does not follow the slot count down. `in_confirmatory_family` counts slots that may still carry a confirmatory claim; `computable_today` counts those whose launch blockers are cleared.",
+    "note": "Holm's divisor is 3 and does not follow the slot count down. `in_confirmatory_family` counts slots that may still carry a confirmatory claim; `computable_today` counts those whose launch blockers are cleared. BOTH NUMBERS ARE TYPED, NOT DERIVED -- nothing here reads launch_blockers.json, so clearing a row there moves nothing in this file by itself. Said plainly because the sentence above reads like a description of a computation and is not one (S45, 2026-08-02).",
     "slots": 3
   },
   "entries": [
@@ -48,11 +48,11 @@
       "note": "No `__version__` and no tag in the `theoria-arm` namespace, so the only handle is the commit. The ablation arm's loop is a separate implementation that the thirteen do not name and Theoria.md:376 makes mandatory; hashed here rather than left to be noticed later.",
       "paths": [
         {
-          "files": 14,
+          "files": 15,
           "hashed_from": "git-blob",
           "kind": "dir",
           "path": "theoria-arm/inner",
-          "sha256": "7eaccc50f3ab7f0464b56cfe7d4c2c629f717a3fffe295deb95e15a14d88b952",
+          "sha256": "c9528048fd391f6fc78c797a47d93d90c6b207dbb2dd883e296e7e48734833e0",
           "tracked": true
         },
         {
@@ -60,7 +60,7 @@
           "hashed_from": "git-blob",
           "kind": "dir",
           "path": "theoria-arm/harness",
-          "sha256": "77f0ecf5136ad8216663e84078a21ec9001a55c80378928a792b20176230c191",
+          "sha256": "4948adaf8b5d134a68a71b29b8f4d37e8313ebbce42b49a7c5fcd859bd74a8b5",
           "tracked": true
         },
         {
@@ -72,11 +72,11 @@
           "tracked": true
         },
         {
-          "files": 15,
+          "files": 17,
           "hashed_from": "git-blob",
           "kind": "dir",
           "path": "theoria-arm/armtools",
-          "sha256": "78616ebe2ac9065948bf51d40aa51e27d7fd54aa9a513a392ae6c5a6b3f9b277",
+          "sha256": "42bc23ab740dca840f1de971201ee48794a2db3a0739e3675d6aba8f1d75b0cd",
           "tracked": true
         },
         {
@@ -158,7 +158,7 @@
           "hashed_from": "git-blob",
           "kind": "dir",
           "path": "theory-compiler/src/theory_compiler/generators",
-          "sha256": "f82681dbc3d3bb6d19287b25c67154d0ed6b87f40c699e5d70114f3b5f8c4a0a",
+          "sha256": "3162ce0356e968e6c011cbd52a4f0ec69b89359ce18f63dc814dbf6ac1ef0044",
           "tracked": true
         },
         {
@@ -207,7 +207,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "baseline-arms/harness/bare_cc.py",
-          "sha256": "f33082a15a66830d818ea8ff2089a6f956f41968bafc80a3d7d73fa92c7b2180",
+          "sha256": "f5cc4a1336841bcc983dcec8f12395fbdbbbc09cb4170c7b5fe2a7c4c0ed5ab3",
           "tracked": true
         }
       ],
@@ -281,7 +281,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "theoria-arm/inner/probe.py",
-          "sha256": "726d9261964183a5637cffe18febfcfea33d4f6e0af4e77fed425661510b2d65",
+          "sha256": "7ebbab7f1fc81818b4d2d9b9fa3232edad53d4a0714e7c5399c50def55c26821",
           "tracked": true
         },
         {
@@ -513,7 +513,7 @@
       "budget_hold": {
         "declared_status": "blocked",
         "held": true,
-        "why": "the programme's measured balance is $250.0687 against a $214.9 ceiling (`freeze/BUDGET_TABLE.json`), so remaining is $-35.1687. A 预算表 that reads `ready` for an overdrawn programme is a false record in the direction that flatters. This hold clears when the number does, not when the prose does."
+        "why": "the programme's measured balance is $371.9131 against a $214.9 ceiling (`freeze/BUDGET_TABLE.json`), so remaining is $-157.0131. A 预算表 that reads `ready` for an overdrawn programme is a false record in the direction that flatters. This hold clears when the number does, not when the prose does."
       },
       "n": 12,
       "name": "预算表",
@@ -573,7 +573,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "baseline-arms/STATUS.md",
-          "sha256": "5ddb6f1d32036e6acbce983763d40f94d2725f39694acd710fa9d02350a65791",
+          "sha256": "c55e9e26e5eab28a317f3d02a9a801eb2253b0ae1d91dae748d12f4374571215",
           "tracked": true
         },
         {
@@ -581,7 +581,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "baseline-arms/DECISIONS.md",
-          "sha256": "849ec37d2f45a16684a5aa80fe6fc7c2c121de8a6492f2c08fec0eba73fb6eef",
+          "sha256": "c160b36b2747179105db60678789c6ceddaebe4aa22d29eb60ee51646ae11647",
           "tracked": true
         },
         {
@@ -680,8 +680,8 @@
   ],
   "format": "theoria/freeze-manifest/1",
   "generated_from": {
-    "branch": "z/freeze-e2u3",
-    "commit": "e8345affa0d500b8358e19fab65b8e25f615c7f9",
+    "branch": "agent/s45-launch-blockers-915-916-and-the-reason-floor",
+    "commit": "1e5b3f00dfb40fcc73f582a5de2390d1d3466844",
     "dirty": true
   },
   "source": "Theoria.md:368 冻结清单（13 项）+ 两项清单外补录",
@@ -695,6 +695,6 @@
     "items": 13,
     "partial": 10,
     "ready": 0,
-    "statement": "0 of the 13 freeze-list items are ready. The campaign may not start until every one is: `Theoria.md:368` requires the list committed and hashed *before the first game*, and an item that is `partial` is one whose bytes can still change without anybody noticing. Separately and independently of the item count: 2 of the 3 primary-endpoint slots may still carry a confirmatory claim (slot 3, the front-loading index paired difference, was withdrawn on 2026-08-01, STATS_RULES.md 3.0), and 0 of them can be computed today. Holm's divisor stays 3. See `endpoints`. And the money: the programme has already spent $250.0687 against a $214.9 ceiling, i.e. $-35.1687 remaining -- a NEGATIVE balance, and a floor on it rather than the figure, because stage [15b] says the ledgers have moved past this table. Item(s) 12 are therefore held at `blocked` regardless of what their prose says; a 预算表 that reads `ready` for an overdrawn programme is worse than one that reads blocked. Nothing here repairs the overrun -- the ruling on the money is the owner's and is pending."
+    "statement": "0 of the 13 freeze-list items are ready. The campaign may not start until every one is: `Theoria.md:368` requires the list committed and hashed *before the first game*, and an item that is `partial` is one whose bytes can still change without anybody noticing. Separately and independently of the item count: 2 of the 3 primary-endpoint slots may still carry a confirmatory claim (slot 3, the front-loading index paired difference, was withdrawn on 2026-08-01, STATS_RULES.md 3.0), and 0 of them can be computed today. Holm's divisor stays 3. See `endpoints`. And the money: the programme has already spent $371.9131 against a $214.9 ceiling, i.e. $-157.0131 remaining -- a NEGATIVE balance, and a floor on it rather than the figure, because stage [15b] says the ledgers have moved past this table. Item(s) 12 are therefore held at `blocked` regardless of what their prose says; a 预算表 that reads `ready` for an overdrawn programme is worse than one that reads blocked. Nothing here repairs the overrun -- the ruling on the money is the owner's and is pending."
   }
 }

@@ -345,7 +345,11 @@ ENDPOINTS = {
     "note": ("Holm's divisor is 3 and does not follow the slot count down. "
              "`in_confirmatory_family` counts slots that may still carry a "
              "confirmatory claim; `computable_today` counts those whose "
-             "launch blockers are cleared."),
+             "launch blockers are cleared. BOTH NUMBERS ARE TYPED, NOT "
+             "DERIVED -- nothing here reads launch_blockers.json, so clearing "
+             "a row there moves nothing in this file by itself. Said plainly "
+             "because the sentence above reads like a description of a "
+             "computation and is not one (S45, 2026-08-02)."),
     "detail": [
         {"slot": 1, "name": "U3 达成率",
          "status": "in-family, not computable",
@@ -356,9 +360,29 @@ ENDPOINTS = {
         {"slot": 2, "name": "判决题准确率（含特异度）",
          "status": "in-family, not computable",
          "why": "the marks are produced by `exam`'s grader against ground "
-                "truth, not written by the arm. Blocked on STATS_RULES.md "
-                "9.15 / 9.16; 9.16 is a DISCRIMINATION defect (`memoriser` "
-                "scores identically to ground truth), not a gaming one."},
+                "truth, not written by the arm. 9.15 and 9.16 CLEARED "
+                "2026-08-02 (S45) -- freeze ran both commands itself and the "
+                "exit codes come apart, 3 for the abstainer and 4 for the "
+                "memoriser. The slot still does not become computable, and "
+                "the reason is bigger than the two rows that just closed: "
+                "**§2.2/§2.2.1's confirmatory statistic has no implementation "
+                "at all** -- it is a paired test over <m> per-game BA "
+                "differences, and no code computes a per-game BA (the verdict "
+                "paper is one hard-coded paper on synthetic world a2), no "
+                "Wilcoxon signed-rank exists anywhere in the tree, and "
+                "freeze/tier_conj.py:134 takes claim_sig/clean_sig as "
+                "booleans that nothing produces. That is the same defect 9.14 "
+                "registers for slot 1, and it had no row until S45 filed "
+                "9.28. Also outstanding on this slot: 9.25 (evaluation order "
+                "-- withholding class-(ii) items converts 不成立 into "
+                "不可结论 at zero cost), 9.26 (the reason floor: `oracle` and "
+                "`cheater-v4` are identical on every gated number and both "
+                "credited), and 9.22 (which of §4.1.0's two boundaries is "
+                "meant -- registered 2026-07-30 against this slot and never "
+                "named here). 9.16 was a DISCRIMINATION defect, not a gaming "
+                "one; its symptom no longer reproduces under 弃权计错 plus "
+                "the class split, which is not the same as it having been "
+                "closed."},
         {"slot": 3, "name": "前载指数配对差",
          "status": "WITHDRAWN 2026-08-01 (STATS_RULES.md 3.0)",
          "why": "the value is a total function of a record the arm lays out, "

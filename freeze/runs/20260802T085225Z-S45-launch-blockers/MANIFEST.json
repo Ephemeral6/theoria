@@ -1,0 +1,170 @@
+{
+ "base_commit": "9e478dd81b880a8b9053d65185e80e3e590f0077",
+ "branch": "agent/s45-launch-blockers-915-916-and-the-reason-floor",
+ "files": [
+  {
+   "bytes": 20236,
+   "path": "freeze/runs/20260802T085225Z-S45-launch-blockers/RUN_STATE.md",
+   "role": "run-artefact",
+   "sha256": "93353dea086d851ad599897cb2a6b8cf98a41dc7e8d571cc35ceb3c3f4703dff"
+  },
+  {
+   "bytes": 7259,
+   "path": "freeze/runs/20260802T085225Z-S45-launch-blockers/_add_residuals.py",
+   "role": "run-artefact",
+   "sha256": "1d39a49f8990dcc5527ebe3cd239701fff630b61fe0f4a77d3e4d9697f731bdf"
+  },
+  {
+   "bytes": 3827,
+   "path": "freeze/runs/20260802T085225Z-S45-launch-blockers/_mkmanifest.py",
+   "role": "run-artefact",
+   "sha256": "bc172e37fadc5ff87f816a7fc54d1a60307e510dd2eb76d2ebf69937edbeb805"
+  },
+  {
+   "bytes": 6281,
+   "path": "freeze/runs/20260802T085225Z-S45-launch-blockers/_sync_append.py",
+   "role": "run-artefact",
+   "sha256": "3b40b06354d1545ef98b5bc7c6e3f7650cad4eb15019855d076d65fe7ea8f8d6"
+  },
+  {
+   "bytes": 3731,
+   "path": "freeze/runs/20260802T085225Z-S45-launch-blockers/endpoint_exit_codes.txt",
+   "role": "run-artefact",
+   "sha256": "c6b13e7694b436b159bbd092a859e9c1ff363f723abe3bb24d6f4307bcdcac80"
+  },
+  {
+   "bytes": 8802,
+   "path": "freeze/runs/20260802T085225Z-S45-launch-blockers/gate_before.txt",
+   "role": "run-artefact",
+   "sha256": "0146ce91654158933a66cebc46cf0b4d3253765df854784f0d2446a03d41305b"
+  },
+  {
+   "bytes": 1849,
+   "path": "freeze/runs/20260802T085225Z-S45-launch-blockers/gate_selftest.txt",
+   "role": "run-artefact",
+   "sha256": "4576a9224fd121978016cd24e8f6e7e67f9eeb73a3b0ccb4a4410b5f9a85b791"
+  },
+  {
+   "bytes": 2231,
+   "path": "freeze/runs/20260802T085225Z-S45-launch-blockers/hashed_inputs.json",
+   "role": "run-artefact",
+   "sha256": "4caacadfd7a20cbf07942651a225537a2fa2f352acbf68c52bb64ab242d266b9"
+  },
+  {
+   "bytes": 2695,
+   "path": "exam/artifacts/answers/p15-verdict-a2.cheater-v4.answers.json",
+   "role": "adjudicated-input",
+   "sha256": "322c21514a8ac07a424e53317ab5f3e0dca076209d7df4b38a69eb00d184718b"
+  },
+  {
+   "bytes": 1206,
+   "path": "exam/artifacts/endpoint_controls/abstainer.answers.json",
+   "role": "adjudicated-input",
+   "sha256": "ce7a73471946f67c6a67b4ca4d76e7a62a15719af6879a75228aa345aa1b6d44"
+  },
+  {
+   "bytes": 1253,
+   "path": "exam/artifacts/endpoint_controls/bluffer.answers.json",
+   "role": "adjudicated-input",
+   "sha256": "efd33c136da4354467886d6de986afa1e5609f007e7871951c7b6547a537253e"
+  },
+  {
+   "bytes": 1217,
+   "path": "exam/artifacts/endpoint_controls/denier.answers.json",
+   "role": "adjudicated-input",
+   "sha256": "d7abcc1e4c7c45f3678d96d95825c8d4c6b63d5593a7ca839d17f776e5316856"
+  },
+  {
+   "bytes": 4501,
+   "path": "exam/artifacts/endpoint_controls/memoriser.answers.json",
+   "role": "adjudicated-input",
+   "sha256": "4aba5b11fe5524229bee72a879c65cce9167503f4b8585fc632ba55025e293e4"
+  },
+  {
+   "bytes": 242,
+   "path": "exam/artifacts/endpoint_controls/null.answers.json",
+   "role": "adjudicated-input",
+   "sha256": "7e21a67f82e5a3ffb7c32004cb73c90acd213d513622aad6c797a3e0f1ec80ca"
+  },
+  {
+   "bytes": 25131,
+   "path": "exam/artifacts/endpoint_controls/oracle.answers.json",
+   "role": "adjudicated-input",
+   "sha256": "235e10b9789840b574afa4d68bce30f8a0c6867c5571418960e16c8468a74f2e"
+  },
+  {
+   "bytes": 1255,
+   "path": "exam/artifacts/endpoint_controls/overclaimer.answers.json",
+   "role": "adjudicated-input",
+   "sha256": "544364810ed12f57b226ca7fe5f079857ae828c7d3e5a5f5d3059e29dcae3f75"
+  },
+  {
+   "bytes": 19721,
+   "path": "exam/endpoint.py",
+   "role": "adjudicated-input",
+   "sha256": "957505d499555e13f9e7f643e6c430e2a7e170e30d3e5b7161a4e17597475116"
+  },
+  {
+   "bytes": 20273,
+   "path": "exam/grading/confusion_matrix.py",
+   "role": "adjudicated-input",
+   "sha256": "65cfc208c905f8e1a2049b537a3545ba3275f73c9728cbb367cedb5a89157e34"
+  },
+  {
+   "bytes": 7737,
+   "path": "exam/grading/mark.py",
+   "role": "adjudicated-input",
+   "sha256": "9ce0a66824c770d4b5eaa63163ba23602aa52d191b007f7a9340d411966dedf9"
+  },
+  {
+   "bytes": 11225,
+   "path": "exam/tools/endpoint_verdict.py",
+   "role": "adjudicated-input",
+   "sha256": "b0208f9d38e0f5e740d2458b19dbbc2033011f071a43df157a53878897057a47"
+  },
+  {
+   "bytes": 62865,
+   "path": "freeze/CLAIMS_TEXT.md",
+   "role": "delivered",
+   "sha256": "ece50f70b73b29eaa52f3e604dff83f8519be3634f6fd2e8587893fd2b593e3f"
+  },
+  {
+   "bytes": 101295,
+   "path": "freeze/RESIDUALS.json",
+   "role": "delivered",
+   "sha256": "2a3872f50c711b014277d53c84ef9394fc4b17b5f3b8ba46245251fa1060e10a"
+  },
+  {
+   "bytes": 192287,
+   "path": "freeze/STATS_RULES.md",
+   "role": "delivered",
+   "sha256": "b2c77073599b3b534bd60cba24656a23d95dc9f1946aa060389e6cc00609c7a1"
+  },
+  {
+   "bytes": 45050,
+   "path": "freeze/build_manifest.py",
+   "role": "delivered",
+   "sha256": "01bb1b3fe6d06a42f6c18dd2a997e81386fa1a8ddbaa8662f9d41af2902b4deb"
+  },
+  {
+   "bytes": 34517,
+   "path": "freeze/launch_blockers.json",
+   "role": "delivered",
+   "sha256": "7d4178af40218db399ec4becfcb14585e9aaed6d1c60baeb8bbf2b824cf62a8b"
+  },
+  {
+   "bytes": 27909,
+   "path": "freeze/launch_gate.py",
+   "role": "delivered",
+   "sha256": "3c7adfffb1bf97b6c455b52f65318c85e3964a4bdee291bb7625d7846cc08355"
+  }
+ ],
+ "head_commit": "1e5b3f00dfb40fcc73f582a5de2390d1d3466844",
+ "prompt_id": "S45-launch-blockers-915-916-and-the-reason-floor",
+ "spend_note": "offline throughout; no API call, no game contact, sealed pile untouched (21 ids scanned against every changed file, zero hits)",
+ "spend_usd": 0.0,
+ "territory": "freeze",
+ "utc": "2026-08-02T08:52:25Z",
+ "what": "freeze's own ruling on launch blockers 9.15 and 9.16, on ⟨c_min⟩, and on the reason-floor fork raised by exam's 2026-08-01 ask. Every verdict here was produced by running the command, not by reading the ask.",
+ "worker": "W-9201"
+}

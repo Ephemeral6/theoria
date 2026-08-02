@@ -35,21 +35,44 @@
     },
     "9.15": {
       "subject": "「弃权计错」与它点名的实现方向相反",
-      "state": "unimplemented",
-      "why": "STATS_RULES.md §2.2 pre-registers 弃权计错 and names exam/grading/mark.py:95 confusion() as the implementation. That implementation does the opposite and says so: abstentions (:125-130), unanswered submissions (:120-124) and illegible answers (:131-144) each `continue` out of the tp/fp/tn/fn tally, so there are THREE exits from the specificity denominator, not one. exam/DECISIONS.md D-EX-015 records the opposite semantics as 'the right call'. The cheapest rescue reading of an unfavourable result therefore costs ZERO: abstain on the class-iii items you are unsure of and the cited implementation removes them from the denominator. Worse, _rate (:155-156) returns None on an empty denominator (confusion_matrix.py:23-26 makes this a design principle), and `None < ⟨S_min⟩` is not false but undefined -- so the one-vote specificity veto has no total order and can be made structurally untriggerable.",
+      "state": "implemented",
+      "why": "CLEARED 2026-08-02 by freeze (S45), on freeze's own run of the command below rather than on the exam track's self-report. The conversion layer asked for by `clears_when` landed on master as `exam/endpoint.py:abstain_as_wrong` (:138-191) with `_escapes` (:109-135) closing all three exits, and it does not merely construct the identity -- it ASSERTS it (:155-163) against each cell's own declared class sizes. Measured by this ticket over all seven controls in exam/artifacts/endpoint_controls/: tp+fn = 9 and tn+fp = 8 (the paper's class sizes) in every one, and in every by_class and by_board_size cell. The registering defect, kept verbatim so the clearance can be argued with: 'STATS_RULES.md §2.2 pre-registers 弃权计错 and names exam/grading/mark.py:95 confusion() as the implementation. That implementation does the opposite and says so: abstentions (:125-130), unanswered submissions (:120-124) and illegible answers (:131-144) each `continue` out of the tp/fp/tn/fn tally, so there are THREE exits from the specificity denominator, not one. exam/DECISIONS.md D-EX-015 records the opposite semantics as the right call. The cheapest rescue reading of an unfavourable result therefore costs ZERO: abstain on the class-iii items you are unsure of and the cited implementation removes them from the denominator. Worse, _rate (:155-156) returns None on an empty denominator (confusion_matrix.py:23-26 makes this a design principle), and `None < ⟨S_min⟩` is not false but undefined -- so the one-vote specificity veto has no total order and can be made structurally untriggerable.' Both halves are answered: the `abstainer` control, which abstains on every item, now reads specificity 0.000 rather than 1.000 or None, so the 一票否决 fires on it; and the denominators are properties of the PAPER, not of the examinee (confusion_matrix.py:117-118), so no submission can empty one. D-EX-015 is not superseded and did not need to be -- §2.3.1 ruling 2 offered two routes and this is the first: a layer over `mark.confusion`, not an edit to it, so the marker keeps reporting what it observed.",
       "clears_when": "A conversion layer (`abstain_as_wrong`) exists and is hashed, counting abstained/unanswered/unclassified into the error cell on the corresponding truth side, so that tp+fn and tn+fp equal the class sizes and neither rate is ever undefined; OR the exam track changes mark.confusion's semantics and D-EX-015 is superseded. Either way the row clears with a command and two targets, per this file's contract -- not by editing this entry.",
+      "cmd": [
+        "python",
+        "-m",
+        "exam.tools.endpoint_verdict",
+        "--submission",
+        "{target}"
+      ],
+      "positive_target": "exam/artifacts/endpoint_controls/oracle.answers.json",
+      "negative_target": "exam/artifacts/endpoint_controls/abstainer.answers.json",
+      "negative_exit": 3,
       "negative_target_when_implemented": "an examinee transcript that abstains on every class-iii item: the layer must score it as wrong, not as 1.000",
-      "negative_target_exists": false,
-      "note": "Invisible to verify.sh stage [16] by construction: 弃权计错 IS stated in both frozen files, so the wording gate is green on it. This is a rule-vs-implementation defect, which is a different gate. Registered by RES-1, E-WORDING, 2026-07-29; argued in STATS_RULES.md §2.3.1."
+      "negative_target_exists": true,
+      "hashed": "The layer is hashed at freeze/runs/20260802T085225Z-S45-launch-blockers/MANIFEST.json (exam/endpoint.py sha256 957505d499555e13f9e7f643e6c430e2a7e170e30d3e5b7161a4e17597475116, exam/tools/endpoint_verdict.py b0208f9d38e0f5e740d2458b19dbbc2033011f071a43df157a53878897057a47). It was hashed in NO manifest anywhere before that -- the seven control transcripts were (exam/runs/20260801T0000Z-EP-endpoint2-prereg/MANIFEST.json, all seven verified against disk today, zero drift), but the code that reads them was not, which is the wrong half to leave unhashed. Recorded here because `clears_when` says 'exists and is hashed' and the gate cannot check the second conjunct.",
+      "note": "Invisible to verify.sh stage [16] by construction: 弃权计错 IS stated in both frozen files, so the wording gate is green on it. This is a rule-vs-implementation defect, which is a different gate. Registered by RES-1, E-WORDING, 2026-07-29; argued in STATS_RULES.md §2.3.1. Cleared by W-9201, S45, 2026-08-02 -- exam's ask of 2026-08-01 (monitor/inbox/20260801T0000Z-exam-endpoint2-prereg-and-two-launch-blockers.md) proposed this shape and this ticket verified it; the ask's own premise that the work sat on an unmerged branch had by then expired."
     },
     "9.16": {
       "subject": "判决题 BA 分不出 `memoriser` 与真值",
-      "state": "unimplemented",
+      "state": "implemented",
+      "cleared": "CLEARED 2026-08-02 by freeze (S45), on freeze's own run. Every limb of `clears_when` was checked separately. (1) Both mandatory controls run and are hashed before any sealed game: `bluffer` 不成立 (exit 3), `memoriser` NOT 成立 (exit 4, 不可结论); all seven control transcripts are recorded in exam/runs/20260801T0000Z-EP-endpoint2-prereg/MANIFEST.json:14-20 and every one reproduces against disk today with zero drift, re-verified by this ticket. (2) The class-split adjudication is in force: `exam/endpoint.py:349` reads the class-(ii) cell of the per-class table, and a breach routes to VERDICT_INCONCLUSIVE (exit 4), not to 不成立 -- the distinction §2.3.2 ruling 2 makes on purpose, and this row's `negative_exit: 4` is what now witnesses it mechanically rather than by eye. (3) ⟨c_min⟩ is no longer needs_human: STATS_RULES.md §2.3.3 裁定 4 fixes it at 0.5, whose executable meaning is 'attempt at least 2 of the 4 class-(ii) items'; the shipped C_MIN (exam/endpoint.py:83) already carries that value, labelled a proposal, so freeze's ruling and the code agree numerically today. WORTH RECORDING BECAUSE IT LOOKS LIKE A REASON TO REOPEN AND IS NOT: the symptom this row was registered for -- memoriser's pooled pair reading 1.000/1.000, 'numerically identical to ground truth' -- NO LONGER REPRODUCES. Under 弃权计错 plus the class split it reads 0.556/0.625. The row does not clear because the symptom went away; it clears because the two named controls were run and the coverage exit is in force. A symptom that stops reproducing is not evidence that the defect was closed, and the distinction is the whole reason this file refuses to believe its own prose.",
       "why": "The pre-registered scalar is BA = (sensitivity + specificity)/2 taken from the confusion half, with the exam's total score demoted to exploratory (§2.2, citing Theoria.md:259 '这里考的是理由'). The measurement contradicts that choice. exam/DECISIONS.md:371-374: the memoriser's pooled pair is sensitivity 1.000 / specificity 1.000, 'numerically identical to ground truth', while it abstains on 4 of 4 large-space items -- so BA = 1.000 for an arm that has never answered the class the campaign exists to test. exam/STATUS.md:53-56: `oracle` and `cheater-v4` are identical in EVERY cell of the class split and differ only in the score -- the very quantity §2.2 demotes. This is not a wording that can be gamed; it is a wording that, executed correctly, returns the wrong conclusion.",
       "clears_when": "Both mandatory negative controls run and are hashed before any sealed game: `bluffer` must be judged 不成立, and `memoriser` must NOT be judged 成立. Plus the class-split adjudication is in force with a ⟨c_min⟩ floor on class (ii) coverage_positive, whose breach routes to 不可结论 (not 不成立). ⟨c_min⟩ is itself needs_human.",
+      "cmd": [
+        "python",
+        "-m",
+        "exam.tools.endpoint_verdict",
+        "--submission",
+        "{target}"
+      ],
+      "positive_target": "exam/artifacts/endpoint_controls/oracle.answers.json",
+      "negative_target": "exam/artifacts/endpoint_controls/memoriser.answers.json",
+      "negative_exit": 4,
       "negative_target_when_implemented": "exam's `memoriser` examinee: the endpoint must refuse to judge it 成立",
       "negative_target_exists": true,
-      "note": "Supersedes and tightens 9.12, which pinned `bluffer` alone -- and `bluffer` is already killed by the specificity floor, so it was the control that did not need to be run. Registered by RES-1, E-WORDING, 2026-07-29; argued in STATS_RULES.md §2.3.2."
+      "note": "Supersedes and tightens 9.12, which pinned `bluffer` alone -- and `bluffer` is already killed by the specificity floor, so it was the control that did not need to be run. Registered by RES-1, E-WORDING, 2026-07-29; argued in STATS_RULES.md §2.3.2. Cleared by W-9201, S45, 2026-08-02. `negative_exit` is 4 and not merely 'non-zero' on purpose: `bluffer` also rejects, at 3, and a row that could not tell 3 from 4 would pass with the two controls swapped -- which would silently assert that an arm that never answered HAD been refuted, the exact thing §2.3.2 ruling 2 forbids.",
+      "what_this_row_does_not_buy": "Three things, none of them registered here when this row was written, all now separately on the board. (a) The evaluation ORDER: `exam/endpoint.py:adjudicate` tests coverage BEFORE the BA floor, so an arm heading for 不成立 converts itself to 不可结论 by withholding class-(ii) items at zero cost -- see §9.25. (b) The REASON route: this row closed the coverage route only; `oracle` and `cheater-v4` remain identical on every gated number -- see §9.26. (c) COMPETENCE on class (ii): `coverage_positive` counts attempts, not correct answers, so no value of ⟨c_min⟩ can require the arm to be right about the class the campaign exists to test -- see §9.27."
     },
     "9.17": {
       "subject": "⟨R⟩（每格重跑上限）未定死、且不在封印范围内",
@@ -104,6 +127,49 @@
       "negative_target_when_implemented": "把 §4.1.0 的两式改回不一致时，tier_conj.py --verify 必须变红并点名会翻转裁决的对数",
       "negative_target_exists": true,
       "note": "由 RES-1 在 S4-E23-TIERS（2026-07-30）登记。发现路径值得记：本条的登记初稿写「这个分歧动不了 §4.4」，是 tier_conj.py --verify 当场把那句话打红的——一句只在举例上成立的话被写成了一般结论。"
+    },
+    "9.25": {
+      "subject": "三道闸的求值次序：覆盖率排在 BA 之前，于是弃答能把「不成立」换成「不可结论」",
+      "state": "unimplemented",
+      "why": "§9.18 / §9.20 / §9.21 是同一条系统性缺陷的三例（凡「没能测到」能软化一个不利裁决的地方，都必须先问那个「没能」是不是臂说了算的）。这是第四例，而且是在清 9.16 的过程中量出来的。`exam/endpoint.py:adjudicate` 的次序是 特异度 → 覆盖率 → BA；覆盖率破闸走不可结论、BA 破闸走不成立，且第 348 行的 `if verdict == VERDICT_CREDITED` 使覆盖率先退出后 BA 根本不评。于是一个注定按 BA 判不成立的臂，只要弃答第 (ii) 类就换到不可结论。实测（270 种能力配置 × 4 档弃答）：35/270 可用；所需弃答题数随 ⟨c_min⟩ 升高而下降（0.25 要 4 题、0.5 要 3 题、1.0 只要 1 题），即抬高地板反而把逃生门开大。且代价严格为零——弃权计错已把弃答记成 `fn`，对本来就答错的臂灵敏度/特异度/BA 一位不动（实测：cov 1.00→0.00 而 sens 0.4444、spec 0.5000、BA 0.4722 三个数完全不变，判定从不成立变不可结论）。第 (ii) 类答不答完全是臂说了算，所以保守分支唯一。现行代码的 docstring 为「覆盖率排第二而不是第一」给了理由，从未为「覆盖率排在 BA 之前」给过理由——那一位是 exam 自己选的，不是 §2.3.2 定的。",
+      "clears_when": "`exam/endpoint.py:adjudicate` 的求值次序改为 特异度 → BA → 理由 → 覆盖率（STATS_RULES.md §2.3.3 裁定 5 与 §2.3.4 裁定 6 同批），即所有走「不成立」的闸排在走「不可结论」的覆盖率闸之前。验收：一份 BA 低于地板、且弃答全部第 (ii) 类的答卷必须判为不成立（退 3），不得判为不可结论（退 4）。改序后实测 0/270 配置可靠弃答改善裁决，七个对照判定不变，9.16 的 clears_when 照旧满足，三道地板的留一验证照旧。",
+      "negative_target_when_implemented": "一份 BA 在地板之下、且第 (ii) 类一题未答的答卷：必须退 3（不成立），退 4 即闸未改",
+      "negative_target_exists": false,
+      "cost_recorded_not_hidden": "改序后有 15/54 种「弃答全部第 (ii) 类」的配置从不可结论翻成不成立，其中 6 种若不计弃权本可越过 BA 地板；最坏一例是第 (i) 类 4/5、第 iii 类 4/8、第 (ii) 类一题未答的臂（观测对 0.800/0.500，折算后 BA 0.4722）。这不是新次序造的，是 §2.3.1 弃权计错本来就有的后果，旧次序先退出把它遮住了；反对它其实是反对弃权计错，而弃权计错的理由已预注册。两种缓和都试过且都更糟：按最好情形补记会重开逃生门，把弃答的第 (ii) 类移出分母能把一个本应不成立的臂送到成立。",
+      "owner_hint": "exam",
+      "note": "由 W-9201 在 S45（2026-08-02）登记，裁定见 STATS_RULES.md §2.3.3 裁定 5。实现在 exam 领地，本轨道不改；已按跨领地纪律走 monitor/inbox/。"
+    },
+    "9.26": {
+      "subject": "理由地板：终点二分不出「附证书的正确判决」与「无理由的正确判决」",
+      "state": "unimplemented",
+      "why": "exam 在 2026-08-01 的 ask §5 把这条交上来并明说自己不该裁（那会是 exam 从自己领地内部推翻一条 freeze 的裁定）。实测，本单复跑确认：`oracle` 与 `cheater-v4` 在每一个受闸的数上逐位相同——灵敏度 1.000 / 特异度 1.000 / BA 1.000 / 第 (ii) 类覆盖率 1.000——两者都判成立、都退 0；唯一把它们分开的是 `certified_share` 1.000 对 0.000，而那正是 §2.2 降为探索性的那一列。`cheater-v4` 不是臆造的对手：它在盘上、被 git 跟踪，自报 certificates_submitted 0、sheet_only true，且它拿到的只有卷面——比任何真臂都少。§2.3.2 已经把这件事写进「加重情节」，但它开出的三条裁定全部只封覆盖率那条路，没有一条封理由那条路。本条是缺的那第四条。",
+      "clears_when": "STATS_RULES.md §2.3.4 裁定 6 的理由地板在 `exam/endpoint.py` 落地：判据为「第 (i) 类判对的不可解题数 ≥ 1 且其中附有 check_certificate 接受的证书者 = 0 → 判不成立」，数的是个数不是比例（`certified_share` 的分母是判对的子集，比例形式会继承 exam/STATUS.md 弱点 24），阈值 0 且不可调，路由到不成立，排在覆盖率闸之前。另须两个附条件：(1) 新增一个可重生的合成对照（建议 `mute-oracle`：判决全对、一条证书不交），因为七个现有对照没有一个单独触发这道闸，而 exam/prereg.py:338-343 的留一纪律逐字禁止携带一道从未被观测到做过任何事的地板；(2) `reason_quality` 须按类拆分（现行 exam/endpoint.py:227-240 把第 i 与第 ii 类混在一起），约四行过滤，但不在树上。",
+      "cmd": [
+        "python",
+        "-m",
+        "exam.tools.endpoint_verdict",
+        "--submission",
+        "{target}"
+      ],
+      "positive_target": "exam/artifacts/endpoint_controls/oracle.answers.json",
+      "negative_target": "exam/artifacts/answers/p15-verdict-a2.cheater-v4.answers.json",
+      "negative_exit": 3,
+      "negative_target_when_implemented": "`cheater-v4`——一个拿到卷面、别的什么都没有、一条证书不交的读者：必须判为不成立（退 3）",
+      "negative_target_exists": true,
+      "state_note": "本行今天清不掉，而这是正确状态：负靶 `cheater-v4` 现在退 0（判成立），正是这道闸存在的理由。命令与两个靶子先写在这里，使「实现了没有」由跑一次回答，而不是由读一段话回答。靶子的一处残余照录：`cheater-v4` 不可重生（emit_controls() 只写七个合成对照，--examinee cheater-v4 退 2），且它躺在 artifacts/answers/ 里会被 _real_submissions 当作真臂扫进去——所以上面第 (1) 条要的那个可重生对照落地后，本行的负靶应改挂它，`cheater-v4` 退回作证据。",
+      "owner_hint": "exam",
+      "note": "由 W-9201 在 S45（2026-08-02）裁定并登记，论证见 STATS_RULES.md §2.3.4。裁定为 (a) 而非 (b) 的决定性理由不是「理由更重要」，是 CLAIMS_TEXT.md C4 成立版第 585-587 行**已经**逐字印着「Theoria 的正确判决附有机器可查的证书」——没有 ⟨…⟩、没有统计量、没有任何闸能使它为真或为假，而机械规程第 4/5 步要求成立版照抄不改一个字。于是不加闸的那条路才是对作者有利的那条：它把闸本该买的东西无条件预先记在账上。见同批的 §9.27 与 CLAIMS_TEXT.md C4 本次修订。"
+    },
+    "9.28": {
+      "subject": "主终点二的确证统计量本身没有任何实现——与 §9.14 对终点一记的是同一个缺陷",
+      "state": "unimplemented",
+      "why": "§2.2/§2.2.1 的确证量是「逐局算 BA、跨 ⟨m⟩ 局做配对检验、clean 层复算 ⟨m_clean⟩ 对、Holm 校正」。树上：没有任何代码算逐局 BA（判决题样卷是硬编码的一份，`exam/papers/verdict.py:89` PAPER_ID / `:106` WORLD_ID='a2' / `:1066` build() 不带参数，磁盘上判决题样卷只有一份）；全仓 `def wilcoxon` 零命中，scipy.stats 除 engine-rig 外从未 import；唯一的符号检验在 battery/audit/discriminate.py，跑的是电池指标的能力梯度，且其 docstring 自陈「there is no game to pair on」；而 `freeze/tier_conj.py:134` 的两层合成把 `claim_sig`/`clean_sig` 当**布尔输入**收下，其 docstring 逐字写着「本函数不做统计」——那两个布尔没有任何东西生产。§9.13 更已经为一个从没被写过的 `scipy.stats.wilcoxon` 调用预注册了 method 的取舍（同一组数据上 exact 与 approx 给 p=0.5417 与 0.0266，跨过 α 两次）。这正是 §9.14 的判据逐字所指：为一个没有任何实现的量冻结统计裁决规则，冻的是一句不可执行的话。",
+      "clears_when": "与 §9.14 不同，本条**不**要求开跑前真算出一次——`Theoria.md:372` 明令考卷子集 ⟨m⟩ 局在主表跑完之后才允许研究并构造变体，所以要求「先算一次真数据」是自相矛盾的。要求的是**验收形状**，它不需要任何封存数据：一个聚合器存在并被哈希，输入是逐臂的逐局 BA 向量，输出是配对检验统计量、p、以及 §4.4.3 六行所需的 claim_sig/clean_sig，且 §9.13 的 method 取舍在那份代码里钉死；用合成向量跑通，并带一个阴性对照（例如一组本不显著的向量必须不得报显著）。在此之前，§4.4.3 的六行是一条读不到输入的规则。",
+      "negative_target_when_implemented": "一组构造成不显著的逐局 BA 差向量：聚合器必须判不显著；以及一份把 method 从冻结值改掉的副本，闸门必须变红",
+      "negative_target_exists": false,
+      "why_this_is_not_9_14_verbatim": "终点二比终点一在**单元层**强得多，照录以免本条被读成重复登记：它有逐臂逐类的方向预注册与反证条件（exam/prereg.py:44-111）、有三值裁决器、有七个跑过并哈希的阴性对照、有命令与两个靶子——这些终点一在 §9.14 登记时一样都没有。缺的恰好是另一半，而且缺得更深：终点一的单元判决已经带 game 字段（freeze/u3.py:966），终点二的单元判决钉死在一个合成世界上，连接入 game 的缝都没有。反方向最强的一条也照录：终点二缺的是三十行 scipy 加一个循环，卡的不是发明而是输入，而那个输入 §2.3 自己的预注册禁止提前造。本条采信这条反驳的一半——所以 clears_when 要的是形状而不是数——但不采信另一半：tier_conj.py 已经把**下游**的合成规则提前实现成布尔了，证明「等数据」这条辩护并没有被一致地执行；被提前实现的是规则，没被提前实现的是检验，而没有任何一行记下这个缺口。",
+      "owner_hint": "freeze / battery",
+      "note": "由 W-9201 在 S45（2026-08-02）登记。发现路径值得记：本条不是工单要求的，是在回答工单最后一问（『computable_today 随之动，或者写明为什么它没动』）时掉出来的——slot 2 不动的真正理由不是 9.22 未清，是这一条。"
     }
   }
 }

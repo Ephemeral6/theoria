@@ -1,0 +1,11 @@
+# `verify.sh` is this territory's gate, and on a Windows checkout with
+# `core.autocrlf=true` it was unrunnable: LF in the index, CRLF in the working
+# tree, and bash answers a CRLF script with `$'\r': command not found` at line
+# 22 and a syntax error at line 44.  Exit 2 -- which for a gate reads exactly
+# like "could not evaluate itself", except nobody had written down that this
+# was why.
+#
+# Same fix and same reason as `engine-rig/.gitattributes`: pin LF so
+# `core.autocrlf` cannot corrupt the files whose bytes are load-bearing.
+# Found 2026-08-02 (S45) while trying to run the gate before handing off.
+*.sh text eol=lf

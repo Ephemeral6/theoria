@@ -29,6 +29,7 @@ targets**:
     cmd                ["python", "-m", "…", "--theory", "{target}"]
     positive_target    an artefact the check must accept   -> exit 0
     negative_target    an artefact the check must reject   -> exit != 0
+    negative_exit      optional: the exact code that rejection must carry
 
 The two runs use the same template, differing only in the substituted path.
 That is the point.  "Implemented" and "implemented but stubbed" are
@@ -239,6 +240,34 @@ def evaluate(row, entry, root=None):
                        "which it exists to reject -- it is not discriminating"
                        % targets["negative_target"])
 
+    # Optional, and the rows that carry it are the ones whose blocker is about
+    # *which* rejection happened.  Without it "rejects" means only "did not
+    # exit 0", and that is weaker than it reads: a negative target that makes
+    # the check crash -- a file that exists but is not of the expected kind --
+    # exits non-zero too, so a garbage path satisfies the contract exactly as
+    # well as a purpose-built liar.  Declaring the code closes that, and buys
+    # one more thing: §2.3.2 ruling 2 makes 不成立 (3) and 不可结论 (4)
+    # DIFFERENT verdicts on purpose -- an arm that never answered has not been
+    # refuted -- and a gate that collapses them cannot witness the distinction
+    # its own row exists to pin.  (Added 2026-08-02, S45, on the S45 audit
+    # finding that rows 9.15/9.16 differ precisely in this digit.)
+    want = entry.get("negative_exit")
+    if want is not None:
+        if not isinstance(want, int) or isinstance(want, bool):
+            return False, ("negative_exit must be an integer exit code, got %r "
+                           "-- an unparseable expectation is not an expectation"
+                           % (want,))
+        if code != want:
+            return False, ("negative control fired with exit %s, but this row "
+                           "declares exit %s for %s -- 'did not exit 0' is not "
+                           "the same as 'was rejected for the stated reason'"
+                           "\n%s"
+                           % (code, want, targets["negative_target"],
+                              out.strip()[:400]))
+        return True, ("accepts %s, rejects %s (exit %s, as declared)"
+                      % (targets["positive_target"],
+                         targets["negative_target"], code))
+
     return True, ("accepts %s, rejects %s (exit %s)"
                   % (targets["positive_target"], targets["negative_target"], code))
 
@@ -324,6 +353,18 @@ sys.exit(0 if "NONTRIVIAL" in open(sys.argv[1], encoding="utf-8").read() else 1)
 
 _ALWAYS_OK = "import sys; sys.exit(0)\n"
 
+#: A check with a *graded* rejection, like `exam.tools.endpoint_verdict`:
+#: 0 accepted, 3 refuted, 4 declined-to-judge, and anything it cannot parse
+#: blows up into exit 1.  The last line is the point -- it is how a negative
+#: target that is merely the WRONG KIND OF FILE still exits non-zero.
+_CODED_CHECK = '''import sys
+t = open(sys.argv[1], encoding="utf-8").read()
+if "GOOD" in t: sys.exit(0)
+if "REFUTED" in t: sys.exit(3)
+if "INCONCLUSIVE" in t: sys.exit(4)
+raise SystemExit("cannot read this at all")
+'''
+
 _ROWS = {
     "9.2": "U3 criterion (c)",
     "9.11": "envelope re-run",
@@ -373,6 +414,14 @@ def selftest():
             fh.write("NONTRIVIAL theorem\n")
         with open(os.path.join(tmp, "vacuous.txt"), "w", encoding="utf-8") as fh:
             fh.write("proves nothing\n")
+        with open(os.path.join(tmp, "coded.py"), "w", encoding="utf-8") as fh:
+            fh.write(_CODED_CHECK)
+        for name, body in (("good2.txt", "GOOD\n"),
+                           ("refuted.txt", "REFUTED\n"),
+                           ("inconclusive.txt", "INCONCLUSIVE\n"),
+                           ("wrong_kind.txt", "a file of some other sort\n")):
+            with open(os.path.join(tmp, name), "w", encoding="utf-8") as fh:
+                fh.write(body)
 
         def entry(**over):
             base = {"state": "implemented",
@@ -448,6 +497,59 @@ def selftest():
         # 12. §9 gone: the gate cannot evaluate itself, and says so
         case("§9 section missing entirely", "error",
              "## 8. something else\n\nno section nine here\n", all_ok)
+
+        # --- negative_exit: rows whose blocker is about WHICH rejection ------
+
+        def coded(**over):
+            base = {"state": "implemented",
+                    "cmd": [sys.executable, "coded.py", "{target}"],
+                    "positive_target": "good2.txt",
+                    "negative_target": "refuted.txt",
+                    "negative_exit": 3}
+            base.update(over)
+            return base
+
+        # 13. the declared code is the one the check actually returns
+        ok13 = dict(all_ok)
+        ok13["9.2"] = coded()
+        case("negative_exit declared and matched",
+             "clear", _fake_rules(all_declared), ok13)
+
+        # 14. THE HOLE THIS FIELD CLOSES.  `wrong_kind.txt` exists and makes
+        #     the check die (exit 1).  Without negative_exit that reads as a
+        #     correct rejection; with it, it does not.
+        bad = dict(all_ok)
+        bad["9.2"] = coded(negative_target="wrong_kind.txt")
+        case("negative target merely CRASHES the check (exit 1, not 3)",
+             "blocked", _fake_rules(all_declared), bad)
+
+        # 15. the two controls swapped: rejected, but for the other reason.
+        #     This is 9.15-vs-9.16 -- 不成立 (3) and 不可结论 (4) are
+        #     different verdicts and the row names which one it means.
+        bad = dict(all_ok)
+        bad["9.2"] = coded(negative_target="inconclusive.txt")
+        case("negative control fires with the OTHER verdict (4, declared 3)",
+             "blocked", _fake_rules(all_declared), bad)
+
+        # 16. an expectation that is not an exit code is not an expectation
+        bad = dict(all_ok)
+        bad["9.2"] = coded(negative_exit="3")
+        case("negative_exit is a string, not an int",
+             "blocked", _fake_rules(all_declared), bad)
+
+        # 17. `True` is an int in Python and would compare equal to 1; a
+        #     JSON `true` here must not be read as "exit 1 is fine".
+        bad = dict(all_ok)
+        bad["9.2"] = coded(negative_exit=True)
+        case("negative_exit is a bool (JSON true)",
+             "blocked", _fake_rules(all_declared), bad)
+
+        # 18. the field stays optional -- rows without it behave as before
+        ok18 = dict(all_ok)
+        ok18["9.2"] = coded(negative_exit=None)
+        del ok18["9.2"]["negative_exit"]
+        case("negative_exit absent: the old contract still clears",
+             "clear", _fake_rules(all_declared), ok18)
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 

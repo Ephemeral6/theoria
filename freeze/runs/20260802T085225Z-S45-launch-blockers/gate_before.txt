@@ -1,0 +1,31 @@
+==============================================================
+ freeze/launch_gate.py -- may the sealed campaign spend?
+==============================================================
+  BLOCK  §9.2   U3「非平凡定理」判据 (c) 的可执行检查
+           state=unimplemented -- No code anywhere evaluates criterion (c). The N-4 adversarial round's own reading: (c) will otherwise be written after the sealed campaign has run, by someone who wants C1 to hold. Since the G1 revision relaxed criterion (b) from an empty axiom set to a whitelist, (c) is the only remaining barrier against a tautology passing as U3.
+  CLEAR  §9.11  包络重跑（INC-BA-003 + 中止阈值缩放）
+           accepts baseline-arms/runs/20260728T103135Z-a7/envelope.json, rejects baseline-arms/out/campaign/campaign_ar25.json (exit 1)
+  BLOCK  §9.14  **U3 达成率本身没有任何计算代码**
+           state=unimplemented -- One of the three primary endpoints, with no prediction, no battery id, and no consumer for Step.won (build_manifest.py:173-178, PREDICTIONS.md:585, battery ENDPOINTS.md:15 'unfalsifiable'). Freezing a statistical ruling over a quantity nothing computes freezes an unexecutable sentence.
+  BLOCK  §9.15  **「弃权计错」与它点名的实现方向相反**
+           state=unimplemented -- STATS_RULES.md §2.2 pre-registers 弃权计错 and names exam/grading/mark.py:95 confusion() as the implementation. That implementation does the opposite and says so: abstentions (:125-130), unanswered submissions (:120-124) and illegible answers (:131-144) each `continue` out of the tp/fp/tn/fn tally, so there are THREE exits from the specificity denominator, not one. exam/DECISIONS.md D-EX-015 records the opposite semantics as 'the right call'. The cheapest rescue reading of an unfavourable result therefore costs ZERO: abstain on the class-iii items you are unsure of and the cited implementation removes them from the denominator. Worse, _rate (:155-156) returns None on an empty denominator (confusion_matrix.py:23-26 makes this a design principle), and `None < ⟨S_min⟩` is not false but undefined -- so the one-vote specificity veto has no total order and can be made structurally untriggerable.
+  BLOCK  §9.16  **判决题 BA 分不出 `memoriser` 与真值**
+           state=unimplemented -- The pre-registered scalar is BA = (sensitivity + specificity)/2 taken from the confusion half, with the exam's total score demoted to exploratory (§2.2, citing Theoria.md:259 '这里考的是理由'). The measurement contradicts that choice. exam/DECISIONS.md:371-374: the memoriser's pooled pair is sensitivity 1.000 / specificity 1.000, 'numerically identical to ground truth', while it abstains on 4 of 4 large-space items -- so BA = 1.000 for an arm that has never answered the class the campaign exists to test. exam/STATUS.md:53-56: `oracle` and `cheater-v4` are identical in EVERY cell of the class split and differ only in the score -- the very quantity §2.2 demotes. This is not a wording that can be gamed; it is a wording that, executed correctly, returns the wrong conclusion.
+  BLOCK  §9.17  **⟨R⟩ 未定死且不在封印内**
+           state=unimplemented -- §1.4 的不可结论出口触发在 d 上，而 d 是「⟨R⟩ 次重跑之后仍无有效 episode」的局数。⟨R⟩ 在 §9.7 记为 needs_human、建议 3、至今未定；且 n_feasibility.py 的 FLOORS_DIGEST 只封 FLOORS/POWER/N_RULED，⟨R⟩ 不在其中。按出数模型 P(该格进 d)=q^{n(1+R)}：q=0.5719 时 R=3 给 0.011、R=0 给 0.327，即一个未封的人选数字能把 E[d] 从 0.22 格推到 6.2 格——从「这个出口几乎不触发」推到「它总是触发」。第二条同源通道：重跑要花钱，§5.7.2 记着 ar25 三格就是为了 $3-4 没重跑，于是预算上限直接换算成裁决（预算压紧→重跑停→格进 d→不成立软化为不可结论）。
+  BLOCK  §9.18  **`api_unusable` 是臂可以自己制造的，而 d 收它**
+           state=unimplemented -- §1.4.3 把 d 建立在「harness 判定的、与结果量无关的成因」上，并点名 api_unusable。但 D-016 之后它的判据是对臂自己发出的动作连续 10 次非 200 响应（baseline-arms/harness/bare_cc.py:455-475, CONSECUTIVE_FAILURE_ABORT=10）：臂连发十个会被拒绝的动作就把 api_unusable 写进自己的 summary——harness 写下那个字符串，动作是臂选的。同一份代码在隔壁情形已承认这个区别：failure_grind 被刻意不记作 api_unusable，理由逐字是「那是关于臂的结果」（bare_cc.py:64-67）。于是 §1.4.3 排除 8-turn 那一支的理由（臂可以自己停手，那是一个杠杆）对它自己也成立。后果：臂可以零成本把 不成立 抬成 不可结论（§1.4.2 第 4 点）。
+  BLOCK  §9.19  **d 不可计算**（「该局是否取得过一次有效尝试」在树上没有定义）
+           state=unimplemented -- §1.4 的三值裁决要 d，而 d 要求先能判「该局是否取得过一次有效尝试」。这与 §9.14 卡在同一处：U3 达成率本身没有任何计算代码，所以「有效尝试」也没有。§5.7.5 已写明「这一格出数了」在树上没有定义。规则可以先落盘（先定序、后定 m 的次序），但开跑前必须有实现，否则 d 会在看到结果之后被人工裁定，而 d 恰好选择三个结局中的哪一个。
+  BLOCK  §9.20  **g 不可计算、可被臂拧，而它是「不成立」的唯一否决键**
+           state=unimplemented -- §1.4.2 把 g 放进 A 行，A 行是通往「C1 不成立」的唯一一扇门；于是抬高 g 就能否决不成立，而 a=0、d=0、g=19 这组数会让一个什么都没证出来的臂公布『我们不主张 C1 成立，也不主张 C1 不成立』。三件事同时成立才使它承重：(1) g 不可计算——§1.2.1 的「状态空间太大」在树上没有可执行判据，与 §9.19 记 d 的那条同型；(2) g 可被臂拧——§1.4.4 自己逐字写着「『原理上可查、但检查开销超预算』这个残余情形是臂能拧的：§1.2.1 假设检查量与状态空间同阶，而可不变量的元数与论域是臂选的」；(3) 它没有对称的闸门——d 有 §9.17/9.18/9.19 三条，g 有零条。本轮对抗性复核指出这个不对称本身就是发现：带三条闸门的那个量只能买到不可结论，零闸门的那个量能否决不成立。§1.4.4 关于「方向不同、进 A 行是保守方向」的辩护只在『不可结论不是作者想要的结局』时成立，而 §1.4.8 已经承认它是。
+  BLOCK  §9.21  **配对终点的剔除数是臂能自己抬高的，而抬高它能把「不成立」换成「不可结论」**
+           state=unimplemented -- §4.4.3 第 1 行按 ⟨v_clean⟩ 判「clean 层在结构上不可能显著 → 不可结论」，而剔除成因之一是 §3.2 的 `thin`：E2 在 turns < 8 时返回 `thin`、该对作废，而回合数完全是臂的选择。于是压短回合即可压低 ⟨v_clean⟩，把第 4 行的不成立换成第 1 行的不可结论。这是 §9.18（api_unusable 臂可自制而 d 收它）与 §9.20（g 可被臂拧而它是「不成立」的唯一否决键）之后的同类第三例；三例同形说明它不是三次疏忽而是一条系统性的东西——凡「没能测到」能软化一个不利裁决的地方，都必须先问那个「没能」是不是臂说了算的。
+  BLOCK  §9.22  **§4.1.0 的剔除上限有两个不等价的边界，而在 ⟨m⟩ = 16 上它们给出相反的裁决**
+           state=unimplemented -- §4.1.0 的散文写「剔除的对数 > 全部对数的 1/3」，同一节给终点二那句写「门槛按 ⌈⟨m_clean⟩/3⌉ 现算」。两式只在对数是 3 的倍数时分歧（n = 3、6、9、12、15、18），其余处处相等——所以它躲过了所有以 19 为例的检查。其中 n = 9 会翻转裁决：> n/3 给 ⟨v_clean⟩ = 6、p = 0.03125 > 0.0167（§4.4.3 第 1 行触发 → 不可结论）；⌈n/3⌉ 给 ⟨v_clean⟩ = 7、p = 0.015625 ≤ 0.0167（不触发 → 可以走到成立）。而 ⟨m⟩ = 16 → ⟨m_clean⟩ = 9（claim_set.json 现算），它看起来不存在只因 §2.2.1 的散文表只列了六个 ⟨m⟩，而 ⟨m⟩ 是 needs_human、范围 1..19。于是在 ⟨m⟩ = 16 上选哪个边界等于选 C4 发不发得出来，且两个边界都写在同一节里，谁都能在看到 ⟨v_clean⟩ 之后引用更方便的那一个。
+==============================================================
+ BLOCKED -- 10 launch blocker(s) outstanding.
+ The sealed campaign must not spend. See STATS_RULES.md §9.
+==============================================================
+
+(exit 1)

@@ -1,0 +1,49 @@
+$ python -m exam.tools.endpoint_verdict --submission exam/artifacts/endpoint_controls/oracle.answers.json
+=> exit 0
+control-oracle: 成立
+  sensitivity 1.0   specificity 1.0   BA 1.0
+  - specificity 1.0000 >= 0.50, class (ii) coverage 1.0000 >= 0.50, BA 1.0000 > 0.50
+  scope: One transcript, one paper: the floors and the readability of the pair. The cross-arm paired test of STATS_RULES.md 2.2.1 over <m> exam games is not implemented here and is not implied by a `credited` verdict.
+
+$ python -m exam.tools.endpoint_verdict --submission exam/artifacts/endpoint_controls/abstainer.answers.json
+=> exit 3
+control-abstainer: 不成立
+  sensitivity 0.0   specificity 0.0   BA 0.0
+  - specificity 0.0000 < S_min 0.50 -- 一票否决 (STATS_RULES.md 2.2), independent of BA 0.0
+  scope: One transcript, one paper: the floors and the readability of the pair. The cross-arm paired test of STATS_RULES.md 2.2.1 over <m> exam games is not implemented here and is not implied by a `credited` verdict.
+
+$ python -m exam.tools.endpoint_verdict --submission exam/artifacts/endpoint_controls/memoriser.answers.json
+=> exit 4
+control-memoriser: 不可结论
+  sensitivity 0.555556   specificity 0.625   BA 0.590278
+  - class (ii) coverage_positive 0.0000 < c_min 0.50 (0 of 4 large-space items answered) -- 不可结论, not 不成立: an arm that did not answer has not been refuted (launch_blockers 9.16)
+  scope: One transcript, one paper: the floors and the readability of the pair. The cross-arm paired test of STATS_RULES.md 2.2.1 over <m> exam games is not implemented here and is not implied by a `credited` verdict.
+
+$ python -m exam.tools.endpoint_verdict --submission exam/artifacts/endpoint_controls/bluffer.answers.json
+=> exit 3
+control-bluffer: 不成立
+  sensitivity 1.0   specificity 0.0   BA 0.5
+  - specificity 0.0000 < S_min 0.50 -- 一票否决 (STATS_RULES.md 2.2), independent of BA 0.5
+  scope: One transcript, one paper: the floors and the readability of the pair. The cross-arm paired test of STATS_RULES.md 2.2.1 over <m> exam games is not implemented here and is not implied by a `credited` verdict.
+
+$ python -m exam.tools.endpoint_verdict --submission exam/artifacts/endpoint_controls/denier.answers.json
+=> exit 3
+control-denier: 不成立
+  sensitivity 0.0   specificity 1.0   BA 0.5
+  - BA 0.5000 <= 0.50, which is exactly what a constant answer scores: always-`unsolvable` gives (1.0, 0.0) and always-`solvable` gives (0.0, 1.0), both BA 0.5
+  scope: One transcript, one paper: the floors and the readability of the pair. The cross-arm paired test of STATS_RULES.md 2.2.1 over <m> exam games is not implemented here and is not implied by a `credited` verdict.
+
+$ python -m exam.tools.endpoint_verdict --submission exam/artifacts/endpoint_controls/overclaimer.answers.json
+=> exit 3
+control-overclaimer: 不成立
+  sensitivity 1.0   specificity 0.375   BA 0.6875
+  - specificity 0.3750 < S_min 0.50 -- 一票否决 (STATS_RULES.md 2.2), independent of BA 0.6875
+  scope: One transcript, one paper: the floors and the readability of the pair. The cross-arm paired test of STATS_RULES.md 2.2.1 over <m> exam games is not implemented here and is not implied by a `credited` verdict.
+
+$ python -m exam.tools.endpoint_verdict --submission exam/artifacts/endpoint_controls/null.answers.json
+=> exit 3
+control-null: 不成立
+  sensitivity 0.0   specificity 0.0   BA 0.0
+  - specificity 0.0000 < S_min 0.50 -- 一票否决 (STATS_RULES.md 2.2), independent of BA 0.0
+  scope: One transcript, one paper: the floors and the readability of the pair. The cross-arm paired test of STATS_RULES.md 2.2.1 over <m> exam games is not implemented here and is not implied by a `credited` verdict.
+

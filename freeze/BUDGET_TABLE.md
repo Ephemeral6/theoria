@@ -56,19 +56,19 @@
 |---|---|---|
 | 池上限 | $214.90 | `proxy/spend_policy.json:4` |
 | 动作上限 | 24,000 | `proxy/spend_policy.json:5` |
-| 闸门可见已花 | **$113.2826** | `proxy/var/spend_gate.jsonl` seq 1–16600（16600 行，sha256 `e902ebc4d167…`）|
-| 闸门可见余额 | $101.6174 | 上两行相减 |
+| 闸门可见已花 | **$160.9480** | `proxy/var/spend_gate.jsonl` seq 1–17285（17285 行，sha256 `1053f2110c1c…`）|
+| 闸门可见余额 | $53.9520 | 上两行相减 |
 | 其中未计价占位 | $4.0099（2 笔）| 见 C1 |
-| 动作已用 | 9,490 / 24,000 | 同上 |
-| 其中测试/离线流量 | 6,540（68.9%）| 见 C6 |
+| 动作已用 | 10,198 / 24,000 | 同上 |
+| 其中测试/离线流量 | 6,688（65.6%）| 见 C6 |
 | 已追踪账本 · `bare_cc` 轨道 | **$97.8161**（2851 次调用 / 99 run / 17 文件）| `baseline-arms/ledger.jsonl` + `out/shards/ledger.*.jsonl` |
-| 已追踪账本 · Theoria 臂 | **$74.7089**（74 次调用 / 11 run）| `theoria-arm/runs/**/ledger.jsonl` |
-| 仅在池里、无追踪账本 | $77.5437 + $4.0099 占位 | 见 C1 / C3 |
-| **全项目已花（实测）** | **$250.0687** | 上四行之并，每一元只计一次 |
-| **全项目已花（含占位）** | $254.0786 | 同上 + 占位 |
-| **真实余额（实测口径）** | **$-35.1687** | 上限 − 实测 |
-| **闸门盲区** | **$136.7861** | 实测已花 − 闸门可见已花 |
-| `pricing_v1` 对 Theoria 臂重算 vs 实际账单 | **-2.12%** | 见 C4 |
+| 已追踪账本 · Theoria 臂 | **$148.8880**（104 次调用 / 15 run）| `theoria-arm/runs/**/ledger.jsonl` |
+| 仅在池里、无追踪账本 | $125.2090 + $4.0099 占位 | 见 C1 / C3 |
+| **全项目已花（实测）** | **$371.9131** | 上四行之并，每一元只计一次 |
+| **全项目已花（含占位）** | $375.9230 | 同上 + 占位 |
+| **真实余额（实测口径）** | **$-157.0131** | 上限 − 实测 |
+| **闸门盲区** | **$210.9651** | 实测已花 − 闸门可见已花 |
+| `pricing_v1` 对 Theoria 臂重算 vs 实际账单 | **-1.67%** | 见 C4 |
 
 ### G2 · 已追踪账本逐文件（自报 `total_cost_usd`）
 
@@ -119,25 +119,33 @@
 | `theoria-arm/runs/20260731T1500Z-A3-sk48-carried-l1/ledger.jsonl` | 12.2517 | 11.9888 | 9 | — |
 | `theoria-arm/runs/20260731T231654Z-R1-g50t-a/ledger.jsonl` | 7.6034 | 7.4892 | 4 | — |
 | `theoria-arm/runs/20260731T231654Z-R1-sk48-b/ledger.jsonl` | 7.6085 | 7.5194 | 3 | — |
+| `theoria-arm/runs/20260801T001851Z-R1b-g50t-a/ledger.jsonl` | 17.7491 | 17.4777 | 9 | — |
+| `theoria-arm/runs/20260801T001851Z-R1b-sk48-b/ledger.jsonl` | 17.3907 | 17.2373 | 6 | — |
+| `theoria-arm/runs/20260801T043743Z-R2-g50t-a/ledger.jsonl` | 0.0000 | 0.0000 | 0 | — |
+| `theoria-arm/runs/20260801T043743Z-R2-sk48-b/ledger.jsonl` | 0.0000 | 0.0000 | 0 | — |
+| `theoria-arm/runs/20260801T044640Z-R2b-g50t-a/ledger.jsonl` | 18.7360 | 18.4226 | 9 | — |
+| `theoria-arm/runs/20260801T044640Z-R2b-sk48-b/ledger.jsonl` | 20.3032 | 20.1413 | 6 | — |
 | `theoria-arm/runs/a3-gate-mock/ledger.jsonl` | 0.0000 | 0.0000 | 0 | — |
 | `theoria-arm/runs/audit-smoke/ledger.jsonl` | 0.0000 | 0.0000 | 0 | — |
 | `theoria-arm/runs/preflight-20260728T012031Z/ledger.jsonl` | 0.0000 | 0.0000 | 0 | — |
 | `theoria-arm/runs/preflight-20260728T012057Z/ledger.jsonl` | 0.0000 | 0.0000 | 0 | — |
 | `theoria-arm/runs/preflight-20260728T074237Z/ledger.jsonl` | 0.0000 | 0.0000 | 0 | — |
-| **合计** | **172.5250** | 100.1983（仅可计价的 352 笔）| **2925** | **2573（88.0%）** |
+| **合计** | **246.7041** | 173.4770（仅可计价的 382 笔）| **2955** | **2573（87.1%）** |
 
 跨文件重复记录键：**0**（0 = 无双计）。
-**两列不可相减当差额**：自报一列是全部 2925 笔，`pricing_v1` 一列只是可计价的 352 笔。唯一可比的一对是 Theoria 臂那 7 笔（G1 末行、C4）。
+**两列不可相减当差额**：自报一列是全部 2955 笔，`pricing_v1` 一列只是可计价的 382 笔。唯一可比的一对是 Theoria 臂那 7 笔（G1 末行、C4）。
 
-### G3 · 池内有钱的战役（$0 的 108 个战役省略）
+### G3 · 池内有钱的战役（$0 的 112 个战役省略）
 
 | 战役 | $ | 其中占位 $ | 动作 |
 |---|---|---|---|
+| `theoria-arm:A3-campaign-devpile:sk48-d8078629:20260801T044640Z-R2b-sk48-b` | 20.3032 | 0.0000 | 97 |
 | `phase3-unit-price-remeasure` | 19.8332 | 0.0000 | 487 |
-| `theoria-arm:A3-campaign-devpile:g50t-5849a774:20260801T001851Z-R1b-g50t-a` | 14.7780 | 0.0000 | 108 |
+| `theoria-arm:A3-campaign-devpile:g50t-5849a774:20260801T044640Z-R2b-g50t-a` | 18.7360 | 0.0000 | 297 |
+| `theoria-arm:A3-campaign-devpile:g50t-5849a774:20260801T001851Z-R1b-g50t-a` | 17.7491 | 0.0000 | 140 |
+| `theoria-arm:A3-campaign-devpile:sk48-d8078629:20260801T001851Z-R1b-sk48-b` | 17.3907 | 0.0000 | 253 |
 | `theoria-arm:A3-campaign-devpile:g50t-5849a774:20260731T1430Z-A3-level2-carried-r3` | 13.4399 | 0.0000 | 239 |
 | `theoria-arm:A3-campaign-devpile:sk48-d8078629:20260731T1500Z-A3-sk48-carried-l1` | 12.2517 | 0.0000 | 181 |
-| `theoria-arm:A3-campaign-devpile:sk48-d8078629:20260801T001851Z-R1b-sk48-b` | 11.7357 | 0.0000 | 207 |
 | `phase3-variance-envelope` | 10.5364 | 0.0000 | 504 |
 | `theoria-arm:A3-campaign-devpile:g50t-5849a774:20260731T1310Z-A3-level2-carried-r2` | 9.5569 | 0.0000 | 106 |
 | `theoria-arm:A3-campaign-devpile:sk48-d8078629:20260731T231654Z-R1-sk48-b` | 7.6085 | 0.0000 | 50 |
@@ -153,7 +161,7 @@
 | model | n 次调用 | 合计 $ | 均值 | 中位 | min | max |
 |---|---|---|---|---|---|---|
 | `claude-haiku-4-5-20251001` | 306 | 16.2891 | 0.053232 | 0.036804 | 0.000000 | 4.000000 |
-| `claude-opus-5` | 111 | 85.1501 | 0.767118 | 0.121513 | 0.111983 | 3.362011 |
+| `claude-opus-5` | 129 | 132.8154 | 1.029577 | 0.123708 | 0.111983 | 4.684776 |
 | `claude-sonnet-5` | 102 | 11.6572 | 0.114286 | 0.111818 | 0.088163 | 0.244602 |
 | `mock-model-1` | 28 | 0.0000 | 0.000000 | 0.000000 | 0.000000 | 0.000000 |
 
@@ -216,7 +224,7 @@ q = 47/48 = 0.979167，**争用条件下的实测值**（`STATS_RULES.md` §5.2 
 
 ### G9 · 裁决
 
-> Of 12 enumerated scenarios for the sealed main table (19 claim games x 3 arms), 0 fit both the remaining measured balance ($-35.17) and the remaining action headroom (14510 requests). At the only measured episode death rate (q=47/48) a nominal n=2 table yields 0.78 live cells of 19, so a projection over nominal cells is not a projection over observations.
+> Of 12 enumerated scenarios for the sealed main table (19 claim games x 3 arms), 0 fit both the remaining measured balance ($-157.01) and the remaining action headroom (13802 requests). At the only measured episode death rate (q=47/48) a nominal n=2 table yields 0.78 live cells of 19, so a projection over nominal cells is not a projection over observations.
 
 装得下的情景：**一个都没有**
 

@@ -1,4 +1,4 @@
-<!-- generated-from: 45cd6ebd0426f94c19b1fb4a109c2eac46aa5322 -->
+<!-- generated-from: 1e5b3f00dfb40fcc73f582a5de2390d1d3466844 -->
 # ENGINE_MANIFEST —— 冻结清单第 5 项：引擎清单与版本
 
 **生成物。不要手改。** 由 `python freeze/build_engine_manifest.py` 写出；`--verify` 从 git 重算每一个哈希并逐行报漂移。

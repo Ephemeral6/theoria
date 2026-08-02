@@ -1,0 +1,24 @@
+==============================================================
+ launch_gate.py --selftest
+==============================================================
+  PASS green is reachable: all three implemented and discriminating (want clear, got clear)
+  PASS stub check (accepts the vacuous artefact too)        (want blocked, got blocked)
+  PASS negative target absent from disk                     (want blocked, got blocked)
+  PASS cmd with no {target} placeholder                     (want blocked, got blocked)
+  PASS state=implemented with no cmd                        (want blocked, got blocked)
+  PASS declared in §9, absent from the registry             (want blocked, got blocked)
+  PASS a newly declared blocker defaults to outstanding     (want blocked, got blocked)
+  PASS downgraded in place (strikethrough + 降级)             (want blocked, got blocked)
+  PASS a floor row deleted from §9 entirely                 (want blocked, got blocked)
+  PASS registry carries a blocker §9 no longer declares     (want blocked, got blocked)
+  PASS §9 emptied of blockers                               (want error, got error)
+  PASS §9 section missing entirely                          (want error, got error)
+  PASS negative_exit declared and matched                   (want clear, got clear)
+  PASS negative target merely CRASHES the check (exit 1, not 3) (want blocked, got blocked)
+  PASS negative control fires with the OTHER verdict (4, declared 3) (want blocked, got blocked)
+  PASS negative_exit is a string, not an int                (want blocked, got blocked)
+  PASS negative_exit is a bool (JSON true)                  (want blocked, got blocked)
+  PASS negative_exit absent: the old contract still clears  (want clear, got clear)
+==============================================================
+ 18/18
+(exit 0)
