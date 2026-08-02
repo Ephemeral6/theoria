@@ -1334,3 +1334,60 @@ Two paths had to become location-independent before the gate could ever be green
 relative to the artefact root, and `exam/papers/verdict.py` and
 `exam/tools/run_exam.py` use it too. D-EX-031's rule is unchanged and now has one
 implementation instead of three.
+
+## U3 / V28 — the census and the E1 flip reach this file three commits late
+
+`77f18b41`, `01d627e3` and `0acc8b8f` landed `exam/u3_census.py`, brought it onto
+the follow-through branch, and flipped the regression tests after freeze repaired
+E1 to key §1.2.1 (c) on theorem **content** instead of theorem **names**. None of
+the three wrote a line here or in `DECISIONS.md`. This section and D-EX-034 are
+that debt paid, on V28.
+
+**The census.** `exam/u3_census.py` finds every Lean book on disk and adjudicates
+none of them — every verdict is a `freeze.u3` return value. It exists because the
+2026-07-31 E1 sweep was invoked with a hand-typed path list and 16 of 22
+developments were never shown to the adjudicator. Post-repair numbers, 24 books:
+`discharged` 17, `unclassified` 4, `vacuous` 2, `failing_obligation` 1 — 17/24
+attained, against 14/24 before freeze's repair
+(`runs/20260801T1200Z-U3-CENSUS-REPAIRED/`).
+
+**The flip.** freeze's 07:00Z letter named four tests that had to invert; the
+measured number was **six**, and freeze's own 12:00Z letter supersedes the first
+on that count. The evidence of each defect is kept in every docstring and only
+the assertions inverted, so the two discovery regressions still light up here if
+`freeze/u3.py` loses its walker. `0acc8b8f` also repaired a defect of its own
+finding: `kind_coverage()` decided "this kind has no (c) check" by sniffing for a
+substring E1 stopped writing after the repair, so the one output whose job is
+reporting gaps reported none. It keys on the exported
+`theorem_shape.KINDS_WITH_A_C_CHECK` now, and the next change to that vocabulary
+is an ImportError rather than a silent lookup miss.
+
+**V28, 2026-08-02: the board item was stale and nothing was rewritten.** It asks
+for the four tests to be flipped; they had been, and the suite measured **540
+passed, 2 xfailed** before anything was touched. What was genuinely open was that
+two of the four things its acceptance line asks for were true and executed by
+nothing — the 24-book agreement between exam's walker and freeze's was recorded
+in two JSON archives and re-derived by no code, and the name-keying control was a
+sentence in a docstring predicting a mutation nobody had run. Both are now tests
+(`tests/test_u3_population_and_namekeying.py`, 9 tests, no Lean, under five
+seconds): the two independent walkers agree directory for directory, and
+re-installing a name-keyed classifier splits the renamed pair —
+`ODDLY_NAMED_MANUAL` goes `not_attained` while its byte-twin `REAL_MANUAL` stays
+`discharged`. It lands `unclassified` rather than `vacuous` because the same
+repair split that word; the adjudication still moves, which is the property asked
+for.
+
+**Operational note, and one test that can no longer be re-verified here.** This
+suite must be run alone and with real memory headroom.
+`test_REGRESSION_F1_deadlock_paradigm_on_disk_attains` compiles a 28,672-state
+Lean development under a 900 s cap. It was green in V28's solo baseline (all 542
+collected) and by the end of that ticket it failed even run alone, in 91 s, with
+Lean reporting `out of memory` — the box had 3.57 GB free of 31.46 GB. Contention
+had earlier pushed the same development past its cap and pushed
+`test_verdict.py`'s enumerator into `MemoryError`. None of these are logic
+failures.
+
+So the claim to make on this commit is **"green given enough memory"**, not
+"green": a red from this suite under memory pressure is not evidence about the
+code, and it is not evidence of health either. Re-run with headroom; do not relax
+the assertion, and do not report the red as if it settled something.

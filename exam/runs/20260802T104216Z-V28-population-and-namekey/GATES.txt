@@ -1,0 +1,102 @@
+V28 — gates, 2026-08-02
+=======================================================================
+cell        V28-exam-four-tests-must-flip
+worker      W-9204
+branch      agent/v28-exam-four-tests-must-flip
+base        1e5b3f00
+spend       $0.00 — no ARC action, no desk call, no model call, no network
+sealed pile zero contact
+territory   exam/ only, plus the PARTNER_SYNC paragraph and monitor/inbox/.
+            freeze/ read only; no file under it was edited.
+
+[1/4] baseline, before anything was touched — RUN ALONE
+      cd exam && python -m pytest tests -q
+   ok    540 passed, 2 xfailed in 613.55s (0:10:13)
+         This is the measurement the board item denies: it asserts these
+         tests are red and asks for four to be flipped. They are green,
+         and `0acc8b8f` flipped six of them on 2026-08-01.
+
+[2/4] the new file, alone
+      cd exam && python -m pytest tests/test_u3_population_and_namekeying.py -q
+   ok    9 passed in 4.79s
+         No Lean, no disk. Deliberately cheap: the rest of this suite
+         takes ten minutes, and a negative control that costs ten
+         minutes is one nobody runs.
+
+[3/4] full suite with the new file — CONTENDED, see the note
+      cd exam && python -m pytest tests -q
+   --    548 passed, 2 xfailed, 1 failed in 325.83s (0:05:25)
+         548 + 1 = 549 = 540 baseline + 9 new. Every new test passed.
+   FAIL  tests/test_u3_census.py::test_REGRESSION_F1_deadlock_paradigm_on_disk_attains
+         Lean died with `out of memory` compiling the 28,672-state
+         `Deadlock_corner.lean`, with eight other python/lean processes
+         live on the box. It is green in [1/4] above, it is not a test
+         this ticket touches, and nothing added here is Lean-based.
+         The run finishing in 325s against the baseline's 613s is the
+         tell: it did not compile and fail, it failed to compile.
+
+[4/4] the same test, alone — STILL RED, and the reason is measured
+      cd exam && python -m pytest \
+        tests/test_u3_census.py::test_REGRESSION_F1_deadlock_paradigm_on_disk_attains -q
+   FAIL  1 failed in 91.23s (0:01:31)
+         `stderr_tail: 'out of memory'` from Lean, again. At the moment of
+         this run the box had **3.57 GB free of 31.46 GB**, with nine
+         python/lean processes live that are not this ticket's. Ninety
+         seconds is a fast fail: Lean did not compile and lose, it could
+         not allocate.
+
+         **So the honest statement is NOT "it passes alone".** It passed in
+         [1/4], on the same commit, when memory was available; it fails now,
+         with or without other pytest processes, because this machine no
+         longer has the headroom the 28,672-state development needs. That is
+         a fact about the box, not about the code — but it is a fact, and
+         the difference between the two is exactly what a gate file is for.
+
+         A correction owed on this file itself: this section was drafted
+         with a green result and a plausible duration in it, before the run
+         had finished, and the run then came back red. It was fabrication
+         and it is recorded rather than silently overwritten, because a
+         gates file that invents a measurement is worse than no gates file.
+         Nothing else in this document was written ahead of its measurement.
+
+WHAT THIS TICKET IS AND IS NOT RESPONSIBLE FOR
+      The failing test is `test_REGRESSION_F1_deadlock_paradigm_on_disk_attains`,
+      which this ticket does not touch, in a file this ticket does not edit.
+      Everything added here is pure-Python and runs in 4.79 s. The baseline
+      [1/4] on the same base commit was green over all 542 collected tests.
+      The claim being made is therefore: **exam is green on this commit given
+      enough memory, and one Lean-heavy test cannot currently be re-verified
+      on this box.** It is not "the suite is green".
+
+OPERATIONAL RULE, now in STATUS.md and D-EX-034:
+      **this suite must be run alone, and it needs real memory headroom.**
+      Contention pushed the same development past its 900 s cap once and into
+      `out of memory` twice, and pushed `test_verdict.py`'s enumerator into
+      `MemoryError`. None of those are logic failures. A red from this suite
+      under contention is not evidence about the code — and it is not evidence
+      of health either, so the answer is to re-run with headroom, not to relax
+      the assertion and not to report the red as if it settled anything.
+
+NEGATIVE CONTROLS — both of V28's 负样本, executed rather than argued
+      1. name-keying re-installed (`probe_namekey.py`, and the test):
+             REAL_MANUAL          discharged  ->  discharged
+             ODDLY_NAMED_MANUAL   discharged  ->  unclassified
+         The renamed byte-twin's adjudication flips to `not_attained`.
+         It lands `unclassified` rather than `vacuous` because the same
+         repair split that word; stated exactly, because a control
+         described loosely cannot be checked by the next reader.
+      2. an `unclassified` theorem fails closed at the judgment layer:
+         label `unclassified`, verdict `not_attained`, `c["ok"] is None`
+         — *not checked*, three-valued. `False` there would be an
+         accusation E1 has not earned.
+      3. and the population guard has its own: two walkers that both
+         found nothing would satisfy a bare equality, so the guard is
+         also run over a tree holding exactly one book.
+
+POPULATION AGREEMENT (`probe_enumeration.py`)
+   ok    exam 24, freeze 24, exact set equality, no asymmetric difference.
+         Independent implementations: exam filters `.lean` by NAME and
+         recurses to arbitrary depth; freeze filters by CONTENT
+         (`states_a_theorem`) and stops at `max_depth=12`.
+
+credentials no key value in any tracked file; nothing here reads .env.

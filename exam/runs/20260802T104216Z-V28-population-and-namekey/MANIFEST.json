@@ -1,0 +1,276 @@
+{
+  "artifact_digests": {
+    "artifacts/answers/p15-handover-a0.reader-tier1.answers.json": "9cbdc6668f172abc5eb7b8c3849177b841e5535cb214ca0551c056b72f9a0de0",
+    "artifacts/answers/p15-handover-a0.reader-tier2.answers.json": "bec7fcd3e16b11e7511b8972dfe17bf8fb8fcf0beb6b360fc2fcda8088e9d0f3",
+    "artifacts/answers/p15-verdict-a2.cheater-v4.answers.json": "322c21514a8ac07a424e53317ab5f3e0dca076209d7df4b38a69eb00d184718b",
+    "artifacts/answers/raw_tier1.json": "addf5c3e333dec165e57dde85739d9aa6d5eec5b7a329a6d01b4de83a3d239d4",
+    "artifacts/answers/raw_tier2.json": "5b887c0d66efcc90c7af9f1c3efaa400bc6a011d60693a7498ab1326d5d347a6",
+    "artifacts/build_manifest.json": "6fe360a8957aeab203009647b10493630d8cffbfcfc01176f3dae77ca96dbb4e",
+    "artifacts/calibration.json": "f2bba28c86b1b816f8c43273cdc462bdf3543a0a44a4cff5a6475bd430c864a9",
+    "artifacts/endpoint_controls/abstainer.answers.json": "ce7a73471946f67c6a67b4ca4d76e7a62a15719af6879a75228aa345aa1b6d44",
+    "artifacts/endpoint_controls/bluffer.answers.json": "efd33c136da4354467886d6de986afa1e5609f007e7871951c7b6547a537253e",
+    "artifacts/endpoint_controls/denier.answers.json": "d7abcc1e4c7c45f3678d96d95825c8d4c6b63d5593a7ca839d17f776e5316856",
+    "artifacts/endpoint_controls/memoriser.answers.json": "4aba5b11fe5524229bee72a879c65cce9167503f4b8585fc632ba55025e293e4",
+    "artifacts/endpoint_controls/null.answers.json": "7e21a67f82e5a3ffb7c32004cb73c90acd213d513622aad6c797a3e0f1ec80ca",
+    "artifacts/endpoint_controls/oracle.answers.json": "235e10b9789840b574afa4d68bce30f8a0c6867c5571418960e16c8468a74f2e",
+    "artifacts/endpoint_controls/overclaimer.answers.json": "544364810ed12f57b226ca7fe5f079857ae828c7d3e5a5f5d3059e29dcae3f75",
+    "artifacts/exam_summary.json": "d57f1a6c95163f44ff9d52e60914b91ef9d79567dda2afe345f9eb1f7b5f9017",
+    "artifacts/leakage.json": "e022b059d9f5db48da7674398f43017d59f33a2c8f0599adac96d708467829fc",
+    "artifacts/matrix/discrimination_worldgen.json": "6df7574f0c48fa936724b56007354f4aed8c1feb823b3d8c4fe69ed43975b46b",
+    "artifacts/matrix/heldout_worldgen.json": "001a9a4028b309c2da3808b3dde988484ec844116053904610e49ce92bacc0aa",
+    "artifacts/matrix/verdict_confusion.json": "70f7f9e350c5ecaca3250b0d08f02dc91193cfaceb0758afb9dd8f6c0587e9c1",
+    "artifacts/matrix/verdict_confusion.md": "bc965521104395d43670e0583a8b3ee17e4822617698c319c9fec01e2d2a6439",
+    "artifacts/papers/p15-adaptation-a0.paper.json": "a403d85fda257290874d1fce386aa6604eba6581011868188dcb981d4819f791",
+    "artifacts/papers/p15-handover-a0.paper.json": "9bc6bd9636d9e7548d050ca6bf7a45fa92bda71a4c34d03d28794838c1270776",
+    "artifacts/papers/p15-heldout-a0.paper.json": "cfa6d8f6d7b21561142f537c5720b8c81aa7776db0bc7210a18c18f2f87b0af1",
+    "artifacts/papers/p15-verdict-a2.paper.json": "e069204ff6ac90b5abd2c65056b8b2586f7f286ad6169123035fc5a100bb17e1",
+    "artifacts/prereg/verdict_class_inventory.md": "211c380a7a9e790f68ca957242e96524b997cb672d54450a4d64cd6c66af9453",
+    "artifacts/prereg/verdict_negative_controls.md": "9103bf805eaf65ce3ec91940416a8a57e57a558eed88a3ae9c2e3bed06629f6b",
+    "artifacts/prereg/verdict_prereg.json": "4d6c8f46243fdd6aa9bdc6c4541158750bcef53ded09b2eb249106e7d6be9029",
+    "artifacts/reports/p15-handover-a0.reader-tier1.report.json": "602f672965606bab30c3dc6350606079a0446a4ed8a5e3445657e5cda292517c",
+    "artifacts/reports/p15-handover-a0.reader-tier2.report.json": "cb386a901d58dc61e692aceb927c43361a7e76c13fb321bef0a4d5967afd550c",
+    "artifacts/selftest.json": "e51a0e488b9df65657aed1ae4bae18c46745d7aeb0f076f00cde8dda66db0186",
+    "artifacts/truth/p15-adaptation-a0.truth.json": "c9e48928a5160d1fd60741a870d5e8c0e1f23e4708528a254252db62e567f953",
+    "artifacts/truth/p15-handover-a0.truth.json": "80223644ab00c271fdb1c2485c61d8ea015ad8317300a99637c82c49bdc1759e",
+    "artifacts/truth/p15-heldout-a0.truth.json": "f054db74788d65c6140b279d48d88deb968efd6c52d447adb9390255ca90d245",
+    "artifacts/truth/p15-verdict-a2.truth.json": "2fb3c1e7e98e9e9ce039b65d1f4ae4cb3b7f62153b453dbd1d586a26634b7ec2",
+    "artifacts/variant_specs/a2var-i1-atrium-nodown.json": "beddb7b0d257ab68b95b52cbf8b1564dc007d354fe9d34dfa0f5c6cec1b48039",
+    "artifacts/variant_specs/a2var-i2-updraft-noup.json": "ab46e1a43040adf8d6183cb51895e60a1225a6b33fb6dbe9abf78cae453daa06",
+    "artifacts/variant_specs/a2var-i3-cistern-cut.json": "bc003113cee3336c6da9a3eee64a491a92268d95b990829b7a0726ff6ae0691c",
+    "artifacts/variant_specs/a2var-i4-atrium-budget.json": "a2dcf5f1ee6a76a7b8aba953c1145d037b6bcbf58c5b71598fa8049d9ca46e7c",
+    "artifacts/variant_specs/a2var-i5-quarry-swap.json": "1d7aa31cf1264ef98273f1b18d0d9ec8418e8c96c253be5d8bc7d847ffb0505e",
+    "artifacts/variant_specs/a2var-ii1-gantry-sealed.json": "9eb625a826b02232153f2cec7e4019c75b9d24db4da82149d122418b67cb56ac",
+    "artifacts/variant_specs/a2var-ii2-lattice-bridge.json": "65e71c4d90fec5f83be98f617d8aa11d04a472f685a13c01049b4899108e5024",
+    "artifacts/variant_specs/a2var-ii3-spindle-budget.json": "342e4be3534fdcdc269d9612b97da363137766cb1e9cd7fe346c7217c046a5cd",
+    "artifacts/variant_specs/a2var-ii4-orchard-noleft.json": "88387889e7c0d702e510765b4ebfc68c526860cf99b39d28027bb92c3453c47e",
+    "artifacts/variant_specs/a2var-iii1-meander-swap.json": "3d1c94f175f7f1541f74ea73e1a37c563e92d27335c35e611cc1b829f231beea",
+    "artifacts/variant_specs/a2var-iii2-atrium-roomy.json": "9ecc49cd8fae8dd3c64f5be581c5a50a4b0b60b05036f38b0a97e66049ec3cd7",
+    "artifacts/variant_specs/a2var-iii3-atrium-offpath.json": "3b111fa268555a9032c0d6a9b55961ad36dcde52f6d13062dece264f1427730f",
+    "artifacts/variant_specs/a2var-iii4-atrium-noleft.json": "b26acb370cb0572a42d57a818325dd318c2851324c712a652f01c4b227867f30",
+    "artifacts/variant_specs/a2var-iii5-atrium-tighten.json": "b63b935993b37928b4d43c625471a509bbb40eca18401ab9134e6cb35e45252c",
+    "artifacts/variant_specs/a2var-iii6-lattice-safe.json": "f1e19e9bbe6a6e1fa597ebbd121d5045a9df2f3caa22ec62a2bcc6415e2febd2",
+    "artifacts/variant_specs/a2var-iii7-lattice-roomy.json": "deebfccd93832f94b5cc6d08f253bf441a4eb5f965207a4f7e3d1dadfc87e381",
+    "artifacts/variant_specs/a2var-iii8-lattice-swap.json": "949276cd0f33fd6fa727774e50fc404f47f1059250fb481b9ce08929eec9c706"
+  },
+  "base_commit": "1e5b3f00dfb40fcc73f582a5de2390d1d3466844",
+  "branch": "agent/v28-exam-four-tests-must-flip",
+  "calibration": {
+    "calibrated": true,
+    "failures": [],
+    "per_type": {
+      "adaptation": {
+        "calibrated": true,
+        "paper_id": "p15-adaptation-a0",
+        "scores": {
+          "bluffer": 0.170833,
+          "memoriser": 0.170833,
+          "null": 0.0,
+          "oracle": 1.0
+        },
+        "structural": {
+          "memoriser_silently_wrong": 2
+        }
+      },
+      "handover": {
+        "calibrated": true,
+        "paper_id": "p15-handover-a0",
+        "scores": {
+          "bluffer": 0.326087,
+          "memoriser": 0.717391,
+          "null": 0.0,
+          "oracle": 1.0
+        },
+        "structural": {}
+      },
+      "heldout": {
+        "calibrated": true,
+        "paper_id": "p15-heldout-a0",
+        "scores": {
+          "bluffer": 0.45,
+          "memoriser": 0.575,
+          "null": 0.0,
+          "oracle": 1.0
+        },
+        "structural": {
+          "bluffer_fraction": 0.45,
+          "min_replay_gap": 0.4,
+          "oracle_minus_bluffer": 0.55,
+          "published_bluffer_ceiling": 0.45,
+          "replay_gap": 0.85
+        }
+      },
+      "verdict": {
+        "calibrated": true,
+        "paper_id": "p15-verdict-a2",
+        "scores": {
+          "bluffer": 0.264706,
+          "memoriser": 0.588235,
+          "null": 0.0,
+          "oracle": 1.0
+        },
+        "structural": {
+          "answer_shape_probes": {
+            "abstainer": {
+              "awarded": 0.0,
+              "counts": {
+                "abstained": 17,
+                "correct": 0,
+                "unanswered": 0,
+                "wrong": 0
+              },
+              "expected": 0.0
+            },
+            "forged_certificate": {
+              "awarded": 17.0,
+              "counts": {
+                "abstained": 0,
+                "correct": 17,
+                "unanswered": 0,
+                "wrong": 0
+              },
+              "expected": 17.0
+            },
+            "illegible": {
+              "awarded": 0.0,
+              "counts": {
+                "abstained": 0,
+                "correct": 0,
+                "unanswered": 0,
+                "wrong": 17
+              },
+              "expected": 0.0
+            },
+            "searcher": {
+              "awarded": 19.0,
+              "counts": {
+                "abstained": 0,
+                "correct": 17,
+                "unanswered": 0,
+                "wrong": 0
+              },
+              "expected": 19.0
+            },
+            "wrong_claim_with_reason": {
+              "awarded": 0.0,
+              "counts": {
+                "abstained": 0,
+                "correct": 0,
+                "unanswered": 0,
+                "wrong": 17
+              },
+              "expected": 0.0
+            }
+          },
+          "bluffer_pair_by_board_size": {
+            "large": [
+              1.0,
+              0.0
+            ],
+            "small": [
+              1.0,
+              0.0
+            ]
+          },
+          "bluffer_sensitivity": 1.0,
+          "bluffer_specificity": 0.0,
+          "denier_pair": [
+            0.0,
+            1.0
+          ],
+          "verdict_weights": {
+            "justification": 0.5,
+            "search_credit": 0.4,
+            "verdict": 0.5
+          }
+        }
+      }
+    }
+  },
+  "marked": [],
+  "note": "Answer keys are digested here, never copied. An archive that ships the keys beside the sheets rebuilds the leak the exam exists to avoid.",
+  "papers": {
+    "p15-adaptation-a0": {
+      "key_sha256": "d0bcd3f2465b6520f31351cc61fc5ba1c38ec5a25f581afc952c1beb9f90e17a",
+      "n_items": 60,
+      "question_type": "adaptation",
+      "sheet_sha256": "8d1c348aacbe81766c84fbce9279e0df073817c014456adff1d4737ae1c8d4ef"
+    },
+    "p15-handover-a0": {
+      "key_sha256": "5bc7b0602de3b75ae727db834001519d0b70268e96adfb593617e302fedbb8cf",
+      "n_items": 29,
+      "question_type": "handover",
+      "sheet_sha256": "30c25410818ed4b34e1aee21493d342cbf8640de82a7fca44bc23ec900d06c56"
+    },
+    "p15-heldout-a0": {
+      "key_sha256": "69686c23998ac0ebb4c7149a7cd1ddadc201441e6f57f433a15891cf5eb218cf",
+      "n_items": 80,
+      "question_type": "heldout",
+      "sheet_sha256": "9e237b523ce4661c1e28792cf9589f8418fbaac6e0cee7e9dc2261a299527a2e"
+    },
+    "p15-verdict-a2": {
+      "key_sha256": "d8b4ae7b96fd619aa0ff3e197d80dbaf23280832ef861c28baf3a13ddf37a984",
+      "n_items": 17,
+      "question_type": "verdict",
+      "sheet_sha256": "ca4e62242e59bb50d0e9d91793d6bd95458c85179075f9fe9051ac935a4504dc"
+    }
+  },
+  "prompt_id": "V28-exam-four-tests-must-flip",
+  "provenance": {
+    "cut_version": "v1",
+    "dev_pile": [
+      "ar25-0c556536",
+      "g50t-5849a774",
+      "sk48-d8078629",
+      "tn36-ef4dde99"
+    ],
+    "generated_worlds_available": 20,
+    "n_sealed": 21,
+    "piles_sha256": "3feca53e5ede695cfa46ae994cb95fd6b43abb9d97295e8c87e6302b41bbc19a",
+    "synthetic_worlds": [
+      "a0",
+      "a0-prime",
+      "a2"
+    ]
+  },
+  "python": "3.13.13",
+  "rubric": {
+    "modules": {
+      "exam.grading.rubrics_adaptation": "7320c75c1db0e1f162efd56aa93d8a2b3cef086aa520bbd814952c8790cf1e4e",
+      "exam.grading.rubrics_handover": "fc35ef2bd43941ca83956fb8a50ae4851fa59630387993856c29974cc06f2c5b",
+      "exam.grading.rubrics_handover_auto": "35f517a3f9c3b5739222fe0f36ab861e4c7614d2fef6a75e5575cef2bb734ce2",
+      "exam.grading.rubrics_heldout": "c595101cdec408969758856885d4bb0f91bcb93ee0cd83571945064765f624e9",
+      "exam.grading.rubrics_verdict": "420a826dafc057f663a28b7fc1b04855785d11618712157cfb5e31c52af45711"
+    },
+    "rubric_digest": "26a518d99d999b0ffc753db3c9dd169add1d26b01d7c0c6e7452fc7dd03f53e4",
+    "rubrics": {
+      "adapt.collateral.v1": "falsified manual rules, claims to re-examine, claims now false, and the standing verdict on `mismatch`; raises silently_wrong when the old verdict is kept on a variant where it flipped",
+      "adapt.describe.v1": "the minimal set of rule-change labels consistent with the observations; set equality against CHANGE_LABELS",
+      "adapt.detect.v1": "first observation at which the old theory mispredicts on one level; graded with episode-sized tolerance bands, no credit for a false alarm on a level where the change is undetectable",
+      "adapt.detect_cross.v1": "the per-level map of first divergences for one variant; mean of the per-level bands, so a uniform guess cannot ride the majority answer",
+      "adapt.repair.v1": "the action budget a stated re-mining protocol spends and whether the re-mined theory is exact on a held-out board",
+      "handover.name_class": "Is this name something the level supplies (level_data) or something the world fixes across every level (world_law)?",
+      "handover.optimal_action": "An action lying on some shortest solution from the given state; the whole optimal set is accepted, not one tie-break.",
+      "handover.step_semantics": "One transition of the A0 manual: the next Player cell, the next Box cell and the rule that fired, all three or nothing.",
+      "handover_auto.counterexample": "A legal situation at which a claim the manual marks proven is false, checked by recomputing the claim there.",
+      "handover_auto.name_class": "Is this name something the level supplies (level_data) or something the world fixes across every level (world_law)?",
+      "handover_auto.optimal_action": "Half the points for an action on some shortest solution (or `none` when there is no solution), half for the length of that shortest solution.",
+      "handover_auto.rule_justification": "The subset of the offered clauses the claim's truth depends on; hits pay, spurious citations cost the same, exact set for full marks.",
+      "handover_auto.step_semantics": "One transition of the A0 manual: next Player cell, next Box cell and the rule that fired, all three or nothing. Same marking as handover.step_semantics, new items.",
+      "heldout.frame_exact": "held-out prediction: the predicted frame must equal the true frame cell for cell. No partial credit -- a cells-correct score on a 7x7 board is ~96% for returning the input unchanged, so it would measure board size rather than theory. Abstention is recorded and scores zero.",
+      "verdict.a2.claim_and_certificate": "Half the points for the verdict, half for the reason. On an unsolvable level the reason is a certificate this rubric verifies against the board (full) or a credible exhaustive search (partial); on a solvable one it is a witness plan this rubric replays."
+    }
+  },
+  "run_files": {
+    "runs/20260802T104216Z-V28-population-and-namekey/ENUMERATION.txt": "a7b5cebe46aaa855b31f79893a1a107829f5fd8521192d61a697d11275be29e8",
+    "runs/20260802T104216Z-V28-population-and-namekey/GATES.txt": "0b8ea4fd1cddd4d2e0723c58ecfcf186f86f803b6d49ea05fdb603584bc69118",
+    "runs/20260802T104216Z-V28-population-and-namekey/NAMEKEY.txt": "8b16b331482586029a81aedc49584bae08ebf16682149dbcd13aaaf1ad7a065e",
+    "runs/20260802T104216Z-V28-population-and-namekey/NOTES.md": "0eac13b192dd4d67c67d1c783ea23e4922e0d76dffb21e3f9b0ffee93e6aabe5",
+    "runs/20260802T104216Z-V28-population-and-namekey/RUN_STATE.md": "5e69fd1387cb871fafe2429a76c736b3a1b721a071cb7f72d40b9112323666e5",
+    "runs/20260802T104216Z-V28-population-and-namekey/probe_enumeration.py": "7f75d0e26f6c61a20a0f196b98a98e68840956258f7a3517edd3e5cc35e02d0d",
+    "runs/20260802T104216Z-V28-population-and-namekey/probe_namekey.py": "4fd03a201e243ae9095813b65243f550c0c7fdb2c0b62b5687ad46b083441a21"
+  },
+  "run_id": "20260802T104216Z-V28-population-and-namekey",
+  "seed": 20260728,
+  "utc": "2026-08-02T10:42:16Z",
+  "worktree_dirty": true
+}

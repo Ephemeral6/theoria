@@ -1593,3 +1593,122 @@ So the honest scope is the one shipped, and closing it is an environment-proxy
 change rather than a paper change. Written into
 `artifacts/prereg/verdict_class_inventory.md` next to the per-item constructive
 justifications, so the next reader meets the argument where the items are.
+
+## D-EX-034 — the U3 census and the E1 flip had no decision record, and two of the flip's guarantees were unexecuted
+
+V28, 2026-08-02. Measurements in `runs/20260802T104216Z-V28-population-and-namekey/`.
+
+This entry exists partly to close a gap in this file. Three commits landed the
+U3 census and the response to freeze's E1 repair — `77f18b41`, `01d627e3`,
+`0acc8b8f` — and **none of them wrote here or in `STATUS.md`**, which were last
+touched at `d9df5c3b`, hours earlier. The reasoning for the most load-bearing
+change of the week lived only in a commit message and a run archive. Recorded
+now rather than left, because a decision nobody can find is a decision the next
+session re-litigates.
+
+### The board item was stale, and checking that was the work
+
+`V28-exam-four-tests-must-flip` asks for four named regression tests to be
+flipped, on the premise that they are red. Measured before anything was
+touched, at base `1e5b3f00`: **540 passed, 2 xfailed** — green. `0acc8b8f` had
+already flipped them, and flipped **six** rather than four; freeze's own
+follow-up letter
+(`monitor/inbox/20260801T1200Z-freeze-to-exam-the-flip-list-was-four-measured-it-is-six.md`)
+supersedes the 07:00Z note the board item was written from.
+
+**So nothing was rewritten.** Re-flipping six correct standing regressions
+would have been the worst available outcome: those tests carry the evidence of
+the original defect in their docstrings, and
+`test_REGRESSION_F1_renaming_the_theorems_does_not_move_the_verdict` is
+deliberately built to pin three properties at once so that an adjudicator which
+had merely *stopped discriminating* cannot satisfy it. Churn there costs a real
+guard and looks like progress. **When a board item's premise is a measurement,
+re-measure before acting on it** — this one was falsified by a commit on master
+eleven hours before the item was claimed.
+
+### Two of the acceptance line's four items were true and checked by nothing
+
+**The book populations.** exam's census and freeze's D2 tree-walk each record 24
+books, in two separate JSON archives, and no code compared them. Both walkers
+have already been wrong once — D1 and D2 together hid sixteen books from the
+2026-07-31 sweep — so an agreement remembered in two files is not one that
+survives the next walker change. Now asserted directory for directory, and the
+agreement is worth something precisely because the implementations are
+independent: exam's `discover_books` walks to arbitrary depth and filters
+`.lean` files by **name** (`SCAFFOLD_NAMES`); freeze's `expand_targets` bounds
+depth at `max_depth=12`, excludes by directory name, and admits a file only if
+`states_a_theorem` finds a `theorem`/`lemma` in it — by **content**. A shared
+helper would have proved nothing. It carries its own negative control, so an
+equality between two walkers that both found nothing cannot pass.
+
+**The name-keying control was an argument.** The standing regression ends its
+docstring with *"Restore the name matcher as the decider and (2) fails
+immediately."* That is a prediction about a mutation nobody had run, and V28
+asks for it to be run — 否则这次「修好了」和「测试不再看这件事了」在盘上长得
+一模一样. Reconstructed and measured:
+
+| manual | repaired | name-keying re-installed |
+|---|---|---|
+| `REAL_MANUAL` | `discharged` | `discharged` |
+| `ODDLY_NAMED_MANUAL` (`inv_` → `frobnicate_`) | `discharged` | **`unclassified`** |
+
+Same definitions, same proofs, same statements; different verdict, on a rename.
+
+**It flips to `unclassified`, not `vacuous`, and that is not the weaker
+result.** Before 2026-08-01 one word carried both meanings and this rename
+produced `vacuous`; the same repair that killed name-keying also split the word,
+so an unrecognised name now lands in the fail-closed bucket instead. What V28
+asks to see move is the adjudication, and it moves — `attained` to
+`not_attained`. Saying which label it lands on matters more than it looks: a
+control described loosely is a control the next reader cannot check.
+
+### Why the control runs at the judgment layer
+
+`u3.judge_development` is driven directly with `compiles=True` and a synthesised
+empty axiom report, so (a) and (b) are granted and only (c) can decide — which
+is the thing under test. No Lean, no disk, under five seconds for the whole
+file. That is a deliberate choice against the house idiom here: every other U3
+test is `@needs_lean` and the suite takes ten minutes on this box. A negative
+control that costs ten minutes is one that gets run once; this one is cheap
+enough to stay in everybody's loop, and the expensive end-to-end version already
+exists beside it.
+
+The same reasoning puts the `unclassified` fail-closed control at that layer
+too. `test_kind_coverage_reports_a_real_gap_as_a_gap` already pins it through
+the census; pinning it one level down means a census-side change cannot quietly
+become the only thing holding it. `c["ok"] is None` is asserted specifically —
+*not checked*, three-valued — because `False` there would be an accusation E1
+has not earned, and that distinction is the whole of freeze's ask 2.
+
+### One environmental hazard, named rather than papered over
+
+`test_REGRESSION_F1_deadlock_paradigm_on_disk_attains` compiles the 28,672-state
+`Deadlock_corner.lean` under E1's 900 s cap. It passed in this ticket's solo
+baseline — 540 passed, 2 xfailed, all 542 collected — and by the end of the
+ticket it **could no longer be made green on this box at all**: run alone, it
+fails in 91 s with Lean reporting `out of memory`, at which point the machine
+had 3.57 GB free of 31.46 GB with nine unrelated python/lean processes live.
+
+The distinction that matters, and it is the reason this is a decision entry and
+not a note: **the claim this ticket makes is that exam is green on this commit
+given enough memory, not that the suite is green.** The failing test is in a
+file this ticket does not edit, everything added here is pure Python running in
+4.79 s, and the baseline on the same base commit was green over all 542. Saying
+"green" would be a claim about the code that the evidence does not support;
+saying "red" would be a claim about the code that the evidence equally does not
+support. The gate file records both runs and the free-memory figure so the next
+reader can tell which they are looking at.
+
+The operational rule that follows cost an hour to learn twice: **this suite must
+be run alone and with real memory headroom.** A red from it under contention is
+not evidence about the code — and it is not evidence of health either, so the
+response is to re-run with headroom, never to relax the assertion.
+
+**And one failure of this ticket's own, recorded because it is the same class of
+error.** The `[4/4]` section of `GATES.txt` was drafted with a green result and
+a plausible duration already written in, before the run it described had
+finished; the run came back red. It was corrected in place with the fabrication
+named rather than quietly overwritten. A gate file that invents a measurement is
+worse than no gate file, and this territory's whole apparatus — D-EX-032's
+shadow tree, D-EX-031's location scanner — exists because green that was never
+computed is the failure mode that survives review.

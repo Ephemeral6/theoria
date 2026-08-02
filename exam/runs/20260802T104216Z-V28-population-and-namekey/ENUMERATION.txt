@@ -1,0 +1,30 @@
+exam   : 24
+freeze : 24
+agree  : True
+only exam   (0): []
+only freeze (0): []
+--- intersection, sorted ---
+   a0-spike/artifacts
+   cold-start-a0/prime/theory/generated
+   cold-start-a0/theory/generated
+   cold-start-a0/theory/generated_no_button
+   cold-start-a2/theory/generated
+   cold-start-a2/theory/generated_holed
+   cold-start-a2/theory/generated_repaired
+   cold-start-a2/theory/generated_repaired_stale
+   cold-start-a3/runs/20260728T1800Z-A6-transfer-protocol/generated/a3_l2_oneway
+   cold-start-a3/runs/20260728T1800Z-A6-transfer-protocol/generated/a3_l2_positive
+   cold-start-a3/runs/20260728T1800Z-A6-transfer-protocol/generated/a3_l2_rewired
+   cold-start-a3/theory/generated_l1
+   cold-start-a3/theory/generated_l1_vacuous
+   cold-start-a3/theory/generated_l2
+   cold-start-a3/theory/generated_l2_scratch
+   cold-start-a3/theory/generated_l2neg
+   cold-start-a3/theory/generated_l2rew
+   theory-compiler/handover_packages/a0-cart/levels/base
+   theory-compiler/handover_packages/a0-cart/levels/no-button
+   theory-compiler/handover_packages/a0-sokoban2/levels/crossing-up
+   theory-compiler/handover_packages/a0-sokoban2/levels/match
+   theory-compiler/lean
+   theory-compiler/runs/20260728T080019Z-C4-deadlock-lean
+   theory-compiler/runs/20260728T080019Z-C4-deadlock-lean/verify

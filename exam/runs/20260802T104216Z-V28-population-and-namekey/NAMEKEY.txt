@@ -1,0 +1,7 @@
+REAL_MANUAL          label=discharged     kinds=['invariant', 'point_claim'] hints=['invariant']
+ODDLY_NAMED_MANUAL   label=discharged     kinds=['invariant', 'point_claim'] hints=[None]
+TAUTOLOGY_MANUAL     label=vacuous        kinds=['invariant', 'point_claim'] hints=['invariant']
+
+=== now re-install name keying ===
+REAL_MANUAL          label=discharged
+ODDLY_NAMED_MANUAL   label=unclassified
