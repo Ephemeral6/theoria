@@ -81,12 +81,27 @@ def main():
                 "twice in the file"),
             "verify_sh_syntax": "bash -n OK",
             "verify_sh_full": (
-                "NOT RUN -- bash could not fork with ~3.6 GB free of 31.46 GB "
-                "and the script never reached stage [0]. Recorded as an "
-                "environmental block, not as a pass."),
+                "RAN. Stage [21] PASS on both checks. The script reports DRAFT "
+                "INCOMPLETE -- 3 check(s) failed, and all three are master's "
+                "own (MANIFEST.json drift, BUDGET_TABLE recompute, "
+                "check_locations.py); clean master reproduces the same three in "
+                "the same order. This ticket adds no failure and removes none. "
+                "Corrects an earlier version of this manifest that recorded the "
+                "script as NOT RUN: two early attempts were killed by memory "
+                "pressure and a later one completed, so the block was transient "
+                "and reporting it as standing overstated it."),
+            "why_the_exit_code_cannot_be_the_negative_sample": (
+                "the baseline is already red at 3, so 'freeze's verify goes red' "
+                "cannot be demonstrated by the exit code. The negative sample "
+                "therefore lives in --selftest, one mutation per rule each "
+                "required to fire -- the kit's own convention (e2_withdrawal.py) "
+                "-- and none of the three standing reds can mask a new bad line "
+                "from stage [21]."),
         },
         "gaps": [
-            "bash freeze/verify.sh is unverified on this machine (memory).",
+            "freeze's verify has three standing failures this ticket closes "
+            "none of: MANIFEST.json drift, BUDGET_TABLE recompute, "
+            "check_locations.py. All predate this branch.",
             "schema_repro survives in MANIFEST_DRAFT.md:537, "
             "PENDING_FIVE.md:141,294 and STATS_RULES.md:26,2099 -- freeze files, "
             "but outside this ticket's scope; named and raised in inbox rather "

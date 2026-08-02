@@ -45,24 +45,39 @@ territory   freeze/ only, plus the PARTNER_SYNC paragraph and monitor/inbox/.
       bash -n freeze/verify.sh
    ok    SYNTAX OK
 
-[4/4] the full script — NOT RUN, and not counted as a pass
+[4/4] the full script — RAN. Stage [21] green; 3 pre-existing failures, none new.
       bash freeze/verify.sh
-   BLOCKED   this box could not run it. With ~3.6 GB free of 31.46 GB (1.89 GB
-             by the last attempt) bash could not fork:
-                 child_copy: cygheap read copy failed ... Win32 error 299
-                 dofork: child -1 - forked process died unexpectedly
-                 /usr/bin/bash: fork: retry: Resource temporarily unavailable
-             The script never reached stage [0], so there is no stage result of
-             any kind — not a pass, not a fail. Attempts were stopped rather
-             than left thrashing.
+   ok    stage [21] PASS on both checks:
+             PASS  schema_column_withdrawal.py --verify: ...
+             PASS  schema_column_withdrawal.py --selftest: 11/11 controls,
+                   every one demonstrated to fire
+   --    DRAFT INCOMPLETE -- 3 check(s) failed, and all three are master's:
+             FAIL  MANIFEST.json has drifted from the tree
+             FAIL  BUDGET_TABLE.{json,md} no longer recompute from the ledgers
+             FAIL  tracked artefacts name a machine without an exemption
+         Measured on clean master too: `DRAFT INCOMPLETE -- 3 check(s) failed`,
+         the same three in the same order, matching what
+         `freeze/runs/20260801T0700Z-E1-kind-census/RUN_STATE.md:80-84` already
+         recorded. `python freeze/build_manifest.py --verify` exits 1 on master
+         as well, so the drift predates this branch. **This ticket adds no
+         failure and removes none.**
 
-             What IS established: stage [21] runs exactly two commands, and both
-             are green above under [1/4] and [2/4]; the surrounding shell
-             plumbing is copied verbatim from stage [19], which runs the §3.0
-             withdrawal check in the same shape. What is NOT established: that
-             the 21-stage script as a whole is green on this commit. Anyone with
-             memory headroom should re-run it, and this file should not be read
-             as saying they need not.
+         A CORRECTION TO THIS FILE'S OWN FIRST VERSION. This section first said
+         the script was BLOCKED and had never reached stage [0]. That was true
+         of two early attempts — bash could not fork under memory pressure
+         (`child_copy: cygheap read copy failed`, `fork: retry: Resource
+         temporarily unavailable`) — and it was wrong as a statement about the
+         script, which completed on a later attempt. The block was transient and
+         reporting it as a standing fact overstated it. The numbers above are
+         from a completed run, and an independent run on clean master
+         reproduced the same three failures.
+
+         The baseline being red at 3 has a consequence worth stating: **"freeze's
+         verify goes red" cannot be demonstrated by the exit code**, because it
+         is already 1. That is why the negative sample lives in [2/4]'s selftest,
+         one mutation per rule, each required to fire — the kit's own convention
+         (`e2_withdrawal.py`), and the reason none of the three pre-existing
+         reds can mask a new `bad` line from stage [21].
 
 INVENTORY behind the negative sample (measured, not assumed)
       `复现值` appears in freeze/ only in CLAIMS_TEXT.md, at 4 lines; the

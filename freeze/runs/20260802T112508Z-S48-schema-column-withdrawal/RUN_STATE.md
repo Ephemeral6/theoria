@@ -93,17 +93,34 @@ left the gate green. It now scans the whole clause `**不可测**，而不是待
 * `python freeze/schema_column_withdrawal.py --verify` → **exit 0**
 * `python freeze/schema_column_withdrawal.py --selftest` → **11/11, exit 0**
 * `bash -n freeze/verify.sh` → **syntax OK**
-* `bash freeze/verify.sh` → see `GATES.txt`. **This box could not run it**: with
-  ~3.6 GB free of 31.5 GB, bash could not fork (`child_copy: cygheap read copy
-  failed`, `fork: retry: Resource temporarily unavailable`) and the script never
-  reached stage 0. Recorded as an environmental block, not as a pass.
+* `bash freeze/verify.sh` → **ran. Stage [21] PASS on both checks**; the script
+  reports `DRAFT INCOMPLETE -- 3 check(s) failed`, and all three are master's
+  own: `MANIFEST.json` drift, `BUDGET_TABLE` recompute, and
+  `check_locations.py`. Clean master reproduces the same three in the same
+  order, matching `runs/20260801T0700Z-E1-kind-census/RUN_STATE.md:80-84`.
+  **This ticket adds no failure and removes none.**
+
+  *Correction to this file's first version.* It said the script was blocked and
+  never reached stage 0. Two early attempts were indeed killed by memory
+  pressure — bash could not fork — but a later attempt completed, and reporting
+  a transient block as a standing fact overstated it. The numbers above are from
+  a completed run.
+
+  One consequence worth carrying: the baseline is already red at 3, so **"freeze's
+  verify goes red" cannot be shown by the exit code** — it is already 1. That is
+  why the negative sample lives in the checker's `--selftest`, one mutation per
+  rule each required to fire, which is the kit's own convention
+  (`e2_withdrawal.py`) and why none of the three standing reds can mask a new
+  `bad` line from stage [21].
 
 ## Gaps — stated, not worked around
 
-1. **`bash freeze/verify.sh` was not run to completion on this machine.** Stage
-   [21]'s two commands were each run directly and are green, and the stage's
-   plumbing is copied verbatim from stage [19], but the end-to-end script is
-   unverified here. Anyone with memory headroom should re-run it.
+1. **freeze's verify has three standing failures and this ticket closes none of
+   them** — `MANIFEST.json` drift, `BUDGET_TABLE` recompute, and
+   `check_locations.py`. They are master's, they predate this branch, and they
+   are somebody's work but not this ticket's. Naming them here so that a future
+   reader who runs `verify.sh` and sees red does not attribute it to stage [21],
+   which passes.
 2. **Three other `freeze` files still name the retired arm** —
    `MANIFEST_DRAFT.md:537`, `PENDING_FIVE.md:141,294`, `STATS_RULES.md:26,2099`
    all say `schema_repro` 不存在. That is half-right now: the arm does not exist,
