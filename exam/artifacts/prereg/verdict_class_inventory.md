@@ -8,13 +8,13 @@ Theoria.md:289 requires a **构造性依据** for every variant: why it is unsol
 
 Exhaustive search is feasible and is *measured* to be: every item's state space is enumerated at build time and the count and cap are in the truth file. What the class scores is the reason -- a certificate against 'I searched and did not find' -- because a complete searcher stops correctly here too, and a searcher with a missing edge stops correctly for a reason that is false.
 
-| item | variant | operators | claim | naive enum | bound / enumerated | relaxed nodes | certificate | witness |
-|---|---|---|---|---|---|---|---|---|
-| `vq-1015eb0bb1` | `a2var-i2-updraft-noup` | `forbid_action` | unsolvable | feasible | 7 states, enumerated | 7 | `invariant` | -- |
-| `vq-17af763cab` | `a2var-i1-atrium-nodown` | `forbid_action` | unsolvable | feasible | 24 states, enumerated | 24 | `invariant` | -- |
-| `vq-82f568ca11` | `a2var-i3-cistern-cut` | `observation_loss` | unsolvable | feasible | 20 states, enumerated | 20 | `cut_set` | -- |
-| `vq-8ff1c690ad` | `a2var-i4-atrium-budget` | `step_limit` | unsolvable | feasible | 31 states, enumerated | 55 | `counting` | -- |
-| `vq-9725fbebf0` | `a2var-i5-quarry-swap` | `remap_action`, `remap_action` | unsolvable | feasible | 14 states, enumerated | 14 | `invariant` | -- |
+| item | variant | operators | claim | naive enum | state count | how counted | relaxed nodes | certificate | witness |
+|---|---|---|---|---|---|---|---|---|---|
+| `vq-1015eb0bb1` | `a2var-i2-updraft-noup` | `forbid_action` | unsolvable | feasible | 7 | enumerated | 7 | `invariant` | -- |
+| `vq-17af763cab` | `a2var-i1-atrium-nodown` | `forbid_action` | unsolvable | feasible | 24 | enumerated | 24 | `invariant` | -- |
+| `vq-82f568ca11` | `a2var-i3-cistern-cut` | `observation_loss` | unsolvable | feasible | 20 | enumerated | 20 | `cut_set` | -- |
+| `vq-8ff1c690ad` | `a2var-i4-atrium-budget` | `step_limit` | unsolvable | feasible | 31 | enumerated | 55 | `counting` | -- |
+| `vq-9725fbebf0` | `a2var-i5-quarry-swap` | `remap_action`, `remap_action` | unsolvable | feasible | 14 | enumerated | 14 | `invariant` | -- |
 
 * **`vq-1015eb0bb1`** (`a2var-i2-updraft-noup`): The updraft board carries no teleport, so every command displaces the cart by one of the four unit vectors or by nothing at all. With UP forbidden the surviving displacements have row components 0, +1 and 0, so the cart's row never decreases. It starts at row 5 and the goal is at row 1. The argument is four subtractions over the action alphabet and does not look at the state space at all.
 * **`vq-17af763cab`** (`a2var-i1-atrium-nodown`): Column 5 of the atrium board is solid wall from r1 to r7, so the right room touches the left room nowhere; its only entrance is the teleport at (7,4), and (7,4) is enterable only from the door cell (6,4) by a DOWN command -- its other three neighbours are wall. Forbidding DOWN therefore deletes the single edge joining the two rooms, and the cart's connected component is closed under every surviving command. The goal (2,7) lies in the other component. This follows from the board and the operator; no play is required to know it.
@@ -24,14 +24,14 @@ Exhaustive search is feasible and is *measured* to be: every item's state space 
 
 ## (ii) large-space unsolvable — 4 items
 
-**The claim this class carries is narrower than Theoria.md 1.11's.** What is established is `naive_enumeration_feasible: False` -- forward enumeration over the full (cart, button, latch mask) state, the method class (i) is graded on, cannot terminate against a constructive bound of 2^60 to 2^120. What is **withdrawn** is 唯不变量推理能答: every shipped item of this class is settled by an exhaustive computation over at most 600 nodes, and each of the four is settled by a different one. So the class measures **method selection under an apparent search barrier**. D-EX-028.
+**The claim this class carries is narrower than Theoria.md 1.11's, and the number it rests on is now a count.** What is established is `naive_enumeration_feasible: False` -- forward enumeration over the full (cart, button, latch mask) state, the method class (i) is graded on, cannot terminate. Three of the four items have their reachable set **counted exactly** on the shipped board by symbolic reachability (8.9e35, 1.6e38, 1.6e38); the fourth ships a step budget that puts an exact count out of reach and carries a two-sided bracket instead (1.7e37 to 4.1e63), whose lower side is itself 19 orders of magnitude above the 2^60 the construction proves. Every count exceeds the construction floor it is checked against, and the two methods share no code. V29. What is **withdrawn** is 唯不变量推理能答: every shipped item of this class is settled by an exhaustive computation over at most 600 nodes, and each of the four is settled by a different one. The count and the withdrawal are not in tension -- they answer different questions, and the class measures **method selection under an apparent search barrier**. D-EX-028.
 
-| item | variant | operators | claim | naive enum | bound / enumerated | relaxed nodes | certificate | witness |
-|---|---|---|---|---|---|---|---|---|
-| `vq-2986ed8ffc` | `a2var-ii4-orchard-noleft` | `forbid_action` | unsolvable | **out of reach** | 2^m = 3.32e+35, by construction | 177 | `invariant` | -- |
-| `vq-6150a6eeb7` | `a2var-ii2-lattice-bridge` | `observation_loss` | unsolvable | **out of reach** | 2^m = 1.33e+36, by construction | 180 | `cut_set` | -- |
-| `vq-721d09813c` | `a2var-ii1-gantry-sealed` | `remap_action`, `remap_action` | unsolvable | **out of reach** | 2^m = 1.33e+36, by construction | 180 | `invariant` | -- |
-| `vq-ee54166153` | `a2var-ii3-spindle-budget` | `step_limit` | unsolvable | **out of reach** | 2^m = 1.15e+18, by construction | 600 | `counting` | -- |
+| item | variant | operators | claim | naive enum | state count | how counted | relaxed nodes | certificate | witness |
+|---|---|---|---|---|---|---|---|---|---|
+| `vq-2986ed8ffc` | `a2var-ii4-orchard-noleft` | `forbid_action` | unsolvable | **out of reach** | 8.862e+35 (36 digits) | symbolic, exact | 177 | `invariant` | -- |
+| `vq-6150a6eeb7` | `a2var-ii2-lattice-bridge` | `observation_loss` | unsolvable | **out of reach** | 1.595e+38 (39 digits) | symbolic, exact | 180 | `cut_set` | -- |
+| `vq-721d09813c` | `a2var-ii1-gantry-sealed` | `remap_action`, `remap_action` | unsolvable | **out of reach** | 1.595e+38 (39 digits) | symbolic, exact | 180 | `invariant` | -- |
+| `vq-ee54166153` | `a2var-ii3-spindle-budget` | `step_limit` | unsolvable | **out of reach** | 1.661e+37 to 4.133e+63 | bracketed | 600 | `counting` | -- |
 
 * **`vq-2986ed8ffc`** (`a2var-ii4-orchard-noleft`): The orchard board has no teleport, so every command displaces the cart by a unit vector or by nothing. With LEFT forbidden the surviving displacements have column components 0, 0 and +1, so the cart's column never decreases. It starts at column 2 and the goal is at column 1. The 118 switches still reachable from the start keep the naive state space past 10^35, so this verdict is not available to a plain forward enumeration; the monotone column costs three subtractions. (118 is reachable, not strictly-to-the-right: two of them, (1,2) and (3,2), sit directly above and below the start's own column. Strictly to the right there are 116, and 2^116 is 8.3e34, which would not clear 10^35 -- the looser phrasing was worth one order of magnitude and is not used.)
 * **`vq-6150a6eeb7`** (`a2var-ii2-lattice-bridge`): The lattice board's separator row is solid except at (4,2), so that single cell is the only join between the corridor half and the goal room. There is no teleport on this board, so the cell cannot be crossed without being occupied at the end of a command. Declaring a loss on (4,2) severs the only join; the goal room becomes unreachable however the 120 switches are set, since no switch alters the geometry.
@@ -42,16 +42,16 @@ Exhaustive search is feasible and is *measured* to be: every item's state space 
 
 The false-positive trap. Every item carries a witness plan that was computed and replayed rather than asserted, and the key records whether the witness came from a search or a construction -- a plan that wins proves solvability however it was found, but on a paper whose premise is 由构造即知答案 the key has to say which.
 
-| item | variant | operators | claim | naive enum | bound / enumerated | relaxed nodes | certificate | witness |
-|---|---|---|---|---|---|---|---|---|
-| `vq-0ffc3cd33f` | `a2var-iii6-lattice-safe` | `observation_loss` | solvable | **out of reach** | 2^m = 1.33e+36, by construction | 298 | -- | construction |
-| `vq-1881c8c383` | `a2var-iii4-atrium-noleft` | `forbid_action` | solvable | feasible | 55 states, enumerated | 55 | -- | search |
-| `vq-6bab2f307c` | `a2var-iii7-lattice-roomy` | `step_limit` | solvable | **out of reach** | 2^m = 1.33e+36, by construction | 301 | -- | construction |
-| `vq-8c4f14b152` | `a2var-iii8-lattice-swap` | `remap_action`, `remap_action` | solvable | **out of reach** | 2^m = 1.33e+36, by construction | 301 | -- | construction |
-| `vq-9e0aefdf80` | `a2var-iii1-meander-swap` | `remap_action`, `remap_action` | solvable | feasible | 99 states, enumerated | 99 | -- | search |
-| `vq-abe007cdfa` | `a2var-iii2-atrium-roomy` | `step_limit` | solvable | feasible | 55 states, enumerated | 55 | -- | search |
-| `vq-c480b494f3` | `a2var-iii5-atrium-tighten` | `win_tighten` | solvable | feasible | 55 states, enumerated | 55 | -- | search |
-| `vq-e6ae49645d` | `a2var-iii3-atrium-offpath` | `observation_loss` | solvable | feasible | 49 states, enumerated | 49 | -- | search |
+| item | variant | operators | claim | naive enum | state count | how counted | relaxed nodes | certificate | witness |
+|---|---|---|---|---|---|---|---|---|---|
+| `vq-0ffc3cd33f` | `a2var-iii6-lattice-safe` | `observation_loss` | solvable | **out of reach** | 3.164e+38 (39 digits) | symbolic, exact | 298 | -- | construction |
+| `vq-1881c8c383` | `a2var-iii4-atrium-noleft` | `forbid_action` | solvable | feasible | 55 | enumerated | 55 | -- | search |
+| `vq-6bab2f307c` | `a2var-iii7-lattice-roomy` | `step_limit` | solvable | **out of reach** | >= 2e+05 | floor only | 301 | -- | construction |
+| `vq-8c4f14b152` | `a2var-iii8-lattice-swap` | `remap_action`, `remap_action` | solvable | **out of reach** | 3.203e+38 (39 digits) | symbolic, exact | 301 | -- | construction |
+| `vq-9e0aefdf80` | `a2var-iii1-meander-swap` | `remap_action`, `remap_action` | solvable | feasible | 99 | enumerated | 99 | -- | search |
+| `vq-abe007cdfa` | `a2var-iii2-atrium-roomy` | `step_limit` | solvable | feasible | 55 | enumerated | 55 | -- | search |
+| `vq-c480b494f3` | `a2var-iii5-atrium-tighten` | `win_tighten` | solvable | feasible | 55 | enumerated | 55 | -- | search |
+| `vq-e6ae49645d` | `a2var-iii3-atrium-offpath` | `observation_loss` | solvable | feasible | 49 | enumerated | 49 | -- | search |
 
 * **`vq-0ffc3cd33f`** (`a2var-iii6-lattice-safe`): The three declared hazards all sit in row 6, the goal room's back row, while the bridge at (4,2), the goal at (5,60) and the whole of row 5 are untouched. Deleting the three cells leaves the corridor, the switch rows, the bridge and row 5 connected, so a plan exists that dips into all 120 switches from the corridor, crosses the bridge and walks row 5 to the goal without ever standing on a hazard. The plan is long, which is the difficulty, not the verdict.
 * **`vq-1881c8c383`** (`a2var-iii4-atrium-noleft`): The atrium's route never moves the cart leftwards: it goes up column 1 to the button, back down column 1, rightwards along the lower rows to the door, down through the teleport into (7,6), and up column 6 to the goal at (2,7) by a final rightward step. Forbidding LEFT therefore removes a command the winning sequence does not contain, and the sequence still wins.

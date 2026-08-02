@@ -24,7 +24,7 @@ from __future__ import annotations
 
 import os
 import sys
-from typing import Any, Dict, List, Sequence
+from typing import Any, Dict, List, Sequence, Tuple
 
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 REPO = os.path.dirname(HERE)
@@ -104,6 +104,13 @@ def inventory() -> Dict[str, Any]:
             "enumerated": state.get("enumerated"),
             "lower_bound": state.get("lower_bound"),
             "positional_states": state.get("positional_states"),
+            # The census, carried through so the inventory can publish a count
+            # where it used to publish a floor. `exact_states` is null exactly
+            # when the count is out of reach and the bracket is what there is.
+            "exact_states": state.get("exact_states"),
+            "census_method": state.get("census_method"),
+            "census_lower": state.get("census_lower"),
+            "census_upper": state.get("census_upper"),
             "certificate_kind": cert.get("kind"),
             "witness_source": truth.get("witness_source"),
             "search_credible": truth.get("search_credible"),
@@ -123,15 +130,23 @@ CLASS_HEADERS = {
         "correctly for a reason that is false."),
     "large_unsolvable": (
         "(ii) large-space unsolvable",
-        "**The claim this class carries is narrower than Theoria.md 1.11's.** "
-        "What is established is `naive_enumeration_feasible: False` -- forward "
-        "enumeration over the full (cart, button, latch mask) state, the method "
-        "class (i) is graded on, cannot terminate against a constructive bound "
-        "of 2^60 to 2^120. What is **withdrawn** is 唯不变量推理能答: every "
-        "shipped item of this class is settled by an exhaustive computation "
-        "over at most 600 nodes, and each of the four is settled by a different "
-        "one. So the class measures **method selection under an apparent search "
-        "barrier**. D-EX-028."),
+        "**The claim this class carries is narrower than Theoria.md 1.11's, and "
+        "the number it rests on is now a count.** What is established is "
+        "`naive_enumeration_feasible: False` -- forward enumeration over the "
+        "full (cart, button, latch mask) state, the method class (i) is graded "
+        "on, cannot terminate. Three of the four items have their reachable set "
+        "**counted exactly** on the shipped board by symbolic reachability "
+        "(8.9e35, 1.6e38, 1.6e38); the fourth ships a step budget that puts an "
+        "exact count out of reach and carries a two-sided bracket instead "
+        "(1.7e37 to 4.1e63), whose lower side is itself 19 orders of magnitude "
+        "above the 2^60 the construction proves. Every count exceeds the "
+        "construction floor it is checked against, and the two methods share no "
+        "code. V29. What is **withdrawn** is 唯不变量推理能答: every shipped "
+        "item of this class is settled by an exhaustive computation over at "
+        "most 600 nodes, and each of the four is settled by a different one. "
+        "The count and the withdrawal are not in tension -- they answer "
+        "different questions, and the class measures **method selection under "
+        "an apparent search barrier**. D-EX-028."),
     "solvable_hard": (
         "(iii) solvable but hard",
         "The false-positive trap. Every item carries a witness plan that was "
@@ -140,6 +155,44 @@ CLASS_HEADERS = {
         "that wins proves solvability however it was found, but on a paper "
         "whose premise is 由构造即知答案 the key has to say which."),
 }
+
+
+#: How each census method reads in a table cell.  The distinction the column
+#: exists to draw is *exact count* against *bracket*, so the two never share a
+#: word: a bracket that printed as a number would be the whole defect this
+#: census was built to fix, one layer further out.
+_CENSUS_WORDS = {
+    "enumeration": "enumerated",
+    "symbolic-reachability": "symbolic, exact",
+    "budgeted-bracket": "bracketed",
+    "enumeration-truncated": "floor only",
+}
+
+
+def _census_cells(row: Dict[str, Any]) -> Tuple[str, str]:
+    """The state-count cell and the how-counted cell.
+
+    The table used to print `2^m = 1.33e+36, by construction` for every class
+    (ii) item -- a floor, in the column a reader reads as a count.  The floor is
+    still true and still published in the truth file; what goes here is the
+    count where there is one, the bracket where there is not, and the method
+    beside it either way.  V29.
+    """
+    method = row.get("census_method")
+    exact = row.get("exact_states")
+    low, high = row.get("census_lower"), row.get("census_upper")
+    if exact is not None:
+        return ("%.4g (%d digits)" % (float(exact), len(str(exact))) if exact >= 10 ** 6
+                else "%d" % exact), _CENSUS_WORDS.get(method, method or "--")
+    if low is not None and high is not None:
+        return ("%.4g to %.4g" % (float(low), float(high)),
+                _CENSUS_WORDS.get(method, method or "--"))
+    if low is not None:
+        return (">= %.4g" % float(low), _CENSUS_WORDS.get(method, method or "--"))
+    bound = row.get("lower_bound")
+    if bound is not None:
+        return ">= %.3g (2^m, construction)" % float(bound), "not counted"
+    return "--", "--"
 
 
 def render_inventory(data: Dict[str, Any]) -> str:
@@ -165,23 +218,19 @@ def render_inventory(data: Dict[str, Any]) -> str:
         lines.append("")
         lines.append(blurb)
         lines.append("")
-        lines.append("| item | variant | operators | claim | naive enum | bound / enumerated "
-                     "| relaxed nodes | certificate | witness |")
-        lines.append("|---|---|---|---|---|---|---|---|---|")
+        lines.append("| item | variant | operators | claim | naive enum | state count "
+                     "| how counted | relaxed nodes | certificate | witness |")
+        lines.append("|---|---|---|---|---|---|---|---|---|---|")
         for row in rows:
-            enumerated = row["enumerated"]
-            bound = row["lower_bound"]
-            size = ("%s states, enumerated" % enumerated if enumerated is not None
-                    else "2^m = %.3g, by construction" % float(bound)
-                    if bound is not None else "--")
-            lines.append("| `%s` | `%s` | %s | %s | %s | %s | %s | %s | %s |" % (
+            size, how = _census_cells(row)
+            lines.append("| `%s` | `%s` | %s | %s | %s | %s | %s | %s | %s | %s |" % (
                 row["item_id"], row["variant_id"] or "--",
                 ", ".join("`%s`" % o for o in row["operators"]) or "--",
                 row["claim"],
                 {True: "feasible", False: "**out of reach**", None: "--"}[
                     row["naive_enumeration_feasible"]
                     if isinstance(row["naive_enumeration_feasible"], bool) else None],
-                size, row["positional_states"],
+                size, how, row["positional_states"],
                 "`%s`" % row["certificate_kind"] if row["certificate_kind"] else "--",
                 row["witness_source"] or "--"))
         lines.append("")

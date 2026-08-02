@@ -1,0 +1,29 @@
+state-space census -- p15-verdict-a2
+naive ceiling 200000; a count above it means the naive method cannot run
+
+item           class              state count              how counted            settles in naive?
+--------------------------------------------------------------------------------------------------------
+vq-1015eb0bb1  small_unsolvable   7                        enumeration            7 nodes    feasible
+vq-17af763cab  small_unsolvable   24                       enumeration            24 nodes   feasible
+vq-82f568ca11  small_unsolvable   20                       enumeration            20 nodes   feasible
+vq-8ff1c690ad  small_unsolvable   31                       enumeration            55 nodes   feasible
+vq-9725fbebf0  small_unsolvable   14                       enumeration            14 nodes   feasible
+vq-2986ed8ffc  large_unsolvable   8.862e+35                symbolic-reachability  177 nodes  OUT OF REACH
+vq-6150a6eeb7  large_unsolvable   1.595e+38                symbolic-reachability  180 nodes  OUT OF REACH
+vq-721d09813c  large_unsolvable   1.595e+38                symbolic-reachability  180 nodes  OUT OF REACH
+vq-ee54166153  large_unsolvable   1.661e+37..4.133e+63     budgeted-bracket       600 nodes  OUT OF REACH
+vq-0ffc3cd33f  solvable_hard      3.164e+38                symbolic-reachability  298 nodes  OUT OF REACH
+vq-1881c8c383  solvable_hard      55                       enumeration            55 nodes   feasible
+vq-6bab2f307c  solvable_hard      >=2e+05                  enumeration-truncated  301 nodes  OUT OF REACH
+vq-8c4f14b152  solvable_hard      3.203e+38                symbolic-reachability  301 nodes  OUT OF REACH
+vq-9e0aefdf80  solvable_hard      99                       enumeration            99 nodes   feasible
+vq-abe007cdfa  solvable_hard      55                       enumeration            55 nodes   feasible
+vq-c480b494f3  solvable_hard      55                       enumeration            55 nodes   feasible
+vq-e6ae49645d  solvable_hard      49                       enumeration            49 nodes   feasible
+
+15 items counted exactly, 1 bracketed, 1 with a floor and no ceiling.
+class (ii) holds 4 items and every one of them survives the reclassification test:
+  vq-ee54166153  at least 1.661e+37 states, so the naive method cannot decide it -- but 600 nodes settle it, so *an* exhaustive method can.
+  vq-2986ed8ffc  at least 8.862e+35 states, so the naive method cannot decide it -- but 177 nodes settle it, so *an* exhaustive method can.
+  vq-721d09813c  at least 1.595e+38 states, so the naive method cannot decide it -- but 180 nodes settle it, so *an* exhaustive method can.
+  vq-6150a6eeb7  at least 1.595e+38 states, so the naive method cannot decide it -- but 180 nodes settle it, so *an* exhaustive method can.

@@ -1279,6 +1279,33 @@ network, zero sealed-pile contact.
   Settled, and against the class: rewritten above as a measured falsehood rather
   than an open question. D-EX-028.
 
+### What V29 closed, and the one it opened
+
+34. **Class (ii)'s state space is a count now, not a floor.** Three of the four
+    items are counted exactly on the shipped board by symbolic reachability
+    (8.86e35, 1.595e38, 1.595e38); the fourth ships a step budget and carries a
+    two-sided bracket, 1.661e37 to 4.133e63. Every one of them clears the 2^m
+    the construction proves -- by 120x, 120x, 8/3x, and for the budgeted item the
+    bracket's *lower* side is 19 orders of magnitude above it. The
+    reclassification test is a build-time gate: `_large_space` refuses an item
+    whose census puts it within reach of the naive enumerator. Nothing moved.
+    D-EX-034.
+35. **The bracket on ii3 is wide, and that is not hidden.** 1.661e37 to 4.133e63
+    is twenty-six orders of magnitude of gap. Both sides are computed and both
+    are sound -- the lower from an explicit strategy, the upper from a necessary
+    condition on the budget -- but the true count is not known and the record
+    says `exact_states: null` rather than quoting either end as though it were
+    one. Closing it needs a minimum-cost walk model that handles a walk
+    traversing an alcove row horizontally, which is where the simple cost
+    formula fails; measured and left open rather than approximated.
+36. **The census is checked against brute force only where brute force can
+    run.** k=2..6, against shipped k=60. What is extrapolated is the *method*
+    and not a fitted curve -- there is nothing fitted anywhere in it -- but the
+    honest statement is that no independent instrument has confirmed 1.595e38,
+    and none can. The closed forms the existing family test measures
+    (`2k*4^k`, `(2*4^k-8)/3`) agree with the census at every k where both run,
+    which is a second opinion at small k and no opinion at all at k=60.
+
 ### Open weaknesses V6-V23 adds
 
 31. **The quotient can exceed the true reachable count, and a shipped item does
