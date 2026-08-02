@@ -1,0 +1,80 @@
+S48 — gates, 2026-08-02
+=======================================================================
+cell        S48-schema-column-withdrawal-claims-text
+worker      W-9204
+branch      agent/s48-schema-column-withdrawal-claims-text
+base        9e478dd8
+spend       $0.00 — no ARC action, no desk call, no model call, no network
+sealed pile zero contact
+territory   freeze/ only, plus the PARTNER_SYNC paragraph and monitor/inbox/.
+            baseline-arms/, battery/, papers/ and Theoria.md were read only.
+
+[1/4] the withdrawal holds
+      python freeze/schema_column_withdrawal.py --verify
+   ok    exit 0
+         "the Schema column is withdrawn rather than blank, the placeholder is
+          recorded but nowhere cited live, C1's 「唯一」 is scoped to the three
+          same-shell arms, C2's comparator is withdrawn as unmeasurable with its
+          pre-registration untouched, and the `schema_upstream` reference row
+          survives with its coverage"
+
+[2/4] every control was seen to fire
+      python freeze/schema_column_withdrawal.py --selftest
+   ok    11/11, exit 0   (full transcript in SELFTEST.txt)
+         1 positive control — the real file passes unmutated, so a red from any
+           mutation means something — plus 10 mutations, each a specific way the
+           withdrawal could be hollowed out:
+             W1/placeholder   cite ⟨复现值⟩ as a value still to be filled
+             W1b/norecord     erase every mention, losing the record itself
+             W2b/halfpremise  state only the first half of the premise
+             W2c/needshuman   put the needs_human flag back
+             W3/scope         let 「唯一」 go unscoped again
+             W4b/unmeasurable downgrade `unmeasurable` to `not measured yet`
+             W4d/prereg       edit the pre-registration instead of its settlement
+             W5b/interval     quote 2.04–3.41 亿 without the no-provenance finding
+             W6/row           delete the surviving upstream reference row
+             W7/deadname      bring `schema_repro` back as a live name
+
+         ONE OF THESE CAUGHT A REAL DEFECT IN THE FIRST DRAFT. W4b scanned for
+         the bare word `不可测`, which also occurs in the paragraph explaining
+         the distinction — so deleting the load-bearing sentence left the gate
+         green. It now scans the whole clause `**不可测**，而不是待测`. This is
+         the control doing the job the control exists for.
+
+[3/4] the stage is syntactically wired
+      bash -n freeze/verify.sh
+   ok    SYNTAX OK
+
+[4/4] the full script — NOT RUN, and not counted as a pass
+      bash freeze/verify.sh
+   BLOCKED   this box could not run it. With ~3.6 GB free of 31.46 GB (1.89 GB
+             by the last attempt) bash could not fork:
+                 child_copy: cygheap read copy failed ... Win32 error 299
+                 dofork: child -1 - forked process died unexpectedly
+                 /usr/bin/bash: fork: retry: Resource temporarily unavailable
+             The script never reached stage [0], so there is no stage result of
+             any kind — not a pass, not a fail. Attempts were stopped rather
+             than left thrashing.
+
+             What IS established: stage [21] runs exactly two commands, and both
+             are green above under [1/4] and [2/4]; the surrounding shell
+             plumbing is copied verbatim from stage [19], which runs the §3.0
+             withdrawal check in the same shape. What is NOT established: that
+             the 21-stage script as a whole is green on this commit. Anyone with
+             memory headroom should re-run it, and this file should not be read
+             as saying they need not.
+
+INVENTORY behind the negative sample (measured, not assumed)
+      `复现值` appears in freeze/ only in CLAIMS_TEXT.md, at 4 lines; the
+      bracketed token `⟨复现值⟩` at 2. Every one is either ordinary prose
+      (`无同壳复现值`) or a withdrawal record, so all are acquitted by the
+      two-line window rule and none is a live citation.
+
+      `schema_repro` survives in three OTHER freeze files — MANIFEST_DRAFT.md:537,
+      PENDING_FIVE.md:141,294, STATS_RULES.md:26,2099 — all saying the arm does
+      not exist, which is now half the story. None cites the placeholder, so the
+      stage is green; the board item scopes this ticket to CLAIMS_TEXT.md, so
+      they are named in RUN_STATE.md and raised in monitor/inbox/ rather than
+      edited under cover of this ticket.
+
+credentials no key value in any tracked file; nothing here reads .env.

@@ -1,0 +1,12 @@
+PASS positive control: CLAIMS_TEXT.md passes unmutated
+PASS control fires: cite the withdrawn placeholder as a value still to be filled -> W1/placeholder
+PASS control fires: erase every mention, losing the record of the withdrawal -> W1b/norecord
+PASS control fires: state only the first half of the premise correction -> W2b/halfpremise
+PASS control fires: put the needs_human flag back -> W2c/needshuman
+PASS control fires: let 「唯一」 go unscoped again -> W3/scope
+PASS control fires: downgrade C2's `unmeasurable` to `not measured this round` -> W4b/unmeasurable
+PASS control fires: edit the pre-registration instead of its settlement -> W4d/prereg
+PASS control fires: quote the 2.04-3.41 interval without the no-provenance finding -> W5b/interval
+PASS control fires: delete the surviving upstream reference row -> W6/row
+PASS control fires: bring the retired arm name back -> W7/deadname
+11/11

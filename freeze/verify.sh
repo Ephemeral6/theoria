@@ -1878,6 +1878,54 @@ else
 fi
 echo
 
+# ---------- 21. the Schema (复现口径) column is withdrawn, not blank
+#
+# 2026-08-02, S48.  `baseline-arms` proposed withdrawing `Theoria.md:271`'s
+# Schema (复现口径) column outright rather than leaving it blank
+# (`monitor/inbox/20260801T0600Z-PROP-schema-column-withdrawal.md`,
+# `baseline-arms/SCHEMA_ARM_RULING.md`).  This stage holds freeze's half: the
+# three places in CLAIMS_TEXT.md where that column was load-bearing.
+#
+# WHY A STAGE.  The reason for withdrawing rather than blanking is that a blank
+# keeps the promise that one day it will be filled -- the official harness was
+# never released, a reimplementation is forbidden by discipline and would
+# contaminate the confirmation set, and past both of those the price is
+# $4,061/25 games against $143.50 in the pool.  A withdrawal that can still be
+# CITED is that same promise under a new name, so the one thing this refuses is a
+# live citation of `⟨复现值⟩`.  Recording that it was withdrawn necessarily names
+# it, so a mention within two lines of a withdrawal marker is acquitted -- the
+# rule `exam/tools/check_withdrawn_claims.py` reached for the same problem.
+#
+# AND A POSITIVE CONTROL.  Only the same-shell reproduction was withdrawn, not
+# the material.  The upstream trajectories survive as the `schema_upstream`
+# reference row and the stage fails if that row or its coverage (开发堆 4 局,
+# 8 runs, the 1 of 2 collections that records tokens) disappears.  Withdrawing a
+# claim and deleting the evidence are different acts.
+#
+# WHAT THIS STAGE DOES NOT DO.  It does not touch `Theoria.md`'s main table, the
+# `battery` arm rename, or the `papers` follow-through -- all three are other
+# territories and are asked for in `monitor/inbox/`.  It also does not judge
+# whether 98.98% is credible: that is upstream self-report over 25 games of which
+# 21 are permanently unauditable here, and it can only ever be a citation.
+echo "[21] the Schema (复现口径) withdrawal is intact, and the material survives"
+export PYTHONIOENCODING=utf-8
+sc_out="$(python "$HERE/schema_column_withdrawal.py" --verify 2>&1)"
+if [ $? -eq 0 ]; then
+  ok "schema_column_withdrawal.py --verify: $(printf '%s' "$sc_out" | head -1 | sed 's/^PASS //')"
+else
+  bad "the Schema column withdrawal has been hollowed out -- read the FAIL lines"
+  printf '%s\n' "$sc_out" | sed 's/^/        /'
+fi
+
+scs_out="$(python "$HERE/schema_column_withdrawal.py" --selftest 2>&1)"
+if [ $? -eq 0 ]; then
+  ok "schema_column_withdrawal.py --selftest: $(printf '%s' "$scs_out" | tail -1 | tr -d ' ') controls, every one demonstrated to fire"
+else
+  bad "schema_column_withdrawal.py --selftest is red -- this stage cannot be trusted either way"
+  printf '%s\n' "$scs_out" | sed 's/^/        /'
+fi
+echo
+
 # ------------------------------------------------------------------ verdict
 echo "=============================================================="
 if [ "$FAIL" -eq 0 ]; then

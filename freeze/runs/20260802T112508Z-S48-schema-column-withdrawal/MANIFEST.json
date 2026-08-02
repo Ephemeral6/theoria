@@ -1,0 +1,76 @@
+{
+  "base_commit": "9e478dd8",
+  "branch": "agent/s48-schema-column-withdrawal-claims-text",
+  "cell": "S48",
+  "delivered": {
+    "claims_text": "four places landed verbatim per proposal 2.1-2.4, each dated 2026-08-02, each new number carrying its coverage (dev pile 4 games / 8 runs / 1 of 2 collections records tokens)",
+    "gate": "freeze/schema_column_withdrawal.py, wired into verify.sh as stage [21] with its selftest, in the shape stage [19] uses for the 3.0 withdrawal",
+    "negative_sample": "a live citation of the withdrawn placeholder reds the gate; a mention within 2 lines of a withdrawal marker is acquitted, because recording a withdrawal necessarily names the thing withdrawn",
+    "positive_control": "the schema_upstream reference row and its coverage must survive -- withdrawing a claim and deleting the evidence are different acts"
+  },
+  "files": [
+    {
+      "path": "freeze/CLAIMS_TEXT.md",
+      "sha256": "f3e984c34b83e7c4dffc30165039d2cffbdd9557f1f0422c06d5f5e837d10ec8"
+    },
+    {
+      "path": "freeze/runs/20260802T112508Z-S48-schema-column-withdrawal/GATES.txt",
+      "sha256": "b7c2668b19297cfdcbde7d186bcb10c251d642ced3577bb1bde900211658d809"
+    },
+    {
+      "path": "freeze/runs/20260802T112508Z-S48-schema-column-withdrawal/RUN_STATE.md",
+      "sha256": "28b082d9fd74819d99e7419f657d6464b7ac343c7b2aa93c7d37aa60b72bb067"
+    },
+    {
+      "path": "freeze/runs/20260802T112508Z-S48-schema-column-withdrawal/SELFTEST.txt",
+      "sha256": "f350f7c9568414a8a234332945941eb8588e6cc7d3ffb66e7dea0f060211ea85"
+    },
+    {
+      "path": "freeze/runs/20260802T112508Z-S48-schema-column-withdrawal/VERIFY.txt",
+      "sha256": "21a85b4f307ff0a68d1d9eb07de4da05a8ed3f5bfbbb4525240b06a96751cfde"
+    },
+    {
+      "path": "freeze/runs/20260802T112508Z-S48-schema-column-withdrawal/_mkmanifest.py",
+      "sha256": "3aba053f5e8e9314b0b468025a5a0d48e6a997e65818e393224a3984d1d3332f"
+    },
+    {
+      "path": "freeze/schema_column_withdrawal.py",
+      "sha256": "b7a2bfd2d09432fdd54771e893e947d5eacc9a058a12f7d9ed0cb7cfbe1759a3"
+    },
+    {
+      "path": "freeze/verify.sh",
+      "sha256": "ae5d02032a1289f2ff45d4c7a8606e1dab80df864b5fff67371f61a6224fbe10"
+    },
+    {
+      "path": "monitor/inbox/20260802T112508Z-W-9204-freeze-half-of-the-schema-withdrawal-has-landed.md",
+      "sha256": "9fd38e14c08629b539073c65c5415f7a4913808e11a7a62e66f76cc6a15a253e"
+    }
+  ],
+  "gaps": [
+    "bash freeze/verify.sh is unverified on this machine (memory).",
+    "schema_repro survives in MANIFEST_DRAFT.md:537, PENDING_FIVE.md:141,294 and STATS_RULES.md:26,2099 -- freeze files, but outside this ticket's scope; named and raised in inbox rather than swept in under this ticket.",
+    "Theoria.md:271's main table, battery's arm rename and papers' follow-through are unmoved; all three are other territories.",
+    "SCHEMA_LOCATE.md 1.1: the upstream spec is Zeng et al., not Feng et al. -- registered long ago, still uncorrected, in nobody's queue."
+  ],
+  "gates": {
+    "selftest": "11/11, exit 0; one control caught a real hole in the first draft, where the C2 check scanned a bare word that occurs twice in the file",
+    "verify": "exit 0",
+    "verify_sh_full": "NOT RUN -- bash could not fork with ~3.6 GB free of 31.46 GB and the script never reached stage [0]. Recorded as an environmental block, not as a pass.",
+    "verify_sh_syntax": "bash -n OK"
+  },
+  "prompt_id": "S48-schema-column-withdrawal-claims-text",
+  "scope": "freeze's half only: CLAIMS_TEXT.md. Theoria.md:271's main table, battery's arm rename and papers' follow-through are other territories and are asked for in monitor/inbox/, not edited.",
+  "seed": null,
+  "source_proposal": "monitor/inbox/20260801T0600Z-PROP-schema-column-withdrawal.md (baseline-arms, 2026-08-01); ruling baseline-arms/SCHEMA_ARM_RULING.md",
+  "spend": {
+    "api_calls": 0,
+    "desk_calls": 0,
+    "model_calls": 0,
+    "network": "none",
+    "sealed_pile_contact": "none",
+    "usd": 0.0
+  },
+  "territory": "freeze",
+  "utc": "2026-08-02T11:25:08Z",
+  "worker": "W-9204"
+}
