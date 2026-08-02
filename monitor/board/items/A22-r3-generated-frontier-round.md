@@ -1,8 +1,8 @@
 priority: 1
 cell: A22
 territory: theoria-arm
-deps: A23
-spend: api — BLOCKED, see below
+deps: A23-anchor-drift-on-the-default-leg
+spend: none — the api half was delivered as R2/R2b, see the 2026-08-02 reconciliation at the foot
 
 # A22-r3-generated-frontier-round · R3 是唯一还需要花钱的一件，它现在被支出天花板挡着
 
@@ -59,3 +59,44 @@ A23（默认腿也能报锚点漂移）与本件的干跑：`--frontier generate
 负样本：把 `THEORIA_FRONTIER` 设成 `1`/`true`/`banana`/`GENERATED`/空串
 必须**仍留在 ablation**（正向白名单，R2 已实现，本件不许放宽），并断言一条
 默认腿的 `design()` 报告不长出任何新键——证据泄进旧路径正是这件事的坏法。
+
+---
+
+## 对账 2026-08-02（监控）· 活的一半已交付，验收的一半没有——本件不关
+
+**活腿已经跑了，而且是在本件写着「不得开始」的情况下跑的。**
+2026-08-01 所有者裁定（登记 #13「不管预算，全额推进」、#14「额度限制全部
+放开」，`monitor/spec.py:521-525`）解除了本件的支出封锁；轮次以 **R2/R2b**
+的名字发出，不叫 R3。裁决书在 `theoria-arm/runs/_rounds/R2b-VERDICT.md`：
+
+| 预注册量 | 目标 | 实测 | 判 |
+|---|---|---|---|
+| 前沿宽度 | 2 → ≥3 | **6, 8, 9, 10** | 达成 |
+| 脱靶率 | 90.4% → ≤40% | **22%**（27 中 6） | 达成 |
+| 实现比特 > 0 | 56 中 0 → 至少半数 | **27 中 21（78%）** | 达成 |
+
+含世界答案率 **9.6% → 78%**；反驳条件（宽度≥3 而脱靶仍 >70% 则回退）
+**没有触发**。离线 replay 事前预测 43/52 ≈ 83%，活腿 g50t 实测 **83%**。
+`--frontier generated` 留树。**本件问的问题得到了回答，答案是「值」。**
+
+**但本件的验收没有被满足，而且缺的正是它最要紧的一条。**
+逐字读两份轮记录：
+
+```
+_rounds/20260801T043743Z-R2/round.json    "prediction": null
+_rounds/20260801T044640Z-R2b/round.json   "prediction": null
+```
+
+`round.json` 的 `prediction` 字段**两轮都是 null**。四行预测确实是事前写下的
+（在 `runs/20260801T0900Z-R2-frontier-by-generation/` 的 README §4），
+所以这不是一次事后编故事——**但轮记录本身不知道它们**，三个数字与它们的目标
+是由人手工誊进 `R2b-VERDICT.md` 的。本件写下「在开跑之前写进 `round.json` 的
+`prediction` 字段」，要的就是让机器持有那张事前的表；今天持有它的仍然是人。
+下一轮如果没有人写裁决书，这一层保护就不存在。
+
+**因此本件保持 open，范围收窄为一件事**：`round.py` 必须能在开跑前接收预测
+并落进 `round.json.prediction`，且**回填 R2/R2b 两轮时必须拒绝**——事后补写
+预测正是这个字段存在的理由的反面。原件的支出段落、R3 的命名、四行预测的
+内容，全部由本节取代；`deps: A23` 已满足（A23 于 2026-08-02T12:07:20Z 交付）。
+
+零花费。
