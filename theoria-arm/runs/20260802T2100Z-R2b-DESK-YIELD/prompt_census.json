@@ -1,0 +1,1707 @@
+{
+ "20260801T044640Z-R2b-g50t-a": {
+  "fit": {
+   "chars_per_token": 0.7980847692498493,
+   "intercept_tokens": -69739.40776351833,
+   "n": 9,
+   "ok": true,
+   "r2": 0.36587734455862175,
+   "slope_tokens_per_char": 1.2529997295148718
+  },
+  "per_call": [
+   {
+    "by_kind": {
+     "boilerplate": {
+      "chars": 11703,
+      "share": 0.13343595005985975
+     },
+     "books": {
+      "chars": 55648,
+      "share": 0.6344906219713813
+     },
+     "evidence": {
+      "chars": 19690,
+      "share": 0.2245025939228094
+     },
+     "feedback": {
+      "chars": 664,
+      "share": 0.00757083404594949
+     }
+    },
+    "cache_creation_input_tokens": 40322,
+    "cache_read_input_tokens": 0,
+    "call": 1,
+    "chars_in": 87705,
+    "cost_usd": 1.5730589999999998,
+    "output_tokens": 45604,
+    "repeat_vs_previous": {
+     "first_call": true,
+     "prefix_chars": 0,
+     "prefix_share": 0.0,
+     "repeated_chars": 0,
+     "repeated_share": 0.0,
+     "sections": {}
+    },
+    "sections": {
+     "certify": 313,
+     "command_diffs": 673,
+     "current_frame": 4294,
+     "engine_proposals": 14241,
+     "grammar_card": 8017,
+     "manual": 48509,
+     "obs_summary": 482,
+     "output_contract": 875,
+     "playbook": 7139,
+     "preamble": 2811,
+     "surprises": 351
+    },
+    "transcript": "call-001-theorize-round1.md"
+   },
+   {
+    "by_kind": {
+     "boilerplate": {
+      "chars": 11703,
+      "share": 0.14159880942298153
+     },
+     "books": {
+      "chars": 45106,
+      "share": 0.5457537296277027
+     },
+     "evidence": {
+      "chars": 20140,
+      "share": 0.24368110926931966
+     },
+     "feedback": {
+      "chars": 5700,
+      "share": 0.06896635167999612
+     }
+    },
+    "cache_creation_input_tokens": 38019,
+    "cache_read_input_tokens": 0,
+    "call": 2,
+    "chars_in": 82649,
+    "cost_usd": 1.689508,
+    "output_tokens": 51251,
+    "repeat_vs_previous": {
+     "first_call": false,
+     "prefix_chars": 11050,
+     "prefix_share": 0.13369792737964162,
+     "repeated_chars": 11703,
+     "repeated_share": 0.14159880942298153,
+     "sections": {
+      "certify": {
+       "chars": 1680,
+       "common_prefix": 116,
+       "identical": false,
+       "was_absent": false
+      },
+      "command_diffs": {
+       "chars": 1121,
+       "common_prefix": 673,
+       "identical": false,
+       "was_absent": false
+      },
+      "current_frame": {
+       "chars": 4294,
+       "common_prefix": 4285,
+       "identical": false,
+       "was_absent": false
+      },
+      "engine_proposals": {
+       "chars": 14241,
+       "common_prefix": 237,
+       "identical": false,
+       "was_absent": false
+      },
+      "grammar_card": {
+       "chars": 8017,
+       "common_prefix": 8017,
+       "identical": true,
+       "was_absent": false
+      },
+      "manual": {
+       "chars": 38081,
+       "common_prefix": 68,
+       "identical": false,
+       "was_absent": false
+      },
+      "obs_summary": {
+       "chars": 484,
+       "common_prefix": 222,
+       "identical": false,
+       "was_absent": false
+      },
+      "output_contract": {
+       "chars": 875,
+       "common_prefix": 875,
+       "identical": true,
+       "was_absent": false
+      },
+      "playbook": {
+       "chars": 7025,
+       "common_prefix": 115,
+       "identical": false,
+       "was_absent": false
+      },
+      "preamble": {
+       "chars": 2811,
+       "common_prefix": 2811,
+       "identical": true,
+       "was_absent": false
+      },
+      "surprises": {
+       "chars": 4020,
+       "common_prefix": 60,
+       "identical": false,
+       "was_absent": false
+      }
+     }
+    },
+    "sections": {
+     "certify": 1680,
+     "command_diffs": 1121,
+     "current_frame": 4294,
+     "engine_proposals": 14241,
+     "grammar_card": 8017,
+     "manual": 38081,
+     "obs_summary": 484,
+     "output_contract": 875,
+     "playbook": 7025,
+     "preamble": 2811,
+     "surprises": 4020
+    },
+    "transcript": "call-002-theorize-round1.md"
+   },
+   {
+    "by_kind": {
+     "boilerplate": {
+      "chars": 11703,
+      "share": 0.1247282261158716
+     },
+     "books": {
+      "chars": 56951,
+      "share": 0.6069723323528158
+     },
+     "evidence": {
+      "chars": 20590,
+      "share": 0.2194440891844652
+     },
+     "feedback": {
+      "chars": 4584,
+      "share": 0.048855352346847424
+     }
+    },
+    "cache_creation_input_tokens": 42774,
+    "cache_read_input_tokens": 0,
+    "call": 3,
+    "chars_in": 93828,
+    "cost_usd": 1.8941430000000001,
+    "output_tokens": 57386,
+    "repeat_vs_previous": {
+     "first_call": false,
+     "prefix_chars": 11050,
+     "prefix_share": 0.11776868312230891,
+     "repeated_chars": 11703,
+     "repeated_share": 0.1247282261158716,
+     "sections": {
+      "certify": {
+       "chars": 1683,
+       "common_prefix": 533,
+       "identical": false,
+       "was_absent": false
+      },
+      "command_diffs": {
+       "chars": 1569,
+       "common_prefix": 1121,
+       "identical": false,
+       "was_absent": false
+      },
+      "current_frame": {
+       "chars": 4294,
+       "common_prefix": 4283,
+       "identical": false,
+       "was_absent": false
+      },
+      "engine_proposals": {
+       "chars": 14242,
+       "common_prefix": 237,
+       "identical": false,
+       "was_absent": false
+      },
+      "grammar_card": {
+       "chars": 8017,
+       "common_prefix": 8017,
+       "identical": true,
+       "was_absent": false
+      },
+      "manual": {
+       "chars": 45092,
+       "common_prefix": 68,
+       "identical": false,
+       "was_absent": false
+      },
+      "obs_summary": {
+       "chars": 485,
+       "common_prefix": 222,
+       "identical": false,
+       "was_absent": false
+      },
+      "output_contract": {
+       "chars": 875,
+       "common_prefix": 875,
+       "identical": true,
+       "was_absent": false
+      },
+      "playbook": {
+       "chars": 11859,
+       "common_prefix": 145,
+       "identical": false,
+       "was_absent": false
+      },
+      "preamble": {
+       "chars": 2811,
+       "common_prefix": 2811,
+       "identical": true,
+       "was_absent": false
+      },
+      "surprises": {
+       "chars": 2901,
+       "common_prefix": 755,
+       "identical": false,
+       "was_absent": false
+      }
+     }
+    },
+    "sections": {
+     "certify": 1683,
+     "command_diffs": 1569,
+     "current_frame": 4294,
+     "engine_proposals": 14242,
+     "grammar_card": 8017,
+     "manual": 45092,
+     "obs_summary": 485,
+     "output_contract": 875,
+     "playbook": 11859,
+     "preamble": 2811,
+     "surprises": 2901
+    },
+    "transcript": "call-003-theorize-round1.md"
+   },
+   {
+    "by_kind": {
+     "boilerplate": {
+      "chars": 11703,
+      "share": 0.11273480396878914
+     },
+     "books": {
+      "chars": 66033,
+      "share": 0.6360947885560158
+     },
+     "evidence": {
+      "chars": 20590,
+      "share": 0.19834312686639052
+     },
+     "feedback": {
+      "chars": 5484,
+      "share": 0.052827280608804546
+     }
+    },
+    "cache_creation_input_tokens": 46853,
+    "cache_read_input_tokens": 0,
+    "call": 4,
+    "chars_in": 103810,
+    "cost_usd": 1.410259,
+    "output_tokens": 36283,
+    "repeat_vs_previous": {
+     "first_call": false,
+     "prefix_chars": 31487,
+     "prefix_share": 0.30331374626721896,
+     "repeated_chars": 35194,
+     "repeated_share": 0.3390232154898372,
+     "sections": {
+      "certify": {
+       "chars": 1682,
+       "common_prefix": 1682,
+       "identical": false,
+       "was_absent": false
+      },
+      "command_diffs": {
+       "chars": 1569,
+       "common_prefix": 1569,
+       "identical": true,
+       "was_absent": false
+      },
+      "compile_errors": {
+       "chars": 901,
+       "common_prefix": 0,
+       "identical": false,
+       "was_absent": true
+      },
+      "current_frame": {
+       "chars": 4294,
+       "common_prefix": 4294,
+       "identical": true,
+       "was_absent": false
+      },
+      "engine_proposals": {
+       "chars": 14242,
+       "common_prefix": 14242,
+       "identical": true,
+       "was_absent": false
+      },
+      "grammar_card": {
+       "chars": 8017,
+       "common_prefix": 8017,
+       "identical": true,
+       "was_absent": false
+      },
+      "manual": {
+       "chars": 51866,
+       "common_prefix": 69,
+       "identical": false,
+       "was_absent": false
+      },
+      "obs_summary": {
+       "chars": 485,
+       "common_prefix": 485,
+       "identical": true,
+       "was_absent": false
+      },
+      "output_contract": {
+       "chars": 875,
+       "common_prefix": 875,
+       "identical": true,
+       "was_absent": false
+      },
+      "playbook": {
+       "chars": 14167,
+       "common_prefix": 145,
+       "identical": false,
+       "was_absent": false
+      },
+      "preamble": {
+       "chars": 2811,
+       "common_prefix": 2811,
+       "identical": true,
+       "was_absent": false
+      },
+      "surprises": {
+       "chars": 2901,
+       "common_prefix": 2901,
+       "identical": true,
+       "was_absent": false
+      }
+     }
+    },
+    "sections": {
+     "certify": 1682,
+     "command_diffs": 1569,
+     "compile_errors": 901,
+     "current_frame": 4294,
+     "engine_proposals": 14242,
+     "grammar_card": 8017,
+     "manual": 51866,
+     "obs_summary": 485,
+     "output_contract": 875,
+     "playbook": 14167,
+     "preamble": 2811,
+     "surprises": 2901
+    },
+    "transcript": "call-004-theorize-round2.md"
+   },
+   {
+    "by_kind": {
+     "boilerplate": {
+      "chars": 11703,
+      "share": 0.11142530705512711
+     },
+     "books": {
+      "chars": 67701,
+      "share": 0.6445872607826335
+     },
+     "evidence": {
+      "chars": 21038,
+      "share": 0.20030467485480338
+     },
+     "feedback": {
+      "chars": 4588,
+      "share": 0.04368275730743597
+     }
+    },
+    "cache_creation_input_tokens": 111301,
+    "cache_read_input_tokens": 47236,
+    "call": 5,
+    "chars_in": 105030,
+    "cost_usd": 2.863988,
+    "output_tokens": 67701,
+    "repeat_vs_previous": {
+     "first_call": false,
+     "prefix_chars": 11050,
+     "prefix_share": 0.10520803579929544,
+     "repeated_chars": 11703,
+     "repeated_share": 0.11142530705512711,
+     "sections": {
+      "certify": {
+       "chars": 1687,
+       "common_prefix": 533,
+       "identical": false,
+       "was_absent": false
+      },
+      "command_diffs": {
+       "chars": 2017,
+       "common_prefix": 1569,
+       "identical": false,
+       "was_absent": false
+      },
+      "current_frame": {
+       "chars": 4294,
+       "common_prefix": 4281,
+       "identical": false,
+       "was_absent": false
+      },
+      "engine_proposals": {
+       "chars": 14242,
+       "common_prefix": 238,
+       "identical": false,
+       "was_absent": false
+      },
+      "grammar_card": {
+       "chars": 8017,
+       "common_prefix": 8017,
+       "identical": true,
+       "was_absent": false
+      },
+      "manual": {
+       "chars": 53699,
+       "common_prefix": 236,
+       "identical": false,
+       "was_absent": false
+      },
+      "obs_summary": {
+       "chars": 485,
+       "common_prefix": 222,
+       "identical": false,
+       "was_absent": false
+      },
+      "output_contract": {
+       "chars": 875,
+       "common_prefix": 875,
+       "identical": true,
+       "was_absent": false
+      },
+      "playbook": {
+       "chars": 14002,
+       "common_prefix": 1222,
+       "identical": false,
+       "was_absent": false
+      },
+      "preamble": {
+       "chars": 2811,
+       "common_prefix": 2811,
+       "identical": true,
+       "was_absent": false
+      },
+      "surprises": {
+       "chars": 2901,
+       "common_prefix": 755,
+       "identical": false,
+       "was_absent": false
+      }
+     }
+    },
+    "sections": {
+     "certify": 1687,
+     "command_diffs": 2017,
+     "current_frame": 4294,
+     "engine_proposals": 14242,
+     "grammar_card": 8017,
+     "manual": 53699,
+     "obs_summary": 485,
+     "output_contract": 875,
+     "playbook": 14002,
+     "preamble": 2811,
+     "surprises": 2901
+    },
+    "transcript": "call-005-theorize-round1.md"
+   },
+   {
+    "by_kind": {
+     "boilerplate": {
+      "chars": 11703,
+      "share": 0.11098045537737906
+     },
+     "books": {
+      "chars": 67701,
+      "share": 0.6420138263269196
+     },
+     "evidence": {
+      "chars": 21038,
+      "share": 0.19950498335719907
+     },
+     "feedback": {
+      "chars": 5009,
+      "share": 0.047500734938502244
+     }
+    },
+    "cache_creation_input_tokens": 47369,
+    "cache_read_input_tokens": 0,
+    "call": 6,
+    "chars_in": 105451,
+    "cost_usd": 2.012925,
+    "output_tokens": 60173,
+    "repeat_vs_previous": {
+     "first_call": false,
+     "prefix_chars": 104155,
+     "prefix_share": 0.9877099316270116,
+     "repeated_chars": 103343,
+     "repeated_share": 0.9800096727389973,
+     "sections": {
+      "certify": {
+       "chars": 1686,
+       "common_prefix": 1686,
+       "identical": false,
+       "was_absent": false
+      },
+      "command_diffs": {
+       "chars": 2017,
+       "common_prefix": 2017,
+       "identical": true,
+       "was_absent": false
+      },
+      "compile_errors": {
+       "chars": 422,
+       "common_prefix": 0,
+       "identical": false,
+       "was_absent": true
+      },
+      "current_frame": {
+       "chars": 4294,
+       "common_prefix": 4294,
+       "identical": true,
+       "was_absent": false
+      },
+      "engine_proposals": {
+       "chars": 14242,
+       "common_prefix": 14242,
+       "identical": true,
+       "was_absent": false
+      },
+      "grammar_card": {
+       "chars": 8017,
+       "common_prefix": 8017,
+       "identical": true,
+       "was_absent": false
+      },
+      "manual": {
+       "chars": 53699,
+       "common_prefix": 53699,
+       "identical": true,
+       "was_absent": false
+      },
+      "obs_summary": {
+       "chars": 485,
+       "common_prefix": 485,
+       "identical": true,
+       "was_absent": false
+      },
+      "output_contract": {
+       "chars": 875,
+       "common_prefix": 875,
+       "identical": true,
+       "was_absent": false
+      },
+      "playbook": {
+       "chars": 14002,
+       "common_prefix": 14002,
+       "identical": true,
+       "was_absent": false
+      },
+      "preamble": {
+       "chars": 2811,
+       "common_prefix": 2811,
+       "identical": true,
+       "was_absent": false
+      },
+      "surprises": {
+       "chars": 2901,
+       "common_prefix": 2901,
+       "identical": true,
+       "was_absent": false
+      }
+     }
+    },
+    "sections": {
+     "certify": 1686,
+     "command_diffs": 2017,
+     "compile_errors": 422,
+     "current_frame": 4294,
+     "engine_proposals": 14242,
+     "grammar_card": 8017,
+     "manual": 53699,
+     "obs_summary": 485,
+     "output_contract": 875,
+     "playbook": 14002,
+     "preamble": 2811,
+     "surprises": 2901
+    },
+    "transcript": "call-006-theorize-round2.md"
+   },
+   {
+    "by_kind": {
+     "boilerplate": {
+      "chars": 11703,
+      "share": 0.10305293097223568
+     },
+     "books": {
+      "chars": 75786,
+      "share": 0.6673476396361491
+     },
+     "evidence": {
+      "chars": 21486,
+      "share": 0.18919894684007996
+     },
+     "feedback": {
+      "chars": 4588,
+      "share": 0.04040048255153527
+     }
+    },
+    "cache_creation_input_tokens": 50825,
+    "cache_read_input_tokens": 0,
+    "call": 7,
+    "chars_in": 113563,
+    "cost_usd": 2.089105,
+    "output_tokens": 61744,
+    "repeat_vs_previous": {
+     "first_call": false,
+     "prefix_chars": 11050,
+     "prefix_share": 0.09730281869975256,
+     "repeated_chars": 11703,
+     "repeated_share": 0.10305293097223568,
+     "sections": {
+      "certify": {
+       "chars": 1687,
+       "common_prefix": 534,
+       "identical": false,
+       "was_absent": false
+      },
+      "command_diffs": {
+       "chars": 2465,
+       "common_prefix": 2017,
+       "identical": false,
+       "was_absent": false
+      },
+      "current_frame": {
+       "chars": 4294,
+       "common_prefix": 4279,
+       "identical": false,
+       "was_absent": false
+      },
+      "engine_proposals": {
+       "chars": 14242,
+       "common_prefix": 237,
+       "identical": false,
+       "was_absent": false
+      },
+      "grammar_card": {
+       "chars": 8017,
+       "common_prefix": 8017,
+       "identical": true,
+       "was_absent": false
+      },
+      "manual": {
+       "chars": 59903,
+       "common_prefix": 69,
+       "identical": false,
+       "was_absent": false
+      },
+      "obs_summary": {
+       "chars": 485,
+       "common_prefix": 222,
+       "identical": false,
+       "was_absent": false
+      },
+      "output_contract": {
+       "chars": 875,
+       "common_prefix": 875,
+       "identical": true,
+       "was_absent": false
+      },
+      "playbook": {
+       "chars": 15883,
+       "common_prefix": 145,
+       "identical": false,
+       "was_absent": false
+      },
+      "preamble": {
+       "chars": 2811,
+       "common_prefix": 2811,
+       "identical": true,
+       "was_absent": false
+      },
+      "surprises": {
+       "chars": 2901,
+       "common_prefix": 755,
+       "identical": false,
+       "was_absent": false
+      }
+     }
+    },
+    "sections": {
+     "certify": 1687,
+     "command_diffs": 2465,
+     "current_frame": 4294,
+     "engine_proposals": 14242,
+     "grammar_card": 8017,
+     "manual": 59903,
+     "obs_summary": 485,
+     "output_contract": 875,
+     "playbook": 15883,
+     "preamble": 2811,
+     "surprises": 2901
+    },
+    "transcript": "call-007-theorize-round1.md"
+   },
+   {
+    "by_kind": {
+     "boilerplate": {
+      "chars": 11703,
+      "share": 0.09558931634403332
+     },
+     "books": {
+      "chars": 84202,
+      "share": 0.6877562688883444
+     },
+     "evidence": {
+      "chars": 21934,
+      "share": 0.17915543575920934
+     },
+     "feedback": {
+      "chars": 4591,
+      "share": 0.03749897900841297
+     }
+    },
+    "cache_creation_input_tokens": 55161,
+    "cache_read_input_tokens": 0,
+    "call": 8,
+    "chars_in": 122430,
+    "cost_usd": 2.020405,
+    "output_tokens": 57138,
+    "repeat_vs_previous": {
+     "first_call": false,
+     "prefix_chars": 11049,
+     "prefix_share": 0.0902474883606959,
+     "repeated_chars": 11703,
+     "repeated_share": 0.09558931634403332,
+     "sections": {
+      "certify": {
+       "chars": 1690,
+       "common_prefix": 533,
+       "identical": false,
+       "was_absent": false
+      },
+      "command_diffs": {
+       "chars": 2913,
+       "common_prefix": 2465,
+       "identical": false,
+       "was_absent": false
+      },
+      "current_frame": {
+       "chars": 4294,
+       "common_prefix": 4277,
+       "identical": false,
+       "was_absent": false
+      },
+      "engine_proposals": {
+       "chars": 14242,
+       "common_prefix": 238,
+       "identical": false,
+       "was_absent": false
+      },
+      "grammar_card": {
+       "chars": 8017,
+       "common_prefix": 8017,
+       "identical": true,
+       "was_absent": false
+      },
+      "manual": {
+       "chars": 68166,
+       "common_prefix": 68,
+       "identical": false,
+       "was_absent": false
+      },
+      "obs_summary": {
+       "chars": 485,
+       "common_prefix": 221,
+       "identical": false,
+       "was_absent": false
+      },
+      "output_contract": {
+       "chars": 875,
+       "common_prefix": 875,
+       "identical": true,
+       "was_absent": false
+      },
+      "playbook": {
+       "chars": 16036,
+       "common_prefix": 145,
+       "identical": false,
+       "was_absent": false
+      },
+      "preamble": {
+       "chars": 2811,
+       "common_prefix": 2811,
+       "identical": true,
+       "was_absent": false
+      },
+      "surprises": {
+       "chars": 2901,
+       "common_prefix": 755,
+       "identical": false,
+       "was_absent": false
+      }
+     }
+    },
+    "sections": {
+     "certify": 1690,
+     "command_diffs": 2913,
+     "current_frame": 4294,
+     "engine_proposals": 14242,
+     "grammar_card": 8017,
+     "manual": 68166,
+     "obs_summary": 485,
+     "output_contract": 875,
+     "playbook": 16036,
+     "preamble": 2811,
+     "surprises": 2901
+    },
+    "transcript": "call-008-theorize-round1.md"
+   },
+   {
+    "by_kind": {
+     "boilerplate": {
+      "chars": 11703,
+      "share": 0.09089073385161425
+     },
+     "books": {
+      "chars": 89772,
+      "share": 0.6972095154513471
+     },
+     "evidence": {
+      "chars": 22320,
+      "share": 0.17334710583337865
+     },
+     "feedback": {
+      "chars": 4964,
+      "share": 0.038552644863660016
+     }
+    },
+    "cache_creation_input_tokens": 121582,
+    "cache_read_input_tokens": 57517,
+    "call": 9,
+    "chars_in": 128759,
+    "cost_usd": 3.1826165,
+    "output_tokens": 75842,
+    "repeat_vs_previous": {
+     "first_call": false,
+     "prefix_chars": 11050,
+     "prefix_share": 0.08581924370335278,
+     "repeated_chars": 11703,
+     "repeated_share": 0.09089073385161425,
+     "sections": {
+      "certify": {
+       "chars": 1690,
+       "common_prefix": 534,
+       "identical": false,
+       "was_absent": false
+      },
+      "command_diffs": {
+       "chars": 3299,
+       "common_prefix": 2913,
+       "identical": false,
+       "was_absent": false
+      },
+      "current_frame": {
+       "chars": 4294,
+       "common_prefix": 196,
+       "identical": false,
+       "was_absent": false
+      },
+      "engine_proposals": {
+       "chars": 14242,
+       "common_prefix": 238,
+       "identical": false,
+       "was_absent": false
+      },
+      "grammar_card": {
+       "chars": 8017,
+       "common_prefix": 8017,
+       "identical": true,
+       "was_absent": false
+      },
+      "manual": {
+       "chars": 72336,
+       "common_prefix": 69,
+       "identical": false,
+       "was_absent": false
+      },
+      "obs_summary": {
+       "chars": 485,
+       "common_prefix": 222,
+       "identical": false,
+       "was_absent": false
+      },
+      "output_contract": {
+       "chars": 875,
+       "common_prefix": 875,
+       "identical": true,
+       "was_absent": false
+      },
+      "playbook": {
+       "chars": 17436,
+       "common_prefix": 152,
+       "identical": false,
+       "was_absent": false
+      },
+      "preamble": {
+       "chars": 2811,
+       "common_prefix": 2811,
+       "identical": true,
+       "was_absent": false
+      },
+      "surprises": {
+       "chars": 3274,
+       "common_prefix": 755,
+       "identical": false,
+       "was_absent": false
+      }
+     }
+    },
+    "sections": {
+     "certify": 1690,
+     "command_diffs": 3299,
+     "current_frame": 4294,
+     "engine_proposals": 14242,
+     "grammar_card": 8017,
+     "manual": 72336,
+     "obs_summary": 485,
+     "output_contract": 875,
+     "playbook": 17436,
+     "preamble": 2811,
+     "surprises": 3274
+    },
+    "transcript": "call-009-theorize-round1.md"
+   }
+  ],
+  "totals": {
+   "by_kind_chars": {
+    "boilerplate": 105327,
+    "books": 608900,
+    "evidence": 188826,
+    "feedback": 40172
+   },
+   "by_kind_share": {
+    "boilerplate": 0.11166688754008852,
+    "books": 0.645551167536908,
+    "evidence": 0.20019189482891145,
+    "feedback": 0.04259005009409208
+   },
+   "cache_read_total_tokens": 104753,
+   "calls": 9,
+   "chars_in": 943225,
+   "cost_per_call_usd": 2.081779,
+   "cost_usd": 18.736009,
+   "est_prefix_tokens": 253032,
+   "est_repeated_tokens": 261570,
+   "est_tokens_by_kind": {
+    "boilerplate": 131975,
+    "books": 762952,
+    "evidence": 236599,
+    "feedback": 50336
+   },
+   "prefix_chars": 201941,
+   "prefix_share": 0.21409631848180444,
+   "repeated_chars": 208755,
+   "repeated_share": 0.22132046966524424
+  }
+ },
+ "20260801T044640Z-R2b-sk48-b": {
+  "fit": {
+   "chars_per_token": 58.02251549066374,
+   "intercept_tokens": 94298.0251397852,
+   "n": 6,
+   "ok": true,
+   "r2": 7.595842638319361e-06,
+   "slope_tokens_per_char": 0.017234688836627696
+  },
+  "per_call": [
+   {
+    "by_kind": {
+     "boilerplate": {
+      "chars": 11703,
+      "share": 0.1362334699199106
+     },
+     "books": {
+      "chars": 55648,
+      "share": 0.6477928850810206
+     },
+     "evidence": {
+      "chars": 17889,
+      "share": 0.20824408642205253
+     },
+     "feedback": {
+      "chars": 664,
+      "share": 0.007729558577016204
+     }
+    },
+    "cache_creation_input_tokens": 76433,
+    "cache_read_input_tokens": 3529,
+    "call": 1,
+    "chars_in": 85904,
+    "cost_usd": 3.5398435,
+    "output_tokens": 109763,
+    "repeat_vs_previous": {
+     "first_call": true,
+     "prefix_chars": 0,
+     "prefix_share": 0.0,
+     "repeated_chars": 0,
+     "repeated_share": 0.0,
+     "sections": {}
+    },
+    "sections": {
+     "certify": 313,
+     "command_diffs": 1189,
+     "current_frame": 1959,
+     "engine_proposals": 14241,
+     "grammar_card": 8017,
+     "manual": 48509,
+     "obs_summary": 500,
+     "output_contract": 875,
+     "playbook": 7139,
+     "preamble": 2811,
+     "surprises": 351
+    },
+    "transcript": "call-001-theorize-round1.md"
+   },
+   {
+    "by_kind": {
+     "boilerplate": {
+      "chars": 11703,
+      "share": 0.17031215891726698
+     },
+     "books": {
+      "chars": 32900,
+      "share": 0.4787892017754493
+     },
+     "evidence": {
+      "chars": 17889,
+      "share": 0.2603361711416721
+     },
+     "feedback": {
+      "chars": 6223,
+      "share": 0.09056246816561159
+     }
+    },
+    "cache_creation_input_tokens": 33265,
+    "cache_read_input_tokens": 0,
+    "call": 2,
+    "chars_in": 68715,
+    "cost_usd": 1.8368079999999998,
+    "output_tokens": 59167,
+    "repeat_vs_previous": {
+     "first_call": false,
+     "prefix_chars": 28766,
+     "prefix_share": 0.4186276649930874,
+     "repeated_chars": 29592,
+     "repeated_share": 0.4306483300589391,
+     "sections": {
+      "certify": {
+       "chars": 3967,
+       "common_prefix": 116,
+       "identical": false,
+       "was_absent": false
+      },
+      "command_diffs": {
+       "chars": 1189,
+       "common_prefix": 1189,
+       "identical": true,
+       "was_absent": false
+      },
+      "current_frame": {
+       "chars": 1959,
+       "common_prefix": 1959,
+       "identical": true,
+       "was_absent": false
+      },
+      "engine_proposals": {
+       "chars": 14241,
+       "common_prefix": 14241,
+       "identical": true,
+       "was_absent": false
+      },
+      "grammar_card": {
+       "chars": 8017,
+       "common_prefix": 8017,
+       "identical": true,
+       "was_absent": false
+      },
+      "manual": {
+       "chars": 27516,
+       "common_prefix": 49,
+       "identical": false,
+       "was_absent": false
+      },
+      "obs_summary": {
+       "chars": 500,
+       "common_prefix": 500,
+       "identical": true,
+       "was_absent": false
+      },
+      "output_contract": {
+       "chars": 875,
+       "common_prefix": 875,
+       "identical": true,
+       "was_absent": false
+      },
+      "playbook": {
+       "chars": 5384,
+       "common_prefix": 117,
+       "identical": false,
+       "was_absent": false
+      },
+      "preamble": {
+       "chars": 2811,
+       "common_prefix": 2811,
+       "identical": true,
+       "was_absent": false
+      },
+      "surprises": {
+       "chars": 2256,
+       "common_prefix": 110,
+       "identical": false,
+       "was_absent": false
+      }
+     }
+    },
+    "sections": {
+     "certify": 3967,
+     "command_diffs": 1189,
+     "current_frame": 1959,
+     "engine_proposals": 14241,
+     "grammar_card": 8017,
+     "manual": 27516,
+     "obs_summary": 500,
+     "output_contract": 875,
+     "playbook": 5384,
+     "preamble": 2811,
+     "surprises": 2256
+    },
+    "transcript": "call-002-theorize-round1.md"
+   },
+   {
+    "by_kind": {
+     "boilerplate": {
+      "chars": 11703,
+      "share": 0.15863527306738237
+     },
+     "books": {
+      "chars": 38442,
+      "share": 0.5210849497783742
+     },
+     "evidence": {
+      "chars": 18342,
+      "share": 0.24862754666341344
+     },
+     "feedback": {
+      "chars": 5286,
+      "share": 0.07165223049082999
+     }
+    },
+    "cache_creation_input_tokens": 100134,
+    "cache_read_input_tokens": 36069,
+    "call": 3,
+    "chars_in": 73773,
+    "cost_usd": 2.7899645,
+    "output_tokens": 69743,
+    "repeat_vs_previous": {
+     "first_call": false,
+     "prefix_chars": 11045,
+     "prefix_share": 0.14971602076640506,
+     "repeated_chars": 11703,
+     "repeated_share": 0.15863527306738237,
+     "sections": {
+      "certify": {
+       "chars": 2146,
+       "common_prefix": 534,
+       "identical": false,
+       "was_absent": false
+      },
+      "command_diffs": {
+       "chars": 1639,
+       "common_prefix": 1189,
+       "identical": false,
+       "was_absent": false
+      },
+      "current_frame": {
+       "chars": 1959,
+       "common_prefix": 485,
+       "identical": false,
+       "was_absent": false
+      },
+      "engine_proposals": {
+       "chars": 14242,
+       "common_prefix": 237,
+       "identical": false,
+       "was_absent": false
+      },
+      "grammar_card": {
+       "chars": 8017,
+       "common_prefix": 8017,
+       "identical": true,
+       "was_absent": false
+      },
+      "manual": {
+       "chars": 32559,
+       "common_prefix": 49,
+       "identical": false,
+       "was_absent": false
+      },
+      "obs_summary": {
+       "chars": 502,
+       "common_prefix": 217,
+       "identical": false,
+       "was_absent": false
+      },
+      "output_contract": {
+       "chars": 875,
+       "common_prefix": 875,
+       "identical": true,
+       "was_absent": false
+      },
+      "playbook": {
+       "chars": 5883,
+       "common_prefix": 155,
+       "identical": false,
+       "was_absent": false
+      },
+      "preamble": {
+       "chars": 2811,
+       "common_prefix": 2811,
+       "identical": true,
+       "was_absent": false
+      },
+      "surprises": {
+       "chars": 3140,
+       "common_prefix": 220,
+       "identical": false,
+       "was_absent": false
+      }
+     }
+    },
+    "sections": {
+     "certify": 2146,
+     "command_diffs": 1639,
+     "current_frame": 1959,
+     "engine_proposals": 14242,
+     "grammar_card": 8017,
+     "manual": 32559,
+     "obs_summary": 502,
+     "output_contract": 875,
+     "playbook": 5883,
+     "preamble": 2811,
+     "surprises": 3140
+    },
+    "transcript": "call-003-theorize-round1.md"
+   },
+   {
+    "by_kind": {
+     "boilerplate": {
+      "chars": 11703,
+      "share": 0.1577351268296628
+     },
+     "books": {
+      "chars": 38442,
+      "share": 0.5181281505243012
+     },
+     "evidence": {
+      "chars": 18342,
+      "share": 0.24721675607191956
+     },
+     "feedback": {
+      "chars": 5707,
+      "share": 0.07691996657411651
+     }
+    },
+    "cache_creation_input_tokens": 100266,
+    "cache_read_input_tokens": 36201,
+    "call": 4,
+    "chars_in": 74194,
+    "cost_usd": 2.8265505,
+    "output_tokens": 71146,
+    "repeat_vs_previous": {
+     "first_call": false,
+     "prefix_chars": 72898,
+     "prefix_share": 0.9825322802382942,
+     "repeated_chars": 71627,
+     "repeated_share": 0.9654015149473003,
+     "sections": {
+      "certify": {
+       "chars": 2145,
+       "common_prefix": 2145,
+       "identical": false,
+       "was_absent": false
+      },
+      "command_diffs": {
+       "chars": 1639,
+       "common_prefix": 1639,
+       "identical": true,
+       "was_absent": false
+      },
+      "compile_errors": {
+       "chars": 422,
+       "common_prefix": 0,
+       "identical": false,
+       "was_absent": true
+      },
+      "current_frame": {
+       "chars": 1959,
+       "common_prefix": 1959,
+       "identical": true,
+       "was_absent": false
+      },
+      "engine_proposals": {
+       "chars": 14242,
+       "common_prefix": 14242,
+       "identical": true,
+       "was_absent": false
+      },
+      "grammar_card": {
+       "chars": 8017,
+       "common_prefix": 8017,
+       "identical": true,
+       "was_absent": false
+      },
+      "manual": {
+       "chars": 32559,
+       "common_prefix": 32559,
+       "identical": true,
+       "was_absent": false
+      },
+      "obs_summary": {
+       "chars": 502,
+       "common_prefix": 502,
+       "identical": true,
+       "was_absent": false
+      },
+      "output_contract": {
+       "chars": 875,
+       "common_prefix": 875,
+       "identical": true,
+       "was_absent": false
+      },
+      "playbook": {
+       "chars": 5883,
+       "common_prefix": 5883,
+       "identical": true,
+       "was_absent": false
+      },
+      "preamble": {
+       "chars": 2811,
+       "common_prefix": 2811,
+       "identical": true,
+       "was_absent": false
+      },
+      "surprises": {
+       "chars": 3140,
+       "common_prefix": 3140,
+       "identical": true,
+       "was_absent": false
+      }
+     }
+    },
+    "sections": {
+     "certify": 2145,
+     "command_diffs": 1639,
+     "compile_errors": 422,
+     "current_frame": 1959,
+     "engine_proposals": 14242,
+     "grammar_card": 8017,
+     "manual": 32559,
+     "obs_summary": 502,
+     "output_contract": 875,
+     "playbook": 5883,
+     "preamble": 2811,
+     "surprises": 3140
+    },
+    "transcript": "call-004-theorize-round2.md"
+   },
+   {
+    "by_kind": {
+     "boilerplate": {
+      "chars": 11703,
+      "share": 0.1577351268296628
+     },
+     "books": {
+      "chars": 38442,
+      "share": 0.5181281505243012
+     },
+     "evidence": {
+      "chars": 18342,
+      "share": 0.24721675607191956
+     },
+     "feedback": {
+      "chars": 5707,
+      "share": 0.07691996657411651
+     }
+    },
+    "cache_creation_input_tokens": 133002,
+    "cache_read_input_tokens": 39802,
+    "call": 5,
+    "chars_in": 74194,
+    "cost_usd": 4.684776,
+    "output_tokens": 132309,
+    "repeat_vs_previous": {
+     "first_call": false,
+     "prefix_chars": 74194,
+     "prefix_share": 1.0,
+     "repeated_chars": 74194,
+     "repeated_share": 1.0,
+     "sections": {
+      "certify": {
+       "chars": 2145,
+       "common_prefix": 2145,
+       "identical": true,
+       "was_absent": false
+      },
+      "command_diffs": {
+       "chars": 1639,
+       "common_prefix": 1639,
+       "identical": true,
+       "was_absent": false
+      },
+      "compile_errors": {
+       "chars": 422,
+       "common_prefix": 422,
+       "identical": true,
+       "was_absent": false
+      },
+      "current_frame": {
+       "chars": 1959,
+       "common_prefix": 1959,
+       "identical": true,
+       "was_absent": false
+      },
+      "engine_proposals": {
+       "chars": 14242,
+       "common_prefix": 14242,
+       "identical": true,
+       "was_absent": false
+      },
+      "grammar_card": {
+       "chars": 8017,
+       "common_prefix": 8017,
+       "identical": true,
+       "was_absent": false
+      },
+      "manual": {
+       "chars": 32559,
+       "common_prefix": 32559,
+       "identical": true,
+       "was_absent": false
+      },
+      "obs_summary": {
+       "chars": 502,
+       "common_prefix": 502,
+       "identical": true,
+       "was_absent": false
+      },
+      "output_contract": {
+       "chars": 875,
+       "common_prefix": 875,
+       "identical": true,
+       "was_absent": false
+      },
+      "playbook": {
+       "chars": 5883,
+       "common_prefix": 5883,
+       "identical": true,
+       "was_absent": false
+      },
+      "preamble": {
+       "chars": 2811,
+       "common_prefix": 2811,
+       "identical": true,
+       "was_absent": false
+      },
+      "surprises": {
+       "chars": 3140,
+       "common_prefix": 3140,
+       "identical": true,
+       "was_absent": false
+      }
+     }
+    },
+    "sections": {
+     "certify": 2145,
+     "command_diffs": 1639,
+     "compile_errors": 422,
+     "current_frame": 1959,
+     "engine_proposals": 14242,
+     "grammar_card": 8017,
+     "manual": 32559,
+     "obs_summary": 502,
+     "output_contract": 875,
+     "playbook": 5883,
+     "preamble": 2811,
+     "surprises": 3140
+    },
+    "transcript": "call-005-theorize-round3.md"
+   },
+   {
+    "by_kind": {
+     "boilerplate": {
+      "chars": 11703,
+      "share": 0.1648983387580843
+     },
+     "books": {
+      "chars": 38442,
+      "share": 0.5416578602527793
+     },
+     "evidence": {
+      "chars": 18342,
+      "share": 0.2584435896352031
+     },
+     "feedback": {
+      "chars": 2484,
+      "share": 0.035000211353933296
+     }
+    },
+    "cache_creation_input_tokens": 130405,
+    "cache_read_input_tokens": 38490,
+    "call": 6,
+    "chars_in": 70971,
+    "cost_usd": 4.625281,
+    "output_tokens": 131033,
+    "repeat_vs_previous": {
+     "first_call": false,
+     "prefix_chars": 68207,
+     "prefix_share": 0.9610545152245283,
+     "repeated_chars": 68487,
+     "repeated_share": 0.9649997886460667,
+     "sections": {
+      "certify": {
+       "chars": 1889,
+       "common_prefix": 116,
+       "identical": false,
+       "was_absent": false
+      },
+      "command_diffs": {
+       "chars": 1639,
+       "common_prefix": 1639,
+       "identical": true,
+       "was_absent": false
+      },
+      "current_frame": {
+       "chars": 1959,
+       "common_prefix": 1959,
+       "identical": true,
+       "was_absent": false
+      },
+      "engine_proposals": {
+       "chars": 14242,
+       "common_prefix": 14242,
+       "identical": true,
+       "was_absent": false
+      },
+      "grammar_card": {
+       "chars": 8017,
+       "common_prefix": 8017,
+       "identical": true,
+       "was_absent": false
+      },
+      "manual": {
+       "chars": 32559,
+       "common_prefix": 32559,
+       "identical": true,
+       "was_absent": false
+      },
+      "obs_summary": {
+       "chars": 502,
+       "common_prefix": 502,
+       "identical": true,
+       "was_absent": false
+      },
+      "output_contract": {
+       "chars": 875,
+       "common_prefix": 875,
+       "identical": true,
+       "was_absent": false
+      },
+      "playbook": {
+       "chars": 5883,
+       "common_prefix": 5883,
+       "identical": true,
+       "was_absent": false
+      },
+      "preamble": {
+       "chars": 2811,
+       "common_prefix": 2811,
+       "identical": true,
+       "was_absent": false
+      },
+      "surprises": {
+       "chars": 595,
+       "common_prefix": 595,
+       "identical": false,
+       "was_absent": false
+      }
+     }
+    },
+    "sections": {
+     "certify": 1889,
+     "command_diffs": 1639,
+     "current_frame": 1959,
+     "engine_proposals": 14242,
+     "grammar_card": 8017,
+     "manual": 32559,
+     "obs_summary": 502,
+     "output_contract": 875,
+     "playbook": 5883,
+     "preamble": 2811,
+     "surprises": 595
+    },
+    "transcript": "call-006-theorize-round1.md"
+   }
+  ],
+  "totals": {
+   "by_kind_chars": {
+    "boilerplate": 70218,
+    "books": 242316,
+    "evidence": 109146,
+    "feedback": 26071
+   },
+   "by_kind_share": {
+    "boilerplate": 0.15682377035450507,
+    "books": 0.5411847209721474,
+    "evidence": 0.24376494971535517,
+    "feedback": 0.058226558957992273
+   },
+   "cache_read_total_tokens": 154091,
+   "calls": 6,
+   "chars_in": 447751,
+   "cost_per_call_usd": 3.383871,
+   "cost_usd": 20.303224,
+   "est_prefix_tokens": 4397,
+   "est_repeated_tokens": 4405,
+   "est_tokens_by_kind": {
+    "boilerplate": 1210,
+    "books": 4176,
+    "evidence": 1881,
+    "feedback": 449
+   },
+   "prefix_chars": 255110,
+   "prefix_share": 0.5697586381716624,
+   "repeated_chars": 255603,
+   "repeated_share": 0.5708596965724253
+  }
+ }
+}
