@@ -1,0 +1,16 @@
+disabled the check in src\theory_compiler\ir.py
+disabled the check in src\theory_compiler\generators\gen_markdown.py
+
+---- with both checks disabled ----
+19 failed, 11 passed in 5.65s
+
+distinct test functions that FAILED (4):
+   test_every_one_of_the_four_forms_refuses_a_written_cell
+   test_no_event_can_allocate_an_instance_onto_a_cell
+   test_the_edge_advance_law_is_refused_when_it_reaches_the_unseated_cell
+   test_the_prose_form_refuses_it_too_and_says_why
+
+(all test function names seen: 5)
+
+restored 2 source file(s)
+git status src/ after restore: ''

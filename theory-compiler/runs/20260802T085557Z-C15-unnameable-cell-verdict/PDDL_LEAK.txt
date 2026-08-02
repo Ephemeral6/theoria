@@ -1,0 +1,41 @@
+C15 - writing a cell in a world `gen_pddl` compiles
+
+BASE (the fixture, unedited)
+   gen_python    compiled
+   gen_lean      compiled
+   gen_markdown  compiled
+   gen_pddl      compiled
+
+WRITES_LANDMARK   then recolored(origin, 1)
+   gen_python    IRError
+       rule 'paint_the_landmark' writes 'origin', which this manual declares as a `landmark` — a *cell*, not an object. An event writes o
+   gen_lean      IRError
+       rule 'paint_the_landmark' writes 'origin', which this manual declares as a `landmark` — a *cell*, not an object. An event writes o
+   gen_markdown  UnrenderableRule
+       rule 'paint_the_landmark' writes 'origin', which this manual declares as a `landmark` — a cell, not an object. Rendering it as pro
+   gen_pddl      UnsupportedClause
+       'origin' is not a declared object type; this backend can only parameterise over the word table's objects
+
+VANISHES_LANDMARK then vanished(origin)
+   gen_python    IRError
+       rule 'paint_the_landmark' writes 'origin', which this manual declares as a `landmark` — a *cell*, not an object. An event writes o
+   gen_lean      IRError
+       rule 'paint_the_landmark' writes 'origin', which this manual declares as a `landmark` — a *cell*, not an object. An event writes o
+   gen_markdown  UnrenderableRule
+       rule 'paint_the_landmark' writes 'origin', which this manual declares as a `landmark` — a cell, not an object. Rendering it as pro
+   gen_pddl      UnsupportedClause
+       'origin' is not a declared object type; this backend can only parameterise over the word table's objects
+
+WRITES_CELL_TERM  then recolored(toward(Cart, up), 1)
+   gen_python    IRError
+       rule 'paint_the_landmark' writes argument 0 of recolored, which is not an object name (FuncCall(name='toward', args=[NameRef(name=
+   gen_lean      IRError
+       rule 'paint_the_landmark' writes argument 0 of recolored, which is not an object name (FuncCall(name='toward', args=[NameRef(name=
+   gen_markdown  UnrenderableRule
+       rule 'paint_the_landmark' writes argument 0 of recolored, which is not an object name (FuncCall(name='toward', args=[NameRef(name=
+   gen_pddl      UnsupportedClause
+       an event's first argument must be an object
+
+LEAK: gen_pddl compiled 0 manual(s) that write a cell
+
+wrote C:\Users\user\Desktop\theoria\.worktrees\c15-the-unnameable-cell-has-no-home-in-the-dsl\theory-compiler\runs\20260802T085557Z-C15-unnameable-cell-verdict\PDDL_LEAK.json

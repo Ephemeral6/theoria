@@ -1,0 +1,100 @@
+{
+  "cases": [
+    {
+      "case": "seated instance (the arm's working shape)",
+      "detail": "",
+      "form": "build_ir",
+      "verdict": "compiled"
+    },
+    {
+      "case": "seated instance (the arm's working shape)",
+      "detail": "",
+      "form": "gen_python",
+      "verdict": "compiled"
+    },
+    {
+      "case": "seated instance (the arm's working shape)",
+      "detail": "",
+      "form": "gen_markdown",
+      "verdict": "compiled"
+    },
+    {
+      "case": "seated instance (the arm's working shape)",
+      "detail": "colored(VarRef(name='p'), 9): this cell term has no STRIPS image in this subset. Refusing rather than dropping the precondition.",
+      "form": "gen_pddl",
+      "verdict": "UnsupportedClause"
+    },
+    {
+      "case": "landmark as effect target",
+      "detail": "rule 'edge_burns' writes 'edge', which this manual declares as a `landmark` \u2014 a *cell*, not an object. An event writes objects. The frame is drawn by painting instances onto the level's board, so a cell no instance stands on renders the board's colour on every step and an event aimed at it compiles to an assignment nothing reads: before this check the rule fired and the frame never changed. Repair: have the level seat an instance on that cell and write the rule over the instance. If the cell has never varied and the level therefore seats nothing there, that is a segmentation question and not a grammar one \u2014 see theory-compiler/runs/20260801T1200Z-R2-2-board-cell-expressivity/FINDING.md.",
+      "form": "build_ir",
+      "verdict": "IRError"
+    },
+    {
+      "case": "landmark as effect target",
+      "detail": "rule 'edge_burns' writes 'edge', which this manual declares as a `landmark` \u2014 a *cell*, not an object. An event writes objects. The frame is drawn by painting instances onto the level's board, so a cell no instance stands on renders the board's colour on every step and an event aimed at it compiles to an assignment nothing reads: before this check the rule fired and the frame never changed. Repair: have the level seat an instance on that cell and write the rule over the instance. If the cell has never varied and the level therefore seats nothing there, that is a segmentation question and not a grammar one \u2014 see theory-compiler/runs/20260801T1200Z-R2-2-board-cell-expressivity/FINDING.md.",
+      "form": "gen_python",
+      "verdict": "IRError"
+    },
+    {
+      "case": "landmark as effect target",
+      "detail": "rule 'edge_burns' writes 'edge', which this manual declares as a `landmark` \u2014 a cell, not an object. Rendering it as prose would make theory.md the only form claiming this rule does anything: the predictor compiles it to an assignment nothing reads. See theory-compiler/runs/20260801T1200Z-R2-2-board-cell-expressivity/FINDING.md.",
+      "form": "gen_markdown",
+      "verdict": "UnrenderableRule"
+    },
+    {
+      "case": "landmark as effect target",
+      "detail": "colored(NameRef(name='edge'), 9): this cell term has no STRIPS image in this subset. Refusing rather than dropping the precondition.",
+      "form": "gen_pddl",
+      "verdict": "UnsupportedClause"
+    },
+    {
+      "case": "cell term as effect target",
+      "detail": "rule 'edge_advance__Bar_6' writes argument 0 of recolored, which is not an object name (FuncCall(name='leftof', args=[NameRef(name='Bar_6')])). An event writes objects; a cell term such as `leftof(?x)` denotes a *location*, and a location is not a thing this manual owns. If the cell needs to change, something has to stand on it: seat an instance there and write the rule over that instance. See theory-compiler/runs/20260801T1200Z-R2-2-board-cell-expressivity/FINDING.md.",
+      "form": "build_ir",
+      "verdict": "IRError"
+    },
+    {
+      "case": "cell term as effect target",
+      "detail": "rule 'edge_advance__Bar_6' writes argument 0 of recolored, which is not an object name (FuncCall(name='leftof', args=[NameRef(name='Bar_6')])). An event writes objects; a cell term such as `leftof(?x)` denotes a *location*, and a location is not a thing this manual owns. If the cell needs to change, something has to stand on it: seat an instance there and write the rule over that instance. See theory-compiler/runs/20260801T1200Z-R2-2-board-cell-expressivity/FINDING.md.",
+      "form": "gen_python",
+      "verdict": "IRError"
+    },
+    {
+      "case": "cell term as effect target",
+      "detail": "rule 'edge_advance' writes argument 0 of recolored, which is not an object name (FuncCall(name='leftof', args=[VarRef(name='p')])). An event writes objects; a cell term such as `leftof(?x)` denotes a *location*, and a location is not a thing this manual owns. If the cell needs to change, something has to stand on it: seat an instance there and write the rule over that instance. See theory-compiler/runs/20260801T1200Z-R2-2-board-cell-expressivity/FINDING.md.",
+      "form": "gen_markdown",
+      "verdict": "UnrenderableRule"
+    },
+    {
+      "case": "cell term as effect target",
+      "detail": "colored(VarRef(name='p'), 1): this cell term has no STRIPS image in this subset. Refusing rather than dropping the precondition.",
+      "form": "gen_pddl",
+      "verdict": "UnsupportedClause"
+    },
+    {
+      "case": "landmark in the GUARD, instance in the effect",
+      "detail": "",
+      "form": "build_ir",
+      "verdict": "compiled"
+    },
+    {
+      "case": "landmark in the GUARD, instance in the effect",
+      "detail": "",
+      "form": "gen_python",
+      "verdict": "compiled"
+    },
+    {
+      "case": "landmark in the GUARD, instance in the effect",
+      "detail": "",
+      "form": "gen_markdown",
+      "verdict": "compiled"
+    },
+    {
+      "case": "landmark in the GUARD, instance in the effect",
+      "detail": "colored(NameRef(name='edge'), 9): this cell term has no STRIPS image in this subset. Refusing rather than dropping the precondition.",
+      "form": "gen_pddl",
+      "verdict": "UnsupportedClause"
+    }
+  ]
+}
