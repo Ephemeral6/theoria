@@ -1,0 +1,18 @@
+(1) appeared(origin) -- allocation at a cell
+   gen_python    IRError
+       rule 'extra' writes 'origin', which this manual declares as a `landmark` — a *cell*, not an object. An event writes objects. The frame is drawn by painting inst
+   gen_lean      IRError
+       rule 'extra' writes 'origin', which this manual declares as a `landmark` — a *cell*, not an object. An event writes objects. The frame is drawn by painting inst
+   gen_markdown  UnrenderableRule
+       rule 'extra' writes 'origin', which this manual declares as a `landmark` — a cell, not an object. Rendering it as prose would make theory.md the only form claim
+   gen_pddl      UnsupportedClause
+       'origin' is not a declared object type; this backend can only parameterise over the word table's objects
+
+(2) landmark in the GUARD only, instance in the effect
+   gen_python    compiled
+   gen_lean      AmbiguousTransition
+       push_down and extra both fire on ('push', 'Cart', 'down') for Cart
+   gen_markdown  compiled
+   gen_pddl      UnsupportedClause
+       free(NameRef(name='origin')): this cell term has no STRIPS image in this subset. Refusing rather than dropping the precondition.
+

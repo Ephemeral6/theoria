@@ -375,8 +375,6 @@ def main():
     return 0
 
 
-if __name__ == "__main__":
-    raise SystemExit(main())
 
 
 # ---------------------------------------------------------------- via-task
@@ -466,3 +464,7 @@ def task_state(task):
         if line.lower().startswith(("status", "状态")):
             return line.split(":", 1)[1].strip()
     return "unknown"
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

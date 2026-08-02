@@ -1,0 +1,52 @@
+========================================================================
+A. gen_pddl's mutable domain -- cells, or instances?
+========================================================================
+seated instances      : ['Cart']
+cells they stand on   : [(1, 1)]
+colour facts in :init : 0
+fluent declaration    : (colour-1 ?c - cell)
+
+VERDICT A: the colour fluent is declared over `?c - cell`, not over
+an object -- printed above, measured. So the STRIPS form's colour
+domain is the CELL set, and the draft's universal claim -- write-
+extent == instance set, in ALL FOUR forms -- is FALSE.
+
+Stated exactly, because this probe is correcting an overclaim and
+must not commit one: the 0 facts above are not a refutation. This
+world's board is entirely background, and gen_pddl.py:440-443 emits a
+colour fact only where `problem.board` differs from the background --
+it reads the board layer directly, which is by definition the never-
+varying one. A painted board therefore DOES put colour facts on cells
+no instance stands on. That half is read from the source, not
+demonstrated in a compiled world here: the world with a painted board
+is the 1x8 bar, and gen_pddl refuses it for the unrelated
+`colored(<cell>, n)` reason. Declaration measured; emission read.
+
+========================================================================
+B. Are the four forms four independent witnesses?
+========================================================================
+  gen_lean._load_predictor defined       [98]
+  gen_lean calls generate_python         [101]
+  gen_lean execs generated source        [101]
+
+VERDICT B: `gen_lean` obtains its transition relation by executing
+`gen_python`'s output, so a refusal raised inside gen_python reaches
+Lean as a dependent, not as a second opinion. 'All four forms refuse'
+is TRUE as an observation and OVERSTATED as independent corroboration.
+
+========================================================================
+C. Is option (a)'s design space really empty?
+========================================================================
+seated instances : ['Bar_6', 'Bar_7']
+row before       : [9, 9, 9, 9, 9, 9, 1, 1]
+row after        : [9, 9, 9, 9, 9, 1, 1, 1]
+keys differ      : True
+overlay contents : {(0, 5): 1}
+
+VERDICT C: the frontier cell BURNED, with nothing seated on it and one
+extra state field -- not one per cell. So the design space of option
+(a) is NOT EMPTY. The draft's 'any such form reduces to seating' is
+FALSE. What the overlay actually costs is elsewhere: `frame persist`,
+`conflict exclusive` and `count(Type, ...)` are all defined over
+OBJECTS, and none of them can see this cell.
+

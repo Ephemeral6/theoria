@@ -1,0 +1,37 @@
+C15 - the R2-2 refusal across all four co-derived forms
+
+seated instance (the arm's working shape)
+   build_ir      compiled
+   gen_python    compiled
+   gen_markdown  compiled
+   gen_pddl      UnsupportedClause
+       colored(VarRef(name='p'), 9): this cell term has no STRIPS image in this subset. Refusing rather than dropping the precondition.
+
+landmark as effect target
+   build_ir      IRError
+       rule 'edge_burns' writes 'edge', which this manual declares as a `landmark` — a *cell*, not an object. An event writes objects. The frame is drawn by 
+   gen_python    IRError
+       rule 'edge_burns' writes 'edge', which this manual declares as a `landmark` — a *cell*, not an object. An event writes objects. The frame is drawn by 
+   gen_markdown  UnrenderableRule
+       rule 'edge_burns' writes 'edge', which this manual declares as a `landmark` — a cell, not an object. Rendering it as prose would make theory.md the on
+   gen_pddl      UnsupportedClause
+       colored(NameRef(name='edge'), 9): this cell term has no STRIPS image in this subset. Refusing rather than dropping the precondition.
+
+cell term as effect target
+   build_ir      IRError
+       rule 'edge_advance__Bar_6' writes argument 0 of recolored, which is not an object name (FuncCall(name='leftof', args=[NameRef(name='Bar_6')])). An eve
+   gen_python    IRError
+       rule 'edge_advance__Bar_6' writes argument 0 of recolored, which is not an object name (FuncCall(name='leftof', args=[NameRef(name='Bar_6')])). An eve
+   gen_markdown  UnrenderableRule
+       rule 'edge_advance' writes argument 0 of recolored, which is not an object name (FuncCall(name='leftof', args=[VarRef(name='p')])). An event writes ob
+   gen_pddl      UnsupportedClause
+       colored(VarRef(name='p'), 1): this cell term has no STRIPS image in this subset. Refusing rather than dropping the precondition.
+
+landmark in the GUARD, instance in the effect
+   build_ir      compiled
+   gen_python    compiled
+   gen_markdown  compiled
+   gen_pddl      UnsupportedClause
+       colored(NameRef(name='edge'), 9): this cell term has no STRIPS image in this subset. Refusing rather than dropping the precondition.
+
+wrote C:\Users\user\Desktop\theoria\.worktrees\c15-the-unnameable-cell-has-no-home-in-the-dsl\theory-compiler\runs\20260802T085557Z-C15-unnameable-cell-verdict\FOURTH_FORM.json (16 rows, width 45)

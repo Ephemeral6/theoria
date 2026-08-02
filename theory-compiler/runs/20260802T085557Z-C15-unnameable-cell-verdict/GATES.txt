@@ -1,0 +1,52 @@
+C15 — gates, 2026-08-02
+=======================================================================
+cell        C15-the-unnameable-cell-has-no-home-in-the-dsl
+worker      W-9204
+branch      agent/c15-the-unnameable-cell-has-no-home-in-the-dsl
+base        1e5b3f00
+spend       $0.00 — no ARC action, no desk call, no model call, no network
+sealed pile zero contact
+
+[1/5] baseline, before anything was touched
+   ok    375 passed, 1 skipped in 36.26s
+         matches runs/20260801T1200Z-.../GATES.txt:8
+
+[2/5] suite, after
+   ok    405 passed, 1 skipped in 30.12s
+         +30, all of them tests/test_c15_unnameable_cell.py
+
+[3/5] theory-compiler/verify.py
+   ok    built a0-cart, a0-sokoban2
+   ok    2 package(s), 33 files, every declared sha256 matches, 0 blocking leaks
+   ok    theory-compiler: green -- suite, one real run, artefact fields
+
+[4/5] CONTRACTS/verify.py
+   ok    7 keys, identical on both sides; status pinned in both
+   ok    44 reference rows accepted; a forged status is rejected
+   ok    CONTRACTS: green
+         note: this gate counts CONTRACTS/*.md and reads candidates_schema.md
+         only. It does not check any grammar file against the parser, so
+         landing dsl_grammar_v0.4.md does not register anywhere it can see.
+         Recorded because a green here must not be read as "the new contract
+         was verified" — it was not, and no such gate exists.
+
+[5/5] negative control — was the refusal seen to say no?
+      `python negative_control.py`, both checks replaced with a no-op
+   ok    19 failed, 11 passed  (was 30 passed)
+   ok    the 11 survivors are exactly the tests that cannot feel those checks:
+            2  test_gen_pddl_refuses_by_its_own_route_and_this_is_what_pins_it
+            3  test_every_one_of_the_four_forms_refuses_a_written_cell[gen_pddl]
+            1  test_no_event_can_allocate_an_instance_onto_a_cell[gen_pddl]
+            3  test_reading_a_board_cell_in_a_guard_is_legal
+            1  test_the_cart_world_compiles_in_all_four_forms_unedited
+            1  test_the_law_is_statable_the_moment_the_cell_is_seated
+         The six gen_pddl rows surviving is not a gap in the control — it is
+         the measurement behind dsl_grammar_v0.4.md §4: gen_pddl never calls
+         build_ir, so its agreement is convergent, not derived. The four
+         controls surviving is required; they must pass either way.
+   ok    sources restored; `git status --short src` empty afterwards
+
+territory   only theory-compiler/, CONTRACTS/dsl_grammar_v0.4.md (a shared
+            surface this track solely owns) and monitor/inbox/ were written.
+            theoria-arm/ and freeze/ read only; no file under either edited.
+credentials no key value in any tracked file; no .env read by anything here.
