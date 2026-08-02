@@ -38,4 +38,4 @@ WRITES_CELL_TERM  then recolored(toward(Cart, up), 1)
 
 LEAK: gen_pddl compiled 0 manual(s) that write a cell
 
-wrote C:\Users\user\Desktop\theoria\.worktrees\c15-the-unnameable-cell-has-no-home-in-the-dsl\theory-compiler\runs\20260802T085557Z-C15-unnameable-cell-verdict\PDDL_LEAK.json
+wrote PDDL_LEAK.json

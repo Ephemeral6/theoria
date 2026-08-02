@@ -128,7 +128,9 @@ def main():
         json.dump({"cases": rows, "leaks": [r["case"] for r in leaks]},
                   fh, indent=2, sort_keys=True)
         fh.write("\n")
-    print("\nwrote %s" % out)
+    # Basename only -- see the note in probe_fourth_form.py: an absolute path
+    # printed here lands in a tracked artefact and records the machine.
+    print("\nwrote %s" % os.path.basename(out))
 
 
 if __name__ == "__main__":
