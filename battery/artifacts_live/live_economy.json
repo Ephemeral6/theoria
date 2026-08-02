@@ -153,13 +153,222 @@
       "note": "absence carries its reason and is never a zero",
       "reason": "fewer than 8 turns; the same early-exit confound as E2",
       "status": "insufficient-data"
+    },
+    {
+      "leg": "20260731T231654Z-R1-g50t-a",
+      "metric": "E2",
+      "note": "absence carries its reason and is never a zero",
+      "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+      "status": "insufficient-data"
+    },
+    {
+      "leg": "20260731T231654Z-R1-g50t-a",
+      "metric": "E3",
+      "note": "absence carries its reason and is never a zero",
+      "reason": "fewer than 8 turns; the same early-exit confound as E2",
+      "status": "insufficient-data"
+    },
+    {
+      "leg": "20260731T231654Z-R1-g50t-a",
+      "metric": "E4",
+      "note": "absence carries its reason and is never a zero",
+      "reason": "fewer than five turns; a quadratic needs room",
+      "status": "insufficient-data"
+    },
+    {
+      "leg": "20260731T231654Z-R1-g50t-a",
+      "metric": "E7",
+      "note": "absence carries its reason and is never a zero",
+      "reason": "fewer than five turns; a quadratic needs room",
+      "status": "insufficient-data"
+    },
+    {
+      "leg": "20260731T231654Z-R1-sk48-b",
+      "metric": "E2",
+      "note": "absence carries its reason and is never a zero",
+      "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+      "status": "insufficient-data"
+    },
+    {
+      "leg": "20260731T231654Z-R1-sk48-b",
+      "metric": "E3",
+      "note": "absence carries its reason and is never a zero",
+      "reason": "fewer than 8 turns; the same early-exit confound as E2",
+      "status": "insufficient-data"
+    },
+    {
+      "leg": "20260731T231654Z-R1-sk48-b",
+      "metric": "E4",
+      "note": "absence carries its reason and is never a zero",
+      "reason": "fewer than five turns; a quadratic needs room",
+      "status": "insufficient-data"
+    },
+    {
+      "leg": "20260731T231654Z-R1-sk48-b",
+      "metric": "E7",
+      "note": "absence carries its reason and is never a zero",
+      "reason": "fewer than five turns; a quadratic needs room",
+      "status": "insufficient-data"
+    },
+    {
+      "leg": "20260801T001851Z-R1b-g50t-a",
+      "metric": "E2",
+      "note": "absence carries its reason and is never a zero",
+      "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+      "status": "insufficient-data"
+    },
+    {
+      "leg": "20260801T001851Z-R1b-g50t-a",
+      "metric": "E3",
+      "note": "absence carries its reason and is never a zero",
+      "reason": "fewer than 8 turns; the same early-exit confound as E2",
+      "status": "insufficient-data"
+    },
+    {
+      "leg": "20260801T001851Z-R1b-sk48-b",
+      "metric": "E2",
+      "note": "absence carries its reason and is never a zero",
+      "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+      "status": "insufficient-data"
+    },
+    {
+      "leg": "20260801T001851Z-R1b-sk48-b",
+      "metric": "E3",
+      "note": "absence carries its reason and is never a zero",
+      "reason": "fewer than 8 turns; the same early-exit confound as E2",
+      "status": "insufficient-data"
+    },
+    {
+      "leg": "20260801T043743Z-R2-g50t-a",
+      "metric": "E1",
+      "note": "absence carries its reason and is never a zero",
+      "reason": "the run records no model calls",
+      "status": "not-applicable"
+    },
+    {
+      "leg": "20260801T043743Z-R2-g50t-a",
+      "metric": "E2",
+      "note": "absence carries its reason and is never a zero",
+      "reason": "the run records no model calls",
+      "status": "not-applicable"
+    },
+    {
+      "leg": "20260801T043743Z-R2-g50t-a",
+      "metric": "E3",
+      "note": "absence carries its reason and is never a zero",
+      "reason": "the run records no model calls",
+      "status": "not-applicable"
+    },
+    {
+      "leg": "20260801T043743Z-R2-g50t-a",
+      "metric": "E4",
+      "note": "absence carries its reason and is never a zero",
+      "reason": "the run records no model calls",
+      "status": "not-applicable"
+    },
+    {
+      "leg": "20260801T043743Z-R2-g50t-a",
+      "metric": "E5",
+      "note": "absence carries its reason and is never a zero",
+      "reason": "the run records no model calls",
+      "status": "not-applicable"
+    },
+    {
+      "leg": "20260801T043743Z-R2-g50t-a",
+      "metric": "E7",
+      "note": "absence carries its reason and is never a zero",
+      "reason": "the run records no model calls",
+      "status": "not-applicable"
+    },
+    {
+      "leg": "20260801T043743Z-R2-sk48-b",
+      "metric": "E1",
+      "note": "absence carries its reason and is never a zero",
+      "reason": "the run records no model calls",
+      "status": "not-applicable"
+    },
+    {
+      "leg": "20260801T043743Z-R2-sk48-b",
+      "metric": "E2",
+      "note": "absence carries its reason and is never a zero",
+      "reason": "the run records no model calls",
+      "status": "not-applicable"
+    },
+    {
+      "leg": "20260801T043743Z-R2-sk48-b",
+      "metric": "E3",
+      "note": "absence carries its reason and is never a zero",
+      "reason": "the run records no model calls",
+      "status": "not-applicable"
+    },
+    {
+      "leg": "20260801T043743Z-R2-sk48-b",
+      "metric": "E4",
+      "note": "absence carries its reason and is never a zero",
+      "reason": "the run records no model calls",
+      "status": "not-applicable"
+    },
+    {
+      "leg": "20260801T043743Z-R2-sk48-b",
+      "metric": "E5",
+      "note": "absence carries its reason and is never a zero",
+      "reason": "the run records no model calls",
+      "status": "not-applicable"
+    },
+    {
+      "leg": "20260801T043743Z-R2-sk48-b",
+      "metric": "E7",
+      "note": "absence carries its reason and is never a zero",
+      "reason": "the run records no model calls",
+      "status": "not-applicable"
+    },
+    {
+      "leg": "20260801T044640Z-R2b-g50t-a",
+      "metric": "E2",
+      "note": "absence carries its reason and is never a zero",
+      "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+      "status": "insufficient-data"
+    },
+    {
+      "leg": "20260801T044640Z-R2b-g50t-a",
+      "metric": "E3",
+      "note": "absence carries its reason and is never a zero",
+      "reason": "fewer than 8 turns; the same early-exit confound as E2",
+      "status": "insufficient-data"
+    },
+    {
+      "leg": "20260801T044640Z-R2b-sk48-b",
+      "metric": "E2",
+      "note": "absence carries its reason and is never a zero",
+      "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+      "status": "insufficient-data"
+    },
+    {
+      "leg": "20260801T044640Z-R2b-sk48-b",
+      "metric": "E3",
+      "note": "absence carries its reason and is never a zero",
+      "reason": "fewer than 8 turns; the same early-exit confound as E2",
+      "status": "insufficient-data"
     }
   ],
   "arm": "theoria",
   "axis_sensitivity": {
     "cells_that_moved": [],
     "note": "E1, E4, E5, E6 and E7 are computed per billed call or per step and cannot move with the turn axis; only E2 and E3 can. An empty `cells_that_moved` therefore means the adapter's fallback axis and the archive's exact axis agree on every computable cell -- which is a result about this material, not a property of the code. Read it beside `turn_counts_that_moved`: a leg whose axis changed length but stayed under the 8-turn floor returns the same `insufficient-data` from both axes, and that agreement is arithmetic rather than corroboration.",
-    "turn_counts_that_moved": []
+    "turn_counts_that_moved": [
+      {
+        "exact_turns": 1,
+        "leg": "20260731T231654Z-R1-sk48-b",
+        "of_record_source": "unjoined: curves.json counts 0 billed call(s), the ledger has 3",
+        "of_record_turns": 3
+      },
+      {
+        "exact_turns": 2,
+        "leg": "20260801T044640Z-R2b-sk48-b",
+        "of_record_source": "curves.json",
+        "of_record_turns": 3
+      }
+    ]
   },
   "constraint": "readings, not confirmations -- the same constraint battery/audit/live_arm.py records. PREDICTIONS.md is frozen prefix-and-whole under BATTERY_V1 freeze:prereg, PREREG_V9 §5 forbids rewriting the committed artefacts, and process 1's gradient (CC vs Schema) does not contain this arm. Nothing here settles a prediction, moves a tier, or enters a discrimination verdict.",
   "excluded": [
@@ -232,6 +441,44 @@
       "bill_shape.json": "sha256:f3a64bb7a1cc18fab433ed59542139e2f36b79fb9de8a000182e283c64eb4809",
       "curves.json": "sha256:84e968a6a73ecd9b8013550ff57b489e0da76fa197d5d0525217525669209d38",
       "ledger.jsonl": "sha256:88690c5cf32066c099d5403b105f2b976f04ae67a7adf13868c6c5c69256420e"
+    },
+    "20260731T231654Z-R1-g50t-a": {
+      "bill_shape.json": "sha256:0330477e0cc2c2f13fba0c3221c99d71f272e254ebc77549856a8a6b0030244d",
+      "curves.json": "sha256:aa1a968f80f3e39c0a940f7cc6ad36bccd5c6d5f4d5435772ea593c2ccf36c07",
+      "ledger.jsonl": "sha256:326643316766eb50049c60e87f7eb1c9de12ab25c7e574390441718bc643557f"
+    },
+    "20260731T231654Z-R1-sk48-b": {
+      "bill_shape.json": "sha256:8b8a9c3cb96a1a5b254222b962953055d56004fdf43347604e8a29a49e9d9fea",
+      "curves.json": "sha256:11fc9fa23976cd510914f48be9ac1cfe39366c06eb52005245a1544d72bae295",
+      "ledger.jsonl": "sha256:bc8514e4173134c36f0885ebd0e60408f68d9b7e4a047fe8ebab06b2e6027a5e"
+    },
+    "20260801T001851Z-R1b-g50t-a": {
+      "bill_shape.json": "sha256:4927f08a22251fa7bf695f245480ce8784acdfaed72e5dea24970cb97c2a0d7f",
+      "curves.json": "sha256:97f07f348e7b3b97d3540df48b78aed858f3d7ea21d299fd1f162d19f532efc8",
+      "ledger.jsonl": "sha256:e21ad90fa3494a8aa43b78ab70aa74b2ffbdf308da6bc5cb8b97acfdf93a74bf"
+    },
+    "20260801T001851Z-R1b-sk48-b": {
+      "bill_shape.json": "sha256:5f3f80b79072975553d85c8d60cb8ed86b56e8928bc3169bf80eb40fb1975968",
+      "curves.json": "sha256:4c7547a5d24d0965463887d45a7a95754a785a2454251b843466f1893f529833",
+      "ledger.jsonl": "sha256:d315b6088d928d0b1e7b74e99a9c7fddb41f59c02011effa2918c4d36cb6854d"
+    },
+    "20260801T043743Z-R2-g50t-a": {
+      "bill_shape.json": "sha256:6ba974798dc1868de9e364d4eb93ff4d737d23a1f08d09d86791307965c0b5ba",
+      "ledger.jsonl": "sha256:baa44c20edcf6526fc726bc79833d6b0ae60d11f6120ca2b8ed4cb2fb6411e55"
+    },
+    "20260801T043743Z-R2-sk48-b": {
+      "bill_shape.json": "sha256:ae5d97bb744bc80b75209344ed1aa0f6d2a81d806a4890d419aafcbe9fd7eb61",
+      "ledger.jsonl": "sha256:0b4e9ec0a0ad7fc29ced9b08dbe577095fb3ba05eb82c50b407280720f9b222b"
+    },
+    "20260801T044640Z-R2b-g50t-a": {
+      "bill_shape.json": "sha256:2c3918ed3d92d2262985200208f1200a70ce09b958ff3a920fee63a04cf799ee",
+      "curves.json": "sha256:1a385133170c660f85432b5919836a58546e08ccee8be025c531562744522aa3",
+      "ledger.jsonl": "sha256:e354a7f835e0f935d0e4c73dfd1747c4213c74178ca3dfed25332e3912c7cc53"
+    },
+    "20260801T044640Z-R2b-sk48-b": {
+      "bill_shape.json": "sha256:840580db926b8108838b415922f8f428cc75d18eac1943fd29c8ca0be181c822",
+      "curves.json": "sha256:242233ebee07fa325a5741a61252df1b300d8795925d09140c64757d4d93eaf9",
+      "ledger.jsonl": "sha256:2d2a9f07eecb1a4689c4478f77583b9b727e55426df8e5d1884e988f40167d1a"
     }
   },
   "legs": {
@@ -1189,6 +1436,1409 @@
           "usd_cumulative": 12.251719
         }
       ]
+    },
+    "20260731T231654Z-R1-g50t-a": {
+      "adapter_turn_join": {
+        "join_confidence": "exact",
+        "joined_calls": 4,
+        "ledger_calls": 4,
+        "source": "curves.json"
+      },
+      "billed_calls": 4,
+      "campaign": "theoria-arm:A3-campaign-devpile",
+      "carried_books": true,
+      "economy_of_record": {
+        "E1": {
+          "status": "ok",
+          "support": {
+            "calls": 4
+          },
+          "value": 7.6034195
+        },
+        "E2": {
+          "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E3": {
+          "reason": "fewer than 8 turns; the same early-exit confound as E2",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E4": {
+          "reason": "fewer than five turns; a quadratic needs room",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E5": {
+          "status": "ok",
+          "support": {
+            "actions": 14,
+            "total_usd": 7.603419
+          },
+          "value": 0.543101393
+        },
+        "E6": {
+          "status": "ok",
+          "support": {
+            "http_calls": 106,
+            "on_failed_steps": 1.0,
+            "steps": 106
+          },
+          "value": 1.0
+        },
+        "E7": {
+          "reason": "fewer than five turns; a quadratic needs room",
+          "status": "insufficient-data",
+          "value": null
+        }
+      },
+      "economy_on_exact_axis": {
+        "E1": {
+          "status": "ok",
+          "support": {
+            "calls": 4
+          },
+          "value": 7.6034195
+        },
+        "E2": {
+          "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E3": {
+          "reason": "fewer than 8 turns; the same early-exit confound as E2",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E4": {
+          "reason": "fewer than five turns; a quadratic needs room",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E5": {
+          "status": "ok",
+          "support": {
+            "actions": 14,
+            "total_usd": 7.603419
+          },
+          "value": 0.543101393
+        },
+        "E6": {
+          "status": "ok",
+          "support": {
+            "http_calls": 106,
+            "on_failed_steps": 1.0,
+            "steps": 106
+          },
+          "value": 1.0
+        },
+        "E7": {
+          "reason": "fewer than five turns; a quadratic needs room",
+          "status": "insufficient-data",
+          "value": null
+        }
+      },
+      "exact_axis": {
+        "axis": "exact",
+        "billed_calls": 4,
+        "decision_turns": 2,
+        "reason": null,
+        "reconciled_usd": 7.6034195,
+        "source": "bill_shape.json",
+        "turn_indices": [
+          2,
+          6
+        ]
+      },
+      "game_id": "g50t-5849a774",
+      "ledger_cost_usd": 7.6034195,
+      "levels_completed": 0,
+      "outcome": "spend_gate_tripped",
+      "pile": "dev",
+      "reconciliation": {
+        "all_three_agree": true,
+        "bill_shape": {
+          "billed_calls": 4,
+          "declared_total_usd": 7.603419,
+          "present": true,
+          "usd": 7.603419
+        },
+        "curves": {
+          "billed_calls": 4,
+          "declared_total_usd": 7.6034195,
+          "join_confidence": "exact",
+          "present": true,
+          "turn_rows": 10,
+          "usd": 7.6034195
+        },
+        "disagreements": [],
+        "ledger": {
+          "billed_calls": 4,
+          "usd": 7.6034195
+        }
+      },
+      "steps": 106,
+      "successful_actions": 14,
+      "turn_cost_curve_exact": [
+        {
+          "share_cumulative": 0.217140327,
+          "turn": 2,
+          "usd": 1.651009,
+          "usd_cumulative": 1.651009
+        },
+        {
+          "share_cumulative": 1.0,
+          "turn": 6,
+          "usd": 5.9524105,
+          "usd_cumulative": 7.6034195
+        }
+      ],
+      "turn_cost_curve_of_record": [
+        {
+          "share_cumulative": 0.217140327,
+          "turn": 1,
+          "usd": 1.651009,
+          "usd_cumulative": 1.651009
+        },
+        {
+          "share_cumulative": 1.0,
+          "turn": 5,
+          "usd": 5.9524105,
+          "usd_cumulative": 7.6034195
+        }
+      ]
+    },
+    "20260731T231654Z-R1-sk48-b": {
+      "adapter_turn_join": {
+        "join_confidence": "degraded",
+        "joined_calls": 0,
+        "ledger_calls": 3,
+        "source": "unjoined: curves.json counts 0 billed call(s), the ledger has 3"
+      },
+      "billed_calls": 3,
+      "campaign": "theoria-arm:A3-campaign-devpile",
+      "carried_books": true,
+      "economy_of_record": {
+        "E1": {
+          "status": "ok",
+          "support": {
+            "calls": 3
+          },
+          "value": 7.6085275
+        },
+        "E2": {
+          "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E3": {
+          "reason": "fewer than 8 turns; the same early-exit confound as E2",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E4": {
+          "reason": "fewer than five turns; a quadratic needs room",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E5": {
+          "status": "ok",
+          "support": {
+            "actions": 6,
+            "total_usd": 7.608528
+          },
+          "value": 1.268087917
+        },
+        "E6": {
+          "status": "ok",
+          "support": {
+            "http_calls": 38,
+            "on_failed_steps": 1.0,
+            "steps": 38
+          },
+          "value": 1.0
+        },
+        "E7": {
+          "reason": "fewer than five turns; a quadratic needs room",
+          "status": "insufficient-data",
+          "value": null
+        }
+      },
+      "economy_on_exact_axis": {
+        "E1": {
+          "status": "ok",
+          "support": {
+            "calls": 3
+          },
+          "value": 7.6085275
+        },
+        "E2": {
+          "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E3": {
+          "reason": "fewer than 8 turns; the same early-exit confound as E2",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E4": {
+          "reason": "fewer than five turns; a quadratic needs room",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E5": {
+          "status": "ok",
+          "support": {
+            "actions": 6,
+            "total_usd": 7.608528
+          },
+          "value": 1.268087917
+        },
+        "E6": {
+          "status": "ok",
+          "support": {
+            "http_calls": 38,
+            "on_failed_steps": 1.0,
+            "steps": 38
+          },
+          "value": 1.0
+        },
+        "E7": {
+          "reason": "fewer than five turns; a quadratic needs room",
+          "status": "insufficient-data",
+          "value": null
+        }
+      },
+      "exact_axis": {
+        "axis": "exact",
+        "billed_calls": 3,
+        "decision_turns": 1,
+        "reason": null,
+        "reconciled_usd": 7.6085275,
+        "source": "bill_shape.json",
+        "turn_indices": [
+          2
+        ]
+      },
+      "game_id": "sk48-d8078629",
+      "ledger_cost_usd": 7.6085275,
+      "levels_completed": 0,
+      "outcome": "spend_gate_tripped",
+      "pile": "dev",
+      "reconciliation": {
+        "all_three_agree": false,
+        "bill_shape": {
+          "billed_calls": 3,
+          "declared_total_usd": 7.608528,
+          "present": true,
+          "usd": 7.608528
+        },
+        "curves": {
+          "billed_calls": 0,
+          "declared_total_usd": 0.0,
+          "join_confidence": "degraded",
+          "present": true,
+          "turn_rows": 2,
+          "usd": 0.0
+        },
+        "disagreements": [
+          "curves.json accounts for 0 billed call(s) over 2 turn row(s); the proxy ledger bills 3",
+          "curves.json totals 0.000000 USD over its turn rows; the proxy ledger totals 7.608528 USD (difference 7.608528)"
+        ],
+        "ledger": {
+          "billed_calls": 3,
+          "usd": 7.6085275
+        }
+      },
+      "steps": 38,
+      "successful_actions": 6,
+      "turn_cost_curve_exact": [
+        {
+          "share_cumulative": 1.0,
+          "turn": 2,
+          "usd": 7.6085275,
+          "usd_cumulative": 7.6085275
+        }
+      ],
+      "turn_cost_curve_of_record": [
+        {
+          "share_cumulative": 0.389278609,
+          "turn": 0,
+          "usd": 2.961837,
+          "usd_cumulative": 2.961837
+        },
+        {
+          "share_cumulative": 0.759473959,
+          "turn": 1,
+          "usd": 2.8166415,
+          "usd_cumulative": 5.7784785
+        },
+        {
+          "share_cumulative": 1.0,
+          "turn": 2,
+          "usd": 1.830049,
+          "usd_cumulative": 7.6085275
+        }
+      ]
+    },
+    "20260801T001851Z-R1b-g50t-a": {
+      "adapter_turn_join": {
+        "join_confidence": "degraded",
+        "joined_calls": 9,
+        "ledger_calls": 9,
+        "source": "curves.json"
+      },
+      "billed_calls": 9,
+      "campaign": "theoria-arm:A3-campaign-devpile",
+      "carried_books": true,
+      "economy_of_record": {
+        "E1": {
+          "status": "ok",
+          "support": {
+            "calls": 9
+          },
+          "value": 17.7491065
+        },
+        "E2": {
+          "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E3": {
+          "reason": "fewer than 8 turns; the same early-exit confound as E2",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E4": {
+          "status": "ok",
+          "support": {
+            "r2_linear": 0.046352,
+            "r2_quadratic": 0.365316,
+            "turns": 9
+          },
+          "value": 0.318963988
+        },
+        "E5": {
+          "status": "ok",
+          "support": {
+            "actions": 26,
+            "total_usd": 17.749106
+          },
+          "value": 0.682657942
+        },
+        "E6": {
+          "status": "ok",
+          "support": {
+            "http_calls": 132,
+            "on_failed_steps": 1.0,
+            "steps": 132
+          },
+          "value": 1.0
+        },
+        "E7": {
+          "status": "ok",
+          "support": {
+            "first_chars": 87705,
+            "last_chars": 97024,
+            "r2_linear": 0.708637,
+            "r2_quadratic": 0.771702,
+            "turns": 9
+          },
+          "value": 0.063064818
+        }
+      },
+      "economy_on_exact_axis": {
+        "E1": {
+          "status": "ok",
+          "support": {
+            "calls": 9
+          },
+          "value": 17.7491065
+        },
+        "E2": {
+          "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E3": {
+          "reason": "fewer than 8 turns; the same early-exit confound as E2",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E4": {
+          "status": "ok",
+          "support": {
+            "r2_linear": 0.046352,
+            "r2_quadratic": 0.365316,
+            "turns": 9
+          },
+          "value": 0.318963988
+        },
+        "E5": {
+          "status": "ok",
+          "support": {
+            "actions": 26,
+            "total_usd": 17.749106
+          },
+          "value": 0.682657942
+        },
+        "E6": {
+          "status": "ok",
+          "support": {
+            "http_calls": 132,
+            "on_failed_steps": 1.0,
+            "steps": 132
+          },
+          "value": 1.0
+        },
+        "E7": {
+          "status": "ok",
+          "support": {
+            "first_chars": 87705,
+            "last_chars": 97024,
+            "r2_linear": 0.708637,
+            "r2_quadratic": 0.771702,
+            "turns": 9
+          },
+          "value": 0.063064818
+        }
+      },
+      "exact_axis": {
+        "axis": "exact",
+        "billed_calls": 9,
+        "decision_turns": 6,
+        "reason": null,
+        "reconciled_usd": 17.7491065,
+        "source": "bill_shape.json",
+        "turn_indices": [
+          2,
+          6,
+          10,
+          14,
+          18,
+          22
+        ]
+      },
+      "game_id": "g50t-5849a774",
+      "ledger_cost_usd": 17.7491065,
+      "levels_completed": 0,
+      "outcome": "spend_gate_tripped",
+      "pile": "dev",
+      "reconciliation": {
+        "all_three_agree": true,
+        "bill_shape": {
+          "billed_calls": 9,
+          "declared_total_usd": 17.749106,
+          "present": true,
+          "usd": 17.749107
+        },
+        "curves": {
+          "billed_calls": 9,
+          "declared_total_usd": 17.7491065,
+          "join_confidence": "degraded",
+          "present": true,
+          "turn_rows": 23,
+          "usd": 17.7491065
+        },
+        "disagreements": [],
+        "ledger": {
+          "billed_calls": 9,
+          "usd": 17.7491065
+        }
+      },
+      "steps": 132,
+      "successful_actions": 26,
+      "turn_cost_curve_exact": [
+        {
+          "share_cumulative": 0.08657895,
+          "turn": 2,
+          "usd": 1.536699,
+          "usd_cumulative": 1.536699
+        },
+        {
+          "share_cumulative": 0.346631139,
+          "turn": 6,
+          "usd": 4.615694,
+          "usd_cumulative": 6.152393
+        },
+        {
+          "share_cumulative": 0.457117602,
+          "turn": 10,
+          "usd": 1.961036,
+          "usd_cumulative": 8.113429
+        },
+        {
+          "share_cumulative": 0.658612365,
+          "turn": 14,
+          "usd": 3.576352,
+          "usd_cumulative": 11.689781
+        },
+        {
+          "share_cumulative": 0.83260394,
+          "turn": 18,
+          "usd": 3.088195,
+          "usd_cumulative": 14.777976
+        },
+        {
+          "share_cumulative": 1.0,
+          "turn": 22,
+          "usd": 2.9711305,
+          "usd_cumulative": 17.7491065
+        }
+      ],
+      "turn_cost_curve_of_record": [
+        {
+          "share_cumulative": 0.08657895,
+          "turn": 1,
+          "usd": 1.536699,
+          "usd_cumulative": 1.536699
+        },
+        {
+          "share_cumulative": 0.346631139,
+          "turn": 5,
+          "usd": 4.615694,
+          "usd_cumulative": 6.152393
+        },
+        {
+          "share_cumulative": 0.457117602,
+          "turn": 9,
+          "usd": 1.961036,
+          "usd_cumulative": 8.113429
+        },
+        {
+          "share_cumulative": 0.658612365,
+          "turn": 13,
+          "usd": 3.576352,
+          "usd_cumulative": 11.689781
+        },
+        {
+          "share_cumulative": 0.83260394,
+          "turn": 17,
+          "usd": 3.088195,
+          "usd_cumulative": 14.777976
+        },
+        {
+          "share_cumulative": 1.0,
+          "turn": 21,
+          "usd": 2.9711305,
+          "usd_cumulative": 17.7491065
+        }
+      ]
+    },
+    "20260801T001851Z-R1b-sk48-b": {
+      "adapter_turn_join": {
+        "join_confidence": "degraded",
+        "joined_calls": 6,
+        "ledger_calls": 6,
+        "source": "curves.json"
+      },
+      "billed_calls": 6,
+      "campaign": "theoria-arm:A3-campaign-devpile",
+      "carried_books": true,
+      "economy_of_record": {
+        "E1": {
+          "status": "ok",
+          "support": {
+            "calls": 6
+          },
+          "value": 17.390721
+        },
+        "E2": {
+          "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E3": {
+          "reason": "fewer than 8 turns; the same early-exit confound as E2",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E4": {
+          "status": "ok",
+          "support": {
+            "r2_linear": 0.495434,
+            "r2_quadratic": 0.799384,
+            "turns": 6
+          },
+          "value": 0.303950019
+        },
+        "E5": {
+          "status": "ok",
+          "support": {
+            "actions": 6,
+            "total_usd": 17.390721
+          },
+          "value": 2.8984535
+        },
+        "E6": {
+          "status": "ok",
+          "support": {
+            "http_calls": 206,
+            "on_failed_steps": 1.0,
+            "steps": 206
+          },
+          "value": 1.0
+        },
+        "E7": {
+          "status": "ok",
+          "support": {
+            "first_chars": 85904,
+            "last_chars": 70185,
+            "r2_linear": 0.267668,
+            "r2_quadratic": 0.754196,
+            "turns": 6
+          },
+          "value": 0.48652865
+        }
+      },
+      "economy_on_exact_axis": {
+        "E1": {
+          "status": "ok",
+          "support": {
+            "calls": 6
+          },
+          "value": 17.390721
+        },
+        "E2": {
+          "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E3": {
+          "reason": "fewer than 8 turns; the same early-exit confound as E2",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E4": {
+          "status": "ok",
+          "support": {
+            "r2_linear": 0.495434,
+            "r2_quadratic": 0.799384,
+            "turns": 6
+          },
+          "value": 0.303950019
+        },
+        "E5": {
+          "status": "ok",
+          "support": {
+            "actions": 6,
+            "total_usd": 17.390721
+          },
+          "value": 2.8984535
+        },
+        "E6": {
+          "status": "ok",
+          "support": {
+            "http_calls": 206,
+            "on_failed_steps": 1.0,
+            "steps": 206
+          },
+          "value": 1.0
+        },
+        "E7": {
+          "status": "ok",
+          "support": {
+            "first_chars": 85904,
+            "last_chars": 70185,
+            "r2_linear": 0.267668,
+            "r2_quadratic": 0.754196,
+            "turns": 6
+          },
+          "value": 0.48652865
+        }
+      },
+      "exact_axis": {
+        "axis": "exact",
+        "billed_calls": 6,
+        "decision_turns": 2,
+        "reason": null,
+        "reconciled_usd": 17.390721,
+        "source": "bill_shape.json",
+        "turn_indices": [
+          2,
+          6
+        ]
+      },
+      "game_id": "sk48-d8078629",
+      "ledger_cost_usd": 17.390721,
+      "levels_completed": null,
+      "outcome": "spend_gate_tripped",
+      "pile": "dev",
+      "reconciliation": {
+        "all_three_agree": true,
+        "bill_shape": {
+          "billed_calls": 6,
+          "declared_total_usd": 17.390721,
+          "present": true,
+          "usd": 17.390721
+        },
+        "curves": {
+          "billed_calls": 6,
+          "declared_total_usd": 17.390721,
+          "join_confidence": "degraded",
+          "present": true,
+          "turn_rows": 7,
+          "usd": 17.390721
+        },
+        "disagreements": [],
+        "ledger": {
+          "billed_calls": 6,
+          "usd": 17.390721
+        }
+      },
+      "steps": 206,
+      "successful_actions": 6,
+      "turn_cost_curve_exact": [
+        {
+          "share_cumulative": 0.67482734,
+          "turn": 2,
+          "usd": 11.735734,
+          "usd_cumulative": 11.735734
+        },
+        {
+          "share_cumulative": 1.0,
+          "turn": 6,
+          "usd": 5.654987,
+          "usd_cumulative": 17.390721
+        }
+      ],
+      "turn_cost_curve_of_record": [
+        {
+          "share_cumulative": 0.67482734,
+          "turn": 1,
+          "usd": 11.735734,
+          "usd_cumulative": 11.735734
+        },
+        {
+          "share_cumulative": 1.0,
+          "turn": 5,
+          "usd": 5.654987,
+          "usd_cumulative": 17.390721
+        }
+      ]
+    },
+    "20260801T043743Z-R2-g50t-a": {
+      "adapter_turn_join": {
+        "join_confidence": null,
+        "joined_calls": 0,
+        "ledger_calls": 0,
+        "source": "unjoined: no turn_series.json and no curves.json"
+      },
+      "billed_calls": 0,
+      "campaign": "theoria-arm:A3-campaign-devpile",
+      "carried_books": true,
+      "economy_of_record": {
+        "E1": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E2": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E3": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E4": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E5": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E6": {
+          "status": "ok",
+          "support": {
+            "http_calls": 41,
+            "on_failed_steps": 1.025,
+            "steps": 40
+          },
+          "value": 1.025
+        },
+        "E7": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        }
+      },
+      "economy_on_exact_axis": null,
+      "exact_axis": {
+        "axis": "not-applicable",
+        "reason": "the leg records no billed model call, so it has no bill and no bill shape; bill_shape.json agrees (0 call row(s)). Absence, not zero."
+      },
+      "game_id": "g50t-5849a774",
+      "ledger_cost_usd": 0,
+      "levels_completed": null,
+      "outcome": "reset_failed",
+      "pile": "dev",
+      "reconciliation": {
+        "all_three_agree": true,
+        "bill_shape": {
+          "billed_calls": 0,
+          "declared_total_usd": 0.0,
+          "present": true,
+          "usd": 0
+        },
+        "curves": {
+          "present": false
+        },
+        "disagreements": [],
+        "ledger": {
+          "billed_calls": 0,
+          "usd": 0
+        }
+      },
+      "steps": 40,
+      "successful_actions": 0,
+      "turn_cost_curve_exact": null,
+      "turn_cost_curve_of_record": []
+    },
+    "20260801T043743Z-R2-sk48-b": {
+      "adapter_turn_join": {
+        "join_confidence": null,
+        "joined_calls": 0,
+        "ledger_calls": 0,
+        "source": "unjoined: no turn_series.json and no curves.json"
+      },
+      "billed_calls": 0,
+      "campaign": "theoria-arm:A3-campaign-devpile",
+      "carried_books": true,
+      "economy_of_record": {
+        "E1": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E2": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E3": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E4": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E5": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E6": {
+          "status": "ok",
+          "support": {
+            "http_calls": 41,
+            "on_failed_steps": 1.025,
+            "steps": 40
+          },
+          "value": 1.025
+        },
+        "E7": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        }
+      },
+      "economy_on_exact_axis": null,
+      "exact_axis": {
+        "axis": "not-applicable",
+        "reason": "the leg records no billed model call, so it has no bill and no bill shape; bill_shape.json agrees (0 call row(s)). Absence, not zero."
+      },
+      "game_id": "sk48-d8078629",
+      "ledger_cost_usd": 0,
+      "levels_completed": null,
+      "outcome": "reset_failed",
+      "pile": "dev",
+      "reconciliation": {
+        "all_three_agree": true,
+        "bill_shape": {
+          "billed_calls": 0,
+          "declared_total_usd": 0.0,
+          "present": true,
+          "usd": 0
+        },
+        "curves": {
+          "present": false
+        },
+        "disagreements": [],
+        "ledger": {
+          "billed_calls": 0,
+          "usd": 0
+        }
+      },
+      "steps": 40,
+      "successful_actions": 0,
+      "turn_cost_curve_exact": null,
+      "turn_cost_curve_of_record": []
+    },
+    "20260801T044640Z-R2b-g50t-a": {
+      "adapter_turn_join": {
+        "join_confidence": "degraded",
+        "joined_calls": 9,
+        "ledger_calls": 9,
+        "source": "curves.json"
+      },
+      "billed_calls": 9,
+      "campaign": "theoria-arm:A3-campaign-devpile",
+      "carried_books": true,
+      "economy_of_record": {
+        "E1": {
+          "status": "ok",
+          "support": {
+            "calls": 9
+          },
+          "value": 18.7360085
+        },
+        "E2": {
+          "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E3": {
+          "reason": "fewer than 8 turns; the same early-exit confound as E2",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E4": {
+          "status": "ok",
+          "support": {
+            "r2_linear": 0.328571,
+            "r2_quadratic": 0.35282,
+            "turns": 9
+          },
+          "value": 0.02424868
+        },
+        "E5": {
+          "status": "ok",
+          "support": {
+            "actions": 30,
+            "total_usd": 18.736009
+          },
+          "value": 0.624533617
+        },
+        "E6": {
+          "status": "ok",
+          "support": {
+            "http_calls": 295,
+            "on_failed_steps": 1.0192307692307692,
+            "steps": 290
+          },
+          "value": 1.017241379
+        },
+        "E7": {
+          "status": "ok",
+          "support": {
+            "first_chars": 87705,
+            "last_chars": 128759,
+            "r2_linear": 0.941307,
+            "r2_quadratic": 0.947526,
+            "turns": 9
+          },
+          "value": 0.006219463
+        }
+      },
+      "economy_on_exact_axis": {
+        "E1": {
+          "status": "ok",
+          "support": {
+            "calls": 9
+          },
+          "value": 18.7360085
+        },
+        "E2": {
+          "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E3": {
+          "reason": "fewer than 8 turns; the same early-exit confound as E2",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E4": {
+          "status": "ok",
+          "support": {
+            "r2_linear": 0.328571,
+            "r2_quadratic": 0.35282,
+            "turns": 9
+          },
+          "value": 0.02424868
+        },
+        "E5": {
+          "status": "ok",
+          "support": {
+            "actions": 30,
+            "total_usd": 18.736009
+          },
+          "value": 0.624533617
+        },
+        "E6": {
+          "status": "ok",
+          "support": {
+            "http_calls": 295,
+            "on_failed_steps": 1.0192307692307692,
+            "steps": 290
+          },
+          "value": 1.017241379
+        },
+        "E7": {
+          "status": "ok",
+          "support": {
+            "first_chars": 87705,
+            "last_chars": 128759,
+            "r2_linear": 0.941307,
+            "r2_quadratic": 0.947526,
+            "turns": 9
+          },
+          "value": 0.006219463
+        }
+      },
+      "exact_axis": {
+        "axis": "exact",
+        "billed_calls": 9,
+        "decision_turns": 7,
+        "reason": null,
+        "reconciled_usd": 18.7360085,
+        "source": "bill_shape.json",
+        "turn_indices": [
+          2,
+          6,
+          10,
+          14,
+          18,
+          22,
+          26
+        ]
+      },
+      "game_id": "g50t-5849a774",
+      "ledger_cost_usd": 18.7360085,
+      "levels_completed": 0,
+      "outcome": "spend_gate_tripped",
+      "pile": "dev",
+      "reconciliation": {
+        "all_three_agree": true,
+        "bill_shape": {
+          "billed_calls": 9,
+          "declared_total_usd": 18.736008,
+          "present": true,
+          "usd": 18.736008
+        },
+        "curves": {
+          "billed_calls": 9,
+          "declared_total_usd": 18.7360085,
+          "join_confidence": "degraded",
+          "present": true,
+          "turn_rows": 28,
+          "usd": 18.7360085
+        },
+        "disagreements": [],
+        "ledger": {
+          "billed_calls": 9,
+          "usd": 18.7360085
+        }
+      },
+      "steps": 290,
+      "successful_actions": 30,
+      "turn_cost_curve_exact": [
+        {
+          "share_cumulative": 0.083959131,
+          "turn": 2,
+          "usd": 1.573059,
+          "usd_cumulative": 1.573059
+        },
+        {
+          "share_cumulative": 0.174133514,
+          "turn": 6,
+          "usd": 1.689508,
+          "usd_cumulative": 3.262567
+        },
+        {
+          "share_cumulative": 0.350499894,
+          "turn": 10,
+          "usd": 3.304402,
+          "usd_cumulative": 6.566969
+        },
+        {
+          "share_cumulative": 0.610796158,
+          "turn": 14,
+          "usd": 4.876913,
+          "usd_cumulative": 11.443882
+        },
+        {
+          "share_cumulative": 0.722298295,
+          "turn": 18,
+          "usd": 2.089105,
+          "usd_cumulative": 13.532987
+        },
+        {
+          "share_cumulative": 0.830133697,
+          "turn": 22,
+          "usd": 2.020405,
+          "usd_cumulative": 15.553392
+        },
+        {
+          "share_cumulative": 1.0,
+          "turn": 26,
+          "usd": 3.1826165,
+          "usd_cumulative": 18.7360085
+        }
+      ],
+      "turn_cost_curve_of_record": [
+        {
+          "share_cumulative": 0.083959131,
+          "turn": 1,
+          "usd": 1.573059,
+          "usd_cumulative": 1.573059
+        },
+        {
+          "share_cumulative": 0.174133514,
+          "turn": 5,
+          "usd": 1.689508,
+          "usd_cumulative": 3.262567
+        },
+        {
+          "share_cumulative": 0.350499894,
+          "turn": 9,
+          "usd": 3.304402,
+          "usd_cumulative": 6.566969
+        },
+        {
+          "share_cumulative": 0.610796158,
+          "turn": 13,
+          "usd": 4.876913,
+          "usd_cumulative": 11.443882
+        },
+        {
+          "share_cumulative": 0.722298295,
+          "turn": 17,
+          "usd": 2.089105,
+          "usd_cumulative": 13.532987
+        },
+        {
+          "share_cumulative": 0.830133697,
+          "turn": 21,
+          "usd": 2.020405,
+          "usd_cumulative": 15.553392
+        },
+        {
+          "share_cumulative": 1.0,
+          "turn": 26,
+          "usd": 3.1826165,
+          "usd_cumulative": 18.7360085
+        }
+      ]
+    },
+    "20260801T044640Z-R2b-sk48-b": {
+      "adapter_turn_join": {
+        "join_confidence": "degraded",
+        "joined_calls": 6,
+        "ledger_calls": 6,
+        "source": "curves.json"
+      },
+      "billed_calls": 6,
+      "campaign": "theoria-arm:A3-campaign-devpile",
+      "carried_books": true,
+      "economy_of_record": {
+        "E1": {
+          "status": "ok",
+          "support": {
+            "calls": 6
+          },
+          "value": 20.3032235
+        },
+        "E2": {
+          "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E3": {
+          "reason": "fewer than 8 turns; the same early-exit confound as E2",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E4": {
+          "status": "ok",
+          "support": {
+            "r2_linear": 0.696337,
+            "r2_quadratic": 0.697754,
+            "turns": 6
+          },
+          "value": 0.001417209
+        },
+        "E5": {
+          "status": "ok",
+          "support": {
+            "actions": 10,
+            "total_usd": 20.303224
+          },
+          "value": 2.03032235
+        },
+        "E6": {
+          "status": "ok",
+          "support": {
+            "http_calls": 52,
+            "on_failed_steps": 1.0,
+            "steps": 52
+          },
+          "value": 1.0
+        },
+        "E7": {
+          "status": "ok",
+          "support": {
+            "first_chars": 85904,
+            "last_chars": 70971,
+            "r2_linear": 0.270327,
+            "r2_quadratic": 0.436161,
+            "turns": 6
+          },
+          "value": 0.165834679
+        }
+      },
+      "economy_on_exact_axis": {
+        "E1": {
+          "status": "ok",
+          "support": {
+            "calls": 6
+          },
+          "value": 20.3032235
+        },
+        "E2": {
+          "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E3": {
+          "reason": "fewer than 8 turns; the same early-exit confound as E2",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E4": {
+          "status": "ok",
+          "support": {
+            "r2_linear": 0.696337,
+            "r2_quadratic": 0.697754,
+            "turns": 6
+          },
+          "value": 0.001417209
+        },
+        "E5": {
+          "status": "ok",
+          "support": {
+            "actions": 10,
+            "total_usd": 20.303224
+          },
+          "value": 2.03032235
+        },
+        "E6": {
+          "status": "ok",
+          "support": {
+            "http_calls": 52,
+            "on_failed_steps": 1.0,
+            "steps": 52
+          },
+          "value": 1.0
+        },
+        "E7": {
+          "status": "ok",
+          "support": {
+            "first_chars": 85904,
+            "last_chars": 70971,
+            "r2_linear": 0.270327,
+            "r2_quadratic": 0.436161,
+            "turns": 6
+          },
+          "value": 0.165834679
+        }
+      },
+      "exact_axis": {
+        "axis": "exact",
+        "billed_calls": 6,
+        "decision_turns": 2,
+        "reason": null,
+        "reconciled_usd": 20.3032235,
+        "source": "bill_shape.json",
+        "turn_indices": [
+          2,
+          6
+        ]
+      },
+      "game_id": "sk48-d8078629",
+      "ledger_cost_usd": 20.3032235,
+      "levels_completed": 0,
+      "outcome": "spend_gate_tripped",
+      "pile": "dev",
+      "reconciliation": {
+        "all_three_agree": true,
+        "bill_shape": {
+          "billed_calls": 6,
+          "declared_total_usd": 20.303224,
+          "present": true,
+          "usd": 20.303223
+        },
+        "curves": {
+          "billed_calls": 6,
+          "declared_total_usd": 20.3032235,
+          "join_confidence": "degraded",
+          "present": true,
+          "turn_rows": 8,
+          "usd": 20.3032235
+        },
+        "disagreements": [],
+        "ledger": {
+          "billed_calls": 6,
+          "usd": 20.3032235
+        }
+      },
+      "steps": 52,
+      "successful_actions": 10,
+      "turn_cost_curve_exact": [
+        {
+          "share_cumulative": 0.264817629,
+          "turn": 2,
+          "usd": 5.3766515,
+          "usd_cumulative": 5.3766515
+        },
+        {
+          "share_cumulative": 1.0,
+          "turn": 6,
+          "usd": 14.926572,
+          "usd_cumulative": 20.3032235
+        }
+      ],
+      "turn_cost_curve_of_record": [
+        {
+          "share_cumulative": 0.264817629,
+          "turn": 1,
+          "usd": 5.3766515,
+          "usd_cumulative": 5.3766515
+        },
+        {
+          "share_cumulative": 0.77218982,
+          "turn": 5,
+          "usd": 10.301291,
+          "usd_cumulative": 15.6779425
+        },
+        {
+          "share_cumulative": 1.0,
+          "turn": 6,
+          "usd": 4.625281,
+          "usd_cumulative": 20.3032235
+        }
+      ]
     }
   },
   "legs_with_axis": {
@@ -1199,18 +2849,34 @@
     "exact": [
       "20260731T1310Z-A3-level2-carried-r2",
       "20260731T1430Z-A3-level2-carried-r3",
-      "20260731T1500Z-A3-sk48-carried-l1"
+      "20260731T1500Z-A3-sk48-carried-l1",
+      "20260731T231654Z-R1-g50t-a",
+      "20260731T231654Z-R1-sk48-b",
+      "20260801T001851Z-R1b-g50t-a",
+      "20260801T001851Z-R1b-sk48-b",
+      "20260801T044640Z-R2b-g50t-a",
+      "20260801T044640Z-R2b-sk48-b"
     ],
     "not-applicable": [
-      "20260731T1240Z-A3-level2-carried"
+      "20260731T1240Z-A3-level2-carried",
+      "20260801T043743Z-R2-g50t-a",
+      "20260801T043743Z-R2-sk48-b"
     ]
   },
-  "legs_with_disagreements": [],
+  "legs_with_disagreements": [
+    "20260731T231654Z-R1-sk48-b"
+  ],
   "measured_by_metric": {
     "E1": [
       "20260731T1310Z-A3-level2-carried-r2",
       "20260731T1430Z-A3-level2-carried-r3",
-      "20260731T1500Z-A3-sk48-carried-l1"
+      "20260731T1500Z-A3-sk48-carried-l1",
+      "20260731T231654Z-R1-g50t-a",
+      "20260731T231654Z-R1-sk48-b",
+      "20260801T001851Z-R1b-g50t-a",
+      "20260801T001851Z-R1b-sk48-b",
+      "20260801T044640Z-R2b-g50t-a",
+      "20260801T044640Z-R2b-sk48-b"
     ],
     "E2": [
       "20260731T1430Z-A3-level2-carried-r3"
@@ -1221,12 +2887,22 @@
     "E4": [
       "20260731T1310Z-A3-level2-carried-r2",
       "20260731T1430Z-A3-level2-carried-r3",
-      "20260731T1500Z-A3-sk48-carried-l1"
+      "20260731T1500Z-A3-sk48-carried-l1",
+      "20260801T001851Z-R1b-g50t-a",
+      "20260801T001851Z-R1b-sk48-b",
+      "20260801T044640Z-R2b-g50t-a",
+      "20260801T044640Z-R2b-sk48-b"
     ],
     "E5": [
       "20260731T1310Z-A3-level2-carried-r2",
       "20260731T1430Z-A3-level2-carried-r3",
-      "20260731T1500Z-A3-sk48-carried-l1"
+      "20260731T1500Z-A3-sk48-carried-l1",
+      "20260731T231654Z-R1-g50t-a",
+      "20260731T231654Z-R1-sk48-b",
+      "20260801T001851Z-R1b-g50t-a",
+      "20260801T001851Z-R1b-sk48-b",
+      "20260801T044640Z-R2b-g50t-a",
+      "20260801T044640Z-R2b-sk48-b"
     ],
     "E6": [
       "20260729T004020Z-leg01",
@@ -1234,12 +2910,24 @@
       "20260731T1240Z-A3-level2-carried",
       "20260731T1310Z-A3-level2-carried-r2",
       "20260731T1430Z-A3-level2-carried-r3",
-      "20260731T1500Z-A3-sk48-carried-l1"
+      "20260731T1500Z-A3-sk48-carried-l1",
+      "20260731T231654Z-R1-g50t-a",
+      "20260731T231654Z-R1-sk48-b",
+      "20260801T001851Z-R1b-g50t-a",
+      "20260801T001851Z-R1b-sk48-b",
+      "20260801T043743Z-R2-g50t-a",
+      "20260801T043743Z-R2-sk48-b",
+      "20260801T044640Z-R2b-g50t-a",
+      "20260801T044640Z-R2b-sk48-b"
     ],
     "E7": [
       "20260731T1310Z-A3-level2-carried-r2",
       "20260731T1430Z-A3-level2-carried-r3",
-      "20260731T1500Z-A3-sk48-carried-l1"
+      "20260731T1500Z-A3-sk48-carried-l1",
+      "20260801T001851Z-R1b-g50t-a",
+      "20260801T001851Z-R1b-sk48-b",
+      "20260801T044640Z-R2b-g50t-a",
+      "20260801T044640Z-R2b-sk48-b"
     ]
   },
   "metrics": [
@@ -1251,7 +2939,7 @@
     "E6",
     "E7"
   ],
-  "n_legs": 6,
+  "n_legs": 14,
   "progressions": {
     "g50t-5849a774": [
       {
@@ -1415,6 +3103,137 @@
         "levels_completed": 0,
         "outcome": "spend_gate_tripped",
         "successful_actions": 34
+      },
+      {
+        "E1_total_usd": {
+          "status": "ok",
+          "support": {
+            "calls": 4
+          },
+          "value": 7.6034195
+        },
+        "E2_frontload_index": {
+          "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E3_convergence_point": {
+          "reason": "fewer than 8 turns; the same early-exit confound as E2",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E5_usd_per_action": {
+          "status": "ok",
+          "support": {
+            "actions": 14,
+            "total_usd": 7.603419
+          },
+          "value": 0.543101393
+        },
+        "billed_calls": 4,
+        "carried_books": true,
+        "decision_turns": 2,
+        "leg": "20260731T231654Z-R1-g50t-a",
+        "levels_completed": 0,
+        "outcome": "spend_gate_tripped",
+        "successful_actions": 14
+      },
+      {
+        "E1_total_usd": {
+          "status": "ok",
+          "support": {
+            "calls": 9
+          },
+          "value": 17.7491065
+        },
+        "E2_frontload_index": {
+          "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E3_convergence_point": {
+          "reason": "fewer than 8 turns; the same early-exit confound as E2",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E5_usd_per_action": {
+          "status": "ok",
+          "support": {
+            "actions": 26,
+            "total_usd": 17.749106
+          },
+          "value": 0.682657942
+        },
+        "billed_calls": 9,
+        "carried_books": true,
+        "decision_turns": 6,
+        "leg": "20260801T001851Z-R1b-g50t-a",
+        "levels_completed": 0,
+        "outcome": "spend_gate_tripped",
+        "successful_actions": 26
+      },
+      {
+        "E1_total_usd": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E2_frontload_index": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E3_convergence_point": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E5_usd_per_action": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "billed_calls": 0,
+        "carried_books": true,
+        "decision_turns": null,
+        "leg": "20260801T043743Z-R2-g50t-a",
+        "levels_completed": null,
+        "outcome": "reset_failed",
+        "successful_actions": 0
+      },
+      {
+        "E1_total_usd": {
+          "status": "ok",
+          "support": {
+            "calls": 9
+          },
+          "value": 18.7360085
+        },
+        "E2_frontload_index": {
+          "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E3_convergence_point": {
+          "reason": "fewer than 8 turns; the same early-exit confound as E2",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E5_usd_per_action": {
+          "status": "ok",
+          "support": {
+            "actions": 30,
+            "total_usd": 18.736009
+          },
+          "value": 0.624533617
+        },
+        "billed_calls": 9,
+        "carried_books": true,
+        "decision_turns": 7,
+        "leg": "20260801T044640Z-R2b-g50t-a",
+        "levels_completed": 0,
+        "outcome": "spend_gate_tripped",
+        "successful_actions": 30
       }
     ],
     "sk48-d8078629": [
@@ -1451,6 +3270,137 @@
         "levels_completed": 0,
         "outcome": "spend_gate_tripped",
         "successful_actions": 22
+      },
+      {
+        "E1_total_usd": {
+          "status": "ok",
+          "support": {
+            "calls": 3
+          },
+          "value": 7.6085275
+        },
+        "E2_frontload_index": {
+          "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E3_convergence_point": {
+          "reason": "fewer than 8 turns; the same early-exit confound as E2",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E5_usd_per_action": {
+          "status": "ok",
+          "support": {
+            "actions": 6,
+            "total_usd": 7.608528
+          },
+          "value": 1.268087917
+        },
+        "billed_calls": 3,
+        "carried_books": true,
+        "decision_turns": 1,
+        "leg": "20260731T231654Z-R1-sk48-b",
+        "levels_completed": 0,
+        "outcome": "spend_gate_tripped",
+        "successful_actions": 6
+      },
+      {
+        "E1_total_usd": {
+          "status": "ok",
+          "support": {
+            "calls": 6
+          },
+          "value": 17.390721
+        },
+        "E2_frontload_index": {
+          "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E3_convergence_point": {
+          "reason": "fewer than 8 turns; the same early-exit confound as E2",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E5_usd_per_action": {
+          "status": "ok",
+          "support": {
+            "actions": 6,
+            "total_usd": 17.390721
+          },
+          "value": 2.8984535
+        },
+        "billed_calls": 6,
+        "carried_books": true,
+        "decision_turns": 2,
+        "leg": "20260801T001851Z-R1b-sk48-b",
+        "levels_completed": null,
+        "outcome": "spend_gate_tripped",
+        "successful_actions": 6
+      },
+      {
+        "E1_total_usd": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E2_frontload_index": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E3_convergence_point": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E5_usd_per_action": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "billed_calls": 0,
+        "carried_books": true,
+        "decision_turns": null,
+        "leg": "20260801T043743Z-R2-sk48-b",
+        "levels_completed": null,
+        "outcome": "reset_failed",
+        "successful_actions": 0
+      },
+      {
+        "E1_total_usd": {
+          "status": "ok",
+          "support": {
+            "calls": 6
+          },
+          "value": 20.3032235
+        },
+        "E2_frontload_index": {
+          "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E3_convergence_point": {
+          "reason": "fewer than 8 turns; the same early-exit confound as E2",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E5_usd_per_action": {
+          "status": "ok",
+          "support": {
+            "actions": 10,
+            "total_usd": 20.303224
+          },
+          "value": 2.03032235
+        },
+        "billed_calls": 6,
+        "carried_books": true,
+        "decision_turns": 2,
+        "leg": "20260801T044640Z-R2b-sk48-b",
+        "levels_completed": 0,
+        "outcome": "spend_gate_tripped",
+        "successful_actions": 10
       }
     ]
   },

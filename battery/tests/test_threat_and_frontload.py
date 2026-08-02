@@ -268,7 +268,7 @@ def legs():
 
 
 def test_the_live_arm_is_not_front_loaded_on_the_step_axis(legs):
-    """Three legs evaluate, and none of them front-loads.
+    """These three legs evaluate, and none of them front-loads.
 
     The two that read exactly 0.0 are not a bug: the live arm spends its first
     five or six actions on free environment probing and takes its first priced
@@ -278,7 +278,10 @@ def test_the_live_arm_is_not_front_loaded_on_the_step_axis(legs):
     r3 = legs["20260731T1430Z-A3-level2-carried-r3"]
     l1 = legs["20260731T1500Z-A3-sk48-carried-l1"]
     assert r2["status"] == "ok" and r2["value"] == 0.0
-    assert r3["status"] == "ok" and round(r3["value"], 6) == 0.132198
+    # 0.132198 until theoria-arm 82e8e25e rewrote r3's curves.json (30 -> 31
+    # rows, n_steps 31 -> 35, $11.761053 -> $13.439862).  A longer axis moves
+    # the head right and re-attributes the bill, so the index moved with it.
+    assert r3["status"] == "ok" and round(r3["value"], 6) == 0.115685
     assert l1["status"] == "ok" and l1["value"] == 0.0
     for leg in (r2, r3, l1):
         assert leg["value"] < 0.25, leg          # below a flat bill
@@ -325,9 +328,19 @@ def test_the_first_leg_is_refused_for_being_free(legs):
 
 
 def test_process_1_has_no_pairs(legs):
+    """More evaluable legs do not buy a pair, which is the whole point.
+
+    `n_evaluable` was 3 when this was written; eight new theoria-arm legs
+    (R1/R1b/R2/R2b x g50t/sk48) have landed since, so 10 legs are read and 8
+    evaluate.  The verdict is unchanged and cannot be moved by replication on
+    this side: the endpoint is a paired difference and there is still no
+    control arm on any of these games, so `n_paired_games` stays 0.
+    """
     material = frontload.paired_material(list(legs.values()))
+    assert material["n_evaluable"] == 8
     assert material["n_paired_games"] == 0
-    assert material["n_evaluable"] == 3
+    assert material["control_arm_legs"] == 0
+    assert material["min_attainable_p"] is None
     assert material["verdict"].startswith("no-data")
 
 

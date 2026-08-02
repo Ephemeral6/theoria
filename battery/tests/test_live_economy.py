@@ -27,6 +27,9 @@ from battery.guard import load_piles
 R1 = "20260731T1240Z-A3-level2-carried"      # carried books, zero billed calls
 R2 = "20260731T1310Z-A3-level2-carried-r2"   # 5 calls, 3 decision turns
 R3 = "20260731T1430Z-A3-level2-carried-r3"   # 8 calls, 8 decision turns
+# the leg that carries the live curves.json/ledger shortfall — see
+# test_curves_json_shortfall_is_reported_not_absorbed
+SHORTFALL = "20260731T231654Z-R1-sk48-b"
 
 
 @pytest.fixture(scope="module")
@@ -83,13 +86,23 @@ def test_the_money_reconciles_with_the_proxy_ledger(runs):
 
 
 def test_curves_json_shortfall_is_reported_not_absorbed(runs):
-    """A real, current disagreement: `curves.json` on r2 and r3 accounts for
-    one billed call fewer than the proxy ledger.  The artefact must name both
-    numbers.  If a future harvest fixes it upstream this test should be
-    *rewritten*, not deleted — the assertion is that a disagreement is
-    reported, and the fixture is that one exists today."""
-    leg = os.path.join(theoria_live.LIVE_ROOT, R3)
-    rec = live_economy.reconcile(runs[R3], leg)
+    """A real, current disagreement: `curves.json` accounts for fewer billed
+    calls than the proxy ledger.  The artefact must name both numbers.
+
+    This test was originally written against r2/r3, where `curves.json`
+    accounted for one billed call fewer than the ledger.  theoria-arm
+    `82e8e25e` rewrote four legs' `curves.json` and fixed that instance —
+    r3 now reads 8 calls / $13.439862 on both sides — so, as the original
+    docstring instructed, the test was *rewritten* rather than deleted.  It
+    now pins the live instance of the same defect, on the R1 sk48-b leg,
+    where `curves.json` accounts for 0 billed calls over 2 turn rows while
+    the proxy ledger bills 3 for $7.608528.
+
+    The assertion is unchanged and is the point of the test: a disagreement
+    is reported, not absorbed.  If this instance is fixed upstream too, find
+    the leg that carries it next and retarget again."""
+    leg = os.path.join(theoria_live.LIVE_ROOT, SHORTFALL)
+    rec = live_economy.reconcile(runs[SHORTFALL], leg)
     assert not rec["all_three_agree"]
     joined = " ".join(rec["disagreements"])
     assert "curves.json" in joined and "proxy ledger" in joined
