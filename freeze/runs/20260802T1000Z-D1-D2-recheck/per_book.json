@@ -1,0 +1,178 @@
+[
+ {
+  "a_compiles": false,
+  "attaining": null,
+  "b_axioms": null,
+  "book": "corner.lean",
+  "c_nonvacuous": null,
+  "dir": "theory-compiler/runs/20260728T080019Z-C4-deadlock-lean",
+  "label": "failing_obligation",
+  "seconds": 69.4,
+  "stderr_tail": "out of memory\n",
+  "verdict": "not_attained"
+ },
+ {
+  "a_compiles": true,
+  "attaining": [
+   "closed_pinned",
+   "dead",
+   "dead_closed",
+   "dead_persists"
+  ],
+  "b_axioms": {
+   "closed_pinned": true,
+   "dead": true,
+   "dead_closed": true,
+   "dead_persists": true,
+   "level_is_winnable": true,
+   "no_goal_pinned": true,
+   "pat_no_goal": true,
+   "pat_pins": true,
+   "pat_witness": true
+  },
+  "book": "pair.lean",
+  "c_nonvacuous": {
+   "closed_pinned": true,
+   "dead": true,
+   "dead_closed": true,
+   "dead_persists": true,
+   "level_is_winnable": null,
+   "no_goal_pinned": null,
+   "pat_no_goal": null,
+   "pat_pins": null,
+   "pat_witness": null
+  },
+  "dir": "theory-compiler/runs/20260728T080019Z-C4-deadlock-lean",
+  "label": "discharged",
+  "seconds": 5.3,
+  "stderr_tail": null,
+  "verdict": "attained"
+ },
+ {
+  "a_compiles": false,
+  "attaining": null,
+  "b_axioms": null,
+  "book": "Control_corner.lean",
+  "c_nonvacuous": null,
+  "dir": "theory-compiler/runs/20260728T080019Z-C4-deadlock-lean/verify",
+  "label": "failing_obligation",
+  "seconds": 63.1,
+  "stderr_tail": "INTERNAL PANIC: out of memory\n",
+  "verdict": "not_attained"
+ },
+ {
+  "a_compiles": false,
+  "attaining": null,
+  "b_axioms": null,
+  "book": "Control_pair.lean",
+  "c_nonvacuous": null,
+  "dir": "theory-compiler/runs/20260728T080019Z-C4-deadlock-lean/verify",
+  "label": "failing_obligation",
+  "seconds": 5.5,
+  "stderr_tail": ":= Cell.c33, b1 := Cell.c22, b2 := Cell.c23 } Move.push_c33_c23_c13_b2_up) = true ∧\n        Pat (applyMove { player := Cell.c33, b1 := Cell.c22, b2 := Cell.c23 } Move.push_c33_c23_c13_b2_up) = true\n'pat_pins' does not depend on any axioms\n'closed_pinned' depends on axioms: [sorryAx]\n'dead_closed' depends on axioms: [sorryAx]\n'no_goal_pinned' does not depend on any axioms\n'pat_no_goal' does not depend on any axioms\n'dead_persists' depends on axioms: [sorryAx]\n'dead' depends on axioms: [sorryAx]\n'pat_pins' does not depend on any axioms\n'closed_pinned' depends on axioms: [sorryAx]\n'dead_closed' depends on axioms: [sorryAx]\n'no_goal_pinned' does not depend on any axioms\n'pat_no_goal' does not depend on any axioms\n'dead_persists' depends on axioms: [sorryAx]\n'dead' depends on axioms: [sorryAx]\n",
+  "verdict": "not_attained"
+ },
+ {
+  "a_compiles": false,
+  "attaining": null,
+  "b_axioms": null,
+  "book": "Deadlock_corner.lean",
+  "c_nonvacuous": null,
+  "dir": "theory-compiler/runs/20260728T080019Z-C4-deadlock-lean/verify",
+  "label": "failing_obligation",
+  "seconds": 83.8,
+  "stderr_tail": "out of memory\n",
+  "verdict": "not_attained"
+ },
+ {
+  "a_compiles": true,
+  "attaining": [
+   "closed_pinned",
+   "dead",
+   "dead_closed",
+   "dead_persists"
+  ],
+  "b_axioms": {
+   "closed_pinned": true,
+   "dead": true,
+   "dead_closed": true,
+   "dead_persists": true,
+   "level_is_winnable": true,
+   "no_goal_pinned": true,
+   "pat_no_goal": true,
+   "pat_pins": true,
+   "pat_witness": true
+  },
+  "book": "Deadlock_pair.lean",
+  "c_nonvacuous": {
+   "closed_pinned": true,
+   "dead": true,
+   "dead_closed": true,
+   "dead_persists": true,
+   "level_is_winnable": null,
+   "no_goal_pinned": null,
+   "pat_no_goal": null,
+   "pat_pins": null,
+   "pat_witness": null
+  },
+  "dir": "theory-compiler/runs/20260728T080019Z-C4-deadlock-lean/verify",
+  "label": "discharged",
+  "seconds": 5.7,
+  "stderr_tail": null,
+  "verdict": "attained"
+ },
+ {
+  "a_compiles": true,
+  "attaining": [
+   "inv_all",
+   "inv_closed"
+  ],
+  "b_axioms": {
+   "goal_break_0": true,
+   "inv_all": true,
+   "inv_closed": true,
+   "inv_init": true,
+   "unsolvable": true
+  },
+  "book": "Ic3_algebraic.lean",
+  "c_nonvacuous": {
+   "goal_break_0": null,
+   "inv_all": true,
+   "inv_closed": true,
+   "inv_init": null,
+   "unsolvable": null
+  },
+  "dir": "theory-compiler/runs/20260728T080019Z-C4-deadlock-lean/verify",
+  "label": "discharged",
+  "seconds": 0.5,
+  "stderr_tail": null,
+  "verdict": "attained"
+ },
+ {
+  "a_compiles": true,
+  "attaining": [
+   "inv_all",
+   "inv_closed"
+  ],
+  "b_axioms": {
+   "goal_break_0": true,
+   "inv_all": true,
+   "inv_closed": true,
+   "inv_init": true,
+   "unsolvable": true
+  },
+  "book": "Ic3_computational.lean",
+  "c_nonvacuous": {
+   "goal_break_0": null,
+   "inv_all": true,
+   "inv_closed": true,
+   "inv_init": null,
+   "unsolvable": null
+  },
+  "dir": "theory-compiler/runs/20260728T080019Z-C4-deadlock-lean/verify",
+  "label": "discharged",
+  "seconds": 0.5,
+  "stderr_tail": null,
+  "verdict": "attained"
+ }
+]

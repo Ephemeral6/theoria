@@ -1,0 +1,4494 @@
+{
+ "all_labels": {
+  "declared_refusal": 12,
+  "discharged": 19,
+  "failing_obligation": 1,
+  "no_evidence": 11,
+  "no_proof_layer": 1,
+  "unclassified": 4,
+  "vacuous": 2
+ },
+ "book_labels": {
+  "discharged": 17,
+  "failing_obligation": 1,
+  "unclassified": 4,
+  "vacuous": 2
+ },
+ "books": 24,
+ "books_attained": 17,
+ "denominator_meaning": "per-DIRECTORY over what is on disk.  This is NOT STATS_RULES §1.2's E1 rate: that denominator is the frozen 19 (clean layer 12) sealed claim-set games and nothing else.  The two share a name and nothing more.",
+ "elapsed_seconds": 310.2,
+ "exclusions": [
+  {
+   "path": "exam\\__pycache__",
+   "reason": "compiled Python"
+  },
+  {
+   "path": "exam\\tests\\__pycache__",
+   "reason": "compiled Python"
+  },
+  {
+   "path": "freeze\\__pycache__",
+   "reason": "compiled Python"
+  },
+  {
+   "path": "freeze\\tests\\__pycache__",
+   "reason": "compiled Python"
+  },
+  {
+   "path": "monitor\\runs\\_worktree-scratch-archive",
+   "reason": "archived byte-copies of other territories' books"
+  },
+  {
+   "path": "proxy\\__pycache__",
+   "reason": "compiled Python"
+  }
+ ],
+ "lean": "4.9.0",
+ "probe": false,
+ "rows": [
+  {
+   "books": [],
+   "criteria": {
+    "a_compiles": true,
+    "attaining": [
+     "inv_closed",
+     "unsolvable"
+    ],
+    "b_axioms": {
+     "goal_break": true,
+     "inv_closed": true,
+     "inv_init": true,
+     "unsolvable": true
+    },
+    "c_nonvacuous": {
+     "goal_break": null,
+     "inv_closed": true,
+     "inv_init": null,
+     "unsolvable": true
+    },
+    "c_residuals": [
+     "inv_closed: constancy probe not run for `I` (static scan only)",
+     "inv_closed: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only",
+     "unsolvable: constancy probe not run for `Goal` (static scan only)",
+     "unsolvable: constancy probe not run for `I` (static scan only)"
+    ],
+    "kind_coverage": {
+     "invariant": 1,
+     "point_claim": 1,
+     "unclassified": 1,
+     "unsolvable": 1
+    },
+    "per_theorem": {
+     "goal_break": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "¬ I s",
+        "hypotheses": [
+         "Goal s"
+        ]
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `unclassified` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (statement shape outside the fragment §1.2.1 defines a non-vacuity requirement for)"
+      },
+      "kind": "unclassified",
+      "kind_basis": {
+       "conclusion": "¬ I s",
+       "rule": "statement shape outside the fragment §1.2.1 defines a non-vacuity requirement for"
+      },
+      "name_hint": "unsolvable"
+     },
+     "inv_closed": {
+      "b": {
+       "axioms": [
+        "propext",
+        "Quot.sound"
+       ],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run for `I` (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only"
+       ],
+       "why": "the invariant `I` is not constant"
+      },
+      "kind": "invariant",
+      "kind_basis": {
+       "invariant_pred": "I",
+       "rule": "positive conclusion `I (step s d)` over the quantified state — a conserved property"
+      },
+      "name_hint": "invariant"
+     },
+     "inv_init": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "I s0",
+        "hypotheses": []
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `point_claim` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (claim about the closed expression `s0` — one state, no §1.2.1 clause covers it)"
+      },
+      "kind": "point_claim",
+      "kind_basis": {
+       "at": "s0",
+       "pred": "I",
+       "rule": "claim about the closed expression `s0` — one state, no §1.2.1 clause covers it"
+      },
+      "name_hint": "invariant"
+     },
+     "unsolvable": {
+      "b": {
+       "axioms": [
+        "propext",
+        "Quot.sound"
+       ],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run for `Goal` (static scan only)",
+        "constancy probe not run for `I` (static scan only)"
+       ],
+       "sub_checks": {
+        "a_inv_at_init": true,
+        "a_provenance": "`inv_init` states `I` at the closed state `s0`, and `I` is the subject of a closure theorem in the same development",
+        "b_goals_excluded": true,
+        "b_provenance": "goal states excluded by `goal_break`",
+        "c_init_has_action": true,
+        "c_provenance": "recorded trace: 1966 transitions",
+        "d_goal_nonempty": true,
+        "d_provenance": "a0_report grading: level(s) match actually solvable with recorded plan"
+       },
+       "why": "§1.2.1-unsolvable (a)-(d) discharged"
+      },
+      "kind": "unsolvable",
+      "kind_basis": {
+       "goal_pred": "Goal",
+       "relation": "Reachable",
+       "rule": "negative conclusion about `Goal` under the internally anchored relation `Reachable`",
+       "start": null,
+       "start_anchor": "internal"
+      },
+      "name_hint": "unsolvable"
+     }
+    },
+    "refuted": [],
+    "unclassified": [
+     "goal_break",
+     "inv_init"
+    ]
+   },
+   "evidence": {
+    "kind": "a0_report",
+    "source": "<repo>\\a0-spike\\artifacts\\a0_report.json"
+   },
+   "flags": {
+    "classical_choice_needed": false,
+    "unclassified_theorems": [
+     "goal_break",
+     "inv_init"
+    ]
+   },
+   "game": null,
+   "label": "discharged",
+   "run": "<repo>\\a0-spike",
+   "seconds": 0.0,
+   "verdict": "attained"
+  },
+  {
+   "books": [
+    "A0.lean"
+   ],
+   "criteria": {
+    "a_compiles": true,
+    "attaining": [
+     "inv_closed"
+    ],
+    "b_axioms": {
+     "drow_dcol_cases": true,
+     "goal_break": true,
+     "inv_closed": true,
+     "inv_init": true,
+     "unsolvable": true
+    },
+    "c_nonvacuous": {
+     "drow_dcol_cases": null,
+     "goal_break": null,
+     "inv_closed": true,
+     "inv_init": null,
+     "unsolvable": false
+    },
+    "c_residuals": [
+     "inv_closed: constancy probe not run for `I` (static scan only)",
+     "inv_closed: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only",
+     "unsolvable: constancy probe not run for `Goal` (static scan only)",
+     "unsolvable: constancy probe not run for `I` (static scan only)",
+     "unsolvable: §1.2.1-unsolvable (c) has no source-level check: 「初始态存在至少一个合法动作」is discharged only from a run record's `trace_transitions`, which a bare Lean book never carries.  Stated as a coverage gap, not passed open."
+    ],
+    "kind_coverage": {
+     "invariant": 1,
+     "point_claim": 1,
+     "unclassified": 2,
+     "unsolvable": 1
+    },
+    "per_theorem": {
+     "drow_dcol_cases": {
+      "b": {
+       "axioms": [
+        "propext"
+       ],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "(drow d = -1 ∧ dcol d = 0) ∨ (drow d = 1 ∧ dcol d = 0) ∨ (drow d = 0 ∧ dcol d = -1) ∨ (drow d = 0 ∧ dcol d = 1)",
+        "hypotheses": []
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `unclassified` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (statement shape outside the fragment §1.2.1 defines a non-vacuity requirement for)"
+      },
+      "kind": "unclassified",
+      "kind_basis": {
+       "conclusion": "(drow d = -1 ∧ dcol d = 0) ∨ (drow d = 1 ∧ dcol d = 0) ∨ (drow d = 0 ∧ dcol d = -1) ∨ (drow d = 0 ∧ dcol d = 1)",
+       "rule": "statement shape outside the fragment §1.2.1 defines a non-vacuity requirement for"
+      },
+      "name_hint": null
+     },
+     "goal_break": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "¬ I s",
+        "hypotheses": [
+         "Goal s"
+        ]
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `unclassified` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (statement shape outside the fragment §1.2.1 defines a non-vacuity requirement for)"
+      },
+      "kind": "unclassified",
+      "kind_basis": {
+       "conclusion": "¬ I s",
+       "rule": "statement shape outside the fragment §1.2.1 defines a non-vacuity requirement for"
+      },
+      "name_hint": "unsolvable"
+     },
+     "inv_closed": {
+      "b": {
+       "axioms": [
+        "propext",
+        "Quot.sound"
+       ],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run for `I` (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only"
+       ],
+       "why": "the invariant `I` is not constant"
+      },
+      "kind": "invariant",
+      "kind_basis": {
+       "invariant_pred": "I",
+       "rule": "positive conclusion `I (step s d)` over the quantified state — a conserved property"
+      },
+      "name_hint": "invariant"
+     },
+     "inv_init": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "I s0",
+        "hypotheses": []
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `point_claim` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (claim about the closed expression `s0` — one state, no §1.2.1 clause covers it)"
+      },
+      "kind": "point_claim",
+      "kind_basis": {
+       "at": "s0",
+       "pred": "I",
+       "rule": "claim about the closed expression `s0` — one state, no §1.2.1 clause covers it"
+      },
+      "name_hint": "invariant"
+     },
+     "unsolvable": {
+      "b": {
+       "axioms": [
+        "propext",
+        "Quot.sound"
+       ],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run for `Goal` (static scan only)",
+        "constancy probe not run for `I` (static scan only)",
+        "§1.2.1-unsolvable (c) has no source-level check: 「初始态存在至少一个合法动作」is discharged only from a run record's `trace_transitions`, which a bare Lean book never carries.  Stated as a coverage gap, not passed open."
+       ],
+       "sub_checks": {
+        "a_inv_at_init": true,
+        "a_provenance": "`inv_init` states `I` at the closed state `s0`, and `I` is the subject of a closure theorem in the same development",
+        "b_goals_excluded": true,
+        "b_provenance": "goal states excluded by `goal_break`",
+        "c_init_has_action": false,
+        "d_goal_nonempty": false
+       },
+       "why": "missing sub-check: ['c_init_has_action', 'd_goal_nonempty']"
+      },
+      "kind": "unsolvable",
+      "kind_basis": {
+       "goal_pred": "Goal",
+       "relation": "Reachable",
+       "rule": "negative conclusion about `Goal` under the internally anchored relation `Reachable`",
+       "start": null,
+       "start_anchor": "internal"
+      },
+      "name_hint": "unsolvable"
+     }
+    },
+    "refuted": [
+     "unsolvable"
+    ],
+    "unclassified": [
+     "drow_dcol_cases",
+     "goal_break",
+     "inv_init"
+    ]
+   },
+   "evidence": {
+    "books_considered": [
+     {
+      "book": "A0.lean",
+      "label": "discharged",
+      "verdict": "attained"
+     }
+    ],
+    "carried_by": "A0.lean",
+    "kind": "lean_source_live",
+    "source": "<repo>\\a0-spike\\artifacts\\A0.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false,
+    "unclassified_theorems": [
+     "drow_dcol_cases",
+     "goal_break",
+     "inv_init"
+    ]
+   },
+   "game": null,
+   "label": "discharged",
+   "run": "<repo>\\a0-spike\\artifacts",
+   "seconds": 0.6,
+   "verdict": "attained"
+  },
+  {
+   "books": [],
+   "criteria": {
+    "a_compiles": true,
+    "attaining": [
+     "inv_all"
+    ],
+    "b_axioms": {
+     "inv_all": true
+    },
+    "c_nonvacuous": {
+     "inv_all": true
+    },
+    "c_residuals": [
+     "inv_all: constancy probe not run for `I` (static scan only)",
+     "inv_all: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only"
+    ],
+    "kind_coverage": {
+     "invariant": 1
+    },
+    "per_theorem": {
+     "inv_all": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run for `I` (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only"
+       ],
+       "why": "the invariant `I` is not constant"
+      },
+      "kind": "invariant",
+      "kind_basis": {
+       "invariant_pred": "I",
+       "rule": "positive conclusion `I s` over the quantified state — a conserved property"
+      },
+      "name_hint": "invariant"
+     }
+    },
+    "refuted": [],
+    "unclassified": []
+   },
+   "evidence": {
+    "kind": "lean_cert_json",
+    "source": "<repo>\\cold-start-a0\\artifacts\\certify_lean_generated_theory_lean.json"
+   },
+   "flags": {
+    "classical_choice_needed": false
+   },
+   "game": null,
+   "label": "discharged",
+   "run": "<repo>\\cold-start-a0",
+   "seconds": 0.0,
+   "verdict": "attained"
+  },
+  {
+   "books": [
+    "theory.lean"
+   ],
+   "criteria": {
+    "a_compiles": true,
+    "attaining": [],
+    "b_axioms": {
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": true
+    },
+    "c_nonvacuous": {
+     "inv_all": false,
+     "inv_closed": false,
+     "inv_init": null
+    },
+    "c_residuals": [
+     "inv_all: constancy probe not run for `I` (static scan only)",
+     "inv_closed: constancy probe not run for `I` (static scan only)",
+     "label `vacuous` is a finding about ['inv_all', 'inv_closed'], the theorem(s) whose §1.2.1 check ran and failed.  It is NOT a finding about ['inv_init'], which E1 could not classify."
+    ],
+    "kind_coverage": {
+     "invariant": 2,
+     "point_claim": 1
+    },
+    "per_theorem": {
+     "inv_all": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run for `I` (static scan only)"
+       ],
+       "why": "the invariant `I` is constant `true` — D-A3-007 class, fails §1.2.1 (two-witness)"
+      },
+      "kind": "invariant",
+      "kind_basis": {
+       "invariant_pred": "I",
+       "rule": "positive conclusion `I s` over the quantified state — a conserved property"
+      },
+      "name_hint": "invariant"
+     },
+     "inv_closed": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run for `I` (static scan only)"
+       ],
+       "why": "the invariant `I` is constant `true` — D-A3-007 class, fails §1.2.1 (two-witness)"
+      },
+      "kind": "invariant",
+      "kind_basis": {
+       "invariant_pred": "I",
+       "rule": "positive conclusion `I (step s d)` over the quantified state — a conserved property"
+      },
+      "name_hint": "invariant"
+     },
+     "inv_init": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "I s0 = true",
+        "hypotheses": []
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `point_claim` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (claim about the closed expression `s0` — one state, no §1.2.1 clause covers it)"
+      },
+      "kind": "point_claim",
+      "kind_basis": {
+       "at": "s0",
+       "pred": "I",
+       "rule": "claim about the closed expression `s0` — one state, no §1.2.1 clause covers it"
+      },
+      "name_hint": "invariant"
+     }
+    },
+    "refuted": [
+     "inv_all",
+     "inv_closed"
+    ],
+    "unclassified": [
+     "inv_init"
+    ]
+   },
+   "evidence": {
+    "books_considered": [
+     {
+      "book": "theory.lean",
+      "label": "vacuous",
+      "verdict": "not_attained"
+     }
+    ],
+    "carried_by": "theory.lean",
+    "kind": "lean_source_live",
+    "source": "<repo>\\cold-start-a0\\prime\\theory\\generated\\theory.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false,
+    "unclassified_theorems": [
+     "inv_init"
+    ]
+   },
+   "game": null,
+   "label": "vacuous",
+   "run": "<repo>\\cold-start-a0\\prime\\theory\\generated",
+   "seconds": 1.6,
+   "verdict": "not_attained"
+  },
+  {
+   "books": [
+    "theory.lean"
+   ],
+   "criteria": {
+    "a_compiles": true,
+    "attaining": [
+     "inv_all",
+     "inv_closed"
+    ],
+    "b_axioms": {
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": true
+    },
+    "c_nonvacuous": {
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": null
+    },
+    "c_residuals": [
+     "inv_all: constancy probe not run for `I` (static scan only)",
+     "inv_all: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only",
+     "inv_closed: constancy probe not run for `I` (static scan only)",
+     "inv_closed: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only"
+    ],
+    "kind_coverage": {
+     "invariant": 2,
+     "point_claim": 1
+    },
+    "per_theorem": {
+     "inv_all": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run for `I` (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only"
+       ],
+       "why": "the invariant `I` is not constant"
+      },
+      "kind": "invariant",
+      "kind_basis": {
+       "invariant_pred": "I",
+       "rule": "positive conclusion `I s` over the quantified state — a conserved property"
+      },
+      "name_hint": "invariant"
+     },
+     "inv_closed": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run for `I` (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only"
+       ],
+       "why": "the invariant `I` is not constant"
+      },
+      "kind": "invariant",
+      "kind_basis": {
+       "invariant_pred": "I",
+       "rule": "positive conclusion `I (step s d)` over the quantified state — a conserved property"
+      },
+      "name_hint": "invariant"
+     },
+     "inv_init": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "I s0 = true",
+        "hypotheses": []
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `point_claim` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (claim about the closed expression `s0` — one state, no §1.2.1 clause covers it)"
+      },
+      "kind": "point_claim",
+      "kind_basis": {
+       "at": "s0",
+       "pred": "I",
+       "rule": "claim about the closed expression `s0` — one state, no §1.2.1 clause covers it"
+      },
+      "name_hint": "invariant"
+     }
+    },
+    "refuted": [],
+    "unclassified": [
+     "inv_init"
+    ]
+   },
+   "evidence": {
+    "books_considered": [
+     {
+      "book": "theory.lean",
+      "label": "discharged",
+      "verdict": "attained"
+     }
+    ],
+    "carried_by": "theory.lean",
+    "kind": "lean_source_live",
+    "source": "<repo>\\cold-start-a0\\theory\\generated\\theory.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false,
+    "unclassified_theorems": [
+     "inv_init"
+    ]
+   },
+   "game": null,
+   "label": "discharged",
+   "run": "<repo>\\cold-start-a0\\theory\\generated",
+   "seconds": 2.5,
+   "verdict": "attained"
+  },
+  {
+   "books": [
+    "theory.lean"
+   ],
+   "criteria": {
+    "a_compiles": true,
+    "attaining": [
+     "inv_all",
+     "inv_closed"
+    ],
+    "b_axioms": {
+     "goal_break": true,
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": true,
+     "unsolvable": true
+    },
+    "c_nonvacuous": {
+     "goal_break": null,
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": null,
+     "unsolvable": null
+    },
+    "c_residuals": [
+     "inv_all: constancy probe not run for `I` (static scan only)",
+     "inv_all: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only",
+     "inv_closed: constancy probe not run for `I` (static scan only)",
+     "inv_closed: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only"
+    ],
+    "kind_coverage": {
+     "invariant": 2,
+     "point_claim": 1,
+     "unclassified": 1,
+     "witness": 1
+    },
+    "per_theorem": {
+     "goal_break": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "I s = false",
+        "hypotheses": [
+         "Goal s = true"
+        ]
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `unclassified` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (statement shape outside the fragment §1.2.1 defines a non-vacuity requirement for)"
+      },
+      "kind": "unclassified",
+      "kind_basis": {
+       "conclusion": "I s = false",
+       "rule": "statement shape outside the fragment §1.2.1 defines a non-vacuity requirement for"
+      },
+      "name_hint": "unsolvable"
+     },
+     "inv_all": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run for `I` (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only"
+       ],
+       "why": "the invariant `I` is not constant"
+      },
+      "kind": "invariant",
+      "kind_basis": {
+       "invariant_pred": "I",
+       "rule": "positive conclusion `I s` over the quantified state — a conserved property"
+      },
+      "name_hint": "invariant"
+     },
+     "inv_closed": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run for `I` (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only"
+       ],
+       "why": "the invariant `I` is not constant"
+      },
+      "kind": "invariant",
+      "kind_basis": {
+       "invariant_pred": "I",
+       "rule": "positive conclusion `I (step s d)` over the quantified state — a conserved property"
+      },
+      "name_hint": "invariant"
+     },
+     "inv_init": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "I s0 = true",
+        "hypotheses": []
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `point_claim` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (claim about the closed expression `s0` — one state, no §1.2.1 clause covers it)"
+      },
+      "kind": "point_claim",
+      "kind_basis": {
+       "at": "s0",
+       "pred": "I",
+       "rule": "claim about the closed expression `s0` — one state, no §1.2.1 clause covers it"
+      },
+      "name_hint": "invariant"
+     },
+     "unsolvable": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "¬ ∃ s : St, Reachable s ∧ Goal s = true",
+        "hypotheses": []
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `witness` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (conclusion is an existential — a witness obligation, not a law about the world)"
+      },
+      "kind": "witness",
+      "kind_basis": {
+       "rule": "conclusion is an existential — a witness obligation, not a law about the world"
+      },
+      "name_hint": "unsolvable"
+     }
+    },
+    "refuted": [],
+    "unclassified": [
+     "goal_break",
+     "inv_init",
+     "unsolvable"
+    ]
+   },
+   "evidence": {
+    "books_considered": [
+     {
+      "book": "theory.lean",
+      "label": "discharged",
+      "verdict": "attained"
+     }
+    ],
+    "carried_by": "theory.lean",
+    "kind": "lean_source_live",
+    "source": "<repo>\\cold-start-a0\\theory\\generated_no_button\\theory.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false,
+    "unclassified_theorems": [
+     "goal_break",
+     "inv_init",
+     "unsolvable"
+    ]
+   },
+   "game": null,
+   "label": "discharged",
+   "run": "<repo>\\cold-start-a0\\theory\\generated_no_button",
+   "seconds": 0.7,
+   "verdict": "attained"
+  },
+  {
+   "books": [
+    "theory.lean"
+   ],
+   "criteria": {
+    "a_compiles": true,
+    "attaining": [
+     "inv_all",
+     "inv_closed"
+    ],
+    "b_axioms": {
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": true
+    },
+    "c_nonvacuous": {
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": null
+    },
+    "c_residuals": [
+     "inv_all: constancy probe not run for `I` (static scan only)",
+     "inv_all: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only",
+     "inv_closed: constancy probe not run for `I` (static scan only)",
+     "inv_closed: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only"
+    ],
+    "kind_coverage": {
+     "invariant": 2,
+     "point_claim": 1
+    },
+    "per_theorem": {
+     "inv_all": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run for `I` (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only"
+       ],
+       "why": "the invariant `I` is not constant"
+      },
+      "kind": "invariant",
+      "kind_basis": {
+       "invariant_pred": "I",
+       "rule": "positive conclusion `I s` over the quantified state — a conserved property"
+      },
+      "name_hint": "invariant"
+     },
+     "inv_closed": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run for `I` (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only"
+       ],
+       "why": "the invariant `I` is not constant"
+      },
+      "kind": "invariant",
+      "kind_basis": {
+       "invariant_pred": "I",
+       "rule": "positive conclusion `I (step s d)` over the quantified state — a conserved property"
+      },
+      "name_hint": "invariant"
+     },
+     "inv_init": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "I s0 = true",
+        "hypotheses": []
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `point_claim` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (claim about the closed expression `s0` — one state, no §1.2.1 clause covers it)"
+      },
+      "kind": "point_claim",
+      "kind_basis": {
+       "at": "s0",
+       "pred": "I",
+       "rule": "claim about the closed expression `s0` — one state, no §1.2.1 clause covers it"
+      },
+      "name_hint": "invariant"
+     }
+    },
+    "refuted": [],
+    "unclassified": [
+     "inv_init"
+    ]
+   },
+   "evidence": {
+    "books_considered": [
+     {
+      "book": "theory.lean",
+      "label": "discharged",
+      "verdict": "attained"
+     }
+    ],
+    "carried_by": "theory.lean",
+    "kind": "lean_source_live",
+    "source": "<repo>\\cold-start-a2\\theory\\generated\\theory.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false,
+    "unclassified_theorems": [
+     "inv_init"
+    ]
+   },
+   "game": null,
+   "label": "discharged",
+   "run": "<repo>\\cold-start-a2\\theory\\generated",
+   "seconds": 2.3,
+   "verdict": "attained"
+  },
+  {
+   "books": [
+    "theory.lean"
+   ],
+   "criteria": {
+    "a_compiles": true,
+    "attaining": [
+     "inv_all",
+     "inv_closed"
+    ],
+    "b_axioms": {
+     "goal_break": true,
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": true,
+     "unsolvable": true
+    },
+    "c_nonvacuous": {
+     "goal_break": null,
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": null,
+     "unsolvable": null
+    },
+    "c_residuals": [
+     "inv_all: constancy probe not run for `I` (static scan only)",
+     "inv_all: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only",
+     "inv_closed: constancy probe not run for `I` (static scan only)",
+     "inv_closed: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only"
+    ],
+    "kind_coverage": {
+     "invariant": 2,
+     "point_claim": 1,
+     "unclassified": 1,
+     "witness": 1
+    },
+    "per_theorem": {
+     "goal_break": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "I s = false",
+        "hypotheses": [
+         "Goal s = true"
+        ]
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `unclassified` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (statement shape outside the fragment §1.2.1 defines a non-vacuity requirement for)"
+      },
+      "kind": "unclassified",
+      "kind_basis": {
+       "conclusion": "I s = false",
+       "rule": "statement shape outside the fragment §1.2.1 defines a non-vacuity requirement for"
+      },
+      "name_hint": "unsolvable"
+     },
+     "inv_all": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run for `I` (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only"
+       ],
+       "why": "the invariant `I` is not constant"
+      },
+      "kind": "invariant",
+      "kind_basis": {
+       "invariant_pred": "I",
+       "rule": "positive conclusion `I s` over the quantified state — a conserved property"
+      },
+      "name_hint": "invariant"
+     },
+     "inv_closed": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run for `I` (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only"
+       ],
+       "why": "the invariant `I` is not constant"
+      },
+      "kind": "invariant",
+      "kind_basis": {
+       "invariant_pred": "I",
+       "rule": "positive conclusion `I (step s d)` over the quantified state — a conserved property"
+      },
+      "name_hint": "invariant"
+     },
+     "inv_init": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "I s0 = true",
+        "hypotheses": []
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `point_claim` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (claim about the closed expression `s0` — one state, no §1.2.1 clause covers it)"
+      },
+      "kind": "point_claim",
+      "kind_basis": {
+       "at": "s0",
+       "pred": "I",
+       "rule": "claim about the closed expression `s0` — one state, no §1.2.1 clause covers it"
+      },
+      "name_hint": "invariant"
+     },
+     "unsolvable": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "¬ ∃ s : St, Reachable s ∧ Goal s = true",
+        "hypotheses": []
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `witness` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (conclusion is an existential — a witness obligation, not a law about the world)"
+      },
+      "kind": "witness",
+      "kind_basis": {
+       "rule": "conclusion is an existential — a witness obligation, not a law about the world"
+      },
+      "name_hint": "unsolvable"
+     }
+    },
+    "refuted": [],
+    "unclassified": [
+     "goal_break",
+     "inv_init",
+     "unsolvable"
+    ]
+   },
+   "evidence": {
+    "books_considered": [
+     {
+      "book": "theory.lean",
+      "label": "discharged",
+      "verdict": "attained"
+     }
+    ],
+    "carried_by": "theory.lean",
+    "kind": "lean_source_live",
+    "source": "<repo>\\cold-start-a2\\theory\\generated_holed\\theory.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false,
+    "unclassified_theorems": [
+     "goal_break",
+     "inv_init",
+     "unsolvable"
+    ]
+   },
+   "game": null,
+   "label": "discharged",
+   "run": "<repo>\\cold-start-a2\\theory\\generated_holed",
+   "seconds": 2.4,
+   "verdict": "attained"
+  },
+  {
+   "books": [
+    "theory.lean",
+    "theory_latch.lean"
+   ],
+   "criteria": {
+    "a_compiles": true,
+    "attaining": [
+     "inv_all",
+     "inv_closed"
+    ],
+    "b_axioms": {
+     "goal_break": true,
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": true,
+     "unsolvable": true
+    },
+    "c_nonvacuous": {
+     "goal_break": null,
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": null,
+     "unsolvable": null
+    },
+    "c_residuals": [
+     "inv_all: constancy probe not run for `I` (static scan only)",
+     "inv_all: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only",
+     "inv_closed: constancy probe not run for `I` (static scan only)",
+     "inv_closed: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only"
+    ],
+    "kind_coverage": {
+     "invariant": 2,
+     "point_claim": 1,
+     "unclassified": 1,
+     "witness": 1
+    },
+    "per_theorem": {
+     "goal_break": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "I s = false",
+        "hypotheses": [
+         "Goal s = true"
+        ]
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `unclassified` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (statement shape outside the fragment §1.2.1 defines a non-vacuity requirement for)"
+      },
+      "kind": "unclassified",
+      "kind_basis": {
+       "conclusion": "I s = false",
+       "rule": "statement shape outside the fragment §1.2.1 defines a non-vacuity requirement for"
+      },
+      "name_hint": "unsolvable"
+     },
+     "inv_all": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run for `I` (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only"
+       ],
+       "why": "the invariant `I` is not constant"
+      },
+      "kind": "invariant",
+      "kind_basis": {
+       "invariant_pred": "I",
+       "rule": "positive conclusion `I s` over the quantified state — a conserved property"
+      },
+      "name_hint": "invariant"
+     },
+     "inv_closed": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run for `I` (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only"
+       ],
+       "why": "the invariant `I` is not constant"
+      },
+      "kind": "invariant",
+      "kind_basis": {
+       "invariant_pred": "I",
+       "rule": "positive conclusion `I (step s d)` over the quantified state — a conserved property"
+      },
+      "name_hint": "invariant"
+     },
+     "inv_init": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "I s0 = true",
+        "hypotheses": []
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `point_claim` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (claim about the closed expression `s0` — one state, no §1.2.1 clause covers it)"
+      },
+      "kind": "point_claim",
+      "kind_basis": {
+       "at": "s0",
+       "pred": "I",
+       "rule": "claim about the closed expression `s0` — one state, no §1.2.1 clause covers it"
+      },
+      "name_hint": "invariant"
+     },
+     "unsolvable": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "¬ ∃ s : St, Reachable s ∧ Goal s = true",
+        "hypotheses": []
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `witness` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (conclusion is an existential — a witness obligation, not a law about the world)"
+      },
+      "kind": "witness",
+      "kind_basis": {
+       "rule": "conclusion is an existential — a witness obligation, not a law about the world"
+      },
+      "name_hint": "unsolvable"
+     }
+    },
+    "refuted": [],
+    "unclassified": [
+     "goal_break",
+     "inv_init",
+     "unsolvable"
+    ]
+   },
+   "evidence": {
+    "books_considered": [
+     {
+      "book": "theory.lean",
+      "label": "discharged",
+      "verdict": "attained"
+     },
+     {
+      "book": "theory_latch.lean",
+      "label": "discharged",
+      "verdict": "attained"
+     }
+    ],
+    "carried_by": "theory.lean",
+    "kind": "lean_source_live",
+    "source": "<repo>\\cold-start-a2\\theory\\generated_repaired\\theory.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false,
+    "unclassified_theorems": [
+     "goal_break",
+     "inv_init",
+     "unsolvable"
+    ]
+   },
+   "game": null,
+   "label": "discharged",
+   "run": "<repo>\\cold-start-a2\\theory\\generated_repaired",
+   "seconds": 4.8,
+   "verdict": "attained"
+  },
+  {
+   "books": [
+    "theory.lean"
+   ],
+   "criteria": {
+    "a_compiles": false,
+    "b_axioms": null,
+    "c_nonvacuous": null
+   },
+   "evidence": {
+    "books_considered": [
+     {
+      "book": "theory.lean",
+      "label": "failing_obligation",
+      "verdict": "not_attained"
+     }
+    ],
+    "carried_by": "theory.lean",
+    "kind": "lean_source_live",
+    "source": "<repo>\\cold-start-a2\\theory\\generated_repaired_stale\\theory.lean",
+    "stderr_tail": "olour := ButtonColour.v7, doorPresent := DoorPresent.yes } Dir.down) = true\n\ncase mk.c31.v8.no.down\n⊢ I { cart := Cell.c31, buttonColour := ButtonColour.v8, doorPresent := DoorPresent.no } = true →\n    I (step { cart := Cell.c31, buttonColour := ButtonColour.v8, doorPresent := DoorPresent.no } Dir.down) = true\n\ncase mk.c31.v8.yes.down\n⊢ I { cart := Cell.c31, buttonColour := ButtonColour.v8, doorPresent := DoorPresent.yes } = true →\n    I (step { cart := Cell.c31, buttonColour := ButtonColour.v8, doorPresent := DoorPresent.yes } Dir.down) = true\n'unsolvable' depends on axioms: [sorryAx]\n'inv_init' does not depend on any axioms\n'inv_closed' depends on axioms: [sorryAx]\n'inv_all' depends on axioms: [sorryAx]\n'goal_break' does not depend on any axioms\n'unsolvable' depends on axioms: [sorryAx]\n"
+   },
+   "flags": {},
+   "game": null,
+   "label": "failing_obligation",
+   "run": "<repo>\\cold-start-a2\\theory\\generated_repaired_stale",
+   "seconds": 2.4,
+   "verdict": "not_attained"
+  },
+  {
+   "books": [
+    "theory.lean"
+   ],
+   "criteria": {
+    "a_compiles": true,
+    "attaining": [
+     "inv_all",
+     "inv_closed"
+    ],
+    "b_axioms": {
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": true
+    },
+    "c_nonvacuous": {
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": null
+    },
+    "c_residuals": [
+     "inv_all: constancy probe not run for `I` (static scan only)",
+     "inv_all: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only",
+     "inv_closed: constancy probe not run for `I` (static scan only)",
+     "inv_closed: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only"
+    ],
+    "kind_coverage": {
+     "invariant": 2,
+     "point_claim": 1
+    },
+    "per_theorem": {
+     "inv_all": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run for `I` (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only"
+       ],
+       "why": "the invariant `I` is not constant"
+      },
+      "kind": "invariant",
+      "kind_basis": {
+       "invariant_pred": "I",
+       "rule": "positive conclusion `I s` over the quantified state — a conserved property"
+      },
+      "name_hint": "invariant"
+     },
+     "inv_closed": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run for `I` (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only"
+       ],
+       "why": "the invariant `I` is not constant"
+      },
+      "kind": "invariant",
+      "kind_basis": {
+       "invariant_pred": "I",
+       "rule": "positive conclusion `I (step s d)` over the quantified state — a conserved property"
+      },
+      "name_hint": "invariant"
+     },
+     "inv_init": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "I s0 = true",
+        "hypotheses": []
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `point_claim` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (claim about the closed expression `s0` — one state, no §1.2.1 clause covers it)"
+      },
+      "kind": "point_claim",
+      "kind_basis": {
+       "at": "s0",
+       "pred": "I",
+       "rule": "claim about the closed expression `s0` — one state, no §1.2.1 clause covers it"
+      },
+      "name_hint": "invariant"
+     }
+    },
+    "refuted": [],
+    "unclassified": [
+     "inv_init"
+    ]
+   },
+   "evidence": {
+    "books_considered": [
+     {
+      "book": "theory.lean",
+      "label": "discharged",
+      "verdict": "attained"
+     }
+    ],
+    "carried_by": "theory.lean",
+    "kind": "lean_source_live",
+    "source": "<repo>\\cold-start-a3\\runs\\20260728T1800Z-A6-transfer-protocol\\generated\\a3_l2_oneway\\theory.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false,
+    "unclassified_theorems": [
+     "inv_init"
+    ]
+   },
+   "game": null,
+   "label": "discharged",
+   "run": "<repo>\\cold-start-a3\\runs\\20260728T1800Z-A6-transfer-protocol\\generated\\a3_l2_oneway",
+   "seconds": 2.0,
+   "verdict": "attained"
+  },
+  {
+   "books": [
+    "theory.lean"
+   ],
+   "criteria": {
+    "a_compiles": true,
+    "attaining": [
+     "inv_all",
+     "inv_closed"
+    ],
+    "b_axioms": {
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": true
+    },
+    "c_nonvacuous": {
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": null
+    },
+    "c_residuals": [
+     "inv_all: constancy probe not run for `I` (static scan only)",
+     "inv_all: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only",
+     "inv_closed: constancy probe not run for `I` (static scan only)",
+     "inv_closed: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only"
+    ],
+    "kind_coverage": {
+     "invariant": 2,
+     "point_claim": 1
+    },
+    "per_theorem": {
+     "inv_all": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run for `I` (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only"
+       ],
+       "why": "the invariant `I` is not constant"
+      },
+      "kind": "invariant",
+      "kind_basis": {
+       "invariant_pred": "I",
+       "rule": "positive conclusion `I s` over the quantified state — a conserved property"
+      },
+      "name_hint": "invariant"
+     },
+     "inv_closed": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run for `I` (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only"
+       ],
+       "why": "the invariant `I` is not constant"
+      },
+      "kind": "invariant",
+      "kind_basis": {
+       "invariant_pred": "I",
+       "rule": "positive conclusion `I (step s d)` over the quantified state — a conserved property"
+      },
+      "name_hint": "invariant"
+     },
+     "inv_init": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "I s0 = true",
+        "hypotheses": []
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `point_claim` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (claim about the closed expression `s0` — one state, no §1.2.1 clause covers it)"
+      },
+      "kind": "point_claim",
+      "kind_basis": {
+       "at": "s0",
+       "pred": "I",
+       "rule": "claim about the closed expression `s0` — one state, no §1.2.1 clause covers it"
+      },
+      "name_hint": "invariant"
+     }
+    },
+    "refuted": [],
+    "unclassified": [
+     "inv_init"
+    ]
+   },
+   "evidence": {
+    "books_considered": [
+     {
+      "book": "theory.lean",
+      "label": "discharged",
+      "verdict": "attained"
+     }
+    ],
+    "carried_by": "theory.lean",
+    "kind": "lean_source_live",
+    "source": "<repo>\\cold-start-a3\\runs\\20260728T1800Z-A6-transfer-protocol\\generated\\a3_l2_positive\\theory.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false,
+    "unclassified_theorems": [
+     "inv_init"
+    ]
+   },
+   "game": null,
+   "label": "discharged",
+   "run": "<repo>\\cold-start-a3\\runs\\20260728T1800Z-A6-transfer-protocol\\generated\\a3_l2_positive",
+   "seconds": 2.1,
+   "verdict": "attained"
+  },
+  {
+   "books": [
+    "theory.lean"
+   ],
+   "criteria": {
+    "a_compiles": true,
+    "attaining": [
+     "inv_all",
+     "inv_closed"
+    ],
+    "b_axioms": {
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": true
+    },
+    "c_nonvacuous": {
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": null
+    },
+    "c_residuals": [
+     "inv_all: constancy probe not run for `I` (static scan only)",
+     "inv_all: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only",
+     "inv_closed: constancy probe not run for `I` (static scan only)",
+     "inv_closed: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only"
+    ],
+    "kind_coverage": {
+     "invariant": 2,
+     "point_claim": 1
+    },
+    "per_theorem": {
+     "inv_all": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run for `I` (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only"
+       ],
+       "why": "the invariant `I` is not constant"
+      },
+      "kind": "invariant",
+      "kind_basis": {
+       "invariant_pred": "I",
+       "rule": "positive conclusion `I s` over the quantified state — a conserved property"
+      },
+      "name_hint": "invariant"
+     },
+     "inv_closed": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run for `I` (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only"
+       ],
+       "why": "the invariant `I` is not constant"
+      },
+      "kind": "invariant",
+      "kind_basis": {
+       "invariant_pred": "I",
+       "rule": "positive conclusion `I (step s d)` over the quantified state — a conserved property"
+      },
+      "name_hint": "invariant"
+     },
+     "inv_init": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "I s0 = true",
+        "hypotheses": []
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `point_claim` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (claim about the closed expression `s0` — one state, no §1.2.1 clause covers it)"
+      },
+      "kind": "point_claim",
+      "kind_basis": {
+       "at": "s0",
+       "pred": "I",
+       "rule": "claim about the closed expression `s0` — one state, no §1.2.1 clause covers it"
+      },
+      "name_hint": "invariant"
+     }
+    },
+    "refuted": [],
+    "unclassified": [
+     "inv_init"
+    ]
+   },
+   "evidence": {
+    "books_considered": [
+     {
+      "book": "theory.lean",
+      "label": "discharged",
+      "verdict": "attained"
+     }
+    ],
+    "carried_by": "theory.lean",
+    "kind": "lean_source_live",
+    "source": "<repo>\\cold-start-a3\\runs\\20260728T1800Z-A6-transfer-protocol\\generated\\a3_l2_rewired\\theory.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false,
+    "unclassified_theorems": [
+     "inv_init"
+    ]
+   },
+   "game": null,
+   "label": "discharged",
+   "run": "<repo>\\cold-start-a3\\runs\\20260728T1800Z-A6-transfer-protocol\\generated\\a3_l2_rewired",
+   "seconds": 2.2,
+   "verdict": "attained"
+  },
+  {
+   "books": [
+    "theory.lean"
+   ],
+   "criteria": {
+    "a_compiles": true,
+    "attaining": [
+     "inv_all",
+     "inv_closed"
+    ],
+    "b_axioms": {
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": true
+    },
+    "c_nonvacuous": {
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": null
+    },
+    "c_residuals": [
+     "inv_all: constancy probe not run for `I` (static scan only)",
+     "inv_all: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only",
+     "inv_closed: constancy probe not run for `I` (static scan only)",
+     "inv_closed: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only"
+    ],
+    "kind_coverage": {
+     "invariant": 2,
+     "point_claim": 1
+    },
+    "per_theorem": {
+     "inv_all": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run for `I` (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only"
+       ],
+       "why": "the invariant `I` is not constant"
+      },
+      "kind": "invariant",
+      "kind_basis": {
+       "invariant_pred": "I",
+       "rule": "positive conclusion `I s` over the quantified state — a conserved property"
+      },
+      "name_hint": "invariant"
+     },
+     "inv_closed": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run for `I` (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only"
+       ],
+       "why": "the invariant `I` is not constant"
+      },
+      "kind": "invariant",
+      "kind_basis": {
+       "invariant_pred": "I",
+       "rule": "positive conclusion `I (step s d)` over the quantified state — a conserved property"
+      },
+      "name_hint": "invariant"
+     },
+     "inv_init": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "I s0 = true",
+        "hypotheses": []
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `point_claim` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (claim about the closed expression `s0` — one state, no §1.2.1 clause covers it)"
+      },
+      "kind": "point_claim",
+      "kind_basis": {
+       "at": "s0",
+       "pred": "I",
+       "rule": "claim about the closed expression `s0` — one state, no §1.2.1 clause covers it"
+      },
+      "name_hint": "invariant"
+     }
+    },
+    "refuted": [],
+    "unclassified": [
+     "inv_init"
+    ]
+   },
+   "evidence": {
+    "books_considered": [
+     {
+      "book": "theory.lean",
+      "label": "discharged",
+      "verdict": "attained"
+     }
+    ],
+    "carried_by": "theory.lean",
+    "kind": "lean_source_live",
+    "source": "<repo>\\cold-start-a3\\theory\\generated_l1\\theory.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false,
+    "unclassified_theorems": [
+     "inv_init"
+    ]
+   },
+   "game": null,
+   "label": "discharged",
+   "run": "<repo>\\cold-start-a3\\theory\\generated_l1",
+   "seconds": 1.9,
+   "verdict": "attained"
+  },
+  {
+   "books": [
+    "theory.lean"
+   ],
+   "criteria": {
+    "a_compiles": true,
+    "attaining": [],
+    "b_axioms": {
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": true
+    },
+    "c_nonvacuous": {
+     "inv_all": false,
+     "inv_closed": false,
+     "inv_init": null
+    },
+    "c_residuals": [
+     "inv_all: constancy probe not run for `I` (static scan only)",
+     "inv_closed: constancy probe not run for `I` (static scan only)",
+     "label `vacuous` is a finding about ['inv_all', 'inv_closed'], the theorem(s) whose §1.2.1 check ran and failed.  It is NOT a finding about ['inv_init'], which E1 could not classify."
+    ],
+    "kind_coverage": {
+     "invariant": 2,
+     "point_claim": 1
+    },
+    "per_theorem": {
+     "inv_all": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run for `I` (static scan only)"
+       ],
+       "why": "the invariant `I` is constant `true` — D-A3-007 class, fails §1.2.1 (two-witness)"
+      },
+      "kind": "invariant",
+      "kind_basis": {
+       "invariant_pred": "I",
+       "rule": "positive conclusion `I s` over the quantified state — a conserved property"
+      },
+      "name_hint": "invariant"
+     },
+     "inv_closed": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run for `I` (static scan only)"
+       ],
+       "why": "the invariant `I` is constant `true` — D-A3-007 class, fails §1.2.1 (two-witness)"
+      },
+      "kind": "invariant",
+      "kind_basis": {
+       "invariant_pred": "I",
+       "rule": "positive conclusion `I (step s d)` over the quantified state — a conserved property"
+      },
+      "name_hint": "invariant"
+     },
+     "inv_init": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "I s0 = true",
+        "hypotheses": []
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `point_claim` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (claim about the closed expression `s0` — one state, no §1.2.1 clause covers it)"
+      },
+      "kind": "point_claim",
+      "kind_basis": {
+       "at": "s0",
+       "pred": "I",
+       "rule": "claim about the closed expression `s0` — one state, no §1.2.1 clause covers it"
+      },
+      "name_hint": "invariant"
+     }
+    },
+    "refuted": [
+     "inv_all",
+     "inv_closed"
+    ],
+    "unclassified": [
+     "inv_init"
+    ]
+   },
+   "evidence": {
+    "books_considered": [
+     {
+      "book": "theory.lean",
+      "label": "vacuous",
+      "verdict": "not_attained"
+     }
+    ],
+    "carried_by": "theory.lean",
+    "kind": "lean_source_live",
+    "source": "<repo>\\cold-start-a3\\theory\\generated_l1_vacuous\\theory.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false,
+    "unclassified_theorems": [
+     "inv_init"
+    ]
+   },
+   "game": null,
+   "label": "vacuous",
+   "run": "<repo>\\cold-start-a3\\theory\\generated_l1_vacuous",
+   "seconds": 1.5,
+   "verdict": "not_attained"
+  },
+  {
+   "books": [
+    "theory.lean"
+   ],
+   "criteria": {
+    "a_compiles": true,
+    "attaining": [
+     "inv_all",
+     "inv_closed"
+    ],
+    "b_axioms": {
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": true
+    },
+    "c_nonvacuous": {
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": null
+    },
+    "c_residuals": [
+     "inv_all: constancy probe not run for `I` (static scan only)",
+     "inv_all: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only",
+     "inv_closed: constancy probe not run for `I` (static scan only)",
+     "inv_closed: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only"
+    ],
+    "kind_coverage": {
+     "invariant": 2,
+     "point_claim": 1
+    },
+    "per_theorem": {
+     "inv_all": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run for `I` (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only"
+       ],
+       "why": "the invariant `I` is not constant"
+      },
+      "kind": "invariant",
+      "kind_basis": {
+       "invariant_pred": "I",
+       "rule": "positive conclusion `I s` over the quantified state — a conserved property"
+      },
+      "name_hint": "invariant"
+     },
+     "inv_closed": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run for `I` (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only"
+       ],
+       "why": "the invariant `I` is not constant"
+      },
+      "kind": "invariant",
+      "kind_basis": {
+       "invariant_pred": "I",
+       "rule": "positive conclusion `I (step s d)` over the quantified state — a conserved property"
+      },
+      "name_hint": "invariant"
+     },
+     "inv_init": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "I s0 = true",
+        "hypotheses": []
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `point_claim` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (claim about the closed expression `s0` — one state, no §1.2.1 clause covers it)"
+      },
+      "kind": "point_claim",
+      "kind_basis": {
+       "at": "s0",
+       "pred": "I",
+       "rule": "claim about the closed expression `s0` — one state, no §1.2.1 clause covers it"
+      },
+      "name_hint": "invariant"
+     }
+    },
+    "refuted": [],
+    "unclassified": [
+     "inv_init"
+    ]
+   },
+   "evidence": {
+    "books_considered": [
+     {
+      "book": "theory.lean",
+      "label": "discharged",
+      "verdict": "attained"
+     }
+    ],
+    "carried_by": "theory.lean",
+    "kind": "lean_source_live",
+    "source": "<repo>\\cold-start-a3\\theory\\generated_l2\\theory.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false,
+    "unclassified_theorems": [
+     "inv_init"
+    ]
+   },
+   "game": null,
+   "label": "discharged",
+   "run": "<repo>\\cold-start-a3\\theory\\generated_l2",
+   "seconds": 2.1,
+   "verdict": "attained"
+  },
+  {
+   "books": [
+    "theory.lean"
+   ],
+   "criteria": {
+    "a_compiles": true,
+    "attaining": [
+     "inv_all",
+     "inv_closed"
+    ],
+    "b_axioms": {
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": true
+    },
+    "c_nonvacuous": {
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": null
+    },
+    "c_residuals": [
+     "inv_all: constancy probe not run for `I` (static scan only)",
+     "inv_all: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only",
+     "inv_closed: constancy probe not run for `I` (static scan only)",
+     "inv_closed: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only"
+    ],
+    "kind_coverage": {
+     "invariant": 2,
+     "point_claim": 1
+    },
+    "per_theorem": {
+     "inv_all": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run for `I` (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only"
+       ],
+       "why": "the invariant `I` is not constant"
+      },
+      "kind": "invariant",
+      "kind_basis": {
+       "invariant_pred": "I",
+       "rule": "positive conclusion `I s` over the quantified state — a conserved property"
+      },
+      "name_hint": "invariant"
+     },
+     "inv_closed": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run for `I` (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only"
+       ],
+       "why": "the invariant `I` is not constant"
+      },
+      "kind": "invariant",
+      "kind_basis": {
+       "invariant_pred": "I",
+       "rule": "positive conclusion `I (step s d)` over the quantified state — a conserved property"
+      },
+      "name_hint": "invariant"
+     },
+     "inv_init": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "I s0 = true",
+        "hypotheses": []
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `point_claim` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (claim about the closed expression `s0` — one state, no §1.2.1 clause covers it)"
+      },
+      "kind": "point_claim",
+      "kind_basis": {
+       "at": "s0",
+       "pred": "I",
+       "rule": "claim about the closed expression `s0` — one state, no §1.2.1 clause covers it"
+      },
+      "name_hint": "invariant"
+     }
+    },
+    "refuted": [],
+    "unclassified": [
+     "inv_init"
+    ]
+   },
+   "evidence": {
+    "books_considered": [
+     {
+      "book": "theory.lean",
+      "label": "discharged",
+      "verdict": "attained"
+     }
+    ],
+    "carried_by": "theory.lean",
+    "kind": "lean_source_live",
+    "source": "<repo>\\cold-start-a3\\theory\\generated_l2_scratch\\theory.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false,
+    "unclassified_theorems": [
+     "inv_init"
+    ]
+   },
+   "game": null,
+   "label": "discharged",
+   "run": "<repo>\\cold-start-a3\\theory\\generated_l2_scratch",
+   "seconds": 2.1,
+   "verdict": "attained"
+  },
+  {
+   "books": [
+    "theory.lean"
+   ],
+   "criteria": {
+    "a_compiles": true,
+    "attaining": [
+     "inv_all",
+     "inv_closed"
+    ],
+    "b_axioms": {
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": true
+    },
+    "c_nonvacuous": {
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": null
+    },
+    "c_residuals": [
+     "inv_all: constancy probe not run for `I` (static scan only)",
+     "inv_all: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only",
+     "inv_closed: constancy probe not run for `I` (static scan only)",
+     "inv_closed: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only"
+    ],
+    "kind_coverage": {
+     "invariant": 2,
+     "point_claim": 1
+    },
+    "per_theorem": {
+     "inv_all": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run for `I` (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only"
+       ],
+       "why": "the invariant `I` is not constant"
+      },
+      "kind": "invariant",
+      "kind_basis": {
+       "invariant_pred": "I",
+       "rule": "positive conclusion `I s` over the quantified state — a conserved property"
+      },
+      "name_hint": "invariant"
+     },
+     "inv_closed": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run for `I` (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only"
+       ],
+       "why": "the invariant `I` is not constant"
+      },
+      "kind": "invariant",
+      "kind_basis": {
+       "invariant_pred": "I",
+       "rule": "positive conclusion `I (step s d)` over the quantified state — a conserved property"
+      },
+      "name_hint": "invariant"
+     },
+     "inv_init": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "I s0 = true",
+        "hypotheses": []
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `point_claim` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (claim about the closed expression `s0` — one state, no §1.2.1 clause covers it)"
+      },
+      "kind": "point_claim",
+      "kind_basis": {
+       "at": "s0",
+       "pred": "I",
+       "rule": "claim about the closed expression `s0` — one state, no §1.2.1 clause covers it"
+      },
+      "name_hint": "invariant"
+     }
+    },
+    "refuted": [],
+    "unclassified": [
+     "inv_init"
+    ]
+   },
+   "evidence": {
+    "books_considered": [
+     {
+      "book": "theory.lean",
+      "label": "discharged",
+      "verdict": "attained"
+     }
+    ],
+    "carried_by": "theory.lean",
+    "kind": "lean_source_live",
+    "source": "<repo>\\cold-start-a3\\theory\\generated_l2neg\\theory.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false,
+    "unclassified_theorems": [
+     "inv_init"
+    ]
+   },
+   "game": null,
+   "label": "discharged",
+   "run": "<repo>\\cold-start-a3\\theory\\generated_l2neg",
+   "seconds": 2.2,
+   "verdict": "attained"
+  },
+  {
+   "books": [
+    "theory.lean"
+   ],
+   "criteria": {
+    "a_compiles": true,
+    "attaining": [
+     "inv_all",
+     "inv_closed"
+    ],
+    "b_axioms": {
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": true
+    },
+    "c_nonvacuous": {
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": null
+    },
+    "c_residuals": [
+     "inv_all: constancy probe not run for `I` (static scan only)",
+     "inv_all: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only",
+     "inv_closed: constancy probe not run for `I` (static scan only)",
+     "inv_closed: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only"
+    ],
+    "kind_coverage": {
+     "invariant": 2,
+     "point_claim": 1
+    },
+    "per_theorem": {
+     "inv_all": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run for `I` (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only"
+       ],
+       "why": "the invariant `I` is not constant"
+      },
+      "kind": "invariant",
+      "kind_basis": {
+       "invariant_pred": "I",
+       "rule": "positive conclusion `I s` over the quantified state — a conserved property"
+      },
+      "name_hint": "invariant"
+     },
+     "inv_closed": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run for `I` (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `I` established statically only"
+       ],
+       "why": "the invariant `I` is not constant"
+      },
+      "kind": "invariant",
+      "kind_basis": {
+       "invariant_pred": "I",
+       "rule": "positive conclusion `I (step s d)` over the quantified state — a conserved property"
+      },
+      "name_hint": "invariant"
+     },
+     "inv_init": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "I s0 = true",
+        "hypotheses": []
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `point_claim` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (claim about the closed expression `s0` — one state, no §1.2.1 clause covers it)"
+      },
+      "kind": "point_claim",
+      "kind_basis": {
+       "at": "s0",
+       "pred": "I",
+       "rule": "claim about the closed expression `s0` — one state, no §1.2.1 clause covers it"
+      },
+      "name_hint": "invariant"
+     }
+    },
+    "refuted": [],
+    "unclassified": [
+     "inv_init"
+    ]
+   },
+   "evidence": {
+    "books_considered": [
+     {
+      "book": "theory.lean",
+      "label": "discharged",
+      "verdict": "attained"
+     }
+    ],
+    "carried_by": "theory.lean",
+    "kind": "lean_source_live",
+    "source": "<repo>\\cold-start-a3\\theory\\generated_l2rew\\theory.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false,
+    "unclassified_theorems": [
+     "inv_init"
+    ]
+   },
+   "game": null,
+   "label": "discharged",
+   "run": "<repo>\\cold-start-a3\\theory\\generated_l2rew",
+   "seconds": 2.0,
+   "verdict": "attained"
+  },
+  {
+   "books": [],
+   "criteria": {
+    "a_compiles": null,
+    "b_axioms": null,
+    "c_nonvacuous": null
+   },
+   "evidence": {
+    "cheap_green": false,
+    "kind": "arm_transfer",
+    "source": "<repo>\\theoria-arm\\runs\\20260728T072604Z-E3-sk48-carried\\transfer.json"
+   },
+   "flags": {},
+   "game": null,
+   "label": "no_proof_layer",
+   "run": "<repo>\\theoria-arm\\runs\\20260728T072604Z-E3-sk48-carried",
+   "seconds": 0.0,
+   "verdict": "not_attained"
+  },
+  {
+   "books": [],
+   "criteria": {
+    "a_compiles": null,
+    "b_axioms": null,
+    "c_nonvacuous": null,
+    "note": "no theorem was produced; strict reading of §1.2 (see module docstring, item 1)"
+   },
+   "evidence": {
+    "cheap_green": false,
+    "detail": "not attempted: the enumerative development decides every state in the kernel and this level has about an unknown number of them (ceiling 200000). The pagoda development is the alternative and needs a LINE world plus an lp_potential certificate; this is a grid world with no state graph.",
+    "kind": "arm_certify",
+    "proof_layer_available": false,
+    "source": "certify record"
+   },
+   "flags": {
+    "gap_candidate_g": true
+   },
+   "game": "sk48-d8078629",
+   "label": "declared_refusal",
+   "run": "<repo>\\theoria-arm\\runs\\20260728T083400Z-E3-sk48-carried-v2",
+   "seconds": 0.0,
+   "verdict": "not_attained"
+  },
+  {
+   "books": [],
+   "criteria": {
+    "note": "certify.json is empty — the certify stage left no records"
+   },
+   "evidence": {
+    "kind": "arm_certify",
+    "source": "<repo>\\theoria-arm\\runs\\20260728T235841Z-leg01\\certify.json"
+   },
+   "flags": {},
+   "game": "g50t-5849a774",
+   "label": "no_evidence",
+   "run": "<repo>\\theoria-arm\\runs\\20260728T235841Z-leg01",
+   "seconds": 0.0,
+   "verdict": "not_attained"
+  },
+  {
+   "books": [],
+   "criteria": {
+    "note": "certify.json is empty — the certify stage left no records"
+   },
+   "evidence": {
+    "kind": "arm_certify",
+    "source": "<repo>\\theoria-arm\\runs\\20260728T235842Z-leg02\\certify.json"
+   },
+   "flags": {},
+   "game": "g50t-5849a774",
+   "label": "no_evidence",
+   "run": "<repo>\\theoria-arm\\runs\\20260728T235842Z-leg02",
+   "seconds": 0.0,
+   "verdict": "not_attained"
+  },
+  {
+   "books": [],
+   "criteria": {
+    "note": "certify.json is empty — the certify stage left no records"
+   },
+   "evidence": {
+    "kind": "arm_certify",
+    "source": "<repo>\\theoria-arm\\runs\\20260728T235843Z-leg01\\certify.json"
+   },
+   "flags": {},
+   "game": "sk48-d8078629",
+   "label": "no_evidence",
+   "run": "<repo>\\theoria-arm\\runs\\20260728T235843Z-leg01",
+   "seconds": 0.0,
+   "verdict": "not_attained"
+  },
+  {
+   "books": [],
+   "criteria": {
+    "note": "certify.json is empty — the certify stage left no records"
+   },
+   "evidence": {
+    "kind": "arm_certify",
+    "source": "<repo>\\theoria-arm\\runs\\20260729T0030Z-a3-desk-live-proof\\certify.json"
+   },
+   "flags": {},
+   "game": "g50t-5849a774",
+   "label": "no_evidence",
+   "run": "<repo>\\theoria-arm\\runs\\20260729T0030Z-a3-desk-live-proof",
+   "seconds": 0.0,
+   "verdict": "not_attained"
+  },
+  {
+   "books": [],
+   "criteria": {
+    "a_compiles": null,
+    "b_axioms": null,
+    "c_nonvacuous": null,
+    "note": "no theorem was produced; strict reading of §1.2 (see module docstring, item 1)"
+   },
+   "evidence": {
+    "cheap_green": false,
+    "detail": "not attempted: the enumerative development decides every state in the kernel and this level has about an unknown number of them (ceiling 200000). The pagoda development is the alternative and needs a LINE world plus an lp_potential certificate; this is a grid world with no state graph.",
+    "kind": "arm_certify",
+    "proof_layer_available": false,
+    "source": "certify record"
+   },
+   "flags": {
+    "gap_candidate_g": true
+   },
+   "game": "g50t-5849a774",
+   "label": "declared_refusal",
+   "run": "<repo>\\theoria-arm\\runs\\20260729T0035Z-a3-desk-live-proof2",
+   "seconds": 0.0,
+   "verdict": "not_attained"
+  },
+  {
+   "books": [],
+   "criteria": {
+    "note": "certify.json is empty — the certify stage left no records"
+   },
+   "evidence": {
+    "kind": "arm_certify",
+    "source": "<repo>\\theoria-arm\\runs\\20260729T004020Z-leg01\\certify.json"
+   },
+   "flags": {},
+   "game": "g50t-5849a774",
+   "label": "no_evidence",
+   "run": "<repo>\\theoria-arm\\runs\\20260729T004020Z-leg01",
+   "seconds": 0.0,
+   "verdict": "not_attained"
+  },
+  {
+   "books": [],
+   "criteria": {
+    "note": "certify.json is empty — the certify stage left no records"
+   },
+   "evidence": {
+    "kind": "arm_certify",
+    "source": "<repo>\\theoria-arm\\runs\\20260729T105653Z-leg01\\certify.json"
+   },
+   "flags": {},
+   "game": "g50t-5849a774",
+   "label": "no_evidence",
+   "run": "<repo>\\theoria-arm\\runs\\20260729T105653Z-leg01",
+   "seconds": 0.0,
+   "verdict": "not_attained"
+  },
+  {
+   "books": [],
+   "criteria": {
+    "note": "certify.json is empty — the certify stage left no records"
+   },
+   "evidence": {
+    "kind": "arm_certify",
+    "source": "<repo>\\theoria-arm\\runs\\20260729T105729Z-leg01\\certify.json"
+   },
+   "flags": {},
+   "game": "g50t-5849a774",
+   "label": "no_evidence",
+   "run": "<repo>\\theoria-arm\\runs\\20260729T105729Z-leg01",
+   "seconds": 0.0,
+   "verdict": "not_attained"
+  },
+  {
+   "books": [],
+   "criteria": {
+    "a_compiles": null,
+    "b_axioms": null,
+    "c_nonvacuous": null,
+    "note": "no theorem was produced; strict reading of §1.2 (see module docstring, item 1)"
+   },
+   "evidence": {
+    "cheap_green": false,
+    "detail": "not attempted: the enumerative development decides every state in the kernel and this level has about an unknown number of them (ceiling 200000). The pagoda development is the alternative and needs a LINE world plus an lp_potential certificate; this is a grid world with no state graph.",
+    "kind": "arm_certify",
+    "proof_layer_available": false,
+    "source": "certify record"
+   },
+   "flags": {
+    "gap_candidate_g": true
+   },
+   "game": "g50t-5849a774",
+   "label": "declared_refusal",
+   "run": "<repo>\\theoria-arm\\runs\\20260731T1240Z-A3-level2-carried",
+   "seconds": 0.0,
+   "verdict": "not_attained"
+  },
+  {
+   "books": [],
+   "criteria": {
+    "a_compiles": null,
+    "b_axioms": null,
+    "c_nonvacuous": null,
+    "note": "no theorem was produced; strict reading of §1.2 (see module docstring, item 1)"
+   },
+   "evidence": {
+    "cheap_green": false,
+    "detail": "not attempted: the enumerative development decides every state in the kernel and this level has about an unknown number of them (ceiling 200000). The pagoda development is the alternative and needs a LINE world plus an lp_potential certificate; this is a grid world with no state graph.",
+    "kind": "arm_certify",
+    "proof_layer_available": false,
+    "source": "certify record"
+   },
+   "flags": {
+    "gap_candidate_g": true
+   },
+   "game": "g50t-5849a774",
+   "label": "declared_refusal",
+   "run": "<repo>\\theoria-arm\\runs\\20260731T1310Z-A3-level2-carried-r2",
+   "seconds": 0.0,
+   "verdict": "not_attained"
+  },
+  {
+   "books": [],
+   "criteria": {
+    "a_compiles": null,
+    "b_axioms": null,
+    "c_nonvacuous": null,
+    "note": "no theorem was produced; strict reading of §1.2 (see module docstring, item 1)"
+   },
+   "evidence": {
+    "cheap_green": false,
+    "detail": "not attempted: the enumerative development decides every state in the kernel and this level has about an unknown number of them (ceiling 200000). The pagoda development is the alternative and needs a LINE world plus an lp_potential certificate; this is a grid world with no state graph.",
+    "kind": "arm_certify",
+    "proof_layer_available": false,
+    "source": "certify record"
+   },
+   "flags": {
+    "gap_candidate_g": true
+   },
+   "game": "g50t-5849a774",
+   "label": "declared_refusal",
+   "run": "<repo>\\theoria-arm\\runs\\20260731T1430Z-A3-level2-carried-r3",
+   "seconds": 0.0,
+   "verdict": "not_attained"
+  },
+  {
+   "books": [],
+   "criteria": {
+    "a_compiles": null,
+    "b_axioms": null,
+    "c_nonvacuous": null,
+    "note": "no theorem was produced; strict reading of §1.2 (see module docstring, item 1)"
+   },
+   "evidence": {
+    "cheap_green": false,
+    "detail": "not attempted: the enumerative development decides every state in the kernel and this level has about an unknown number of them (ceiling 200000). The pagoda development is the alternative and needs a LINE world plus an lp_potential certificate; this is a grid world with no state graph.",
+    "kind": "arm_certify",
+    "proof_layer_available": false,
+    "source": "certify record"
+   },
+   "flags": {
+    "gap_candidate_g": true
+   },
+   "game": "sk48-d8078629",
+   "label": "declared_refusal",
+   "run": "<repo>\\theoria-arm\\runs\\20260731T1500Z-A3-sk48-carried-l1",
+   "seconds": 0.0,
+   "verdict": "not_attained"
+  },
+  {
+   "books": [],
+   "criteria": {
+    "a_compiles": null,
+    "b_axioms": null,
+    "c_nonvacuous": null,
+    "note": "no theorem was produced; strict reading of §1.2 (see module docstring, item 1)"
+   },
+   "evidence": {
+    "cheap_green": true,
+    "detail": "not attempted: the enumerative development decides every state in the kernel and this level has about an unknown number of them (ceiling 200000). The pagoda development is the alternative and needs a LINE world plus an lp_potential certificate; this is a grid world with no state graph.",
+    "kind": "arm_certify",
+    "proof_layer_available": false,
+    "source": "certify record"
+   },
+   "flags": {
+    "gap_candidate_g": true
+   },
+   "game": "g50t-5849a774",
+   "label": "declared_refusal",
+   "run": "<repo>\\theoria-arm\\runs\\20260731T231654Z-R1-g50t-a",
+   "seconds": 0.0,
+   "verdict": "not_attained"
+  },
+  {
+   "books": [],
+   "criteria": {
+    "a_compiles": null,
+    "b_axioms": null,
+    "c_nonvacuous": null,
+    "note": "no theorem was produced; strict reading of §1.2 (see module docstring, item 1)"
+   },
+   "evidence": {
+    "cheap_green": false,
+    "detail": "not attempted: the enumerative development decides every state in the kernel and this level has about an unknown number of them (ceiling 200000). The pagoda development is the alternative and needs a LINE world plus an lp_potential certificate; this is a grid world with no state graph.",
+    "kind": "arm_certify",
+    "proof_layer_available": false,
+    "source": "certify record"
+   },
+   "flags": {
+    "gap_candidate_g": true
+   },
+   "game": "sk48-d8078629",
+   "label": "declared_refusal",
+   "run": "<repo>\\theoria-arm\\runs\\20260731T231654Z-R1-sk48-b",
+   "seconds": 0.0,
+   "verdict": "not_attained"
+  },
+  {
+   "books": [],
+   "criteria": {
+    "a_compiles": null,
+    "b_axioms": null,
+    "c_nonvacuous": null,
+    "note": "no theorem was produced; strict reading of §1.2 (see module docstring, item 1)"
+   },
+   "evidence": {
+    "cheap_green": true,
+    "detail": "not attempted: the enumerative development decides every state in the kernel and this level has about an unknown number of them (ceiling 200000). The pagoda development is the alternative and needs a LINE world plus an lp_potential certificate; this is a grid world with no state graph.",
+    "kind": "arm_certify",
+    "proof_layer_available": false,
+    "source": "certify record"
+   },
+   "flags": {
+    "gap_candidate_g": true
+   },
+   "game": "g50t-5849a774",
+   "label": "declared_refusal",
+   "run": "<repo>\\theoria-arm\\runs\\20260801T001851Z-R1b-g50t-a",
+   "seconds": 0.0,
+   "verdict": "not_attained"
+  },
+  {
+   "books": [],
+   "criteria": {
+    "a_compiles": null,
+    "b_axioms": null,
+    "c_nonvacuous": null,
+    "note": "no theorem was produced; strict reading of §1.2 (see module docstring, item 1)"
+   },
+   "evidence": {
+    "cheap_green": false,
+    "detail": "not attempted: the enumerative development decides every state in the kernel and this level has about an unknown number of them (ceiling 200000). The pagoda development is the alternative and needs a LINE world plus an lp_potential certificate; this is a grid world with no state graph.",
+    "kind": "arm_certify",
+    "proof_layer_available": false,
+    "source": "certify record"
+   },
+   "flags": {
+    "gap_candidate_g": true
+   },
+   "game": "sk48-d8078629",
+   "label": "declared_refusal",
+   "run": "<repo>\\theoria-arm\\runs\\20260801T001851Z-R1b-sk48-b",
+   "seconds": 0.0,
+   "verdict": "not_attained"
+  },
+  {
+   "books": [],
+   "criteria": {
+    "note": "certify.json is empty — the certify stage left no records"
+   },
+   "evidence": {
+    "kind": "arm_certify",
+    "source": "<repo>\\theoria-arm\\runs\\20260801T043743Z-R2-g50t-a\\certify.json"
+   },
+   "flags": {},
+   "game": "g50t-5849a774",
+   "label": "no_evidence",
+   "run": "<repo>\\theoria-arm\\runs\\20260801T043743Z-R2-g50t-a",
+   "seconds": 0.0,
+   "verdict": "not_attained"
+  },
+  {
+   "books": [],
+   "criteria": {
+    "note": "certify.json is empty — the certify stage left no records"
+   },
+   "evidence": {
+    "kind": "arm_certify",
+    "source": "<repo>\\theoria-arm\\runs\\20260801T043743Z-R2-sk48-b\\certify.json"
+   },
+   "flags": {},
+   "game": "sk48-d8078629",
+   "label": "no_evidence",
+   "run": "<repo>\\theoria-arm\\runs\\20260801T043743Z-R2-sk48-b",
+   "seconds": 0.0,
+   "verdict": "not_attained"
+  },
+  {
+   "books": [],
+   "criteria": {
+    "a_compiles": null,
+    "b_axioms": null,
+    "c_nonvacuous": null,
+    "note": "no theorem was produced; strict reading of §1.2 (see module docstring, item 1)"
+   },
+   "evidence": {
+    "cheap_green": true,
+    "detail": "not attempted: the enumerative development decides every state in the kernel and this level has about an unknown number of them (ceiling 200000). The pagoda development is the alternative and needs a LINE world plus an lp_potential certificate; this is a grid world with no state graph.",
+    "kind": "arm_certify",
+    "proof_layer_available": false,
+    "source": "certify record"
+   },
+   "flags": {
+    "gap_candidate_g": true
+   },
+   "game": "g50t-5849a774",
+   "label": "declared_refusal",
+   "run": "<repo>\\theoria-arm\\runs\\20260801T044640Z-R2b-g50t-a",
+   "seconds": 0.0,
+   "verdict": "not_attained"
+  },
+  {
+   "books": [],
+   "criteria": {
+    "a_compiles": null,
+    "b_axioms": null,
+    "c_nonvacuous": null,
+    "note": "no theorem was produced; strict reading of §1.2 (see module docstring, item 1)"
+   },
+   "evidence": {
+    "cheap_green": false,
+    "detail": "not attempted: the enumerative development decides every state in the kernel and this level has about an unknown number of them (ceiling 200000). The pagoda development is the alternative and needs a LINE world plus an lp_potential certificate; this is a grid world with no state graph.",
+    "kind": "arm_certify",
+    "proof_layer_available": false,
+    "source": "certify record"
+   },
+   "flags": {
+    "gap_candidate_g": true
+   },
+   "game": "sk48-d8078629",
+   "label": "declared_refusal",
+   "run": "<repo>\\theoria-arm\\runs\\20260801T044640Z-R2b-sk48-b",
+   "seconds": 0.0,
+   "verdict": "not_attained"
+  },
+  {
+   "books": [],
+   "criteria": {
+    "note": "certify.json is empty — the certify stage left no records"
+   },
+   "evidence": {
+    "kind": "arm_certify",
+    "source": "<repo>\\theoria-arm\\runs\\a3-gate-mock\\certify.json"
+   },
+   "flags": {},
+   "game": "g50t-5849a774",
+   "label": "no_evidence",
+   "run": "<repo>\\theoria-arm\\runs\\a3-gate-mock",
+   "seconds": 0.0,
+   "verdict": "not_attained"
+  },
+  {
+   "books": [],
+   "criteria": {
+    "note": "certify.json is empty — the certify stage left no records"
+   },
+   "evidence": {
+    "kind": "arm_certify",
+    "source": "<repo>\\theoria-arm\\runs\\audit-smoke\\certify.json"
+   },
+   "flags": {},
+   "game": "ar25-0c556536",
+   "label": "no_evidence",
+   "run": "<repo>\\theoria-arm\\runs\\audit-smoke",
+   "seconds": 0.0,
+   "verdict": "not_attained"
+  },
+  {
+   "books": [
+    "Level.lean"
+   ],
+   "criteria": {
+    "a_compiles": true,
+    "attaining": [],
+    "b_axioms": {
+     "goal_is_reachable": true,
+     "reachable_closed": true
+    },
+    "c_nonvacuous": {
+     "goal_is_reachable": null,
+     "reachable_closed": null
+    },
+    "c_residuals": [],
+    "kind_coverage": {
+     "unclassified": 1,
+     "witness": 1
+    },
+    "per_theorem": {
+     "goal_is_reachable": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "∃ s : St, Goal s = true",
+        "hypotheses": []
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `witness` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (conclusion is an existential — a witness obligation, not a law about the world)"
+      },
+      "kind": "witness",
+      "kind_basis": {
+       "rule": "conclusion is an existential — a witness obligation, not a law about the world"
+      },
+      "name_hint": null
+     },
+     "reachable_closed": {
+      "b": {
+       "axioms": [
+        "propext"
+       ],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "(step s a = step s a) = True",
+        "hypotheses": []
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `unclassified` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (statement shape outside the fragment §1.2.1 defines a non-vacuity requirement for)"
+      },
+      "kind": "unclassified",
+      "kind_basis": {
+       "conclusion": "(step s a = step s a) = True",
+       "rule": "statement shape outside the fragment §1.2.1 defines a non-vacuity requirement for"
+      },
+      "name_hint": null
+     }
+    },
+    "refuted": [],
+    "unclassified": [
+     "goal_is_reachable",
+     "reachable_closed"
+    ]
+   },
+   "evidence": {
+    "books_considered": [
+     {
+      "book": "Level.lean",
+      "label": "unclassified",
+      "verdict": "not_attained"
+     }
+    ],
+    "carried_by": "Level.lean",
+    "kind": "lean_source_live",
+    "source": "<repo>\\theory-compiler\\handover_packages\\a0-cart\\levels\\base\\Level.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false,
+    "unclassified_theorems": [
+     "goal_is_reachable",
+     "reachable_closed"
+    ]
+   },
+   "game": null,
+   "label": "unclassified",
+   "run": "<repo>\\theory-compiler\\handover_packages\\a0-cart\\levels\\base",
+   "seconds": 0.5,
+   "verdict": "not_attained"
+  },
+  {
+   "books": [
+    "Level.lean"
+   ],
+   "criteria": {
+    "a_compiles": true,
+    "attaining": [],
+    "b_axioms": {
+     "no_goal_state": true,
+     "reachable_closed": true,
+     "unsolvable": true
+    },
+    "c_nonvacuous": {
+     "no_goal_state": null,
+     "reachable_closed": null,
+     "unsolvable": null
+    },
+    "c_residuals": [],
+    "kind_coverage": {
+     "unclassified": 2,
+     "witness": 1
+    },
+    "per_theorem": {
+     "no_goal_state": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "Goal s = false",
+        "hypotheses": []
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `unclassified` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (statement shape outside the fragment §1.2.1 defines a non-vacuity requirement for)"
+      },
+      "kind": "unclassified",
+      "kind_basis": {
+       "conclusion": "Goal s = false",
+       "rule": "statement shape outside the fragment §1.2.1 defines a non-vacuity requirement for"
+      },
+      "name_hint": "unsolvable"
+     },
+     "reachable_closed": {
+      "b": {
+       "axioms": [
+        "propext"
+       ],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "(step s a = step s a) = True",
+        "hypotheses": []
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `unclassified` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (statement shape outside the fragment §1.2.1 defines a non-vacuity requirement for)"
+      },
+      "kind": "unclassified",
+      "kind_basis": {
+       "conclusion": "(step s a = step s a) = True",
+       "rule": "statement shape outside the fragment §1.2.1 defines a non-vacuity requirement for"
+      },
+      "name_hint": null
+     },
+     "unsolvable": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "¬ ∃ s : St, Reachable s ∧ Goal s = true",
+        "hypotheses": []
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `witness` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (conclusion is an existential — a witness obligation, not a law about the world)"
+      },
+      "kind": "witness",
+      "kind_basis": {
+       "rule": "conclusion is an existential — a witness obligation, not a law about the world"
+      },
+      "name_hint": "unsolvable"
+     }
+    },
+    "refuted": [],
+    "unclassified": [
+     "no_goal_state",
+     "reachable_closed",
+     "unsolvable"
+    ]
+   },
+   "evidence": {
+    "books_considered": [
+     {
+      "book": "Level.lean",
+      "label": "unclassified",
+      "verdict": "not_attained"
+     }
+    ],
+    "carried_by": "Level.lean",
+    "kind": "lean_source_live",
+    "source": "<repo>\\theory-compiler\\handover_packages\\a0-cart\\levels\\no-button\\Level.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false,
+    "unclassified_theorems": [
+     "no_goal_state",
+     "reachable_closed",
+     "unsolvable"
+    ]
+   },
+   "game": null,
+   "label": "unclassified",
+   "run": "<repo>\\theory-compiler\\handover_packages\\a0-cart\\levels\\no-button",
+   "seconds": 0.5,
+   "verdict": "not_attained"
+  },
+  {
+   "books": [
+    "Level.lean"
+   ],
+   "criteria": {
+    "a_compiles": true,
+    "attaining": [],
+    "b_axioms": {
+     "goal_is_reachable": true,
+     "reachable_closed": true
+    },
+    "c_nonvacuous": {
+     "goal_is_reachable": null,
+     "reachable_closed": null
+    },
+    "c_residuals": [],
+    "kind_coverage": {
+     "unclassified": 1,
+     "witness": 1
+    },
+    "per_theorem": {
+     "goal_is_reachable": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "∃ s : St, Goal s = true",
+        "hypotheses": []
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `witness` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (conclusion is an existential — a witness obligation, not a law about the world)"
+      },
+      "kind": "witness",
+      "kind_basis": {
+       "rule": "conclusion is an existential — a witness obligation, not a law about the world"
+      },
+      "name_hint": null
+     },
+     "reachable_closed": {
+      "b": {
+       "axioms": [
+        "propext"
+       ],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "(step s a = step s a) = True",
+        "hypotheses": []
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `unclassified` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (statement shape outside the fragment §1.2.1 defines a non-vacuity requirement for)"
+      },
+      "kind": "unclassified",
+      "kind_basis": {
+       "conclusion": "(step s a = step s a) = True",
+       "rule": "statement shape outside the fragment §1.2.1 defines a non-vacuity requirement for"
+      },
+      "name_hint": null
+     }
+    },
+    "refuted": [],
+    "unclassified": [
+     "goal_is_reachable",
+     "reachable_closed"
+    ]
+   },
+   "evidence": {
+    "books_considered": [
+     {
+      "book": "Level.lean",
+      "label": "unclassified",
+      "verdict": "not_attained"
+     }
+    ],
+    "carried_by": "Level.lean",
+    "kind": "lean_source_live",
+    "source": "<repo>\\theory-compiler\\handover_packages\\a0-sokoban2\\levels\\crossing-up\\Level.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false,
+    "unclassified_theorems": [
+     "goal_is_reachable",
+     "reachable_closed"
+    ]
+   },
+   "game": null,
+   "label": "unclassified",
+   "run": "<repo>\\theory-compiler\\handover_packages\\a0-sokoban2\\levels\\crossing-up",
+   "seconds": 2.5,
+   "verdict": "not_attained"
+  },
+  {
+   "books": [
+    "Level.lean"
+   ],
+   "criteria": {
+    "a_compiles": true,
+    "attaining": [],
+    "b_axioms": {
+     "goal_is_reachable": true,
+     "reachable_closed": true
+    },
+    "c_nonvacuous": {
+     "goal_is_reachable": null,
+     "reachable_closed": null
+    },
+    "c_residuals": [],
+    "kind_coverage": {
+     "unclassified": 1,
+     "witness": 1
+    },
+    "per_theorem": {
+     "goal_is_reachable": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "∃ s : St, Goal s = true",
+        "hypotheses": []
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `witness` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (conclusion is an existential — a witness obligation, not a law about the world)"
+      },
+      "kind": "witness",
+      "kind_basis": {
+       "rule": "conclusion is an existential — a witness obligation, not a law about the world"
+      },
+      "name_hint": null
+     },
+     "reachable_closed": {
+      "b": {
+       "axioms": [
+        "propext"
+       ],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "(step s a = step s a) = True",
+        "hypotheses": []
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `unclassified` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (statement shape outside the fragment §1.2.1 defines a non-vacuity requirement for)"
+      },
+      "kind": "unclassified",
+      "kind_basis": {
+       "conclusion": "(step s a = step s a) = True",
+       "rule": "statement shape outside the fragment §1.2.1 defines a non-vacuity requirement for"
+      },
+      "name_hint": null
+     }
+    },
+    "refuted": [],
+    "unclassified": [
+     "goal_is_reachable",
+     "reachable_closed"
+    ]
+   },
+   "evidence": {
+    "books_considered": [
+     {
+      "book": "Level.lean",
+      "label": "unclassified",
+      "verdict": "not_attained"
+     }
+    ],
+    "carried_by": "Level.lean",
+    "kind": "lean_source_live",
+    "source": "<repo>\\theory-compiler\\handover_packages\\a0-sokoban2\\levels\\match\\Level.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false,
+    "unclassified_theorems": [
+     "goal_is_reachable",
+     "reachable_closed"
+    ]
+   },
+   "game": null,
+   "label": "unclassified",
+   "run": "<repo>\\theory-compiler\\handover_packages\\a0-sokoban2\\levels\\match",
+   "seconds": 2.6,
+   "verdict": "not_attained"
+  },
+  {
+   "books": [
+    "TheoriaLean.lean"
+   ],
+   "criteria": {
+    "a_compiles": true,
+    "attaining": [
+     "inv_all",
+     "inv_closed"
+    ],
+    "b_axioms": {
+     "goal_break": true,
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": true,
+     "unsolvable": true
+    },
+    "c_nonvacuous": {
+     "goal_break": null,
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": null,
+     "unsolvable": null
+    },
+    "c_residuals": [
+     "inv_all: constancy probe not run for `Inv` (static scan only)",
+     "inv_all: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `Inv` established statically only",
+     "inv_closed: constancy probe not run for `Inv` (static scan only)",
+     "inv_closed: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `Inv` established statically only"
+    ],
+    "kind_coverage": {
+     "invariant": 2,
+     "point_claim": 2,
+     "witness": 1
+    },
+    "per_theorem": {
+     "goal_break": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "Inv (St.mk p0 p1 p2 p3 p4) = false",
+        "hypotheses": [
+         "Goal (St.mk p0 p1 p2 p3 p4) = true"
+        ]
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `point_claim` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (claim about the closed expression `(St.mk p0 p1 p2 p3 p4)` — one state, no §1.2.1 clause covers it)"
+      },
+      "kind": "point_claim",
+      "kind_basis": {
+       "at": "(St.mk p0 p1 p2 p3 p4)",
+       "pred": "Inv",
+       "rule": "claim about the closed expression `(St.mk p0 p1 p2 p3 p4)` — one state, no §1.2.1 clause covers it"
+      },
+      "name_hint": "unsolvable"
+     },
+     "inv_all": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run for `Inv` (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `Inv` established statically only"
+       ],
+       "why": "the invariant `Inv` is not constant"
+      },
+      "kind": "invariant",
+      "kind_basis": {
+       "invariant_pred": "Inv",
+       "rule": "positive conclusion `Inv s` over the quantified state — a conserved property"
+      },
+      "name_hint": "invariant"
+     },
+     "inv_closed": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run for `Inv` (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `Inv` established statically only"
+       ],
+       "why": "the invariant `Inv` is not constant"
+      },
+      "kind": "invariant",
+      "kind_basis": {
+       "invariant_pred": "Inv",
+       "rule": "positive conclusion `Inv (applyMove (St.mk p0 p1 p2 p3 p4) m)` over the quantified state — a conserved property"
+      },
+      "name_hint": "invariant"
+     },
+     "inv_init": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "Inv s0 = true",
+        "hypotheses": []
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `point_claim` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (claim about the closed expression `s0` — one state, no §1.2.1 clause covers it)"
+      },
+      "kind": "point_claim",
+      "kind_basis": {
+       "at": "s0",
+       "pred": "Inv",
+       "rule": "claim about the closed expression `s0` — one state, no §1.2.1 clause covers it"
+      },
+      "name_hint": "invariant"
+     },
+     "unsolvable": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "¬ ∃ s : St, Reachable s ∧ Goal s = true",
+        "hypotheses": []
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `witness` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (conclusion is an existential — a witness obligation, not a law about the world)"
+      },
+      "kind": "witness",
+      "kind_basis": {
+       "rule": "conclusion is an existential — a witness obligation, not a law about the world"
+      },
+      "name_hint": "unsolvable"
+     }
+    },
+    "refuted": [],
+    "unclassified": [
+     "goal_break",
+     "inv_init",
+     "unsolvable"
+    ]
+   },
+   "evidence": {
+    "books_considered": [
+     {
+      "book": "TheoriaLean.lean",
+      "label": "discharged",
+      "verdict": "attained"
+     }
+    ],
+    "carried_by": "TheoriaLean.lean",
+    "kind": "lean_source_live",
+    "source": "<repo>\\theory-compiler\\lean\\TheoriaLean.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false,
+    "unclassified_theorems": [
+     "goal_break",
+     "inv_init",
+     "unsolvable"
+    ]
+   },
+   "game": null,
+   "label": "discharged",
+   "run": "<repo>\\theory-compiler\\lean",
+   "seconds": 0.6,
+   "verdict": "attained"
+  },
+  {
+   "books": [
+    "corner.lean",
+    "pair.lean"
+   ],
+   "criteria": {
+    "a_compiles": true,
+    "attaining": [
+     "closed_pinned",
+     "dead",
+     "dead_closed",
+     "dead_persists"
+    ],
+    "b_axioms": {
+     "closed_pinned": true,
+     "dead": true,
+     "dead_closed": true,
+     "dead_persists": true,
+     "level_is_winnable": true,
+     "no_goal_pinned": true,
+     "pat_no_goal": true,
+     "pat_pins": true,
+     "pat_witness": true
+    },
+    "c_nonvacuous": {
+     "closed_pinned": true,
+     "dead": true,
+     "dead_closed": true,
+     "dead_persists": true,
+     "level_is_winnable": null,
+     "no_goal_pinned": null,
+     "pat_no_goal": null,
+     "pat_pins": null,
+     "pat_witness": null
+    },
+    "c_residuals": [
+     "closed_pinned: constancy probe not run for `wf` (static scan only)",
+     "closed_pinned: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `wf` established statically only",
+     "dead: constancy probe not run for `Pat` (static scan only)",
+     "dead: constancy probe not run for `wf` (static scan only)",
+     "dead: constancy probe not run for `Goal` (static scan only)",
+     "dead_closed: constancy probe not run for `wf` (static scan only)",
+     "dead_closed: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `wf` established statically only",
+     "dead_persists: constancy probe not run for `wf` (static scan only)",
+     "dead_persists: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `wf` established statically only"
+    ],
+    "kind_coverage": {
+     "invariant": 3,
+     "point_claim": 1,
+     "prune": 1,
+     "unclassified": 3,
+     "witness": 1
+    },
+    "per_theorem": {
+     "closed_pinned": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run for `wf` (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `wf` established statically only"
+       ],
+       "why": "the invariant `wf` is not constant"
+      },
+      "kind": "invariant",
+      "kind_basis": {
+       "invariant_pred": "wf",
+       "rule": "positive conclusion `wf (applyMove ⟨player, .c11, b2⟩ m)` over the quantified state — a conserved property"
+      },
+      "name_hint": null
+     },
+     "dead": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run for `Pat` (static scan only)",
+        "constancy probe not run for `wf` (static scan only)",
+        "constancy probe not run for `Goal` (static scan only)"
+       ],
+       "sub_checks": {
+        "a_pattern_satisfiable": true,
+        "a_provenance": "`pat_witness` exhibits the state `⟨.c12, .c11, .c13⟩` satisfying ['Pat', 'wf']",
+        "b_pattern_excludes_goal": true,
+        "b_provenance": "`no_goal_pinned` excludes goal states from the pattern",
+        "c_level_solvable": true,
+        "c_provenance": "`level_is_winnable` exhibits a run from a declared initial state to a state satisfying `Goal`",
+        "goal_pred": "Goal",
+        "pattern_preds": [
+         "Pat",
+         "wf"
+        ]
+       },
+       "why": "§1.2.1-prune (a)-(c) discharged"
+      },
+      "kind": "prune",
+      "kind_basis": {
+       "goal_pred": "Goal",
+       "pattern_preds": [
+        "Pat",
+        "wf"
+       ],
+       "relation": "ReachFrom",
+       "rule": "negative conclusion about `Goal` from ANY state matching ['Pat', 'wf'] — conditional unsolvability, the start state is quantified and constrained",
+       "start": "r",
+       "start_anchor": "quantified"
+      },
+      "name_hint": "prune"
+     },
+     "dead_closed": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run for `wf` (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `wf` established statically only"
+       ],
+       "why": "the invariant `wf` is not constant"
+      },
+      "kind": "invariant",
+      "kind_basis": {
+       "invariant_pred": "wf",
+       "rule": "positive conclusion `wf (applyMove s m)` over the quantified state — a conserved property"
+      },
+      "name_hint": "prune"
+     },
+     "dead_persists": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run for `wf` (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `wf` established statically only"
+       ],
+       "why": "the invariant `wf` is not constant"
+      },
+      "kind": "invariant",
+      "kind_basis": {
+       "invariant_pred": "wf",
+       "rule": "positive conclusion `wf s` over the quantified state — a conserved property"
+      },
+      "name_hint": "prune"
+     },
+     "level_is_winnable": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "∃ s : St, ReachFrom s0 s ∧ Goal s = true",
+        "hypotheses": []
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `witness` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (conclusion is an existential — a witness obligation, not a law about the world)"
+      },
+      "kind": "witness",
+      "kind_basis": {
+       "rule": "conclusion is an existential — a witness obligation, not a law about the world"
+      },
+      "name_hint": null
+     },
+     "no_goal_pinned": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "Goal ⟨.c11, b1, b2⟩ = false",
+        "hypotheses": [
+         "Pat ⟨.c11, b1, b2⟩ = true"
+        ]
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `unclassified` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (statement shape outside the fragment §1.2.1 defines a non-vacuity requirement for)"
+      },
+      "kind": "unclassified",
+      "kind_basis": {
+       "conclusion": "Goal ⟨.c11, b1, b2⟩ = false",
+       "rule": "statement shape outside the fragment §1.2.1 defines a non-vacuity requirement for"
+      },
+      "name_hint": "unsolvable"
+     },
+     "pat_no_goal": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "Goal s = false",
+        "hypotheses": [
+         "Pat s = true"
+        ]
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `unclassified` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (statement shape outside the fragment §1.2.1 defines a non-vacuity requirement for)"
+      },
+      "kind": "unclassified",
+      "kind_basis": {
+       "conclusion": "Goal s = false",
+       "rule": "statement shape outside the fragment §1.2.1 defines a non-vacuity requirement for"
+      },
+      "name_hint": null
+     },
+     "pat_pins": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "b1 = .c11",
+        "hypotheses": [
+         "Pat ⟨.c11, b1, .c11⟩ = true"
+        ]
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `unclassified` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (statement shape outside the fragment §1.2.1 defines a non-vacuity requirement for)"
+      },
+      "kind": "unclassified",
+      "kind_basis": {
+       "conclusion": "b1 = .c11",
+       "rule": "statement shape outside the fragment §1.2.1 defines a non-vacuity requirement for"
+      },
+      "name_hint": null
+     },
+     "pat_witness": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "wf ⟨.c12, .c11, .c13⟩ = true ∧ Pat ⟨.c12, .c11, .c13⟩ = true",
+        "hypotheses": []
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `point_claim` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (claim about the closed expression `⟨.c12, .c11, .c13⟩` — one state, no §1.2.1 clause covers it)"
+      },
+      "kind": "point_claim",
+      "kind_basis": {
+       "at": "⟨.c12, .c11, .c13⟩",
+       "pred": "wf",
+       "rule": "claim about the closed expression `⟨.c12, .c11, .c13⟩` — one state, no §1.2.1 clause covers it"
+      },
+      "name_hint": null
+     }
+    },
+    "refuted": [],
+    "unclassified": [
+     "level_is_winnable",
+     "no_goal_pinned",
+     "pat_no_goal",
+     "pat_pins",
+     "pat_witness"
+    ]
+   },
+   "evidence": {
+    "books_considered": [
+     {
+      "book": "corner.lean",
+      "label": "discharged",
+      "verdict": "attained"
+     },
+     {
+      "book": "pair.lean",
+      "label": "discharged",
+      "verdict": "attained"
+     }
+    ],
+    "carried_by": "corner.lean",
+    "kind": "lean_source_live",
+    "source": "<repo>\\theory-compiler\\runs\\20260728T080019Z-C4-deadlock-lean\\corner.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false,
+    "unclassified_theorems": [
+     "level_is_winnable",
+     "no_goal_pinned",
+     "pat_no_goal",
+     "pat_pins",
+     "pat_witness"
+    ]
+   },
+   "game": null,
+   "label": "discharged",
+   "run": "<repo>\\theory-compiler\\runs\\20260728T080019Z-C4-deadlock-lean",
+   "seconds": 90.4,
+   "verdict": "attained"
+  },
+  {
+   "books": [
+    "Control_corner.lean",
+    "Control_pair.lean",
+    "Deadlock_corner.lean",
+    "Deadlock_pair.lean",
+    "Ic3_algebraic.lean",
+    "Ic3_computational.lean"
+   ],
+   "criteria": {
+    "a_compiles": true,
+    "attaining": [
+     "closed_pinned",
+     "dead",
+     "dead_closed",
+     "dead_persists"
+    ],
+    "b_axioms": {
+     "closed_pinned": true,
+     "dead": true,
+     "dead_closed": true,
+     "dead_persists": true,
+     "level_is_winnable": true,
+     "no_goal_pinned": true,
+     "pat_no_goal": true,
+     "pat_pins": true,
+     "pat_witness": true
+    },
+    "c_nonvacuous": {
+     "closed_pinned": true,
+     "dead": true,
+     "dead_closed": true,
+     "dead_persists": true,
+     "level_is_winnable": null,
+     "no_goal_pinned": null,
+     "pat_no_goal": null,
+     "pat_pins": null,
+     "pat_witness": null
+    },
+    "c_residuals": [
+     "closed_pinned: constancy probe not run for `wf` (static scan only)",
+     "closed_pinned: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `wf` established statically only",
+     "dead: constancy probe not run for `Pat` (static scan only)",
+     "dead: constancy probe not run for `wf` (static scan only)",
+     "dead: constancy probe not run for `Goal` (static scan only)",
+     "dead_closed: constancy probe not run for `wf` (static scan only)",
+     "dead_closed: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `wf` established statically only",
+     "dead_persists: constancy probe not run for `wf` (static scan only)",
+     "dead_persists: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `wf` established statically only"
+    ],
+    "kind_coverage": {
+     "invariant": 3,
+     "point_claim": 1,
+     "prune": 1,
+     "unclassified": 3,
+     "witness": 1
+    },
+    "per_theorem": {
+     "closed_pinned": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run for `wf` (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `wf` established statically only"
+       ],
+       "why": "the invariant `wf` is not constant"
+      },
+      "kind": "invariant",
+      "kind_basis": {
+       "invariant_pred": "wf",
+       "rule": "positive conclusion `wf (applyMove ⟨player, .c11, b2⟩ m)` over the quantified state — a conserved property"
+      },
+      "name_hint": null
+     },
+     "dead": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run for `Pat` (static scan only)",
+        "constancy probe not run for `wf` (static scan only)",
+        "constancy probe not run for `Goal` (static scan only)"
+       ],
+       "sub_checks": {
+        "a_pattern_satisfiable": true,
+        "a_provenance": "`pat_witness` exhibits the state `⟨.c12, .c11, .c13⟩` satisfying ['Pat', 'wf']",
+        "b_pattern_excludes_goal": true,
+        "b_provenance": "`no_goal_pinned` excludes goal states from the pattern",
+        "c_level_solvable": true,
+        "c_provenance": "`level_is_winnable` exhibits a run from a declared initial state to a state satisfying `Goal`",
+        "goal_pred": "Goal",
+        "pattern_preds": [
+         "Pat",
+         "wf"
+        ]
+       },
+       "why": "§1.2.1-prune (a)-(c) discharged"
+      },
+      "kind": "prune",
+      "kind_basis": {
+       "goal_pred": "Goal",
+       "pattern_preds": [
+        "Pat",
+        "wf"
+       ],
+       "relation": "ReachFrom",
+       "rule": "negative conclusion about `Goal` from ANY state matching ['Pat', 'wf'] — conditional unsolvability, the start state is quantified and constrained",
+       "start": "r",
+       "start_anchor": "quantified"
+      },
+      "name_hint": "prune"
+     },
+     "dead_closed": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run for `wf` (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `wf` established statically only"
+       ],
+       "why": "the invariant `wf` is not constant"
+      },
+      "kind": "invariant",
+      "kind_basis": {
+       "invariant_pred": "wf",
+       "rule": "positive conclusion `wf (applyMove s m)` over the quantified state — a conserved property"
+      },
+      "name_hint": "prune"
+     },
+     "dead_persists": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run for `wf` (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy of `wf` established statically only"
+       ],
+       "why": "the invariant `wf` is not constant"
+      },
+      "kind": "invariant",
+      "kind_basis": {
+       "invariant_pred": "wf",
+       "rule": "positive conclusion `wf s` over the quantified state — a conserved property"
+      },
+      "name_hint": "prune"
+     },
+     "level_is_winnable": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "∃ s : St, ReachFrom s0 s ∧ Goal s = true",
+        "hypotheses": []
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `witness` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (conclusion is an existential — a witness obligation, not a law about the world)"
+      },
+      "kind": "witness",
+      "kind_basis": {
+       "rule": "conclusion is an existential — a witness obligation, not a law about the world"
+      },
+      "name_hint": null
+     },
+     "no_goal_pinned": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "Goal ⟨.c11, b1, b2⟩ = false",
+        "hypotheses": [
+         "Pat ⟨.c11, b1, b2⟩ = true"
+        ]
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `unclassified` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (statement shape outside the fragment §1.2.1 defines a non-vacuity requirement for)"
+      },
+      "kind": "unclassified",
+      "kind_basis": {
+       "conclusion": "Goal ⟨.c11, b1, b2⟩ = false",
+       "rule": "statement shape outside the fragment §1.2.1 defines a non-vacuity requirement for"
+      },
+      "name_hint": "unsolvable"
+     },
+     "pat_no_goal": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "Goal s = false",
+        "hypotheses": [
+         "Pat s = true"
+        ]
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `unclassified` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (statement shape outside the fragment §1.2.1 defines a non-vacuity requirement for)"
+      },
+      "kind": "unclassified",
+      "kind_basis": {
+       "conclusion": "Goal s = false",
+       "rule": "statement shape outside the fragment §1.2.1 defines a non-vacuity requirement for"
+      },
+      "name_hint": null
+     },
+     "pat_pins": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "b1 = .c11",
+        "hypotheses": [
+         "Pat ⟨.c11, b1, .c11⟩ = true"
+        ]
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `unclassified` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (statement shape outside the fragment §1.2.1 defines a non-vacuity requirement for)"
+      },
+      "kind": "unclassified",
+      "kind_basis": {
+       "conclusion": "b1 = .c11",
+       "rule": "statement shape outside the fragment §1.2.1 defines a non-vacuity requirement for"
+      },
+      "name_hint": null
+     },
+     "pat_witness": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": null,
+       "residuals": [],
+       "shape": {
+        "conclusion": "wf ⟨.c12, .c11, .c13⟩ = true ∧ Pat ⟨.c12, .c11, .c13⟩ = true",
+        "hypotheses": []
+       },
+       "why": "§1.2.1 defines no non-vacuity requirement for a `point_claim` assertion — UNCLASSIFIED, not vacuous: E1 did not check this theorem, it is not accusing it (claim about the closed expression `⟨.c12, .c11, .c13⟩` — one state, no §1.2.1 clause covers it)"
+      },
+      "kind": "point_claim",
+      "kind_basis": {
+       "at": "⟨.c12, .c11, .c13⟩",
+       "pred": "wf",
+       "rule": "claim about the closed expression `⟨.c12, .c11, .c13⟩` — one state, no §1.2.1 clause covers it"
+      },
+      "name_hint": null
+     }
+    },
+    "refuted": [],
+    "unclassified": [
+     "level_is_winnable",
+     "no_goal_pinned",
+     "pat_no_goal",
+     "pat_pins",
+     "pat_witness"
+    ]
+   },
+   "evidence": {
+    "books_considered": [
+     {
+      "book": "Control_corner.lean",
+      "label": "failing_obligation",
+      "verdict": "not_attained"
+     },
+     {
+      "book": "Control_pair.lean",
+      "label": "failing_obligation",
+      "verdict": "not_attained"
+     },
+     {
+      "book": "Deadlock_corner.lean",
+      "label": "discharged",
+      "verdict": "attained"
+     },
+     {
+      "book": "Deadlock_pair.lean",
+      "label": "discharged",
+      "verdict": "attained"
+     },
+     {
+      "book": "Ic3_algebraic.lean",
+      "label": "discharged",
+      "verdict": "attained"
+     },
+     {
+      "book": "Ic3_computational.lean",
+      "label": "discharged",
+      "verdict": "attained"
+     }
+    ],
+    "carried_by": "Deadlock_corner.lean",
+    "kind": "lean_source_live",
+    "source": "<repo>\\theory-compiler\\runs\\20260728T080019Z-C4-deadlock-lean\\verify\\Deadlock_corner.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false,
+    "unclassified_theorems": [
+     "level_is_winnable",
+     "no_goal_pinned",
+     "pat_no_goal",
+     "pat_pins",
+     "pat_witness"
+    ]
+   },
+   "game": null,
+   "label": "discharged",
+   "run": "<repo>\\theory-compiler\\runs\\20260728T080019Z-C4-deadlock-lean\\verify",
+   "seconds": 177.5,
+   "verdict": "attained"
+  }
+ ],
+ "targets": 50,
+ "targets_attained": 19,
+ "utc": "2026-08-01T07:00:00Z"
+}
