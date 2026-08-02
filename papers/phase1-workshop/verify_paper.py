@@ -12,7 +12,7 @@ while `PAPER.md` had reached 3,729 lines / 237,872 bytes -- so §7 through §12
 had been audited by nobody, and this file reported PASS (6/6) throughout.
 Check G exists so that the sentence cannot go quietly false again.
 
-Seven checks, each independently reported, exit code 1 if any fails:
+Eight checks, each independently reported, exit code 1 if any fails:
 
   A. GENERATED   `PAPER.md` is byte-identical to `assemble.py`'s output from
                  `sections/*.md`. The header says "do not hand-edit"; this is the
@@ -148,6 +148,49 @@ Seven checks, each independently reported, exit code 1 if any fails:
                  considered and rejected -- it freezes a live draft, and a gate
                  that blocks ordinary work gets switched off.
 
+  H DUALPROXY   The paper describes a **double** proxy, and the evidence
+                 supports **one** of them being validated on real traffic. The
+                 environment proxy has forwarded thousands of authenticated
+                 requests to the live endpoint; the model proxy has completed
+                 zero calls against a real provider -- every one it ever carried
+                 returned 401, because it strips a client's own credential by
+                 design and this repository holds no provider key. §9.3 concedes
+                 exactly that, and §9.2's "66 `bypass_attempt` incidents and 65
+                 consecutive 401s" is the arithmetic the concession rests on.
+
+                 Checks A-G cannot tell that sentence from an inflated one: E
+                 asks only that the block cite something, and it does. So H
+                 recomputes the census with the instrument that produced it --
+                 `verify-lab/dualagent/count.py`, run rather than reimplemented
+                 -- and compares in two modes, which is the load-bearing detail:
+
+                   * **model side, equality.** `theoria-arm/evidence/
+                     model-proxy-401.jsonl` is a closed archive of one
+                     experiment. 65 calls, 65 refusals, 0 successes, 66
+                     incidents. A change there is a change to the finding.
+                   * **environment side, floor.** `theoria-arm/runs/` is
+                     append-only: 924/1009 across 24 ledgers when S32 measured
+                     it, 2529/2620 across 37 two days later, and rising. An
+                     equality would go red the next time anyone plays a leg,
+                     and a gate that reds on the experiment it guards is worse
+                     than no gate. A prose figure below the live one is stale,
+                     which is what an as-of number is; a prose figure *above*
+                     it is the paper claiming traffic that is not in the tree,
+                     and that is the direction H fails on.
+
+                 Absence is graded, and the grading is a ruling rather than an
+                 accident: the two model numbers are **required**, because the
+                 concession is the point and it must not be deletable in
+                 silence; the environment numbers are a **note**, because the
+                 body is under no rule to quote a denominator.
+
+                 What it does not prove is in `check_dualproxy`'s docstring, and
+                 the first item is the one to read: **it reads numbers, not
+                 sentences.** A section that keeps both model numbers and still
+                 asserts both proxies are validated passes H. It makes the
+                 arithmetic un-deletable and un-inflatable; it does not read
+                 English, and nothing in this file does.
+
 Run:  python papers/phase1-workshop/verify_paper.py
       python papers/phase1-workshop/verify_paper.py --quiet   (verdict lines only)
       python papers/phase1-workshop/verify_paper.py --explain-uncited  (E, verbose)
@@ -158,6 +201,7 @@ No network, no API key, no model call, no game spend.
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import os
 import re
 import shutil
@@ -165,6 +209,7 @@ import subprocess
 import sys
 import tempfile
 from pathlib import Path
+from typing import NamedTuple
 
 import audit_stamp
 
@@ -2189,6 +2234,443 @@ def check_bare() -> tuple[bool, list[str]]:
     return not flagged and not stale and not overran, notes
 
 
+# --------------------------------------------------------------------------
+# H DUALPROXY
+# --------------------------------------------------------------------------
+
+#: The dual-proxy census instrument. Another territory's file, read-only here.
+#:
+#: `verify-lab/dualagent/count.py` is S32's answer to the question this check
+#: asks -- it walks `theoria-arm/runs/*/ledger.jsonl` and
+#: `theoria-arm/evidence/model-proxy-401.jsonl` and counts what crossed each
+#: proxy boundary. It is *run*, not reimplemented. Copying its arithmetic into
+#: this file would give a gate that agrees with a copy of the instrument, which
+#: is the one thing a recomputation is supposed to rule out; and the copy would
+#: then drift, silently, in the direction of whatever the paper says.
+DUALPROXY_COUNT = ROOT / "verify-lab" / "dualagent" / "count.py"
+
+
+#: The model proxy's entire recorded history against a **real** provider, as a
+#: closed archive rather than a growing log.
+#:
+#: A3 archived one experiment and it ended, so these are equalities: a change to
+#: either number is a change to the finding, not more of it. Both are pinned the
+#: same way, for the same stated reason, at
+#: `verify-lab/dualagent/tests/test_count.py:213-230`. They are repeated here
+#: because a gate on the paper that only goes red when *another territory's*
+#: suite happens to be run is not a gate on the paper.
+#:
+#: `records_total` (131) is deliberately not pinned here. No sentence in the
+#: body rests on it, and every equality this file adds is another way for
+#: ordinary work elsewhere to red a paper gate.
+MODEL_ARCHIVE = {"model_calls": 65, "bypass_attempts": 66}
+
+#: The environment proxy's traffic as S32 measured it, used as a **floor** and
+#: never as an equality.
+#:
+#: `theoria-arm/runs/` is append-only. The census read 924 live / 1009 total
+#: across 24 ledgers on 2026-07-31 and 2529 / 2620 across 37 on 2026-08-02, and
+#: it rises again every time anyone plays a leg. `== 924` would turn this gate
+#: red on the next arm run, and a gate that reds on ordinary work is a gate
+#: somebody switches off -- the reasoning check D and check E each record for
+#: their own thresholds, and it applies here with the extra force that the work
+#: which reds it is the experiment itself.
+#:
+#: What a floor still catches is the failure that actually matters to a reader:
+#: the instrument reading nothing -- a moved `theoria-arm/`, an emptied runs
+#: directory, a census run from the wrong root -- reported as a clean bill of
+#: health. `0 >= 924` is false, so a collapsed walk is a red rather than a
+#: quiet PASS. Same device as `MIN_SECTIONS` and `MIN_SCANNED` above.
+ENV_FLOOR = {"requests_live_upstream": 924, "requests_total": 1009, "ledgers": 24}
+
+
+def _load_census_module():
+    """Import `DUALPROXY_COUNT` by path, without touching `sys.path`.
+
+    The directory is `verify-lab/`, with a hyphen, so it is not an importable
+    package name and `import dualagent.count` cannot be made to work without
+    editing another territory. `spec_from_file_location` needs neither. The
+    module it loads imports only `json` and `os`: no network, no API key, no
+    model call, which is the promise in this file's header.
+    """
+    spec = importlib.util.spec_from_file_location(
+        "_papers_dualagent_count", DUALPROXY_COUNT)
+    if spec is None or spec.loader is None:
+        raise ImportError(f"no loader for {DUALPROXY_COUNT}")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def dualproxy_census() -> dict:
+    """The census, recomputed live from the ledgers on this checkout.
+
+    Not read from a run record. The numbers in the body were true of the tree on
+    the day they were written; the point of this check is whether they are true
+    of the tree a reader is handed, and a cached census answers the first
+    question while looking like it answered the second.
+
+    Raises on any failure. The caller turns that into a FAIL rather than a
+    skipped check -- see `check_dualproxy`.
+    """
+    return _load_census_module().census()
+
+
+#: Backtick and asterisk, removed before the prose is read.
+#:
+#: Underscore is deliberately absent: it is markdown emphasis *and* it is inside
+#: `bypass_attempt`, and stripping it turns the identifier the claim is about
+#: into two words.
+_PROSE_NOISE = re.compile(r"[`*]")
+
+
+def _flatten(text: str) -> tuple[str, list[int]]:
+    """`(one-line normalised prose, source line number per character)`.
+
+    The claim this check exists for is split across a line break and wrapped in
+    emphasis -- `**66 \\`bypass_attempt\\`` / `incidents and 65 consecutive
+    401s**` -- so a per-line scan cannot see it at all. A whole-file scan can,
+    but then cannot say *where* it is, and a finding a reader cannot locate is
+    most of the way to a finding nobody acts on. Hence the parallel line map:
+    every character emitted remembers the line it came from.
+    """
+    chars: list[str] = []
+    lines: list[int] = []
+    for lineno, raw in enumerate(text.splitlines(), 1):
+        cleaned = re.sub(r"\s+", " ", _PROSE_NOISE.sub(" ", raw)).strip()
+        if not cleaned:
+            continue
+        if chars:
+            chars.append(" ")
+            lines.append(lineno)
+        chars.extend(cleaned)
+        lines.extend([lineno] * len(cleaned))
+    return "".join(chars), lines
+
+
+#: A cardinal, comma-grouped or not, not preceded by a digit or a decimal point.
+#:
+#: Space-grouped thousands are the known gap, and the honest statement of it is
+#: not "they are not read" -- `2 529 requests` is read as **529**, the trailing
+#: group, because that is the run of digits adjacent to the words the claim
+#: pattern needs. Which way that lands is asymmetric and worth knowing:
+#: on the model side it is an equality, so a mis-read is a loud red on a true
+#: sentence; on the environment side it is a floor, so a mis-read is a smaller
+#: number that passes and the claim goes unchecked. Widening this is a real
+#: option -- it was left alone because `\d{1,3}(?:[ ,]\d{3})+` also reads
+#: `65 401s` as one number and recovers only by backtracking, and a pattern
+#: whose correctness rests on backtracking order is worse than a written-down
+#: gap. Pinned in `test_dualproxy_gate.py` so this note cannot go quietly false.
+_CARD = r"(?<![\d.])(\d[\d,]*)"
+
+
+class ProseNumber(NamedTuple):
+    """One number the body may quote, and what the instrument says it is."""
+    tag: str
+    field: tuple[str, str]     # (census block, key)
+    pattern: re.Pattern
+    floor: bool                # True: prose is an as-of floor, `prose <= live`
+    required: bool             # True: absence of it from the body is a FAIL
+    means: str
+
+
+#: Every dual-proxy number the body is allowed to carry, and how it is checked.
+#:
+#: **The two modes are not a stylistic choice.** The model side is a closed
+#: archive and is checked for equality; the environment side grows with every
+#: leg the arm plays and is checked as a floor, in the one direction that can
+#: embarrass the paper -- prose claiming *more* traffic than the instrument can
+#: support. Prose quoting less is a number that was true when it was written and
+#: has since been overtaken, which is what an as-of figure is.
+#:
+#: **Required vs noted.** The two model-side numbers are `required=True`: this
+#: check exists because the evidence supports *one* validated proxy and the body
+#: has to keep saying so, and the sentence carrying that concession cannot be
+#: deleted without the gate noticing. The environment numbers are `required=
+#: False` -- the body may legitimately never quote a denominator, and a check
+#: that demanded one would be inventing a rule the paper never set itself.
+#:
+#: The three environment patterns are latent today: no section quotes any of
+#: them. Landing them empty is the same call check B's `MISCASED`/`LOCAL`/
+#: `UNSHAREABLE` verdicts record -- a hole is cheapest to close while nothing is
+#: standing in it, and this one has a live incentive behind it, since the number
+#: a paper is tempted to round up is the denominator.
+DUALPROXY_CLAIMS = (
+    ProseNumber(
+        tag="model bypass_attempt incidents",
+        field=("model_proxy", "bypass_attempts"),
+        pattern=re.compile(_CARD + r"\s+bypass_attempt\s+incidents?\b"),
+        floor=False, required=True,
+        means="incidents the model proxy raised when a client presented its own "
+              "credential",
+    ),
+    ProseNumber(
+        tag="model 401s",
+        field=("model_proxy", "refused_401"),
+        pattern=re.compile(
+            _CARD + r"\s+(?:consecutive\s+|successive\s+|straight\s+"
+                    r"|unbroken\s+|upstream\s+)*"
+                    r"401(?:s\b|\s+(?:responses|refusals|rejections|statuses)\b)"),
+        floor=False, required=True,
+        means="model calls the provider refused -- the whole recorded history "
+              "of the model proxy against a real provider",
+    ),
+    ProseNumber(
+        tag="env live-upstream requests",
+        field=("env_proxy", "requests_live_upstream"),
+        pattern=re.compile(
+            _CARD + r"\s+(?:(?:requests?|legs?)\s+(?:against|to|through|via)\s+"
+                    r"(?:a\s+|the\s+)?live\s+upstream"
+                    r"|live(?:[- ]upstream)?\s+(?:requests?|legs?))\b"),
+        floor=True, required=False,
+        means="requests the environment proxy forwarded to the real endpoint",
+    ),
+    ProseNumber(
+        tag="env requests total",
+        field=("env_proxy", "requests_total"),
+        pattern=re.compile(
+            _CARD + r"\s+(?:(?:environment|env)[- ]proxy\s+(?:requests?|legs?)"
+                    r"|(?:requests?|legs?)\s+(?:through|across)\s+the\s+"
+                    r"(?:environment|env)\s+proxy)\b"),
+        floor=True, required=False,
+        means="every request the environment proxy handled, live and fixture",
+    ),
+    ProseNumber(
+        tag="env ledgers",
+        field=("env_proxy", "ledgers"),
+        pattern=re.compile(_CARD + r"\s+(?:proxy\s+|arm\s+|run\s+)?ledgers\b"),
+        floor=True, required=False,
+        means="run directories under theoria-arm/runs/ holding a ledger",
+    ),
+)
+
+
+def scan_dualproxy(sections=None, census=None):
+    """Every dual-proxy number in the body, against the recomputed census.
+
+    Returns `(findings, observed, missing)`: failure lines, one
+    `(claim, section, lineno, prose value, live value)` per number found, and
+    the claims no section quotes.
+
+    **The abstract is not exempt here**, and that is a departure from checks E
+    and F worth stating. Their exemption is about *citation* -- an abstract does
+    not carry paths -- and this check is about a number agreeing with an
+    instrument, which an abstract has no exemption from. Exempting it would
+    leave the one section every reader reads as the one place an overclaim is
+    not checked.
+    """
+    sections = SECTIONS if sections is None else sections
+    census = dualproxy_census() if census is None else census
+    findings: list[str] = []
+    observed: list[tuple] = []
+    missing: list[ProseNumber] = []
+
+    flat_sections = []
+    for section in sorted(Path(sections).glob("*.md")):
+        flat, linemap = _flatten(section.read_text(encoding="utf-8"))
+        flat_sections.append((section.name, flat, linemap))
+
+    for claim in DUALPROXY_CLAIMS:
+        live = census.get(claim.field[0], {}).get(claim.field[1])
+        hits = []
+        for name, flat, linemap in flat_sections:
+            for m in claim.pattern.finditer(flat):
+                value = int(m.group(1).replace(",", ""))
+                lineno = linemap[m.start()] if m.start() < len(linemap) else 0
+                hits.append((name, lineno, value))
+        if not hits:
+            missing.append(claim)
+            if claim.required:
+                findings.append(fail(
+                    f"  ABSENT    no section states the {claim.tag}. The body's "
+                    f"one concession that the model proxy was never validated "
+                    f"rests on these numbers ({claim.means}); with the sentence "
+                    f"gone, nothing in the paper or in this gate says the second "
+                    f"proxy carried no traffic. Absence is a failure here, not a "
+                    f"note -- that is the whole point of the check."))
+            continue
+        for name, lineno, value in hits:
+            observed.append((claim, name, lineno, value, live))
+            if not isinstance(live, int):
+                findings.append(fail(
+                    f"  NOFIELD   {name}:{lineno} -- the body states a {claim.tag} "
+                    f"of {value} and the census has no "
+                    f"`{claim.field[0]}.{claim.field[1]}` to check it against. The "
+                    f"instrument changed shape; this check is reading a field that "
+                    f"no longer exists rather than confirming anything."))
+            elif claim.floor:
+                if value > live:
+                    findings.append(fail(
+                        f"  OVERCLAIM {name}:{lineno} -- the body states {value} "
+                        f"({claim.tag}) and the instrument can support only "
+                        f"{live}. This number is checked as an as-of floor "
+                        f"because the ledgers are append-only, so a smaller prose "
+                        f"figure is merely stale -- a larger one is the paper "
+                        f"claiming traffic that is not in the tree."))
+            elif value != live:
+                findings.append(fail(
+                    f"  MISMATCH  {name}:{lineno} -- the body states {value} "
+                    f"({claim.tag}); `verify-lab/dualagent/count.py` recomputes "
+                    f"{live} from `{claim.field[0]}.{claim.field[1]}`. The model "
+                    f"proxy's evidence is a closed archive, so this is an "
+                    f"equality: one of the two is wrong."))
+    return findings, observed, missing
+
+
+def _archive_findings(census: dict) -> list[str]:
+    """The instrument's own numbers, before any prose is read.
+
+    Two separate jobs, and neither is about the paper's wording. The equalities
+    say the closed archive is still the archive the finding was drawn from. The
+    floors say the environment ledgers are still there to be counted -- without
+    them an emptied `theoria-arm/runs/` reads as `0` and, since no section
+    quotes a denominator, every prose comparison above passes over nothing and
+    this check prints PASS on a tree with no evidence in it.
+    """
+    out: list[str] = []
+    model = census.get("model_proxy", {})
+    env = census.get("env_proxy", {})
+    for key, expected in sorted(MODEL_ARCHIVE.items()):
+        got = model.get(key)
+        if got != expected:
+            out.append(fail(
+                f"  ARCHIVE   model_proxy.{key} is {got}, and the finding this "
+                f"paper reports was drawn from {expected}. "
+                f"`theoria-arm/evidence/model-proxy-401.jsonl` is a closed "
+                f"archive of one experiment, not a growing log, so it moving is "
+                f"an event -- re-audit the section before relaxing this."))
+    if model.get("refused_401") != model.get("model_calls"):
+        out.append(fail(
+            f"  NOT-ALL-401 model_proxy has {model.get('model_calls')} model "
+            f"calls and {model.get('refused_401')} of them were refused 401. The "
+            f"paper's sentence is that *every* call the model proxy ever carried "
+            f"was refused; if that stops being true the claim changes shape."))
+    if model.get("succeeded"):
+        out.append(fail(
+            f"  SUCCEEDED model_proxy.succeeded is {model.get('succeeded')}. The "
+            f"model proxy has completed a request against a real provider, which "
+            f"is the fact §9.3 says does not exist. This is good news and it is "
+            f"still a failure of this check: the section has to be rewritten "
+            f"before the gate can be green again."))
+    for key, floor in sorted(ENV_FLOOR.items()):
+        got = env.get(key)
+        if not isinstance(got, int) or got < floor:
+            out.append(fail(
+                f"  UNDERRUN  env_proxy.{key} is {got}; S32 measured {floor} and "
+                f"`theoria-arm/runs/` is append-only, so it cannot fall. Either "
+                f"the ledgers are gone or the census was run against the wrong "
+                f"tree, and in both cases the numbers below were compared against "
+                f"an instrument that read nothing."))
+    return out
+
+
+def check_dualproxy() -> tuple[bool, list[str]]:
+    """H. One proxy is validated on real traffic, and the paper says so.
+
+    §9.2 rests a claim on a number -- "66 `bypass_attempt` incidents and 65
+    consecutive 401s" -- and §9.3 rests the paper's honesty on what that number
+    means: of the two proxies the design calls for, exactly **one** has ever
+    carried real traffic. The environment proxy has forwarded thousands of
+    authenticated requests to the live endpoint. The model proxy has completed
+    **zero** calls against a real provider; every one it ever carried came back
+    401, because it strips a client's own credential by design and this
+    repository holds no provider key. "Two proxies, both validated" would be a
+    sentence the evidence does not support, and nothing in checks A-G could tell
+    the difference between it and the true one -- E asks only that the block
+    cite *something*, and it does.
+
+    So this check recomputes the census with the instrument that produced it and
+    compares, in two different modes, for a reason that is a correctness
+    property and not a preference:
+
+    * **Model side, equality.** A closed archive. See `MODEL_ARCHIVE`.
+    * **Environment side, floor.** Append-only and still growing. See
+      `ENV_FLOOR`. An `==` here would go red the next time anyone plays a leg,
+      and a gate that reds on the experiment it is guarding is worse than no
+      gate.
+
+    **What this does not prove**, stated plainly rather than left to be
+    discovered:
+
+      * **It reads numbers, not sentences.** A section could keep the two model
+        numbers and still assert that both proxies are validated; H would pass
+        it. H makes the arithmetic behind the concession un-deletable and
+        un-inflatable. It does not read English, and no check in this file does.
+      * **The environment patterns are latent.** No section quotes a denominator
+        today, so `env` numbers are reported as a note. A future sentence
+        phrased outside the vocabulary in `DUALPROXY_CLAIMS` is not read rather
+        than failed -- the same shape of hole check F records for
+        `STATUS.md#seal`. Extend the pattern when the sentence lands; do not
+        read the note as "the body quotes no denominator".
+      * **Space-grouped thousands are mis-read, not skipped.** `2 529
+        requests` is read as `529`. On the floor side that is a number too
+        small to fail, so the claim goes unchecked; on the equality side it is
+        a red on a true sentence. See `_CARD`.
+      * **It trusts the instrument.** If `verify-lab/dualagent/count.py` counts
+        the wrong thing, H confirms the paper agrees with it. That instrument's
+        own controls are `verify-lab/dualagent/tests/test_count.py`, and this
+        check is not a substitute for them.
+      * **The census is a live read of this checkout.** On a tree with
+        `theoria-arm/` missing it is the `ENV_FLOOR` underrun, not the prose
+        comparison, that keeps the verdict honest.
+    """
+    notes: list[str] = []
+    try:
+        census = dualproxy_census()
+    except Exception as exc:                     # noqa: BLE001 -- see below
+        # Every failure mode is a red. A check that cannot run its instrument
+        # has not checked anything, and "the instrument was unavailable" must
+        # never be reported the way "the numbers agree" is -- the same rule
+        # MIN_SCANNED and MIN_SECTIONS encode one directory up.
+        return False, [fail(
+            f"  NOCENSUS  could not recompute the census from "
+            f"`verify-lab/dualagent/count.py` ({type(exc).__name__}: {exc}). "
+            f"This check is the only thing standing between the paper and a "
+            f"'two validated proxies' sentence, so an instrument that will not "
+            f"run is a failure and not a skip.")]
+
+    findings = _archive_findings(census)
+    scan_findings, observed, missing = scan_dualproxy(census=census)
+    findings.extend(scan_findings)
+
+    env, model = census.get("env_proxy", {}), census.get("model_proxy", {})
+    notes.append(
+        f"  census: env proxy {env.get('requests_live_upstream')} live / "
+        f"{env.get('requests_total')} total requests across "
+        f"{env.get('ledgers')} ledgers; model proxy {model.get('model_calls')} "
+        f"calls, {model.get('refused_401')} refused 401, "
+        f"{model.get('succeeded')} succeeded, "
+        f"{model.get('bypass_attempts')} bypass_attempt incidents")
+    notes.append(
+        f"  1 of 2 proxies validated on real traffic. Env numbers are floors "
+        f"(theoria-arm/runs/ is append-only, S32 read "
+        f"{ENV_FLOOR['requests_live_upstream']}/{ENV_FLOOR['requests_total']} "
+        f"across {ENV_FLOOR['ledgers']}); model numbers are equalities (closed "
+        f"archive)")
+    notes.append(
+        f"  {len(observed)} dual-proxy number(s) quoted in the body, "
+        f"{len(findings)} finding(s), {len(missing)} of "
+        f"{len(DUALPROXY_CLAIMS)} claim slots not quoted anywhere")
+    notes.extend(findings)
+    for claim, name, lineno, value, live in observed:
+        if claim.floor:
+            notes.append(f"  ok        {name}:{lineno} {claim.tag} = {value}, "
+                         f"an as-of floor under a live {live}")
+        else:
+            notes.append(f"  ok        {name}:{lineno} {claim.tag} = {value}, "
+                         f"recomputed {live}")
+    for claim in missing:
+        if not claim.required:
+            notes.append(
+                f"  note      no section quotes the {claim.tag} (live: "
+                f"{census.get(claim.field[0], {}).get(claim.field[1])}). A gap "
+                f"in coverage, not a defect in the paper: the body is under no "
+                f"rule to quote a denominator, and this check does not invent "
+                f"one. It is a note because the number is unread here, not "
+                f"because it is unimportant.")
+    return not findings, notes
+
+
 #: (tag, blurb, fn, reads_sections).
 #:
 #: The last field exists because the six checks are independent and their
@@ -2207,6 +2689,8 @@ CHECKS = [
     ("F BARE", "no citation is an ambiguous bare filename", check_bare, True),
     ("G AUDITSTAMP", "every audit report pins what it audited, correctly",
      audit_stamp.check, False),
+    ("H DUALPROXY", "one proxy is validated on real traffic, and the body says so",
+     check_dualproxy, True),
 ]
 
 #: The check whose failure makes the other verdicts describe the wrong document.

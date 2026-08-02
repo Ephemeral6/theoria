@@ -1,0 +1,514 @@
+{
+  "env_proxy": {
+    "fixture_runs": 8,
+    "forwarded_true_total": 2620,
+    "ledgers": 37,
+    "live_runs": 29,
+    "live_status_counts": {
+      "-1": 7,
+      "200": 301,
+      "400": 2030,
+      "404": 191
+    },
+    "requests_fixture_upstream": 91,
+    "requests_live_upstream": 2529,
+    "requests_total": 2620,
+    "runs": [
+      {
+        "env_meta": 1,
+        "env_step": 85,
+        "forwarded_true": 86,
+        "requests": 86,
+        "run": "20260728T012311Z-g50t-first-contact-aborted",
+        "status_counts": {
+          "200": 7,
+          "400": 79
+        },
+        "upstream_is_live": true
+      },
+      {
+        "env_meta": 8,
+        "env_step": 0,
+        "forwarded_true": 8,
+        "requests": 8,
+        "run": "20260728T012311Z-g50t-first-contact-salvage",
+        "status_counts": {
+          "404": 8
+        },
+        "upstream_is_live": true
+      },
+      {
+        "env_meta": 10,
+        "env_step": 0,
+        "forwarded_true": 10,
+        "requests": 10,
+        "run": "20260728T012311Z-g50t-first-contact-salvage2",
+        "status_counts": {
+          "200": 1,
+          "404": 9
+        },
+        "upstream_is_live": true
+      },
+      {
+        "env_meta": 1,
+        "env_step": 44,
+        "forwarded_true": 45,
+        "requests": 45,
+        "run": "20260728T014402Z-g50t-first-contact-aborted",
+        "status_counts": {
+          "200": 8,
+          "400": 37
+        },
+        "upstream_is_live": true
+      },
+      {
+        "env_meta": 2,
+        "env_step": 0,
+        "forwarded_true": 2,
+        "requests": 2,
+        "run": "20260728T014402Z-g50t-first-contact-salvage",
+        "status_counts": {
+          "200": 1,
+          "404": 1
+        },
+        "upstream_is_live": true
+      },
+      {
+        "env_meta": 1,
+        "env_step": 40,
+        "forwarded_true": 41,
+        "requests": 41,
+        "run": "20260728T015354Z-g50t-first-contact",
+        "status_counts": {
+          "200": 9,
+          "400": 32
+        },
+        "upstream_is_live": true
+      },
+      {
+        "env_meta": 6,
+        "env_step": 0,
+        "forwarded_true": 6,
+        "requests": 6,
+        "run": "20260728T015354Z-g50t-first-contact-salvage",
+        "status_counts": {
+          "200": 1,
+          "404": 5
+        },
+        "upstream_is_live": true
+      },
+      {
+        "env_meta": 1,
+        "env_step": 146,
+        "forwarded_true": 147,
+        "requests": 147,
+        "run": "20260728T025503Z-g50t-e08-fixed",
+        "status_counts": {
+          "200": 15,
+          "400": 132
+        },
+        "upstream_is_live": true
+      },
+      {
+        "env_meta": 1,
+        "env_step": 92,
+        "forwarded_true": 93,
+        "requests": 93,
+        "run": "20260728T072604Z-E3-sk48-carried",
+        "status_counts": {
+          "200": 11,
+          "400": 82
+        },
+        "upstream_is_live": true
+      },
+      {
+        "env_meta": 20,
+        "env_step": 0,
+        "forwarded_true": 20,
+        "requests": 20,
+        "run": "20260728T072604Z-E3-sk48-carried-salvage",
+        "status_counts": {
+          "200": 1,
+          "404": 19
+        },
+        "upstream_is_live": true
+      },
+      {
+        "env_meta": 30,
+        "env_step": 252,
+        "forwarded_true": 282,
+        "requests": 282,
+        "run": "20260728T083400Z-E3-sk48-carried-v2",
+        "status_counts": {
+          "200": 33,
+          "400": 221,
+          "404": 28
+        },
+        "upstream_is_live": true
+      },
+      {
+        "env_meta": 2,
+        "env_step": 7,
+        "forwarded_true": 9,
+        "requests": 9,
+        "run": "20260728T235841Z-leg01",
+        "status_counts": {
+          "200": 9
+        },
+        "upstream_is_live": false
+      },
+      {
+        "env_meta": 2,
+        "env_step": 7,
+        "forwarded_true": 9,
+        "requests": 9,
+        "run": "20260728T235842Z-leg02",
+        "status_counts": {
+          "200": 9
+        },
+        "upstream_is_live": false
+      },
+      {
+        "env_meta": 2,
+        "env_step": 7,
+        "forwarded_true": 9,
+        "requests": 9,
+        "run": "20260728T235843Z-leg01",
+        "status_counts": {
+          "200": 9
+        },
+        "upstream_is_live": false
+      },
+      {
+        "env_meta": 2,
+        "env_step": 5,
+        "forwarded_true": 7,
+        "requests": 7,
+        "run": "20260729T0030Z-a3-desk-live-proof",
+        "status_counts": {
+          "200": 7
+        },
+        "upstream_is_live": false
+      },
+      {
+        "env_meta": 2,
+        "env_step": 13,
+        "forwarded_true": 15,
+        "requests": 15,
+        "run": "20260729T0035Z-a3-desk-live-proof2",
+        "status_counts": {
+          "200": 15
+        },
+        "upstream_is_live": false
+      },
+      {
+        "env_meta": 1,
+        "env_step": 104,
+        "forwarded_true": 105,
+        "requests": 105,
+        "run": "20260729T004020Z-leg01",
+        "status_counts": {
+          "200": 11,
+          "400": 94
+        },
+        "upstream_is_live": true
+      },
+      {
+        "env_meta": 3,
+        "env_step": 0,
+        "forwarded_true": 3,
+        "requests": 3,
+        "run": "20260729T004020Z-leg01-salvage",
+        "status_counts": {
+          "200": 1,
+          "404": 2
+        },
+        "upstream_is_live": true
+      },
+      {
+        "env_meta": 2,
+        "env_step": 7,
+        "forwarded_true": 9,
+        "requests": 9,
+        "run": "20260729T105653Z-leg01",
+        "status_counts": {
+          "200": 9
+        },
+        "upstream_is_live": false
+      },
+      {
+        "env_meta": 13,
+        "env_step": 34,
+        "forwarded_true": 47,
+        "requests": 47,
+        "run": "20260729T105729Z-leg01",
+        "status_counts": {
+          "200": 8,
+          "400": 28,
+          "404": 11
+        },
+        "upstream_is_live": true
+      },
+      {
+        "env_meta": 3,
+        "env_step": 60,
+        "forwarded_true": 63,
+        "requests": 63,
+        "run": "20260731T1240Z-A3-level2-carried",
+        "status_counts": {
+          "200": 8,
+          "400": 54,
+          "404": 1
+        },
+        "upstream_is_live": true
+      },
+      {
+        "env_meta": 7,
+        "env_step": 99,
+        "forwarded_true": 106,
+        "requests": 106,
+        "run": "20260731T1310Z-A3-level2-carried-r2",
+        "status_counts": {
+          "200": 16,
+          "400": 85,
+          "404": 5
+        },
+        "upstream_is_live": true
+      },
+      {
+        "env_meta": 5,
+        "env_step": 234,
+        "forwarded_true": 239,
+        "requests": 239,
+        "run": "20260731T1430Z-A3-level2-carried-r3",
+        "status_counts": {
+          "200": 36,
+          "400": 200,
+          "404": 3
+        },
+        "upstream_is_live": true
+      },
+      {
+        "env_meta": 4,
+        "env_step": 177,
+        "forwarded_true": 181,
+        "requests": 181,
+        "run": "20260731T1500Z-A3-sk48-carried-l1",
+        "status_counts": {
+          "200": 24,
+          "400": 155,
+          "404": 2
+        },
+        "upstream_is_live": true
+      },
+      {
+        "env_meta": 6,
+        "env_step": 106,
+        "forwarded_true": 112,
+        "requests": 112,
+        "run": "20260731T231654Z-R1-g50t-a",
+        "status_counts": {
+          "200": 16,
+          "400": 92,
+          "404": 4
+        },
+        "upstream_is_live": true
+      },
+      {
+        "env_meta": 12,
+        "env_step": 38,
+        "forwarded_true": 50,
+        "requests": 50,
+        "run": "20260731T231654Z-R1-sk48-b",
+        "status_counts": {
+          "200": 8,
+          "400": 32,
+          "404": 10
+        },
+        "upstream_is_live": true
+      },
+      {
+        "env_meta": 8,
+        "env_step": 132,
+        "forwarded_true": 140,
+        "requests": 140,
+        "run": "20260801T001851Z-R1b-g50t-a",
+        "status_counts": {
+          "200": 28,
+          "400": 106,
+          "404": 6
+        },
+        "upstream_is_live": true
+      },
+      {
+        "env_meta": 41,
+        "env_step": 206,
+        "forwarded_true": 247,
+        "requests": 247,
+        "run": "20260801T001851Z-R1b-sk48-b",
+        "status_counts": {
+          "-1": 2,
+          "200": 7,
+          "400": 200,
+          "404": 38
+        },
+        "upstream_is_live": true
+      },
+      {
+        "env_meta": 1,
+        "env_step": 40,
+        "forwarded_true": 41,
+        "requests": 41,
+        "run": "20260801T043743Z-R2-g50t-a",
+        "status_counts": {
+          "-1": 1,
+          "400": 40
+        },
+        "upstream_is_live": true
+      },
+      {
+        "env_meta": 1,
+        "env_step": 40,
+        "forwarded_true": 41,
+        "requests": 41,
+        "run": "20260801T043743Z-R2-sk48-b",
+        "status_counts": {
+          "200": 1,
+          "400": 40
+        },
+        "upstream_is_live": true
+      },
+      {
+        "env_meta": 2,
+        "env_step": 290,
+        "forwarded_true": 292,
+        "requests": 292,
+        "run": "20260801T044640Z-R2b-g50t-a",
+        "status_counts": {
+          "-1": 2,
+          "200": 32,
+          "400": 258
+        },
+        "upstream_is_live": true
+      },
+      {
+        "env_meta": 41,
+        "env_step": 52,
+        "forwarded_true": 93,
+        "requests": 93,
+        "run": "20260801T044640Z-R2b-sk48-b",
+        "status_counts": {
+          "-1": 2,
+          "200": 11,
+          "400": 42,
+          "404": 38
+        },
+        "upstream_is_live": true
+      },
+      {
+        "env_meta": 6,
+        "env_step": 21,
+        "forwarded_true": 27,
+        "requests": 27,
+        "run": "a3-gate-mock",
+        "status_counts": {
+          "200": 27
+        },
+        "upstream_is_live": false
+      },
+      {
+        "env_meta": 2,
+        "env_step": 4,
+        "forwarded_true": 6,
+        "requests": 6,
+        "run": "audit-smoke",
+        "status_counts": {
+          "200": 6
+        },
+        "upstream_is_live": false
+      },
+      {
+        "env_meta": 1,
+        "env_step": 0,
+        "forwarded_true": 1,
+        "requests": 1,
+        "run": "preflight-20260728T012031Z",
+        "status_counts": {
+          "200": 1
+        },
+        "upstream_is_live": true
+      },
+      {
+        "env_meta": 3,
+        "env_step": 18,
+        "forwarded_true": 21,
+        "requests": 21,
+        "run": "preflight-20260728T012057Z",
+        "status_counts": {
+          "200": 3,
+          "400": 17,
+          "404": 1
+        },
+        "upstream_is_live": true
+      },
+      {
+        "env_meta": 2,
+        "env_step": 5,
+        "forwarded_true": 7,
+        "requests": 7,
+        "run": "preflight-20260728T074237Z",
+        "status_counts": {
+          "200": 3,
+          "400": 4
+        },
+        "upstream_is_live": true
+      }
+    ]
+  },
+  "excluded": [
+    {
+      "path": "arc-recon/data/recon_ledger.jsonl",
+      "proxy_legs": 0,
+      "records": 1273,
+      "why_excluded": "arc-recon/client.py talks to the upstream directly with its own key"
+    },
+    {
+      "path": "baseline-arms/ledger.jsonl",
+      "proxy_legs": 0,
+      "records": 656,
+      "why_excluded": "baseline-arms' own client format; no proxy `http` leg on any record"
+    }
+  ],
+  "headline": {
+    "env_proxy_requests_live": 2529,
+    "env_proxy_requests_total": 2620,
+    "model_proxy_fixture_succeeded": 0,
+    "model_proxy_model_calls": 65,
+    "model_proxy_requests": 131,
+    "model_proxy_succeeded": 0
+  },
+  "model_proxy": {
+    "bypass_attempts": 66,
+    "bypass_headers": [
+      "authorization"
+    ],
+    "incidents": 66,
+    "model_calls": 65,
+    "records_total": 131,
+    "refused_401": 65,
+    "status_counts": {
+      "401": 65
+    },
+    "succeeded": 0
+  },
+  "model_proxy_fixture": {
+    "arms": [],
+    "gitignored": true,
+    "model_calls": 0,
+    "models": [],
+    "present": false,
+    "records_total": 0,
+    "status_counts": {},
+    "succeeded": 0
+  }
+}

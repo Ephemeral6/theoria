@@ -1,0 +1,13 @@
+[PASS] H DUALPROXY -- one proxy is validated on real traffic, and the body says so
+  census: env proxy 2529 live / 2620 total requests across 37 ledgers; model proxy 65 calls, 65 refused 401, 0 succeeded, 66 bypass_attempt incidents
+  1 of 2 proxies validated on real traffic. Env numbers are floors (theoria-arm/runs/ is append-only, S32 read 924/1009 across 24); model numbers are equalities (closed archive)
+  2 dual-proxy number(s) quoted in the body, 0 finding(s), 3 of 5 claim slots not quoted anywhere
+  ok        09_preflight.md:102 model bypass_attempt incidents = 66, recomputed 66
+  ok        09_preflight.md:103 model 401s = 65, recomputed 65
+  note      no section quotes the env live-upstream requests (live: 2529). A gap in coverage, not a defect in the paper: the body is under no rule to quote a denominator, and this check does not invent one. It is a note because the number is unread here, not because it is unimportant.
+  note      no section quotes the env requests total (live: 2620). A gap in coverage, not a defect in the paper: the body is under no rule to quote a denominator, and this check does not invent one. It is a note because the number is unread here, not because it is unimportant.
+  note      no section quotes the env ledgers (live: 37). A gap in coverage, not a defect in the paper: the body is under no rule to quote a denominator, and this check does not invent one. It is a note because the number is unread here, not because it is unimportant.
+
+--- negative control: test_dualproxy_gate.py ---
+..........................                                               [100%]
+26 passed in 1.54s

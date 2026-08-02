@@ -1,0 +1,30 @@
+[1/3] classify the directories under papers/
+   --    runs (provenance, not a paper)
+   FAIL  case-studies: no PAPER.md, and not named in NOT_PAPERS
+   FAIL  related-work: no PAPER.md, and not named in NOT_PAPERS
+   ok    1 paper(s): phase1-workshop
+[2/3] run the gate each paper ships
+   FAIL  phase1-workshop/verify_paper.py exited 1
+ed @ 0c173e22 (93.9% of `papers/phase1-workshop/PAPER.md` as it now is), superseded by CITECHECK-2026-08-01.md
+  ok        CITECHECK-2026-08-01.md -- binding on `papers/phase1-workshop/PAPER.md` @ cec3bd3e, 4057 lines, 260623 bytes
+  ok        CITECHECK.md -- stale, pinned @ 4208b69c (29.1% of `papers/phase1-workshop/PAPER.md` as it now is), superseded by CITECHECK-2026-07-30.md
+  ok        REVIEW-2026-07-30.md -- stale, pinned @ 6b633fcc (91.3% of `papers/phase1-workshop/PAPER.md` as it now is), superseded by REVIEW-2026-07-31.md
+  ok        REVIEW-2026-07-31.md -- stale, pinned @ 0c173e22 (93.9% of `papers/phase1-workshop/PAPER.md` as it now is), superseded by REVIEW-2026-08-01.md
+  ok        REVIEW-2026-08-01.md -- binding on `papers/phase1-workshop/PAPER.md` @ cec3bd3e, 4057 lines, 260623 bytes
+  ok        REVIEW.md -- stale, pinned @ 4208b69c (29.1% of `papers/phase1-workshop/PAPER.md` as it now is), superseded by REVIEW-2026-07-30.md
+[PASS] H DUALPROXY -- one proxy is validated on real traffic, and the body says so
+  census: env proxy 2529 live / 2620 total requests across 37 ledgers; model proxy 65 calls, 65 refused 401, 0 succeeded, 66 bypass_attempt incidents
+  1 of 2 proxies validated on real traffic. Env numbers are floors (theoria-arm/runs/ is append-only, S32 read 924/1009 across 24); model numbers are equalities (closed archive)
+  2 dual-proxy number(s) quoted in the body, 0 finding(s), 3 of 5 claim slots not quoted anywhere
+  ok        09_preflight.md:102 model bypass_attempt incidents = 66, recomputed 66
+  ok        09_preflight.md:103 model 401s = 65, recomputed 65
+  note      no section quotes the env live-upstream requests (live: 2529). A gap in coverage, not a defect in the paper: the body is under no rule to quote a denominator, and this check does not invent one. It is a note because the number is unread here, not because it is unimportant.
+  note      no section quotes the env requests total (live: 2620). A gap in coverage, not a defect in the paper: the body is under no rule to quote a denominator, and this check does not invent one. It is a note because the number is unread here, not because it is unimportant.
+  note      no section quotes the env ledgers (live: 37). A gap in coverage, not a defect in the paper: the body is under no rule to quote a denominator, and this check does not invent one. It is a note because the number is unread here, not because it is unimportant.
+
+verify_paper: FAIL (3/8) -- C FIGDATA, E UNCITED, F BARE
+
+[3/3] run the suite that shows those gates can go red
+   FAIL  pytest exited 1: 1 failed, 10 passed in 4.57s
+
+papers: RED (4 problem(s))

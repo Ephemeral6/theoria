@@ -229,4 +229,7 @@ def test_every_check_declares_whether_it_reads_sections():
         assert len(entry) == 4, entry
         assert isinstance(entry[3], bool), entry
     reads = {tag for tag, _, _, r in vp.CHECKS if r}
-    assert reads == {"B PATHS", "E UNCITED", "F BARE"}, reads
+    # H reads sections/ for the same reason B, E and F do, and carries the same
+    # caveat when A fails: the numbers it checked came out of the sections, not
+    # out of the PAPER.md a reader is handed.
+    assert reads == {"B PATHS", "E UNCITED", "F BARE", "H DUALPROXY"}, reads

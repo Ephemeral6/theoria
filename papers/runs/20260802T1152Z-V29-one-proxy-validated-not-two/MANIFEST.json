@@ -1,0 +1,122 @@
+{
+  "api_calls": 0,
+  "base_commit": "9e478dd8",
+  "baseline": {
+    "none_fixed_here": true,
+    "papers_verify": "RED, 4 problems, at 9e478dd8 before this branch",
+    "problems": [
+      "case-studies: no PAPER.md",
+      "related-work: no PAPER.md",
+      "verify_paper: FAIL (3/7) -- C FIGDATA, E UNCITED, F BARE",
+      "pytest exited 1: 1 failed, 10 passed"
+    ],
+    "why_it_matters": "adding a check to an already-failing gate means the gate's colour is not evidence about this work; only the named check and its negative control are"
+  },
+  "branch": "agent/v29-one-proxy-validated-not-two",
+  "census_as_S32_wrote_it_20260731": {
+    "env_ledgers": 24,
+    "env_requests_fixture_upstream": 85,
+    "env_requests_live_upstream": 924,
+    "env_requests_total": 1009,
+    "model_bypass_attempts": 66,
+    "model_calls": 65,
+    "model_refused_401": 65,
+    "model_succeeded": 0,
+    "note": "the four env figures are stale and the four model figures are bit-stable; the verdict (b) is unchanged and strengthened. This is why the gate compares env as a floor and model for equality."
+  },
+  "census_measured": {
+    "env_ledgers": 37,
+    "env_requests_fixture_upstream": 91,
+    "env_requests_live_upstream": 2529,
+    "env_requests_total": 2620,
+    "model_bypass_attempts": 66,
+    "model_calls": 65,
+    "model_refused_401": 65,
+    "model_succeeded": 0
+  },
+  "evidence_read_not_written": [
+    {
+      "path": "verify-lab/dualagent/count.py",
+      "sha256": "sha256:dd40a2631054350915279f36dc271a44d5e11656e2b14eab55164fbc8fe9fdce"
+    },
+    {
+      "path": "verify-lab/DUAL_PROXY.md",
+      "sha256": "sha256:b1dc17856a9237afc395807487cb4aa242e40d2b778f55af06247ff977fadd6b"
+    },
+    {
+      "path": "papers/phase1-workshop/sections/09_preflight.md",
+      "sha256": "sha256:b18e8d60c79e3f0a45c725e76d30681312887d5320b8b7c482b55e8ac740386c"
+    },
+    {
+      "path": "papers/phase1-workshop/PAPER.md",
+      "sha256": "sha256:cec3bd3e35bae4572b1dedc6b35128443c76adfc48e12f4e0298a08d07057c08"
+    },
+    {
+      "path": "monitor/inbox/20260731T1800Z-S32-to-RES-2-one-proxy-validated-not-two.md",
+      "sha256": "sha256:6dca034d1dd3ad0c265e908a70438a0e2b274b21775954e977f73a1486f5c70b"
+    },
+    {
+      "path": "monitor/CHARTER.md",
+      "sha256": "sha256:c6d1aca3f2288a2a4d81da6477292ad78899c50f8984db17acf5b4a48fd30314"
+    }
+  ],
+  "files": [
+    {
+      "path": "papers/phase1-workshop/verify_paper.py",
+      "sha256": "sha256:729c49faaf54f104833dde7620f69a967cadf974851045fb3537754fc72955e5"
+    },
+    {
+      "path": "papers/phase1-workshop/test_dualproxy_gate.py",
+      "sha256": "sha256:243c4eba0ce9e177f9a41a482a5de4f566c018b22e1049dfeab5a0d7007cff16"
+    },
+    {
+      "path": "papers/runs/20260802T1152Z-V29-one-proxy-validated-not-two/NOTES.md",
+      "sha256": "sha256:8b34233127572d6a3e46490bc5ea83bba40693da635db610fb5df2b30a27b40d"
+    },
+    {
+      "path": "papers/runs/20260802T1152Z-V29-one-proxy-validated-not-two/RUN_STATE.md",
+      "sha256": "sha256:403388c7083553219122d533fa36ebe2645bcd33c78d4b38a74abd8013cea6bc"
+    },
+    {
+      "path": "papers/runs/20260802T1152Z-V29-one-proxy-validated-not-two/baseline_verify.txt",
+      "sha256": "sha256:9527cfed0577ddadf755b3c9475f46b7cd345f691b8b8bdfcf728f892d51e45a"
+    },
+    {
+      "path": "papers/runs/20260802T1152Z-V29-one-proxy-validated-not-two/after_verify.txt",
+      "sha256": "sha256:11c5e9a7a88bbb8da6aa08a188f4d3336e19c8907a04b8c6c2cec029aabd4907"
+    },
+    {
+      "path": "papers/runs/20260802T1152Z-V29-one-proxy-validated-not-two/census.json",
+      "sha256": "sha256:59d2e4deb2a6a763dcd248abf79003a14f6f0d6b6867aab762f87d4150874b78"
+    },
+    {
+      "path": "papers/runs/20260802T1152Z-V29-one-proxy-validated-not-two/make_manifest.py",
+      "sha256": "sha256:8e1fe9df8a53c80f3eee6246afe0bd7e509c3ca85b21fac8eb6bbc68af65f071"
+    },
+    {
+      "path": "monitor/inbox/20260802T1200Z-W-9203-to-RES-2-the-v29-gate-is-built-and-S32s-numbers-have-moved.md",
+      "sha256": "sha256:238e13c4acd8e52bcd9ba1225edb01817b5588a792d8ee26698e9172f95018b2"
+    }
+  ],
+  "head_commit": "9e478dd81b880a8b9053d65185e80e3e590f0077",
+  "network": "none",
+  "prompt": "the paper's 'dual proxy' is supported by evidence for one and a half; make the numbers checkable rather than copied",
+  "prompt_id": "V29-one-proxy-validated-not-two",
+  "reproduce": [
+    "python -c \"import sys;sys.path.insert(0,'verify-lab/dualagent');import count,json;print(json.dumps(count.census(),indent=2,sort_keys=True))\"",
+    "cd papers/phase1-workshop && python verify_paper.py",
+    "cd papers && python -m pytest phase1-workshop/test_dualproxy_gate.py -q",
+    "python papers/verify.py"
+  ],
+  "scope": {
+    "charter": "monitor/CHARTER.md:22-28 -- W-* may \u6539\u4ee3\u7801 inside the assigned territory, may not \u5199\u8bba\u6587\u6b63\u6587",
+    "delivered": "the gate: papers/ checks its dual-proxy numbers against verify-lab/dualagent/count.py, with a negative control that mutates the instrument",
+    "not_delivered": "the WP2 prose. monitor/CHARTER.md:22-28 reserves writing the paper's body text to RES-2; handed over in monitor/inbox/ with paste-ready text"
+  },
+  "sealed_pile_contact": "none",
+  "seed": null,
+  "spend_usd": 0.0,
+  "territory": "papers",
+  "utc": "2026-08-02T11:51:51Z",
+  "worker": "W-9203"
+}
