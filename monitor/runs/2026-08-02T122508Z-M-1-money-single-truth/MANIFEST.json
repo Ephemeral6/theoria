@@ -1,0 +1,97 @@
+{
+  "artifacts": {
+    "monitor/INCIDENTS.md": {
+      "bytes": 7504,
+      "sha256": "1de787b26c1d08d3b58d5373040f458e45a42237cffba2ebdeeaf04da4724a7c"
+    },
+    "monitor/inbox/20260802T1240Z-monitor-to-freeze-9-2-cannot-be-cleared-a-one-token-tautology-passes.md": {
+      "bytes": 4311,
+      "sha256": "43e8a58e16aa3d78735ae0ac1779faab6b6679083fe5c004b434b1aa655f6774"
+    },
+    "monitor/inbox/20260802T1245Z-monitor-to-theoria-arm-three-money-records-to-correct.md": {
+      "bytes": 4300,
+      "sha256": "e4dce6f5360dc947171f29c8ef16fb53d6fddc44e3f7e892c2129837c744a3ec"
+    },
+    "monitor/loop_state.json": {
+      "bytes": 11787,
+      "sha256": "6500a5cec5c62f09fff155fe7f9037fa79ea520b9258258a835070b52bd3cb4f"
+    },
+    "monitor/money.json": {
+      "bytes": 10304,
+      "sha256": "bc9640cf5fe90d5ba7fe8aa57edfe948497fcdf62ef569d5abc3402cb37991b0"
+    },
+    "monitor/runs/2026-08-02T122508Z-M-1-money-single-truth/NOTES.md": {
+      "bytes": 4248,
+      "sha256": "4f696ed45b3f282675145997cd1b840773944983e698a524ca6a3c254603a5c2"
+    },
+    "monitor/runs/2026-08-02T122508Z-M-1-money-single-truth/RUN_STATE.md": {
+      "bytes": 11430,
+      "sha256": "e22f2e8f0ce06f18a331b3589e941759dc629fab52a5d66a91f23f7a61145caa"
+    },
+    "monitor/runs/2026-08-02T122508Z-M-1-money-single-truth/results.json": {
+      "bytes": 1145,
+      "sha256": "1103009ff04e9ea0f026c9140f9470b9a1745cf6ef0e1eb3ce1dba7e9c208c86"
+    },
+    "monitor/scan.py": {
+      "bytes": 176287,
+      "sha256": "cf40144b71e97f8b307c8ff15a2a4a7b1d1394f89bee761a98236639299f126c"
+    },
+    "monitor/spec.py": {
+      "bytes": 123612,
+      "sha256": "2523e645c7de35df00fe72da99329dc02f6357212fed098c49a50551faf52e45"
+    },
+    "monitor/tests/test_money_register.py": {
+      "bytes": 12185,
+      "sha256": "16e3d5ebf1033f62070c81def0866b4f30d0925d0c9189354c3829045acd9474"
+    }
+  },
+  "base_commit": "d10788f752b7561720b9078371717512cf2f6b10",
+  "branch": "agent/m-1-money-single-truth",
+  "determinism": "No stochastic step; seed is null.",
+  "prompt": null,
+  "prompt_id": "M-1",
+  "results": {
+    "gates": {
+      "boundary": "1/1 green -- nothing outside monitor/",
+      "monitor_suite": {
+        "baseline": "525 passed, 2 xfailed",
+        "command": "python -m pytest monitor/tests -q",
+        "delta": "+9 tests, still green",
+        "exit": 0,
+        "result": "534 passed, 2 xfailed"
+      },
+      "sealed": "2/2 green with --allow on 3 pre-existing paths (disclosed); raw run flagged them file-level, my added lines contain zero sealed ids",
+      "secret": "5/5 green -- no secret value in 13093 tracked files"
+    },
+    "money": {
+      "B_crossed": {
+        "during": "20260801T001851Z-R1b-sk48-b",
+        "line": 16346,
+        "utc": "2026-08-01T00:48:42.766Z"
+      },
+      "G1_crossed": {
+        "during": "20260731T231654Z-R1-g50t-a",
+        "line": 16157,
+        "utc": "2026-07-31T23:54:45.969Z"
+      },
+      "R2": 0.0,
+      "R2b": 39.0392,
+      "dev_pile_B_cap": 60.0,
+      "dev_pile_B_measured": 129.0326,
+      "pct_of_cap": 215,
+      "per_game": {
+        "ar25": 0.0,
+        "g50t": 71.4784,
+        "sk48": 57.5542
+      },
+      "pool_basis": "spend + price_correction",
+      "pool_ceiling_source": "proxy/spend_policy.json",
+      "pool_charged": 160.948
+    }
+  },
+  "run_dir": "monitor/runs/2026-08-02T122508Z-M-1-money-single-truth",
+  "seed": null,
+  "t": "2026-08-02T12:48:30Z",
+  "tests": "monitor suite 534 passed, 2 xfailed, exit 0 (baseline 525 passed / 2 xfailed at base d10788f7; +9 tests). Guards: sealed 2/2 with a disclosed --allow on 3 pre-existing paths, secret 5/5, boundary 1/1.",
+  "title": "M-1: money gets a single source of truth, and the register acquires a test that can turn it red"
+}
