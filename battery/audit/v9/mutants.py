@@ -288,10 +288,16 @@ def _call(idx: int, price, turn=None, tokens=1000) -> Call:
 
 
 def _priced_run(prices, steps=6) -> Run:
+    # `turn=i` is one call per turn, stated rather than inferred.  These are D3
+    # mutants -- price completeness -- and not one of them is about the turn
+    # axis, so the axis has to be present and uninteresting for the price gate
+    # to be what is under test.  Through S46 `turn_costs()` manufactured this
+    # same labelling from the call's position; now that the fallback is gone,
+    # the fixture says out loud what it always meant.
     return Run(run_id="m", arm="m", source="v9",
                steps=[Step(idx=i, action="a", state_key="s%d" % i)
                       for i in range(steps)],
-               calls=[_call(i, p) for i, p in enumerate(prices)])
+               calls=[_call(i, p, turn=i) for i, p in enumerate(prices)])
 
 
 def mutant_D3_all_priced() -> Mutant:

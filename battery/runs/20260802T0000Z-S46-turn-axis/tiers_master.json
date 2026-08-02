@@ -1,0 +1,202 @@
+{
+  "label": "master",
+  "mutants_accepted_not_ok": [],
+  "mutants_disagreeing": [],
+  "mutants_total": 37,
+  "n_demoted": 38,
+  "n_reference": 38,
+  "tiers": {
+    "E1": "reference",
+    "E2": "reference",
+    "E3": "reference",
+    "E4": "reference",
+    "E5": "reference",
+    "E6": "reference",
+    "E7": "reference",
+    "K1": "reference",
+    "K10": "reference",
+    "K11": "reference",
+    "K12": "reference",
+    "K13": "reference",
+    "K14": "reference",
+    "K2": "reference",
+    "K3": "reference",
+    "K4": "reference",
+    "K5": "reference",
+    "K6": "reference",
+    "K7": "reference",
+    "K8": "reference",
+    "K9": "reference",
+    "M1": "reference",
+    "M2": "reference",
+    "M3": "reference",
+    "M4": "reference",
+    "M5": "reference",
+    "M6": "reference",
+    "P1": "reference",
+    "P2": "reference",
+    "P3": "reference",
+    "P4": "reference",
+    "P5": "reference",
+    "X1": "reference",
+    "X2": "reference",
+    "X3": "reference",
+    "X4": "reference",
+    "X5": "reference",
+    "X6": "reference"
+  },
+  "v9_demotions": {
+    "E1": {
+      "attack": "cache-flag",
+      "value": 6.0
+    },
+    "E2": {
+      "attack": "batched-turn-label",
+      "value": 0.973387097
+    },
+    "E3": {
+      "attack": "batched-turn-label",
+      "value": 0.024390244
+    },
+    "E4": {
+      "attack": "compaction-sawtooth",
+      "value": 0.0
+    },
+    "E5": {
+      "attack": "step-spam",
+      "value": 2.5e-05
+    },
+    "E6": {
+      "attack": "partial-logging",
+      "value": 3000.0
+    },
+    "E7": {
+      "attack": "compaction-sawtooth",
+      "value": 0.0
+    },
+    "K1": {
+      "attack": "hollow",
+      "value": 1.0
+    },
+    "K10": {
+      "attack": "counter",
+      "value": 1000000.0
+    },
+    "K11": {
+      "attack": "bookkeeping",
+      "value": 1000.0
+    },
+    "K12": {
+      "attack": "clause-tag",
+      "value": 1.0
+    },
+    "K13": {
+      "attack": "empty-repair",
+      "value": 0.0
+    },
+    "K14": {
+      "attack": "censor",
+      "value": 4096.0
+    },
+    "K2": {
+      "attack": "frame-string",
+      "value": 1.0
+    },
+    "K3": {
+      "attack": "duplicates",
+      "value": 250.0
+    },
+    "K4": {
+      "attack": "single-annotated",
+      "value": 1.0
+    },
+    "K5": {
+      "attack": "alphabet",
+      "value": 140.0
+    },
+    "K6": {
+      "attack": "mean-hides",
+      "value": 399808.0
+    },
+    "K7": {
+      "attack": "sign",
+      "value": 1000.0
+    },
+    "K8": {
+      "attack": "one-probe",
+      "value": 1.0
+    },
+    "K9": {
+      "attack": "counter",
+      "value": 100000.0
+    },
+    "M1": {
+      "attack": "survivorship",
+      "value": 0.0
+    },
+    "M2": {
+      "attack": "single",
+      "value": 1.0
+    },
+    "M3": {
+      "attack": "\u2014",
+      "value": null
+    },
+    "M4": {
+      "attack": "instant",
+      "value": 0.0
+    },
+    "M5": {
+      "attack": "one-detected",
+      "value": 1.0
+    },
+    "M6": {
+      "attack": "dial",
+      "value": 1.0
+    },
+    "P1": {
+      "attack": "failure-free-by-omission",
+      "value": 60.0
+    },
+    "P2": {
+      "attack": "boundary-lie",
+      "value": 200.0
+    },
+    "P3": {
+      "attack": "counter-keys",
+      "value": 0.0
+    },
+    "P4": {
+      "attack": "failed-steps-are-free",
+      "value": 0.05
+    },
+    "P5": {
+      "attack": "flag-only",
+      "value": 1.0
+    },
+    "X1": {
+      "attack": "counter-in-key",
+      "value": 0.0
+    },
+    "X2": {
+      "attack": "failed-curtain",
+      "value": 1.0
+    },
+    "X3": {
+      "attack": "explore-then-jam",
+      "value": 1.0
+    },
+    "X4": {
+      "attack": "dilute-the-stall",
+      "value": 0.04
+    },
+    "X5": {
+      "attack": "label-dial",
+      "value": 500.0
+    },
+    "X6": {
+      "attack": "round-robin",
+      "value": 1.0
+    }
+  }
+}

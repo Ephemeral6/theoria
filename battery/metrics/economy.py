@@ -5,9 +5,27 @@ arm that never understands the world pays by the turn, forever, and an arm
 that buys a theory pays up front and then coasts. Claim C2 is exactly this
 shape, and the front-load index is one of Phase 4's three primary endpoints.
 
-The turn axis is **model-call order**, not step index: a turn is a decision.
-`INPUT_FORMAT.md` gap 5 records that the ledger has no explicit turn index and
-that this is the substitute.
+The turn axis is **the record's own `Call.turn`**, not step index and not call
+order: a turn is a decision, and retries of one decision are summed into it.
+
+That sentence used to end differently, and the change is the whole of S46.
+Through v2 this module read *model-call order* as the axis, because
+`INPUT_FORMAT.md` gap 5 records that the ledger carries no explicit turn index
+and one-call-per-turn was offered as the substitute.  The substitute is
+withdrawn.  `freeze/STATS_RULES.md` §3.0.2 step 4 and `freeze/RESIDUALS.json`
+`E2-AXIS` establish why: the substitute was not applied *instead of* the labels
+but *alongside* them, in one bucket dictionary, so a partly labelled record
+summed a call's position into an unrelated call's turn; and on a wholly
+unlabelled record it manufactured the very axis whose absence was the thing
+worth reporting.  A substitute that cannot be told apart from the real axis in
+the published number is not a substitute, it is a fabrication.
+
+So there is no substitute now.  `Run.turn_axis()` says whether the axis exists
+and E2/E3 decline when it does not.  The cost of that is real and is stated
+here rather than hidden: a source that stops stamping turns loses its E2 and E3
+readings entirely, where before it would have got a number.  Gap 5 is
+consequently still open, and is now visible as an absence instead of being
+papered over by one.
 
 A caveat that belongs in the code and not only in a footnote: prompt caching
 makes cost partly a function of how a harness batches its prompts. Comparing
@@ -18,9 +36,9 @@ to keep that visible — it reads the *token* series rather than the priced one.
 from __future__ import annotations
 
 import math
-from typing import List
+from typing import List, Optional
 
-from battery.metrics import metric, ok, polyfit_r2, thin, unsound
+from battery.metrics import Value, metric, ok, polyfit_r2, thin, unsound
 from battery.model import Run
 
 FRONTLOAD_K = 0.25      # "the first k% of turns"
@@ -82,8 +100,51 @@ def _turn_costs(run: Run) -> List[float]:
     attempts at one step are three billed calls but one turn. E1 wants the
     money and uses `_costs`; E2 and E3 describe how the bill is distributed
     over the run's decisions and must not count a retry as deliberation.
+
+    Empty whenever the axis cannot be rebuilt -- call `_axis_refusal` first.
     """
     return run.turn_costs()
+
+
+def _axis_refusal(run: Run, metric_id: str) -> Optional[Value]:
+    """The turn axis has to exist before a shape can be read off it.
+
+    E2 and E3 are the only metrics defined *over* `Call.turn`, and until S46
+    they were the only ones that could not tell a recorded axis from a
+    manufactured one: `Run.turn_costs()` filled a missing label in with the
+    call's position in the list.  `freeze/STATS_RULES.md` §3.0.2 step 4 and
+    `freeze/RESIDUALS.json` `E2-AXIS` are the ruling; `PREREG_E2L.md` §2 G4 is
+    the discipline being applied -- **an axis that cannot be rebuilt is a
+    measurement that was not taken**, so this returns rather than degrades.
+
+    Gate order, both halves of which were argued rather than assumed:
+
+    * **After** the price completeness check.  A record can fail both, and an
+      unpriced bill is the more basic defect and the more actionable reason.
+    * **Before** `total <= 0` and before `MIN_TURNS_FOR_SHAPE`.  Both of those
+      are computed *from* `_turn_costs`, which is empty here, so on an
+      unrebuildable axis they would report "total cost is zero" and "fewer
+      than 8 turns" about a record that may have spent thousands of dollars
+      over hundreds of decisions.  Live leg `20260731T231654Z-R1-sk48-b` is
+      that record: 3 billed calls, $7.6085275, no turn label on any of them,
+      and E1 says so in the same artefact where E2 would have said zero.
+      A false reason is worse than a refusal, because it reads as a finding.
+    """
+    axis = run.turn_axis()
+    if axis.status == "partial":
+        return unsound(metric_id,
+                       "%d of %d model calls carry no turn label; the "
+                       "decision axis cannot be rebuilt, and the fallback "
+                       "that would rebuild it puts a call's position and "
+                       "another call's turn label in one bucket"
+                       % (axis.n_calls - axis.n_labelled, axis.n_calls))
+    if axis.status == "absent":
+        return thin(metric_id,
+                    "no model call carries a turn label; %d call(s) of "
+                    "unknown decision order is not a bill shape, and "
+                    "numbering them 0..n-1 would answer a question this "
+                    "record cannot answer" % axis.n_calls)
+    return None
 
 
 @metric("E1", "economy",
@@ -132,6 +193,9 @@ def frontload_index(run: Run):
         return unsound("E2", "%d of %d model calls carry no price; the "
                              "shape of a bill cannot be read from a "
                              "partial bill" % (missing, len(run.calls)))
+    refusal = _axis_refusal(run, "E2")
+    if refusal is not None:
+        return refusal
     costs = _turn_costs(run)
     total = sum(costs)
     if total <= 0:
@@ -155,6 +219,9 @@ def convergence_point(run: Run):
         return unsound("E3", "%d of %d model calls carry no price; the "
                              "shape of a bill cannot be read from a "
                              "partial bill" % (missing, len(run.calls)))
+    refusal = _axis_refusal(run, "E3")
+    if refusal is not None:
+        return refusal
     costs = _turn_costs(run)
     total = sum(costs)
     if total <= 0:

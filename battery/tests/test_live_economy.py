@@ -145,6 +145,41 @@ def test_the_turn_cost_curve_sums_to_the_bill(fresh):
         assert curve[-1]["share_cumulative"] == 1.0
 
 
+def test_spend_that_has_no_shape_is_named_rather_than_left_as_an_empty_curve(
+        fresh):
+    """S46. An empty curve is not self-explaining, so it does not stand alone.
+
+    `20260731T231654Z-R1-sk48-b` bills three calls for $7.6085275 and carries
+    no turn label on any of them.  Its `turn_cost_curve_of_record` is `[]` --
+    byte-identical to the curve of a leg that never called a model -- and E2
+    and E3 decline.  Without this list the money would be readable only as an
+    absence, which is the reading `freeze/RESIDUALS.json` `E2-AXIS` exists to
+    stop: 看不出钱少了一截.
+    """
+    rows = {r["leg"]: r for r in fresh["spend_with_no_shape"]}
+    assert rows, "at least one live leg carries unlabelled billed calls"
+    for slug, row in rows.items():
+        leg = fresh["legs"][slug]
+        assert leg["turn_cost_curve_of_record"] == []
+        assert leg["turn_axis"]["status"] == row["axis"]
+        assert row["axis"] in ("absent", "partial")
+        assert row["unshaped_usd"] > 0, slug
+        assert row["reason"]
+        # The money is not lost, only shapeless: E1 still states it.
+        assert leg["economy_of_record"]["E1"]["value"] == pytest.approx(
+            row["unshaped_usd"])
+        for mid in ("E2", "E3"):
+            cell = leg["economy_of_record"][mid]
+            assert cell["status"] != "ok"
+            assert cell["value"] is None
+            assert "total cost is zero" not in cell.get("reason", "")
+
+    # Every leg that made calls and is not on this list must have a curve.
+    for slug, leg in fresh["legs"].items():
+        if leg["billed_calls"] and slug not in rows:
+            assert leg["turn_axis"]["status"] == "exact"
+
+
 def test_the_constraint_is_stated_inside_the_artifact(fresh):
     assert "not confirmations" in fresh["constraint"]
     assert "PREDICTIONS.md" in fresh["constraint"]

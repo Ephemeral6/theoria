@@ -1,4 +1,5 @@
 {
+  "axis_caveat": "每一个前载数字都带着同一个缺陷。E2 的分桶轴是 `Call.turn`——记录方写下的一个标签，而跨臂的回合标签约定在冻结包里没有被钉死；`freeze/STATS_RULES.md` §3.0 据此把前载终点撤出确证家族。S46 拿掉了`Run.turn_costs()` 里那条把枚举下标与真实标签装进同一个桶的回落，所以轴不可重建时 E2/E3 拒答而不再换轴；但**降级不修指标**，轴的效度问题在探索性读数上照样存在。E2L 换的是步轴，不受 `Call.turn` 约束，然而它自己也已被 `first-turn-bill-coherent` 刷到 1.0，并且下面每一条腿的 `join_confidence` 都随数一起带着。`freeze/RESIDUALS.json` 的 `E2-AXIS` 与 `E2-BACK` 收着这两笔。",
   "definition": "share of a run's total model cost billed in the first 25% of its steps, interpolated at the boundary; cost is attributed to `Call.step_idx`, never to `Call.turn`",
   "direction": "higher",
   "gates": {
@@ -6,10 +7,12 @@
     "G2": "total cost <= 0 -> thin",
     "G3": "fewer than 8 steps -> thin",
     "G4": "any priced call without a step_idx -> unsound; no fallback to call order",
-    "G5": "fewer than 2 new states after the head -> thin"
+    "G5": "fewer than 2 new states after the head -> thin",
+    "G6": "curves.json does not certify that it accounts for the leg's billed calls and dollars -> unsound; added by S46, after the numbers were seen, and it only ever refuses (PREREG_V9 R1's safe direction). See PREREG_E2L.md 修订 1"
   },
   "live_legs": [
     {
+      "accounts_for_the_bill": true,
       "anchored_priced_rows": 0,
       "game_id": "g50t-5849a774",
       "join_confidence": "exact",
@@ -22,6 +25,7 @@
       "value": null
     },
     {
+      "accounts_for_the_bill": true,
       "actions_taken": 13,
       "anchored_priced_rows": 3,
       "axis_break_even_steps": 24.0,
@@ -40,6 +44,7 @@
       "value": 0.0
     },
     {
+      "accounts_for_the_bill": true,
       "actions_taken": 33,
       "anchored_priced_rows": 8,
       "axis_break_even_steps": 24.0,
@@ -58,6 +63,7 @@
       "value": 0.11568504200415154
     },
     {
+      "accounts_for_the_bill": true,
       "actions_taken": 21,
       "anchored_priced_rows": 4,
       "axis_break_even_steps": 24.0,
@@ -76,36 +82,33 @@
       "value": 0.0
     },
     {
-      "actions_taken": 13,
+      "accounts_for_the_bill": false,
       "anchored_priced_rows": 2,
-      "axis_break_even_steps": 24.0,
-      "axis_margin_steps": 11.0,
-      "first_priced_step": 6,
       "game_id": "g50t-5849a774",
-      "head_steps": 2.75,
       "join_confidence": "exact",
       "leg": "20260731T231654Z-R1-g50t-a",
       "priced_rows": 2,
-      "reason": "share of cost billed in the first 25% of 11 step(s)",
-      "status": "ok",
-      "steps": 11,
+      "reason": "curves.json does not certify that it accounts for the leg's billed calls and dollars, so its 7.603420 USD total is this join's total and not this leg's, and neither a zero nor a share may be read off it",
+      "status": "unsound",
       "total_usd": 7.6034195,
       "turn_rows": 10,
-      "value": 0.0
+      "value": null
     },
     {
+      "accounts_for_the_bill": false,
       "anchored_priced_rows": 0,
       "game_id": "sk48-d8078629",
       "join_confidence": "degraded",
       "leg": "20260731T231654Z-R1-sk48-b",
       "priced_rows": 0,
-      "reason": "total cost is zero",
-      "status": "thin",
+      "reason": "curves.json does not certify that it accounts for the leg's billed calls and dollars, so its 0.000000 USD total is this join's total and not this leg's, and neither a zero nor a share may be read off it",
+      "status": "unsound",
       "total_usd": 0.0,
       "turn_rows": 2,
       "value": null
     },
     {
+      "accounts_for_the_bill": true,
       "actions_taken": 25,
       "anchored_priced_rows": 6,
       "axis_break_even_steps": 24.0,
@@ -124,6 +127,7 @@
       "value": 0.06493421232218083
     },
     {
+      "accounts_for_the_bill": true,
       "actions_taken": 5,
       "anchored_priced_rows": 2,
       "axis_break_even_steps": 24.0,
@@ -142,6 +146,7 @@
       "value": 0.0
     },
     {
+      "accounts_for_the_bill": true,
       "actions_taken": 29,
       "anchored_priced_rows": 7,
       "axis_break_even_steps": 24.0,
@@ -160,6 +165,7 @@
       "value": 0.08395913142332316
     },
     {
+      "accounts_for_the_bill": true,
       "actions_taken": 9,
       "anchored_priced_rows": 3,
       "axis_break_even_steps": 24.0,
@@ -260,7 +266,6 @@
       "20260731T1310Z-A3-level2-carried-r2",
       "20260731T1430Z-A3-level2-carried-r3",
       "20260731T1500Z-A3-sk48-carried-l1",
-      "20260731T231654Z-R1-g50t-a",
       "20260801T001851Z-R1b-g50t-a",
       "20260801T001851Z-R1b-sk48-b",
       "20260801T044640Z-R2b-g50t-a",
@@ -271,7 +276,11 @@
       "sk48-d8078629"
     ],
     "min_attainable_p": null,
-    "n_evaluable": 8,
+    "n_evaluable": 7,
+    "n_evaluable_by_join_confidence": {
+      "degraded": 6,
+      "exact": 1
+    },
     "n_paired_games": 0,
     "verdict": "no-data: the endpoint is a paired difference and there is no control arm on any of these games, so the number of pairs is 0 and no amount of Theoria-side replication changes it"
   },

@@ -405,3 +405,57 @@ passable by an empty tree. The blind must contain no post-attack vocabulary
 registered leak — K2's `thin()` string carrying `39960` and "3 adversarial
 gaps" (`BLINDING.md` §3.7). A rebuild missing the known leak is not the tree
 the attackers saw either.
+
+
+### D-B-024 · An axis that cannot be rebuilt is a measurement that was not taken
+
+`Run.turn_costs()` used to fill a missing `Call.turn` in with the call's
+position in the list, and put that position into the same bucket dictionary as
+the real labels.  Two defects in one line.  The loud one: a *partly* labelled
+record summed the unlabelled call at position 7 into the bucket of the call
+genuinely labelled `turn=7`.  The quiet one, and the worse one: a *wholly*
+unlabelled record was renumbered `0..n-1` and scored, so a record that could not
+answer the question answered it anyway.
+
+`freeze` found it, ruled on it in `STATS_RULES.md` §3.0.2 step 4, registered it
+as `RESIDUALS.json` `E2-AXIS`, and sent it here rather than editing our code.
+S46 is the answer.
+
+**The decision that needed arguing is not "refuse the partly labelled record"
+— that is the ticket — it is "refuse the wholly unlabelled one too."**  This
+module's own header used to declare one-call-per-turn as E2's axis, on the
+authority of `INPUT_FORMAT.md` gap 5: the ledger carries no turn index, so
+call order is the substitute.  Refusing the unlabelled record withdraws that
+substitute, and costs any future source that stops stamping turns its E2 and E3
+readings outright.  It is still right, because the substitute was never applied
+*instead of* the labels — it was applied *alongside* them, in one key space,
+and a substitute that cannot be told apart from the real axis in the published
+number is not a substitute but a fabrication.  The header now says so, and gap 5
+is visible as an absence instead of being papered over by one.
+
+Two things make this a repair rather than a change of口径, and both were
+measured before anything was edited rather than argued afterwards:
+
+* **Every priced call in every loadable ledger already carries a `step_idx`**,
+  so the fallback was reachable but never load-bearing.  4028 metric cells were
+  compared against master one by one: **none moved.**
+* **`v9_demotions()` recomputes against the live metric**, so a gate that made
+  a V9 attack stop landing would *promote* a metric, which `PREREG_V9.md` R1
+  forbids outright.  Measured: 38 demotions before, 38 after, zero tier moves.
+  The V9 mutants and the exploit fixtures that meant "one call per turn" were
+  re-expressed to say it (`turn=i`) rather than to infer it from the fallback;
+  their registered verdicts and every asserted number are unchanged.
+
+The refusal is split so the reason stays useful: `partial` is `unsound` (the
+record claims an axis and does not supply one, and `incoherent record:` is the
+grep handle for that), `absent` is `thin` (nothing contradicts itself; the axis
+was simply never written down).  No fourth status was invented — `Value`'s three
+are a contract the artefacts are written against.
+
+The gate sits **after** the price check and **before** `total <= 0` and
+`MIN_TURNS_FOR_SHAPE`, because those two are computed from the empty list and
+would otherwise report "total cost is zero" about a leg that spent real money.
+That is not hypothetical: `20260731T231654Z-R1-sk48-b` bills three calls for
+$7.6085275 with no turn label on any of them, and E1 states the money in the
+same artefact where E2 would have stated a zero.  **A false reason is worse
+than a refusal, because it reads as a finding.**

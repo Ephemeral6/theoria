@@ -1098,6 +1098,7 @@
       "pile": "dev",
       "source": "theoria-arm-live",
       "steps": 104,
+      "turn_axis": "no-calls",
       "turns": null
     },
     "20260729T105729Z-leg01": {
@@ -1344,6 +1345,7 @@
       "pile": "dev",
       "source": "theoria-arm-live",
       "steps": 34,
+      "turn_axis": "no-calls",
       "turns": null
     },
     "20260731T1240Z-A3-level2-carried": {
@@ -1610,6 +1612,7 @@
       "pile": "dev",
       "source": "theoria-arm-live",
       "steps": 60,
+      "turn_axis": "no-calls",
       "turns": null
     },
     "20260731T1310Z-A3-level2-carried-r2": {
@@ -1903,6 +1906,7 @@
       "pile": "dev",
       "source": "theoria-arm-live",
       "steps": 99,
+      "turn_axis": "exact",
       "turns": 3
     },
     "20260731T1430Z-A3-level2-carried-r3": {
@@ -2203,6 +2207,7 @@
       "pile": "dev",
       "source": "theoria-arm-live",
       "steps": 234,
+      "turn_axis": "exact",
       "turns": 8
     },
     "20260731T1500Z-A3-sk48-carried-l1": {
@@ -2496,6 +2501,7 @@
       "pile": "dev",
       "source": "theoria-arm-live",
       "steps": 177,
+      "turn_axis": "exact",
       "turns": 4
     },
     "20260731T231654Z-R1-g50t-a": {
@@ -2780,6 +2786,7 @@
       "pile": "dev",
       "source": "theoria-arm-live",
       "steps": 106,
+      "turn_axis": "exact",
       "turns": 2
     },
     "20260731T231654Z-R1-sk48-b": {
@@ -2797,12 +2804,12 @@
           "value": 7.6085275
         },
         "E2": {
-          "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+          "reason": "no model call carries a turn label; 3 call(s) of unknown decision order is not a bill shape, and numbering them 0..n-1 would answer a question this record cannot answer",
           "status": "insufficient-data",
           "value": null
         },
         "E3": {
-          "reason": "fewer than 8 turns; the same early-exit confound as E2",
+          "reason": "no model call carries a turn label; 3 call(s) of unknown decision order is not a bill shape, and numbering them 0..n-1 would answer a question this record cannot answer",
           "status": "insufficient-data",
           "value": null
         },
@@ -3055,7 +3062,8 @@
       "pile": "dev",
       "source": "theoria-arm-live",
       "steps": 38,
-      "turns": 3
+      "turn_axis": "absent",
+      "turns": null
     },
     "20260801T001851Z-R1b-g50t-a": {
       "arm": "theoria",
@@ -3349,6 +3357,7 @@
       "pile": "dev",
       "source": "theoria-arm-live",
       "steps": 132,
+      "turn_axis": "exact",
       "turns": 6
     },
     "20260801T001851Z-R1b-sk48-b": {
@@ -3639,6 +3648,7 @@
       "pile": "dev",
       "source": "theoria-arm-live",
       "steps": 206,
+      "turn_axis": "exact",
       "turns": 2
     },
     "20260801T043743Z-R2-g50t-a": {
@@ -3886,6 +3896,7 @@
       "pile": "dev",
       "source": "theoria-arm-live",
       "steps": 40,
+      "turn_axis": "no-calls",
       "turns": null
     },
     "20260801T043743Z-R2-sk48-b": {
@@ -4133,6 +4144,7 @@
       "pile": "dev",
       "source": "theoria-arm-live",
       "steps": 40,
+      "turn_axis": "no-calls",
       "turns": null
     },
     "20260801T044640Z-R2b-g50t-a": {
@@ -4427,6 +4439,7 @@
       "pile": "dev",
       "source": "theoria-arm-live",
       "steps": 290,
+      "turn_axis": "exact",
       "turns": 7
     },
     "20260801T044640Z-R2b-sk48-b": {
@@ -4721,6 +4734,7 @@
       "pile": "dev",
       "source": "theoria-arm-live",
       "steps": 52,
+      "turn_axis": "exact",
       "turns": 3
     }
   },

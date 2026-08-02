@@ -118,7 +118,7 @@ def test_D3_an_unpriced_call_is_not_a_free_one():
 def test_D3_a_genuinely_free_call_is_priced_at_zero_and_still_counts():
     run = Run(run_id="t", arm="a", source="v9",
               steps=[Step(idx=0, action="a", state_key="s")],
-              calls=[Call(idx=i, cost_usd=(1.0 if i < 4 else 0.0))
+              calls=[Call(idx=i, turn=i, cost_usd=(1.0 if i < 4 else 0.0))
                      for i in range(40)])
     assert evaluate(run)["E1"].value == 4.0
     assert evaluate(run)["E2"].ok
@@ -127,14 +127,14 @@ def test_D3_a_genuinely_free_call_is_priced_at_zero_and_still_counts():
 def test_D3_a_complete_flat_bill_still_scores_a_quarter():
     run = Run(run_id="t", arm="a", source="v9",
               steps=[Step(idx=0, action="a", state_key="s")],
-              calls=[Call(idx=i, cost_usd=1.0) for i in range(40)])
+              calls=[Call(idx=i, turn=i, cost_usd=1.0) for i in range(40)])
     assert evaluate(run)["E2"].value == 0.25
 
 
 def test_D3_leaves_the_token_axis_alone():
     """E4 and E7 read tokens, not money, and must be untouched by D3."""
     run = Run(run_id="t", arm="a", source="v9",
-              calls=[Call(idx=i, input_tokens=100 * i, cost_usd=None,
+              calls=[Call(idx=i, turn=i, input_tokens=100 * i, cost_usd=None,
                           prompt_chars=400 * i) for i in range(1, 20)])
     assert evaluate(run)["E4"].ok
     assert evaluate(run)["E7"].ok

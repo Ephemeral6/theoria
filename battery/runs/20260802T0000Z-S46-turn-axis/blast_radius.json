@@ -1,0 +1,13 @@
+{
+  "axis_today": {
+    "exact": 99,
+    "no-priced-calls": 7
+  },
+  "axis_without_fabrication": {
+    "exact": 99,
+    "no-priced-calls": 7
+  },
+  "moved": [],
+  "n_runs": 106,
+  "ok_cells_today": 1656
+}

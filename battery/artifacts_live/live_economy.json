@@ -186,14 +186,14 @@
       "leg": "20260731T231654Z-R1-sk48-b",
       "metric": "E2",
       "note": "absence carries its reason and is never a zero",
-      "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+      "reason": "no model call carries a turn label; 3 call(s) of unknown decision order is not a bill shape, and numbering them 0..n-1 would answer a question this record cannot answer",
       "status": "insufficient-data"
     },
     {
       "leg": "20260731T231654Z-R1-sk48-b",
       "metric": "E3",
       "note": "absence carries its reason and is never a zero",
-      "reason": "fewer than 8 turns; the same early-exit confound as E2",
+      "reason": "no model call carries a turn label; 3 call(s) of unknown decision order is not a bill shape, and numbering them 0..n-1 would answer a question this record cannot answer",
       "status": "insufficient-data"
     },
     {
@@ -360,7 +360,7 @@
         "exact_turns": 1,
         "leg": "20260731T231654Z-R1-sk48-b",
         "of_record_source": "unjoined: curves.json counts 0 billed call(s), the ledger has 3",
-        "of_record_turns": 3
+        "of_record_turns": 0
       },
       {
         "exact_turns": 2,
@@ -559,6 +559,11 @@
       },
       "steps": 104,
       "successful_actions": 10,
+      "turn_axis": {
+        "calls": 0,
+        "labelled_calls": 0,
+        "status": "no-calls"
+      },
       "turn_cost_curve_exact": null,
       "turn_cost_curve_of_record": []
     },
@@ -639,6 +644,11 @@
       },
       "steps": 34,
       "successful_actions": 6,
+      "turn_axis": {
+        "calls": 0,
+        "labelled_calls": 0,
+        "status": "no-calls"
+      },
       "turn_cost_curve_exact": null,
       "turn_cost_curve_of_record": []
     },
@@ -727,6 +737,11 @@
       },
       "steps": 60,
       "successful_actions": 6,
+      "turn_axis": {
+        "calls": 0,
+        "labelled_calls": 0,
+        "status": "no-calls"
+      },
       "turn_cost_curve_exact": null,
       "turn_cost_curve_of_record": []
     },
@@ -894,6 +909,11 @@
       },
       "steps": 99,
       "successful_actions": 14,
+      "turn_axis": {
+        "calls": 5,
+        "labelled_calls": 5,
+        "status": "exact"
+      },
       "turn_cost_curve_exact": [
         {
           "share_cumulative": 0.329694234,
@@ -1118,6 +1138,11 @@
       },
       "steps": 234,
       "successful_actions": 34,
+      "turn_axis": {
+        "calls": 8,
+        "labelled_calls": 8,
+        "status": "exact"
+      },
       "turn_cost_curve_exact": [
         {
           "share_cumulative": 0.115685042,
@@ -1384,6 +1409,11 @@
       },
       "steps": 177,
       "successful_actions": 22,
+      "turn_axis": {
+        "calls": 9,
+        "labelled_calls": 9,
+        "status": "exact"
+      },
       "turn_cost_curve_exact": [
         {
           "share_cumulative": 0.209763707,
@@ -1580,6 +1610,11 @@
       },
       "steps": 106,
       "successful_actions": 14,
+      "turn_axis": {
+        "calls": 4,
+        "labelled_calls": 4,
+        "status": "exact"
+      },
       "turn_cost_curve_exact": [
         {
           "share_cumulative": 0.217140327,
@@ -1628,12 +1663,12 @@
           "value": 7.6085275
         },
         "E2": {
-          "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+          "reason": "no model call carries a turn label; 3 call(s) of unknown decision order is not a bill shape, and numbering them 0..n-1 would answer a question this record cannot answer",
           "status": "insufficient-data",
           "value": null
         },
         "E3": {
-          "reason": "fewer than 8 turns; the same early-exit confound as E2",
+          "reason": "no model call carries a turn label; 3 call(s) of unknown decision order is not a bill shape, and numbering them 0..n-1 would answer a question this record cannot answer",
           "status": "insufficient-data",
           "value": null
         },
@@ -1754,6 +1789,11 @@
       },
       "steps": 38,
       "successful_actions": 6,
+      "turn_axis": {
+        "calls": 3,
+        "labelled_calls": 0,
+        "status": "absent"
+      },
       "turn_cost_curve_exact": [
         {
           "share_cumulative": 1.0,
@@ -1762,26 +1802,7 @@
           "usd_cumulative": 7.6085275
         }
       ],
-      "turn_cost_curve_of_record": [
-        {
-          "share_cumulative": 0.389278609,
-          "turn": 0,
-          "usd": 2.961837,
-          "usd_cumulative": 2.961837
-        },
-        {
-          "share_cumulative": 0.759473959,
-          "turn": 1,
-          "usd": 2.8166415,
-          "usd_cumulative": 5.7784785
-        },
-        {
-          "share_cumulative": 1.0,
-          "turn": 2,
-          "usd": 1.830049,
-          "usd_cumulative": 7.6085275
-        }
-      ]
+      "turn_cost_curve_of_record": []
     },
     "20260801T001851Z-R1b-g50t-a": {
       "adapter_turn_join": {
@@ -1950,6 +1971,11 @@
       },
       "steps": 132,
       "successful_actions": 26,
+      "turn_axis": {
+        "calls": 9,
+        "labelled_calls": 9,
+        "status": "exact"
+      },
       "turn_cost_curve_exact": [
         {
           "share_cumulative": 0.08657895,
@@ -2190,6 +2216,11 @@
       },
       "steps": 206,
       "successful_actions": 6,
+      "turn_axis": {
+        "calls": 6,
+        "labelled_calls": 6,
+        "status": "exact"
+      },
       "turn_cost_curve_exact": [
         {
           "share_cumulative": 0.67482734,
@@ -2299,6 +2330,11 @@
       },
       "steps": 40,
       "successful_actions": 0,
+      "turn_axis": {
+        "calls": 0,
+        "labelled_calls": 0,
+        "status": "no-calls"
+      },
       "turn_cost_curve_exact": null,
       "turn_cost_curve_of_record": []
     },
@@ -2382,6 +2418,11 @@
       },
       "steps": 40,
       "successful_actions": 0,
+      "turn_axis": {
+        "calls": 0,
+        "labelled_calls": 0,
+        "status": "no-calls"
+      },
       "turn_cost_curve_exact": null,
       "turn_cost_curve_of_record": []
     },
@@ -2553,6 +2594,11 @@
       },
       "steps": 290,
       "successful_actions": 30,
+      "turn_axis": {
+        "calls": 9,
+        "labelled_calls": 9,
+        "status": "exact"
+      },
       "turn_cost_curve_exact": [
         {
           "share_cumulative": 0.083959131,
@@ -2805,6 +2851,11 @@
       },
       "steps": 52,
       "successful_actions": 10,
+      "turn_axis": {
+        "calls": 6,
+        "labelled_calls": 6,
+        "status": "exact"
+      },
       "turn_cost_curve_exact": [
         {
           "share_cumulative": 0.264817629,
@@ -3280,12 +3331,12 @@
           "value": 7.6085275
         },
         "E2_frontload_index": {
-          "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+          "reason": "no model call carries a turn label; 3 call(s) of unknown decision order is not a bill shape, and numbering them 0..n-1 would answer a question this record cannot answer",
           "status": "insufficient-data",
           "value": null
         },
         "E3_convergence_point": {
-          "reason": "fewer than 8 turns; the same early-exit confound as E2",
+          "reason": "no model call carries a turn label; 3 call(s) of unknown decision order is not a bill shape, and numbering them 0..n-1 would answer a question this record cannot answer",
           "status": "insufficient-data",
           "value": null
         },
@@ -3407,5 +3458,15 @@
   "reading": "E2 is a share of the bill spent in the first quarter of the turn axis, interpolated, so a perfectly flat bill scores 0.250 at every run length -- read a value near 0.25 as `no front-loading detected`, not as `a quarter of the money`. E3 is the fraction of turns needed to reach 90% of the bill, so 1.0 means the bill was still climbing when the run stopped. Both require at least 8 decision turns (battery/metrics/economy.py MIN_TURNS_FOR_SHAPE) and both are `reference` tier under the V9 audit, so neither may carry an ordering claim.",
   "runs_root": "theoria-arm/runs",
   "source": "theoria-arm-live",
+  "spend_with_no_shape": [
+    {
+      "axis": "absent",
+      "calls": 3,
+      "labelled_calls": 0,
+      "leg": "20260731T231654Z-R1-sk48-b",
+      "reason": "0 of 3 call(s) carry a turn label, so the decision axis cannot be rebuilt, the curve is empty and E2/E3 decline; the 7.608528 USD billed over those calls was spent, and is reported here rather than left to be read off an empty curve as zero",
+      "unshaped_usd": 7.6085275
+    }
+  ],
   "what": "the 经济 (economy) family of the frozen battery, evaluated on the live Theoria arm's committed leg archives on two axes: the reading of record (battery.adapters.theoria_live, whose turn join degrades to one-call-per-turn when the archive publishes none) and the archive's exact call_idx->turn join read from bill_shape.json. The metric bodies are the frozen ones, imported; only the axis differs. No timestamp on purpose: for a fixed tree this file is byte-reproducible."
 }

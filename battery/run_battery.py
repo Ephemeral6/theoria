@@ -200,6 +200,10 @@ def spectrum(runs: Sequence[Run],
             "failed_steps": sum(1 for s in run.steps if s.failed),
             "model_calls": len(run.calls),
             "turns": len(run.turn_costs()) or None,
+            # `turns: null` alone cannot say whether the run made no decision
+            # or made decisions it did not label, and those are different
+            # facts about different records (S46).
+            "turn_axis": run.turn_axis().status,
             "repairs": len(run.repairs),
             "metrics": {mid: value.as_dict()
                         for mid, value in sorted(values[run.run_id].items())},

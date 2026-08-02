@@ -216,17 +216,30 @@ def test_G3_refuses_a_short_run_and_admits_an_eight_step_one():
     assert frontload.frontload_step_index(just_long)["status"] == "ok"
 
 
-def test_G4_refuses_the_fallback_that_decides_E2():
-    """The gate this metric exists for.
+def test_G4_and_E2_now_both_refuse_the_unlabelled_axis():
+    """The gate this metric exists for -- and the contrast that has gone.
 
-    The same run scores a number under E2 -- because `turn_costs()` falls back
-    to one call per turn when the label is missing -- and is refused by E2L.
+    Through S45 this test pinned a *disagreement*: the same unlabelled run
+    scored a number under E2, because `Run.turn_costs()` fell back to the
+    call's position in the list whenever `Call.turn` was missing, while E2L's
+    G4 refused it outright. That contrast is what motivated E2L.
+
+    S46 removed the fallback (`freeze/RESIDUALS.json` `E2-AXIS`), so the
+    demonstration no longer exists to be made: the record that E2L refuses on
+    `step_idx` is now refused by E2 as well, on the turn label. The new fact
+    worth pinning is the agreement -- both halves of the axis question say no
+    to the same record, and neither manufactures an axis to answer it.
+
+    The E2L half is unchanged from the original test on purpose; only E2's
+    half moved.
     """
     run = Run(run_id="x", arm="a", source="t", steps=_steps(20),
               calls=[Call(idx=i, step_idx=None,
                           cost_usd=(1.0 if i == 0 else 0.0))
                      for i in range(20)])
-    assert evaluate(run)["E2"].status == "ok"
+    value = evaluate(run)["E2"]
+    assert value.status == "insufficient-data"
+    assert "turn label" in value.reason
     reading = frontload.frontload_step_index(run)
     assert reading["status"] == "unsound"
     assert "step_idx" in reading["reason"]
@@ -331,17 +344,53 @@ def test_process_1_has_no_pairs(legs):
     """More evaluable legs do not buy a pair, which is the whole point.
 
     `n_evaluable` was 3 when this was written; eight new theoria-arm legs
-    (R1/R1b/R2/R2b x g50t/sk48) have landed since, so 10 legs are read and 8
-    evaluate.  The verdict is unchanged and cannot be moved by replication on
-    this side: the endpoint is a paired difference and there is still no
-    control arm on any of these games, so `n_paired_games` stays 0.
+    (R1/R1b/R2/R2b x g50t/sk48) have landed since, so 10 legs are read.  Eight
+    evaluated until S46 added G6, which refuses a leg whose `curves.json` does
+    not certify that it accounts for the leg's billed calls and dollars; the
+    two R1 legs do not, so seven evaluate now.  The verdict is unchanged and
+    cannot be moved by replication on this side: the endpoint is a paired
+    difference and there is still no control arm on any of these games, so
+    `n_paired_games` stays 0 whatever `n_evaluable` does.
     """
     material = frontload.paired_material(list(legs.values()))
-    assert material["n_evaluable"] == 8
+    assert material["n_evaluable"] == 7
     assert material["n_paired_games"] == 0
     assert material["control_arm_legs"] == 0
     assert material["min_attainable_p"] is None
     assert material["verdict"].startswith("no-data")
+    # The count may not be read as that many clean legs: six of the seven
+    # rebuilt their step axis from a join the archive itself calls degraded.
+    assert material["n_evaluable_by_join_confidence"] == {
+        "degraded": 6, "exact": 1}
+
+
+def test_a_curve_that_does_not_account_for_the_bill_is_not_a_zero(legs):
+    """G6 (S46). The defect S46 was opened for, one artefact further on.
+
+    `20260731T231654Z-R1-sk48-b` published `total cost is zero` for a leg the
+    proxy ledger bills three calls and $7.6085275 for: its `curves.json`
+    totals $0.00 over two rows claiming zero model calls, and G2 reported that
+    sum as a fact about the leg.  `20260731T231654Z-R1-g50t-a` is the milder
+    form -- it read `ok` at 0.0 off a curve $0.005 short of the ledger.
+    Neither certifies `accounts_for_every_billed_call`, and neither may be
+    read as a number now.
+    """
+    for slug in ("20260731T231654Z-R1-sk48-b", "20260731T231654Z-R1-g50t-a"):
+        leg = legs[slug]
+        assert leg["accounts_for_the_bill"] is False
+        assert leg["status"] == "unsound"
+        assert leg["value"] is None
+        assert "does not certify" in leg["reason"]
+        assert "total cost is zero" not in leg["reason"]
+
+    # And the gate is on the money, not on the join: every leg whose curve does
+    # account for the bill keeps its reading, including the six whose turn
+    # spine the archive calls degraded. Refusing those would convert readings
+    # that point against C2 into silence after seeing which way they point,
+    # which `freeze/STATS_RULES.md` §8 seals off.
+    kept = [r for r in legs.values()
+            if r.get("join_confidence") == "degraded" and r["status"] == "ok"]
+    assert len(kept) == 6
 
 
 def test_the_artefact_is_byte_reproducible(tmp_path):
