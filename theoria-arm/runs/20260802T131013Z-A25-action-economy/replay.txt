@@ -1,0 +1,26 @@
+A25 counterfactual -- the same recorded money, a different cadence
+  the number to beat is 78: 78 is the number to beat: g50t level 1's own `level_baseline_actions`, recorded in runs/20260728T012311Z-g50t-first-contact-salvage2/ledger.jsonl. The best recorded leg reached 33.
+
+  control fidelity: 71/73 recorded adjudications reproduced
+    the control refuses 2 recorded adjudication(s). Every one of them is on a leg that ran BEFORE the gate existed: MIN_NEW_FRAMES_BETWEEN_THEORIZE landed in 6717a7e0 at 2026-07-28T02:01Z, and 20260728T015354Z-g50t-first-contact started at 01:53Z -- eight minutes earlier. It is the leg whose one-action-per-adjudication behaviour the constant was written to stop, so a control that refuses its calls is the control working, not the control drifting.
+
+  policy                fire  skip       usd      acts   acts/$    @cap     vs
+  actions-unit            70     3    140.54       206   1.4658    36.6   1.04
+  adaptive                64     9    140.54       194   1.3804    34.5   0.98
+  floor-12                24    49     31.07       158   5.0857   127.1  3.611
+  floor-8                 38    35     79.03       189   2.3914    59.8  1.699
+  one-round               49    24    110.65       206   1.8617    46.5  1.321
+  one-round-floor-8       26    47     63.09       189   2.9958    74.9  2.128
+  today                   71     2    146.20       206   1.4091    35.2    1.0
+
+  what each policy refused (of the calls that were scored):
+  policy                    inert   productive
+  actions-unit                  1            1
+  adaptive                      7            1
+  floor-12                     16           21
+  floor-8                      13           13
+  one-round                    15            7
+  one-round-floor-8            20           17
+  today                         1            1
+
+  projection assumption: a desk call's price does not rise with the wait before it; corr(step_idx, cost_usd) = -0.039 over 65 priced calls
