@@ -1383,3 +1383,98 @@ This closes the configuration half only. Axis 2 — a run whose `run_start` name
 a non-localhost upstream — costs money and is not this item's to authorise; the
 first live leg after this lands is where "跑完即打分" produces its first live
 evidence, and it will produce it without anyone remembering to ask.
+
+## D-A23-001 · The backfill was worth more as a second reader than as a first one
+
+GAP R2-1 asked for a number the default leg cannot take about itself, and the
+cheap way to deliver it was to lift `measure_frontier.py`'s anchor block into a
+reusable function and point it at four more legs. That would have produced the
+four missing triples in an afternoon and would have been worth almost nothing,
+because a second tool sharing the first tool's code cannot disagree with it. A
+backfill nobody can check is a number, not a measurement.
+
+So the module reads the archive by a **different path on purpose**. R2 took the
+world's frame from the trace row's recorded `before_hash` field.
+`armtools/anchor_drift.py` discards that field and hands `trace.jsonl` to
+`world.frames.load_store`, which rebuilds the anchor from the `frames` array
+(`FrameStore.add` assigns `before_hash = grid_hash(self.current)`). The
+disagreement it could have found is counted and reported
+(`recorded_vs_recomputed_disagreements`); it found none, on 72 probes across
+eight legs. The 35 of 52 that decided R2 reproduce exactly -- per leg, per
+probe, and on all three totals.
+
+That gap is narrower than it sounds and the record should say so, because
+"independent" is the word this would like to use and cannot. The recompute is
+independent of *R2's reader*; it is **not** independent of the *recorder*,
+since it runs the very `FrameStore.add`/`current` that assigned the field during
+the live run, over the frames in the same file. What is corroborated is that the
+trace is internally consistent and that R2's join and arithmetic were right.
+What is not corroborated is that `current` -- *the last step whose cascade was
+non-empty* -- is the right reading of "the frame the world was showing". If that
+reading is wrong, both paths are wrong together and nothing offline can see it.
+
+The same modesty applies to `crosscheck` itself, whose first draft could not
+support its own docstring. It compared the `(leg, probe_id)` pairs both readers
+carried and skipped the rest, so `equal: true` was reachable while the two
+disagreed about *which* probes exist -- and, worse, while a leg it named had
+never been opened: withhold one `trace.jsonl` and a four-leg crosscheck still
+reported agreement over 52 probes. It now compares the row sets as sets, counts
+what only one side has, and treats a leg this reader could not measure as a
+failure of the comparison rather than a zero inside it.
+
+**Three consequences that were decided rather than defaulted.**
+
+1. **An unknown anchor is not a drift.** R2 compared `predictions.get("inert")`
+   against `before_hash` directly, so a probe with no `inert` key or no trace
+   step counted as drifted, because `None != hash`. This module returns `None`
+   and counts it under `anchor_unknown`. The two readings agree on the archive
+   only because no completed probe there is in that condition, which
+   `test_every_completed_probe_in_the_archive_has_an_anchor_to_compare` asserts
+   rather than assumes -- otherwise the reproduction of the 35 would be luck.
+2. **A leg that resolved no probe says so, and so does one whose probe got no
+   answer.** Two of the eight are `0/0/0`, which reads exactly like *measured,
+   and clean*. It is not; there was nothing to measure. `R1b-sk48-b` is the
+   subtler case and was missed on the first pass: `1/0/0`, which reads like *one
+   probe, cleanly anchored*, when what happened is that it designed 5 probes,
+   4 were ruled unrunnable, and the one sent came back HTTP 400 with no frame
+   and a vacuous frontier. Its `drifted: false` is genuine -- anchor and
+   `before_hash` are both `05615f3d5f835100` -- but "off-frontier" says nothing
+   about a probe the world never answered. Both shapes now carry a `note` and a
+   `probes_without_an_answer` count, because the discipline that stops an
+   absence arriving as a zero has to cover the honest zeros too.
+3. **The negative controls run on a real compiled manual, not only a toy, and
+   they assert sets rather than signs.** The self-consistent leg -- the world
+   *is* a leg's own `theory.dsl`, rolled forward, and the arm's manual is that
+   same object -- must report 0, and it is the control that matters. Anything
+   can report a positive number.
+
+   Two predicates in the first draft were too weak to be worth writing, and both
+   were found by pointing an adversarial reader at them rather than by
+   re-reading them. `drifted == 0` counts only `True`, so it folds an *unknown*
+   anchor into the same zero: rename the trace's notes until the join misses, or
+   strip `inert` from every design, and a leg that measured nothing at all
+   passes. And `drifted > 0` accepts the check firing anywhere, which is how a
+   comment in the run directory came to predict `P-03` onward while the file's
+   own output said `P-04`, `P-05`. Both now assert the exact drifted set --
+   derived from the roll arithmetic, not restated -- plus `anchor_unknown == 0`.
+   A third pair of controls answers each command in four frames instead of one,
+   because on a one-grid world every candidate reading of "the frame the world
+   was showing" coincides and 26 of the 34 steps on `…-r3` are multi-frame.
+
+   **What the mispredicting control does not show.** It is one wrong
+   *transition*, not one wrong *call*: the no-op returns the frozen state, so
+   the state is absorbing and every later action is wrong too. That is the
+   mechanism under study rather than a defect -- `_roll_forward` is open-loop --
+   but at the frozen state every hypothesis that consults `step` returns the
+   frozen frame, so the frontier collapses to a point and the drifted probes are
+   off-frontier *because of the collapse*. The archive's `drifted =>
+   off_frontier` implication therefore has no controlled counterpart here, and
+   claiming one would have been the easiest available overstatement. GAP A23-3.
+
+**What was not done, and why it is a gap rather than an omission.** The triple
+was asked to live inside each measured leg's directory. Measured, that turns
+`verify_provenance` check 8 red on a live-spend archive record, and the fix
+would be to regenerate four manifests that R2 and R3 each declined to touch by
+name. The evidence is in GAP A23-1 and the change is not made: rewriting a
+published record to make room for a diagnostic is a decision about the archive,
+not about this ticket.

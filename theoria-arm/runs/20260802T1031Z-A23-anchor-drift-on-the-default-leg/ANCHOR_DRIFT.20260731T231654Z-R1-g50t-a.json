@@ -1,0 +1,85 @@
+{
+ "anchor_unknown": 0,
+ "anchored_to_world": 2,
+ "duplicate_probe_notes": [],
+ "leg": "20260731T231654Z-R1-g50t-a",
+ "note": null,
+ "off_frontier": 5,
+ "probes": [
+  {
+   "action": 2,
+   "anchor_hash": "9bb17844cc3a57c9",
+   "drifted": false,
+   "frontier_width_distinct": 2,
+   "n_hypotheses": 18,
+   "observed": "af3bb95d3135e37c",
+   "off_frontier": true,
+   "probe_id": "P-01",
+   "step_idx": 6,
+   "trace_step_idx": 6,
+   "world_before_hash": "9bb17844cc3a57c9"
+  },
+  {
+   "action": 5,
+   "anchor_hash": "25cac958273811a3",
+   "drifted": true,
+   "frontier_width_distinct": 2,
+   "n_hypotheses": 18,
+   "observed": "0e1cd0b30fbb12b3",
+   "off_frontier": true,
+   "probe_id": "P-02",
+   "step_idx": 7,
+   "trace_step_idx": 7,
+   "world_before_hash": "af3bb95d3135e37c"
+  },
+  {
+   "action": 2,
+   "anchor_hash": "818eaaf57cafd7bb",
+   "drifted": false,
+   "frontier_width_distinct": 2,
+   "n_hypotheses": 23,
+   "observed": "882c12b1cc465224",
+   "off_frontier": true,
+   "probe_id": "P-05",
+   "step_idx": 10,
+   "trace_step_idx": 10,
+   "world_before_hash": "818eaaf57cafd7bb"
+  },
+  {
+   "action": 5,
+   "anchor_hash": "b90a6233898771e2",
+   "drifted": true,
+   "frontier_width_distinct": 2,
+   "n_hypotheses": 23,
+   "observed": "0c56717accb832fb",
+   "off_frontier": true,
+   "probe_id": "P-06",
+   "step_idx": 11,
+   "trace_step_idx": 11,
+   "world_before_hash": "882c12b1cc465224"
+  },
+  {
+   "action": 2,
+   "anchor_hash": "15c2e5de8c8dc96b",
+   "drifted": true,
+   "frontier_width_distinct": 2,
+   "n_hypotheses": 23,
+   "observed": "30332fff54b4924c",
+   "off_frontier": true,
+   "probe_id": "P-07",
+   "step_idx": 12,
+   "trace_step_idx": 12,
+   "world_before_hash": "0c56717accb832fb"
+  }
+ ],
+ "probes_designed": 5,
+ "probes_without_an_answer": 0,
+ "recorded_vs_recomputed_disagreements": [],
+ "status": "measured",
+ "trace_available": true,
+ "triple": {
+  "drifted": 3,
+  "drifted_and_off_frontier": 3,
+  "probes": 5
+ }
+}

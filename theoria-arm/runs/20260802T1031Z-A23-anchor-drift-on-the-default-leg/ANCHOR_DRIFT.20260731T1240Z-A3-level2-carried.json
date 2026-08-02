@@ -1,0 +1,19 @@
+{
+ "anchor_unknown": 0,
+ "anchored_to_world": 0,
+ "duplicate_probe_notes": [],
+ "leg": "20260731T1240Z-A3-level2-carried",
+ "note": "no probe was designed and resolved on this leg, so the triple is empty rather than clean",
+ "off_frontier": 0,
+ "probes": [],
+ "probes_designed": 1,
+ "probes_without_an_answer": 0,
+ "recorded_vs_recomputed_disagreements": [],
+ "status": "measured",
+ "trace_available": true,
+ "triple": {
+  "drifted": 0,
+  "drifted_and_off_frontier": 0,
+  "probes": 0
+ }
+}

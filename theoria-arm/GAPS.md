@@ -479,3 +479,152 @@ rather than as zero. One certify round on each of R1-g50t-a, R1-sk48-b,
 R1b-g50t-a and R1b-sk48-b is `unreconstructed` for the honest reason that the
 archived report carries no replay to reproduce (the manual would not compile
 that round); those four contribute nothing to any number here.
+
+## GAP A23-1 · The triple could not be filed inside the leg it describes
+
+The ticket asked for the drift triple to be written into each measured leg's own
+`runs/` directory, on the stated reasoning that a new file changes no byte the
+published manifest covers. It does. Measured rather than argued, on the
+smallest leg:
+
+```
+armtools.backfill._files_the_clone_carries("runs/20260731T1240Z-A3-level2-carried")
+    before  37 paths
+    after   38 paths      (a new ANCHOR_DRIFT.json enters files[])
+    list changed: True
+```
+
+`backfill.build()` re-derives `files[]` by walking the run directory and
+subtracting only what `.gitignore` excludes, so a tracked new file lands in the
+list, `backfill.render(build(...))` stops matching the manifest on disk, and
+`armtools.verify_provenance` check 8 -- *re-deriving every manifest reproduces
+it byte for byte* -- goes red for a live-spend archive record. Through
+`tests/test_arm.py::test_the_archive_stays_accountable` that is `verify.py`
+rung 1 as well.
+
+Absorbing the file instead would mean regenerating four archived manifests.
+That is precisely what R2 and R3 each declined, in writing, under
+`not_changed`: *"any `runs/` directory whose name contains R1 (a live round was
+running)"*. It also collides with the standing GAP A3-B-3, which reports check 8
+already CRLF-red on a fresh worktree for these same legs -- so a regeneration
+would be rewriting a record that two machines already disagree about.
+
+What was delivered instead: one file per leg,
+`runs/20260802T1031Z-A23-anchor-drift-on-the-default-leg/ANCHOR_DRIFT.<leg>.json`,
+eight of them, filed under the run that took the measurement rather than inside
+the run it describes. The triple is per leg and it is in `runs/`; what it is
+not is co-located. Reversing this is a decision about four published manifests
+and belongs to whoever owns them, which is why the evidence is here rather than
+the change.
+
+## GAP A23-2 · Re-theorizing re-seats the anchor, except on the two legs where it does not
+
+This gap was first written the wrong way round and the correction is the useful
+part, so it is kept rather than tidied away. The anchored probe ids looked
+periodic -- every one of them at an id ≡ 1 (mod 4) on most legs -- and it was
+filed as *a period observed and not explained*. It is explained, by two
+constants in this repository: `MIN_NEW_FRAMES_BETWEEN_THEORIZE = 4` and
+`MAX_PROBES_BETWEEN_THEORIZE = 4` (`inner/loop.py:86,114`). Each measured leg's
+own `turns.json` -- a tracked file beside the `probes.jsonl` the tool already
+reads -- prints the gate firing. Joining the two series:
+
+```
+                       anchored ids              theorize turns          equal
+R1-g50t-a              1,5                       1,5                     yes
+R1b-g50t-a             1,5,9,13,17               1,5,9,13,17             yes
+R1b-sk48-b             1                         1                       yes (n=1)
+r3                     1,5,9,13,17,21,25         1,5,9,13,17,21,25       yes
+r2                     5                         1,5                     NO
+sk48-carried-l1        1,2,3,5,6,9,13,14,15      1,5,9,13                NO
+```
+
+So the finding is not a period. It is that **`_roll_forward` re-seats on the
+turn the manual is rewritten and is wrong again by the next probe** -- the state
+is correct when freshly theorized and stale immediately after. That is a
+smaller claim, it corroborates R3's recovery count from a second series, and it
+identifies the cause R3's series could only observe.
+
+**What is actually left open are the two exceptions, and the schedule does not
+touch either.** On `r2` a theorize call ran at turn 1 and the anchor was still
+wrong at `P-01`, so re-theorizing does not always re-seat. On
+`sk48-carried-l1` the anchor survives one or two probes past each re-seat, so it
+is not always lost immediately either. Both would be answered by joining each
+probe to the snapshot the arm was holding when it designed it -- `books/
+snapshots/` is tracked and the join is free -- and that measurement is not taken
+here.
+
+The methodological residue is worth one line, since it cost this ticket an
+adversarial pass to find: the original wording also counted *seven of eight
+legs* as supporting the pattern, when three of those seven have zero or one
+anchored probe and cannot test it, and two are vacuously true with no probes at
+all. Three legs carry the evidence. A count of legs is not a count of evidence.
+
+## GAP A23-3 · The controls cannot witness the implication that carries the finding
+
+The headline of this measurement, and of R2's before it, is that a drifted
+anchor puts the world's answer outside the frontier -- 47 of 47 here, 35 of 35
+there. The negative controls in
+`runs/20260802T1031Z-A23-anchor-drift-on-the-default-leg/` **do not confirm
+it**, and it would have been easy to claim they did.
+
+The mispredicting control freezes the manual's state, so at the drifted probes
+every hypothesis that consults `step` returns the frozen frame and the frontier
+collapses from 2 distinct predictions to 1. Those probes are off-frontier
+because their frontier is a *point*. The wrapper manufactures the drift and the
+collapse together, so it can witness neither implying the other. On the toy
+manual the collapse is strictly wider than the drift -- `P-04` is collapsed and
+drifted, `P-03` is collapsed while still correctly anchored -- which is the
+cleanest statement of the problem: the leg contains no drifted-and-uncollapsed
+probe, and that is exactly the probe the implication needs.
+
+`tests/test_anchor_drift.py::test_the_mispredicting_leg_cannot_test_the_archives_implication`
+asserts the collapse rather than mentioning it. What would close this is a
+control whose manual drifts while its frontier stays wide -- a wrong transition
+that returns a *different* state rather than the same one -- and that is a
+different synthesiser from the one here. Until then `47 of 47` is an
+observation about the archive with no controlled counterpart.
+
+## GAP A23-4 · The triple counts frames, and desynchronisation is about states
+
+`drifted` compares a rendered frame hash against the frame the world was
+showing, which is the right question for a frontier whose every prediction is a
+frame hash. It is not the question "had the manual's bookkeeping come apart".
+The two differ whenever two states render to the same grid, and this archive is
+not injective: `20260731T1500Z-A3-sk48-carried-l1` runs 16 probes over 11
+distinct world frames, 10 of them on a frame the leg had already shown.
+
+Constructed rather than supposed: on the g50t manual with actions `[1,1,2,2,2]`
+-- where key 1 is a no-op, so frames 0, 1 and 2 coincide -- a manual frozen at
+frame 0 scores `drifted: false` on `P-03` while that same probe's
+`manual_survived` is `false`. The frontier was correctly anchored and the
+manual was lost, both true at once.
+
+So **47 is a frame-level count and a lower bound on state-level drift**, and
+nothing here bounds the gap. R3's `inner/anchor.py::divergence` measures the
+state-level quantity in cells and its per-certify-beat series is in
+`runs/20260801T1200Z-R3-anchor-duality/DRIFT.json`; joining the two series per
+probe would size this, and is not done here.
+
+## GAP A23-5 · 16 of the 72 rows are one experiment counted twice
+
+Comparing designs on `(action, predictions)`, sixteen of the 72 resolved probes
+are byte-identical repeats of one already run on the same leg: 4 on `r2`, 4 on
+`r3`, and **8 of the 16 on `sk48-carried-l1`**. The archive therefore holds
+**56 distinct experiments**, and since 14 of the 47 drifted rows are repeats the
+de-duplicated triple is **56 / 33 / 33**.
+
+The published triple is left at 72 because that is what the legs actually ran
+and because R2's 52 must stay comparable. But the de-duplicated figure belongs
+next to it, for one specific reason: `sk48-carried-l1` is the only leg in the
+archive that ever put the world's answer inside its frontier (5 probes, all
+five), and it is also the leg that is half repeats -- 6 of its 7 drifted rows
+are re-runs. Every claim resting on that leg rests on fewer experiments than
+its row count suggests.
+
+This is not a new defect. `inner/probe.py` names `r3`'s `P-25`/`P-27` and
+`P-26`/`P-28` as byte-identical designs, and `inner/loop.py` gained an
+unconditional refusal for repeat fingerprints afterwards -- which is why R1 and
+R1b carry zero repeats and unrunnable rows in their place. **The arm as it
+stands today would refuse to run 16 of the 72 rows counted here.** What is
+missing is not the fix but the arithmetic: no measurement over these four legs,
+R2's included, has yet reported its numbers per distinct experiment.

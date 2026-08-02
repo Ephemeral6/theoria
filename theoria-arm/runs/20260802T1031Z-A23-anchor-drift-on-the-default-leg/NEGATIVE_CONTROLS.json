@@ -1,0 +1,242 @@
+{
+ "all_held": true,
+ "controls": [
+  {
+   "actions": [
+    2,
+    5,
+    2,
+    5,
+    2
+   ],
+   "anchor_unknown": 0,
+   "anchored_to_world": 5,
+   "cascade": 1,
+   "control": "self_consistent",
+   "drifted_probes": [],
+   "drifted_probes_required": [],
+   "frontier_widths": [
+    2
+   ],
+   "game": "g50t-5849a774",
+   "held": true,
+   "manual": "20260731T1310Z-A3-level2-carried-r2",
+   "mispredict_at": null,
+   "required": "exactly these probes drift: none",
+   "snapshot": "rev11-before-theorize",
+   "status": "measured",
+   "triple": {
+    "drifted": 0,
+    "drifted_and_off_frontier": 0,
+    "probes": 5
+   },
+   "world_frames_distinct": 6
+  },
+  {
+   "actions": [
+    2,
+    5,
+    2,
+    5,
+    2
+   ],
+   "anchor_unknown": 0,
+   "anchored_to_world": 3,
+   "cascade": 1,
+   "control": "mispredicting",
+   "drifted_probes": [
+    "P-04",
+    "P-05"
+   ],
+   "drifted_probes_required": [
+    "P-04",
+    "P-05"
+   ],
+   "frontier_widths": [
+    1,
+    2
+   ],
+   "game": "g50t-5849a774",
+   "held": true,
+   "manual": "20260731T1310Z-A3-level2-carried-r2",
+   "mispredict_at": 2,
+   "required": "exactly these probes drift: ['P-04', 'P-05']",
+   "snapshot": "rev11-before-theorize",
+   "status": "measured",
+   "triple": {
+    "drifted": 2,
+    "drifted_and_off_frontier": 2,
+    "probes": 5
+   },
+   "world_frames_distinct": 6
+  },
+  {
+   "actions": [
+    2,
+    5,
+    2,
+    5,
+    2
+   ],
+   "anchor_unknown": 0,
+   "anchored_to_world": 5,
+   "cascade": 4,
+   "control": "cascade",
+   "drifted_probes": [],
+   "drifted_probes_required": [],
+   "frontier_widths": [
+    2
+   ],
+   "game": "g50t-5849a774",
+   "held": true,
+   "manual": "20260731T1310Z-A3-level2-carried-r2",
+   "mispredict_at": null,
+   "required": "the triple is what the same leg measured with one frame per step",
+   "snapshot": "rev11-before-theorize",
+   "status": "measured",
+   "triple": {
+    "drifted": 0,
+    "drifted_and_off_frontier": 0,
+    "probes": 5
+   },
+   "world_frames_distinct": 6
+  },
+  {
+   "actions": [
+    4,
+    3,
+    4,
+    3,
+    4
+   ],
+   "anchor_unknown": 0,
+   "anchored_to_world": 5,
+   "cascade": 1,
+   "control": "self_consistent",
+   "drifted_probes": [],
+   "drifted_probes_required": [],
+   "frontier_widths": [
+    2
+   ],
+   "game": "sk48-d8078629",
+   "held": true,
+   "manual": "20260731T1500Z-A3-sk48-carried-l1",
+   "mispredict_at": null,
+   "required": "exactly these probes drift: none",
+   "snapshot": "rev19-before-theorize",
+   "status": "measured",
+   "triple": {
+    "drifted": 0,
+    "drifted_and_off_frontier": 0,
+    "probes": 5
+   },
+   "world_frames_distinct": 6
+  },
+  {
+   "actions": [
+    4,
+    3,
+    4,
+    3,
+    4
+   ],
+   "anchor_unknown": 0,
+   "anchored_to_world": 3,
+   "cascade": 1,
+   "control": "mispredicting",
+   "drifted_probes": [
+    "P-04",
+    "P-05"
+   ],
+   "drifted_probes_required": [
+    "P-04",
+    "P-05"
+   ],
+   "frontier_widths": [
+    1,
+    2
+   ],
+   "game": "sk48-d8078629",
+   "held": true,
+   "manual": "20260731T1500Z-A3-sk48-carried-l1",
+   "mispredict_at": 2,
+   "required": "exactly these probes drift: ['P-04', 'P-05']",
+   "snapshot": "rev19-before-theorize",
+   "status": "measured",
+   "triple": {
+    "drifted": 2,
+    "drifted_and_off_frontier": 2,
+    "probes": 5
+   },
+   "world_frames_distinct": 6
+  },
+  {
+   "actions": [
+    4,
+    3,
+    4,
+    3,
+    4
+   ],
+   "anchor_unknown": 0,
+   "anchored_to_world": 5,
+   "cascade": 4,
+   "control": "cascade",
+   "drifted_probes": [],
+   "drifted_probes_required": [],
+   "frontier_widths": [
+    2
+   ],
+   "game": "sk48-d8078629",
+   "held": true,
+   "manual": "20260731T1500Z-A3-sk48-carried-l1",
+   "mispredict_at": null,
+   "required": "the triple is what the same leg measured with one frame per step",
+   "snapshot": "rev19-before-theorize",
+   "status": "measured",
+   "triple": {
+    "drifted": 0,
+    "drifted_and_off_frontier": 0,
+    "probes": 5
+   },
+   "world_frames_distinct": 6
+  },
+  {
+   "control": "trace_absent_as_in_a_clone",
+   "held": true,
+   "manual": null,
+   "required": "the triple is all null, none of it is 0, and the status names the missing trace specifically",
+   "status": "trace.jsonl is gitignored and absent here; nothing measured (this is the normal case in a clone -- it is an absence, not a drift of zero)",
+   "triple": {
+    "drifted": null,
+    "drifted_and_off_frontier": null,
+    "probes": null
+   }
+  },
+  {
+   "control": "probes_absent",
+   "held": true,
+   "manual": null,
+   "required": "all null, and a status distinct from the missing trace's",
+   "status": "no probes.jsonl here; nothing measured",
+   "triple": {
+    "drifted": null,
+    "drifted_and_off_frontier": null,
+    "probes": null
+   }
+  },
+  {
+   "control": "leg_absent",
+   "held": true,
+   "manual": null,
+   "required": "all null, and a status distinct from the missing trace's",
+   "status": "no such directory; nothing measured",
+   "triple": {
+    "drifted": null,
+    "drifted_and_off_frontier": null,
+    "probes": null
+   }
+  }
+ ],
+ "mispredict_at": 2
+}

@@ -1,0 +1,220 @@
+GATES · A23-anchor-drift-on-the-default-leg
+branch agent/a23-anchor-drift-on-the-default-leg, base 1e5b3f00, worker W-9202
+
+Everything below was run in the worktree
+.worktrees/a23-anchor-drift-on-the-default-leg/, which is a fresh checkout and
+therefore has no runs/*/trace.jsonl (gitignored). The eight traces were copied
+in from the main working tree so the archive pins could run; without them those
+four tests skip themselves by name, which is the correct behaviour in a clone
+and is asserted by the skipif rather than assumed.
+
+
+1. COLLECTION -- no test lost
+------------------------------------------------------------------------
+    python -m pytest -o addopts= --collect-only -q
+        757 tests collected in 0.76s
+
+    python -m pytest -o addopts= --collect-only -q \
+        --ignore=tests/test_anchor_drift.py
+        730 tests collected in 0.25s
+
+    757 - 730 = 27, which is tests/test_anchor_drift.py as it stood when the
+    delta was taken; it has since grown to 33. No pre-existing node id was
+    removed or renamed.
+
+
+2. THE SUITE
+------------------------------------------------------------------------
+    BASELINE, taken on the untouched worktree before one byte was written:
+    python -m pytest -q
+        730 collected, 5 FAILED:
+            tests/test_arm.py::test_the_shell_turns_end_to_end_against_the_mock
+            tests/test_arm.py::test_the_scorecard_action_count_matches_the_ledgers_successes
+            tests/test_arm.py::test_the_archive_stays_accountable
+            tests/test_desk_gate.py::test_the_ceiling_table_still_covers_the_archive
+            tests/test_reply_loss.py::test_the_archive_still_holds_the_thirteen_lost_replies
+
+    AFTER, same command, same worktree:
+    python -m pytest -q
+        757 collected, 3 FAILED -- a strict subset of the baseline five:
+            tests/test_arm.py::test_the_archive_stays_accountable
+            tests/test_desk_gate.py::test_the_ceiling_table_still_covers_the_archive
+            tests/test_reply_loss.py::test_the_archive_still_holds_the_thirteen_lost_replies
+
+    The two that stopped failing are the mock end-to-end pair. Re-run alone:
+
+    python -m pytest -o addopts= -q --tb=no -p no:cacheprovider <the five>
+        ..FFF
+        3 failed, 2 passed in 274.76s (0:04:34)
+
+    So both are environment-dependent, not fixed by anything here -- the
+    baseline run of them coincided with memory pressure on this machine that
+    later killed two background jobs outright. Nothing in this ticket touches
+    inner/, world/ or harness/, so neither could have been repaired by it.
+
+    The three that remain are all archive census pins that moved when the R2/R2b
+    legs landed on master, and each fails for a reason it states:
+      * test_the_reply_loss ...  assert 17 == 13  {'lost_continuation': 17, ...}
+      * test_the_archive_stays_accountable -- verify_provenance, see §4
+      * test_the_ceiling_table_still_covers_the_archive -- the desk ceiling
+        table has no row for the newest legs
+    None of the three reads anything this ticket wrote.
+
+    THE NEW FILE, alone:
+    python -m pytest tests/test_anchor_drift.py -o addopts= -q
+        33 passed in 3.03s
+
+    and in a checkout with no traces (the clone's normal case):
+        22 passed, 5 skipped in 2.11s
+    -- the five skips are the archive pins, which say so by name.
+
+
+3. THE MEASUREMENT
+------------------------------------------------------------------------
+    cd runs/20260802T1031Z-A23-anchor-drift-on-the-default-leg
+    python measure_anchor_drift.py
+
+        20260731T231654Z-R1-g50t-a           probes=5   drifted=3   drifted_and_off=3
+        20260731T231654Z-R1-sk48-b           probes=0   drifted=0   drifted_and_off=0
+        20260801T001851Z-R1b-g50t-a          probes=14  drifted=9   drifted_and_off=9
+        20260801T001851Z-R1b-sk48-b          probes=1   drifted=0   drifted_and_off=0
+        20260731T1240Z-A3-level2-carried     probes=0   drifted=0   drifted_and_off=0
+        20260731T1310Z-A3-level2-carried-r2  probes=8   drifted=7   drifted_and_off=7
+        20260731T1430Z-A3-level2-carried-r3  probes=28  drifted=21  drifted_and_off=21
+        20260731T1500Z-A3-sk48-carried-l1    probes=16  drifted=7   drifted_and_off=7
+        {"legs_measured": 8, "legs_named": 8, "legs_refused": 0,
+         "recorded_vs_recomputed_disagreements": 0,
+         "triple": {"drifted": 47, "drifted_and_off_frontier": 47, "probes": 72}}
+        crosscheck vs R2 MEASUREMENT.json: True (52 probes)
+
+    CROSSCHECK.json, the fields that carry it:
+        equal                              true
+        probes_compared                    52
+        totals_mine                        {"drifted":35,"drifted_and_off_frontier":35,"probes":52}
+        totals_theirs                      {"drifted":35,"drifted_and_off_frontier":35,"probes":52}
+        per_leg_disagreements              []
+        per_probe_disagreements            []
+        probes_only_this_reader_has        []
+        probes_only_the_other_reader_has   []
+        legs_this_reader_could_not_measure []
+
+    THE SAME COMMAND IN A CHECKOUT WITHOUT THE TRACES (before they were copied
+    in) -- the refusal path, which is what a clone gets:
+
+        every leg: probes=None drifted=None drifted_and_off=None
+        {"legs_measured": 0, "legs_named": 8, "legs_refused": 8,
+         "triple": {"drifted": null, "drifted_and_off_frontier": null,
+                    "probes": null}}
+        stderr: REFUSED <leg> -- trace.jsonl is gitignored and absent here;
+                nothing measured (this is the normal case in a clone -- it is
+                an absence, not a drift of zero)
+
+    NEGATIVE CONTROLS:
+    python negative_controls.py
+
+        self_consistent   A3-level2-carried-r2  required drift set []            -> HELD
+        mispredicting     A3-level2-carried-r2  required drift set [P-04, P-05]  -> HELD
+        cascade           A3-level2-carried-r2  required triple == flat leg's    -> HELD
+        self_consistent   A3-sk48-carried-l1    required drift set []            -> HELD
+        mispredicting     A3-sk48-carried-l1    required drift set [P-04, P-05]  -> HELD
+        cascade           A3-sk48-carried-l1    required triple == flat leg's    -> HELD
+        trace_absent_as_in_a_clone   required all null + status NO_TRACE         -> HELD
+        probes_absent                required all null + status NO_PROBES        -> HELD
+        leg_absent                   required all null + status NO_LEG           -> HELD
+        all_held: True
+
+    Note what these do NOT establish: the mispredicting leg collapses its own
+    frontier to width 1, so it cannot confirm the archive's `drifted =>
+    off_frontier` implication. GAP A23-3, asserted in the suite.
+
+
+4. PROVENANCE
+------------------------------------------------------------------------
+    python -m armtools.verify_provenance
+
+    BASELINE, on the untouched worktree before anything was written:
+        FAILED: 1 of 10
+        8  FAIL  re-deriving every manifest reproduces it byte for byte
+               the check itself failed: TimeoutExpired: Command
+               '['git', 'cat-file', 'blob', 'e9d7936e...']' timed out after
+               120 seconds
+        checks 1-7 and 9-10 PASS.
+
+    So check 8 is red on this machine before this ticket exists, and red for an
+    environment reason (git is pathologically slow in this repository -- 55
+    worktrees) rather than a drift one. GAP A3-B-3 independently reports check 8
+    as CRLF-red on any fresh worktree for the four R1 legs. Both are pre-existing
+    and neither is this ticket's.
+
+    AFTER, with this ticket's run directory and its MANIFEST.json in place:
+        FAILED: 1 of 10
+        checks 1-7 and 9-10 PASS
+        8  FAIL  re-deriving every manifest reproduces it byte for byte
+               drifted: ['20260731T231654Z-R1-g50t-a',
+                         '20260731T231654Z-R1-sk48-b',
+                         '20260801T001851Z-R1b-g50t-a',
+                         '20260801T001851Z-R1b-sk48-b',
+                         '20260801T043743Z-R2-g50t-a',
+                         '20260801T043743Z-R2-sk48-b',
+                         '20260801T044640Z-R2b-g50t-a',
+                         '20260801T044640Z-R2b-sk48-b']
+
+    Same check red before and after, for two different pre-existing reasons --
+    the baseline run hit git's 120 s timeout before it could compare anything,
+    this one got far enough to report the comparison itself. The eight it names
+    are exactly the CRLF set of GAP A3-B-3 (their env_proxy.log was written with
+    CRLF in the main checkout and normalises to LF in any worktree, so the
+    recorded files[].sha256 no longer matches); R3's run reported the same list.
+
+    NONE of the eight is this ticket's, and this ticket's run directory does not
+    appear anywhere in the output -- `grep -c A23-anchor-drift` over the whole
+    report returns 0. It is classified `process_record` (no ledger.jsonl: no API
+    call, no model call), so the re-derivation check correctly skips it: there
+    is nothing to derive it from. Check 2 counts 29 runs / 29 manifests, before
+    and after alike, because a process record is not archive material.
+
+    Check 10 -- "every file a shipped manifest lists is shipped too" -- passes
+    over 67 manifests and 1180 listed paths with this ticket's 17 files added.
+
+    THE MEASUREMENT THAT DECIDED WHERE THE PER-LEG FILES GO -- run against a
+    real archived leg, and the reason GAP A23-1 exists:
+
+        armtools.backfill._files_the_clone_carries(
+            "runs/20260731T1240Z-A3-level2-carried")
+              is_backfilled: True
+              files before : 37
+              files after  : 38   (a new ANCHOR_DRIFT.json enters files[])
+              new file enters files[]: True
+              list changed : True
+              restored ok  : True
+
+    A tracked new file inside an archived leg therefore changes what
+    backfill.build() re-derives, so check 8 would go red for a live-spend
+    archive record. The per-leg triples are filed in this run directory instead.
+
+
+5. RED LINES
+------------------------------------------------------------------------
+    Territory: every changed path is under theoria-arm/, plus one appended
+    section in PARTNER_SYNC.md. git status --porcelain at handoff:
+        M theoria-arm/DECISIONS.md          (+D-A23-001, appended)
+        M theoria-arm/GAPS.md               (+GAP A23-1..5, appended)
+        ?? theoria-arm/armtools/anchor_drift.py
+        ?? theoria-arm/tests/test_anchor_drift.py
+        ?? theoria-arm/runs/20260802T1031Z-A23-anchor-drift-on-the-default-leg/
+    Both ledger appends were made through a guard that re-reads the file and
+    asserts the new content startswith the old: no existing byte moved.
+
+    Sealed pile: zero contact, API and content. The only game ids anywhere in
+    this ticket's files are g50t-5849a774 and sk48-d8078629, both development
+    pile. No leg was played, opened or read beyond artefacts already on disk.
+
+    Credentials: no value of any secret in any tracked file. Nothing here reads
+    .env, and nothing here makes a network call of any kind.
+
+    Spend: $0.00. Zero ARC actions, zero model calls, zero network. The shared
+    spend gate was not engaged because nothing was spent.
+
+    Generated artefacts: ANCHOR_DRIFT*.json, CROSSCHECK.json and
+    NEGATIVE_CONTROLS.json are written by the two scripts beside them and were
+    never hand-edited; re-running either regenerates them.
