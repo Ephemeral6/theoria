@@ -1,0 +1,96 @@
+{
+ "base_commit": "9e478dd81b880a8b9053d65185e80e3e590f0077",
+ "branch": "agent/v30-p18-hand-merge",
+ "byte_identical_across_branches": [
+  {
+   "path": "papers/phase1-workshop/runs/20260730T000000Z-P18-audits-cover-half/citecheck-B-s4-to-s6.md",
+   "same_on_p18": true,
+   "sha256_blob": "48f2511c2d29f6d734fba59f4a0bb72ff27efb91"
+  },
+  {
+   "path": "papers/phase1-workshop/runs/20260730T000000Z-P18-audits-cover-half/citecheck-D1-s9-to-s10.md",
+   "same_on_p18": true,
+   "sha256_blob": "867d4e295486e74f0d0d3ecb4977a06b9bc5c2b3"
+  },
+  {
+   "path": "papers/phase1-workshop/runs/20260730T000000Z-P18-audits-cover-half/citecheck-D2-s11-to-s12.md",
+   "same_on_p18": true,
+   "sha256_blob": "48efeeca4bf47cea4c384318ae987b9e51f72ba6"
+  },
+  {
+   "path": "papers/phase1-workshop/runs/20260730T000000Z-P18-audits-cover-half/COVERAGE.md",
+   "same_on_p18": true,
+   "sha256_blob": "ffe8a2ca8558705ab4af305c05737372cbbaff5e"
+  }
+ ],
+ "conflicts_resolved_to_master": [
+  "papers/phase1-workshop/REVIEW-2026-07-30.md",
+  "papers/phase1-workshop/verify_paper.py",
+  "papers/phase1-workshop/runs/20260730T000000Z-P18-audits-cover-half/MANIFEST.json",
+  "papers/phase1-workshop/runs/20260730T000000Z-P18-audits-cover-half/RUN_STATE.md",
+  "papers/phase1-workshop/runs/20260730T000000Z-P18-audits-cover-half/citecheck-A-abstract-to-s3.md",
+  "papers/phase1-workshop/runs/20260730T000000Z-P18-audits-cover-half/citecheck-C-s7-to-s8.md",
+  "papers/phase1-workshop/runs/20260730T000000Z-P18-audits-cover-half/delta-old-vs-new.md"
+ ],
+ "files": [
+  {
+   "bytes": 14685,
+   "path": "papers/runs/20260802T111536Z-V30-p18-hand-merge/RUN_STATE.md",
+   "sha256": "4dc005bd411e99870840fbcb059bd48b4ad103c6870fe59bc4465776e451f099"
+  },
+  {
+   "bytes": 5244,
+   "path": "papers/runs/20260802T111536Z-V30-p18-hand-merge/_mkmanifest.py",
+   "sha256": "2b5e86fa41ac9fc1eb8a996ab4ae93da7786304067c9717f71c83b17cd804f4f"
+  },
+  {
+   "bytes": 5016,
+   "path": "papers/runs/20260802T111536Z-V30-p18-hand-merge/_sync_append.py",
+   "sha256": "53f6f1b393d263800f906c056311f6bfb3d8df109e748032870963a49e6fa79d"
+  }
+ ],
+ "findings_recount": {
+  "commit_message_claims": "21 (B) + 32 (D1) + 32 (D2) = 85",
+  "note": "The bases differ -- D1 totals by severity, B and D2 by pass -- so they are not addable. The three files are byte-identical on both branches, so this discrepancy is neither caused nor fixable by this merge; it predates it. Master's own MANIFEST uses a third basis again (332 rows, 'not asserted').",
+  "recomputed_from_the_files_own_summary_tables": "B 23 (22 net of one B/C overlap), D1 32, D2 22"
+ },
+ "gates": {
+  "acceptance_line_met": false,
+  "after": "identical, necessarily -- the tree did not change",
+  "before": "pytest papers: 2 failed / 272 passed / 1 xfailed; verify_paper: FAIL (3/7) -- C FIGDATA, E UNCITED, F BARE",
+  "why_not": "The ticket's line is 'all paper gates green'. They were already red on master before this ticket started. The three red checks are unrelated to p18 and clearing them means editing paper body text, which monitor/CHARTER.md reserves to RES-2. Recorded as a gap, not worked around."
+ },
+ "merge_commit": "5c27678cad855312cf541c0cfe0afb8d06ec4edf",
+ "merged_branch": "origin/agent/p18-audits-cover-half-onmaster",
+ "merged_tip": "0eb876f7c3f833284a87562b910997cc7012d8ef",
+ "p18_commits": [
+  {
+   "reachable_from_head": true,
+   "sha": "0eb876f7",
+   "what": "the three never-audited sections -- citecheck B/D1/D2"
+  },
+  {
+   "reachable_from_head": true,
+   "sha": "5f11953b",
+   "what": "check G AUDITSTAMP + audit_stamp.py"
+  },
+  {
+   "reachable_from_head": true,
+   "sha": "bc910d8d",
+   "what": "referee pass + 45 gate tests -- already on master per git cherry"
+  },
+  {
+   "reachable_from_head": true,
+   "sha": "4f7e300d",
+   "what": "referee axis refresh -- already on master per git cherry"
+  }
+ ],
+ "prompt_id": "V30-p18-hand-merge",
+ "spend_note": "offline; no API call, no sealed-pile contact",
+ "spend_usd": 0.0,
+ "territory": "papers",
+ "tree_identical_to_master": false,
+ "utc": "2026-08-02T11:15:36Z",
+ "verdict": "All seven conflicts resolved to master's side. The merged tree is BYTE-IDENTICAL to origin/master: this branch's content was already absorbed by master (commit fe0d9357 says so in its own message). The merge commit exists to join the history so ci_merge stops retrying, not to move any bytes.",
+ "worker": "W-9201"
+}
