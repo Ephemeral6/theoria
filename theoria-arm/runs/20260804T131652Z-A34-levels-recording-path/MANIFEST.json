@@ -7,6 +7,9 @@
   "theoria-arm/inner/loop.py",
   "theoria-arm/armtools/level_evidence.py (new)",
   "theoria-arm/armtools/round.py",
+  "theoria-arm/harness/campaign.py",
+  "theoria-arm/DECISIONS.md",
+  "theoria-arm/GAPS.md",
   "theoria-arm/tests/test_levels_recording_path.py (new)"
  ],
  "classification": {
@@ -16,14 +19,14 @@
  },
  "files": [
   {
-   "bytes": 10642,
+   "bytes": 11843,
    "path": "MEASUREMENT.json",
-   "sha256": "0e355080de2ff27e5782351dc3cd04913b1f1cc2658b6cf41445413c04b1a8d5"
+   "sha256": "e668916df1973445e5eb8f6870fa92f135574fcf2b2a8727b6886d51cba45990"
   },
   {
-   "bytes": 4890,
+   "bytes": 6116,
    "path": "README.md",
-   "sha256": "4ee0b45f172795310c0845b3bafd2fe16997de6b7b00cc7bba773eb038f90088"
+   "sha256": "83a6a899d4e1fee8b797e1dcc04fdda7024b8ea048ce5d0727706a3d7506fa18"
   },
   {
    "bytes": 4685,
@@ -31,9 +34,9 @@
    "sha256": "1c8b7188022bef77682f606ced22948e55467d271a6338636119ce31e9226559"
   },
   {
-   "bytes": 11641,
+   "bytes": 12041,
    "path": "make_manifest.py",
-   "sha256": "7c23635d15683935fe4047a0231913710120fbeccdbc6c4dd49fc62fd0aed270"
+   "sha256": "d1b715bdacad61bcb3f555278f10749f278ab682abb35bfcdc520717fe3e3007"
   },
   {
    "bytes": 3599,
@@ -121,6 +124,14 @@
    "question": "A27 landed inner/scoreboard.py with a default-on envelope rung. Two detectors for one event is worse than one if they can disagree silently.",
    "still_open": "the two instruments are still reconciled only by a test, not by a runtime check. A disagreement introduced later would be caught by tests/test_levels_recording_path.py and by nothing in a live leg."
   },
+  "6b_the_downstream_defect_the_fix_exposed": {
+   "expression": "(summary.get('levels') or {}).get('boundaries', 0)",
+   "fix": "harness.campaign._completions = boundaries + game_won, used at both sites; `legs_with_no_level_record` added so a leg with no levels block at all is counted rather than summed as 0; campaign_series marks the winning turn by reading events + finals.",
+   "found_by": "fixing the upstream defect. Before this ticket `boundaries` also excluded the win, so the two sites were already wrong and nothing could show it -- there was no `game_won` to count.",
+   "honest_note": "nothing had ever won, so nothing had ever been wrong. That is not the same as being right.",
+   "problem": "`boundaries` counts SEGMENTING boundaries -- the ones with a level after them. The increment that finishes the game is not one, by construction. So a leg that WON its game counted zero completions: it contributed nothing to the campaign's levels_completed, and `_progress` called the winning leg unproductive, which means a three-leg zero-progress streak could have stopped the campaign immediately after the only win in the project's history.",
+   "where": "harness/campaign.py, two call sites"
+  },
   "7_the_negative_control": {
    "asked_for_by": "A34's closing section: build a mock leg that DID complete a level, truncate its levels.jsonl to zero bytes, and require every instrument to report 'completion information missing' rather than zero completions.",
    "before": "armtools/round.py:188 read sum((l.get('levels_completed') or 0) for l in legs). Under that rule a leg that completed a level and lost its record contributed exactly what a leg that completed nothing contributed. A31 proved the `or 0`; this is the case that makes it bite.",
@@ -172,7 +183,8 @@
   "a leg whose only trace row is a failed command reads `unmeasured` with None",
   "the default offline explorer over 200 mock actions: 2 distinct positions, 0 completions -- absence of a completion recorded as absence of a reachable goal, not as a broken detector",
   "the destructive half of the boundary handler is still refused at a win: problem.json survives, generated/ survives, starts is not cut, and levels.level does not become 4 in a 3-level game",
-  "the pre-fix tree was re-run under the new tests (git stash of inner/): test_the_two_instruments_agree_about_the_winning_increment failed with '2 row(s) reached disk; the missing one is the win'. The test is red without the fix."
+  "the pre-fix tree was re-run under the new tests (git stash of inner/): test_the_two_instruments_agree_about_the_winning_increment failed with '2 row(s) reached disk; the missing one is the win'. The test is red without the fix.",
+  "harness.campaign._progress must call a leg that WON its game productive. Reading `boundaries` alone it did not, which is how a three-leg zero-progress streak could have stopped a campaign immediately after the only win in this project's history."
  ],
  "not_changed": [
   "inner/scoreboard.py -- A27's territory and correct as it stands. The disagreement was LevelLog's silence, not ScoreWatch's speech.",

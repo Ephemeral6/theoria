@@ -56,6 +56,23 @@ win — off disk, while the second instrument recorded all seven and said
 `observed`. **Two instruments, one event, silently different answers, on the
 single run this project exists to produce.**
 
+## And one more, found by fixing the first
+
+`harness/campaign.py` asked "how many levels did this leg finish" twice, both
+times as `(summary.get("levels") or {}).get("boundaries", 0)` — once for the
+campaign total and once inside `_progress`, the predicate behind
+`ZERO_PROGRESS_LIMIT`. `boundaries` excludes the win. So a leg that **won its
+game** counted zero completions at both sites: it would have contributed nothing
+to the campaign total, and `_progress` would have called the winning leg
+unproductive, letting a three-leg zero-progress streak stop the campaign
+immediately after the only win in this project's history.
+
+That was already true before this ticket — there was no `game_won` to add, so
+the expression could not have been written correctly. Nothing had ever won, so
+nothing had ever been wrong. That is not the same as being right, and it is the
+second time here that a code path was correct only because the event it
+mishandles has never happened.
+
 ## What changed
 
 * `inner/levels.py` — `LevelLog.finals` holds the winning increment as a
@@ -73,9 +90,12 @@ single run this project exists to produce.**
   `levels_completed` is `None` in three of them.
 * `armtools/round.py` — the round total no longer reads
   `sum((l.get("levels_completed") or 0) for l in legs)`.
-* `tests/test_levels_recording_path.py` (new) — five tests: the mechanism, the
-  end-to-end positive, the two-instrument cross-check, and two negative
-  controls.
+* `harness/campaign.py` — `_completions()` = `boundaries + game_won` at both
+  call sites; `legs_with_no_level_record` counted rather than summed as zero;
+  `campaign_series` marks the winning turn by reading `events + finals`.
+* `tests/test_levels_recording_path.py` (new) — six tests: the mechanism, the
+  end-to-end positive, the two-instrument cross-check, the campaign reduction,
+  and two negative controls.
 
 ## The honest status
 

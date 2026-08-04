@@ -138,6 +138,28 @@ LAUNCH_GATE_TIMEOUT = 1800
 DEV_PILE = ("g50t-5849a774", "sk48-d8078629", "tn36-ef4dde99", "ar25-0c556536")
 
 
+def _completions(summary: Any) -> int:
+    """How many levels a leg finished, counting the one that ends the game.
+
+    A34. This used to be `(summary.get("levels") or {}).get("boundaries", 0)` in
+    both of the places that ask, and `boundaries` is the count of *segmenting*
+    boundaries -- the ones with a level after them. The increment that finishes
+    the game is not one of those, by construction and for good reasons
+    (`inner/levels.LevelLog.finals`), so a leg that **won its game** counted
+    zero completions here. It would have contributed nothing to the campaign's
+    `levels_completed`, and `_progress` would have called the winning leg
+    unproductive and let a three-leg zero-progress streak stop the campaign
+    immediately after the only win in the project's history.
+
+    Nothing had ever won, so nothing had ever been wrong. That is not the same
+    as being right.
+    """
+    levels = (summary or {}).get("levels")
+    if not isinstance(levels, dict):
+        return 0
+    return (levels.get("boundaries") or 0) + (levels.get("game_won") or 0)
+
+
 class CampaignStopped(Exception):
     """Raised to end the campaign, carrying the reason and the accounts."""
 
@@ -552,7 +574,7 @@ class Campaign:
         anything -- which is exactly the outcome the bill-shape figure needs
         the campaign NOT to have.
         """
-        levels = (summary.get("levels") or {}).get("boundaries", 0)
+        levels = _completions(summary)
         kinds = {k for k, n in
                  ((summary.get("surprises") or {}).get("by_kind") or {}).items()
                  if n}
@@ -837,9 +859,13 @@ class Campaign:
             "spent_usd": round(self.spent_usd, 6),
             "by_game": {k: round(v, 6) for k, v in self.by_game.items()},
             "legs": self.legs,
-            "levels_completed": sum(
-                (leg.get("levels") or {}).get("boundaries", 0)
-                for leg in self.legs),
+            "levels_completed": sum(_completions(leg) for leg in self.legs),
+            # Absence, kept as absence (A34). A leg whose summary carries no
+            # `levels` block at all contributed 0 to the line above and was
+            # indistinguishable from a leg that completed nothing.
+            "legs_with_no_level_record": sum(
+                1 for leg in self.legs
+                if not isinstance(leg.get("levels"), dict)),
             "stopped": self.stopped,
             "zero_progress_streak": self.zero_progress,
         }
@@ -906,8 +932,14 @@ class Campaign:
                 continue
 
             leg_rows = doc.get("rows") or []
+            # `events` + `finals`: the winning increment is in `finals` and not
+            # in `events` (`inner/levels.LevelLog`), so reading `events` alone
+            # leaves the turn a game was won on unmarked in figure 2's raw
+            # material -- the one turn the figure most needs marked.
+            _levels = leg.get("levels") or {}
             boundaries = {b.get("turn") for b
-                          in ((leg.get("levels") or {}).get("events") or [])
+                          in ((_levels.get("events") or [])
+                              + (_levels.get("finals") or []))
                           if b.get("turn") is not None}
             for row in leg_rows:
                 campaign_turn += 1

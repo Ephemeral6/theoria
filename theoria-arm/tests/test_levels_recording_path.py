@@ -424,6 +424,43 @@ def test_a_completed_level_with_a_truncated_record_reads_as_missing_not_zero(
     assert "unmeasured=1" in total["reading"]
 
 
+def test_the_campaign_counts_a_won_game_as_a_completed_level(tmp_path):
+    """The downstream half of the same defect, found by fixing the upstream one.
+
+    `harness/campaign.py` asked two questions with one expression:
+    `(summary.get("levels") or {}).get("boundaries", 0)`. `boundaries` counts
+    *segmenting* boundaries -- the ones with a level after them -- so a leg that
+    **won its game** counted zero. It would have contributed nothing to the
+    campaign's `levels_completed`, and `_progress` would have called the winning
+    leg unproductive, letting a three-leg zero-progress streak stop the campaign
+    immediately after the only win in the project's history.
+
+    Nothing had ever won, so nothing had ever been wrong. That is not the same
+    as being right, and this is the test that says which.
+    """
+    from harness.campaign import _completions           # noqa: PLC0415
+
+    won = {"levels": {"boundaries": 2, "game_won": 1, "levels_completed": 3,
+                      "finished": True}}
+    advanced = {"levels": {"boundaries": 2, "game_won": 0}}
+    nothing = {"levels": {"boundaries": 0, "game_won": 0}}
+    no_record = {"outcome": "died_before_reset"}
+
+    assert _completions(won) == 3, (
+        "a leg that won a three-level game completed three levels; counting "
+        "`boundaries` alone reports two")
+    assert _completions(advanced) == 2
+    assert _completions(nothing) == 0
+    assert _completions(no_record) == 0
+
+    # ...and the progress predicate must call the winning leg productive.
+    from harness.campaign import Campaign               # noqa: PLC0415
+
+    seen = set()
+    assert Campaign._progress(None, won, seen) is True
+    assert Campaign._progress(None, nothing, set()) is False
+
+
 def test_absence_and_measured_absence_are_different_verdicts(tmp_path):
     """The other half of the same rule, on legs that completed nothing.
 

@@ -129,6 +129,10 @@ PAYLOAD = {
         "inner/): test_the_two_instruments_agree_about_the_winning_increment "
         "failed with '2 row(s) reached disk; the missing one is the win'. The "
         "test is red without the fix.",
+        "harness.campaign._progress must call a leg that WON its game "
+        "productive. Reading `boundaries` alone it did not, which is how a "
+        "three-leg zero-progress streak could have stopped a campaign "
+        "immediately after the only win in this project's history.",
     ],
     "synthetic_positives": [
         "a scripted mock leg through the real shell writes one "
@@ -161,6 +165,9 @@ PAYLOAD = {
         "theoria-arm/inner/loop.py",
         "theoria-arm/armtools/level_evidence.py (new)",
         "theoria-arm/armtools/round.py",
+        "theoria-arm/harness/campaign.py",
+        "theoria-arm/DECISIONS.md",
+        "theoria-arm/GAPS.md",
         "theoria-arm/tests/test_levels_recording_path.py (new)",
     ],
     "not_changed": [

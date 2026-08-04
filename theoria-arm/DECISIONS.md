@@ -1569,3 +1569,32 @@ Note what `evidence_missing` does **not** do: it does not fall back on the
 counter in `RUN_STATE.json` and publish that number instead. A completion whose
 event record is not on disk cannot be audited, and a figure no artefact supports
 is worse than a gap that is named.
+
+## D-A34-003 · A campaign counted a won game as zero levels, and only the fix upstream could show it
+
+`harness/campaign.py` asked "how many levels did this leg finish" twice, both
+times as `(summary.get("levels") or {}).get("boundaries", 0)` — once for the
+campaign's `levels_completed` and once inside `_progress`, the predicate behind
+`ZERO_PROGRESS_LIMIT`. `boundaries` is the count of *segmenting* boundaries: the
+ones with a level after them. The increment that finishes a game is not one of
+those, deliberately (D-A34-001).
+
+So a leg that **won its game** counted zero completions at both sites. It would
+have contributed nothing to the campaign total, and `_progress` would have
+called the winning leg unproductive — which means three such legs in a row could
+have stopped the campaign on `zero_progress_streak` immediately after the only
+win in this project's history.
+
+This was already true before D-A34-001: `boundaries` excluded the win then too,
+and there was no other number to add, so the expression could not have been
+written correctly. Nothing had ever won, so nothing had ever been wrong. That is
+not the same as being right, and it is the second time in this ticket that a
+code path was correct only because the event it mishandles has never happened.
+
+`_completions()` is the one reading, used at both sites: `boundaries +
+game_won`, and `0` for a summary with no `levels` block — with
+`legs_with_no_level_record` counted separately in the campaign summary so that
+absence is a number of its own rather than part of the numerator. `campaign_
+series` marks the boundary turns from `events + finals` for the same reason: the
+turn a game was won on is the one turn figure 2 most needs marked, and reading
+`events` alone leaves exactly that turn unmarked.

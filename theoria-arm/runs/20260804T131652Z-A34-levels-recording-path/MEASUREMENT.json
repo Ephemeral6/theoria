@@ -74,6 +74,14 @@
   "now": "every increment ScoreWatch sees has a row in levels.jsonl. summary() keeps the two kinds apart -- boundaries (segmenting, paired with starts) and game_won (not) -- rather than adding them into one number, and the test asserts boundaries + game_won == the free rung's event count.",
   "still_open": "the two instruments are still reconciled only by a test, not by a runtime check. A disagreement introduced later would be caught by tests/test_levels_recording_path.py and by nothing in a live leg."
  },
+ "6b_the_downstream_defect_the_fix_exposed": {
+  "where": "harness/campaign.py, two call sites",
+  "expression": "(summary.get('levels') or {}).get('boundaries', 0)",
+  "problem": "`boundaries` counts SEGMENTING boundaries -- the ones with a level after them. The increment that finishes the game is not one, by construction. So a leg that WON its game counted zero completions: it contributed nothing to the campaign's levels_completed, and `_progress` called the winning leg unproductive, which means a three-leg zero-progress streak could have stopped the campaign immediately after the only win in the project's history.",
+  "found_by": "fixing the upstream defect. Before this ticket `boundaries` also excluded the win, so the two sites were already wrong and nothing could show it -- there was no `game_won` to count.",
+  "fix": "harness.campaign._completions = boundaries + game_won, used at both sites; `legs_with_no_level_record` added so a leg with no levels block at all is counted rather than summed as 0; campaign_series marks the winning turn by reading events + finals.",
+  "honest_note": "nothing had ever won, so nothing had ever been wrong. That is not the same as being right."
+ },
  "7_the_negative_control": {
   "asked_for_by": "A34's closing section: build a mock leg that DID complete a level, truncate its levels.jsonl to zero bytes, and require every instrument to report 'completion information missing' rather than zero completions.",
   "built": "tests/test_levels_recording_path.py::test_a_completed_level_with_a_truncated_record_reads_as_missing_not_zero",
