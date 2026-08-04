@@ -1,0 +1,60 @@
+20260728T014402Z-g50t-first-contact-aborted
+    call 1   $ 0.7305  drop=0    empty                      -
+20260728T083400Z-E3-sk48-carried-v2
+    call 9   $ 0.0000  drop=None provider_refusal           -  [identical re-ask]
+    call 12  $ 0.0000  drop=None provider_refusal           -  [identical re-ask]
+    call 15  $ 0.0000  drop=None provider_refusal           -  [identical re-ask]
+    call 18  $ 0.0000  drop=None provider_refusal           -  [identical re-ask]
+    call 21  $ 0.0000  drop=None provider_refusal           -  [identical re-ask]
+    call 24  $ 0.0000  drop=None provider_refusal           -  [identical re-ask]
+    call 27  $ 0.0000  drop=None provider_refusal           -  [identical re-ask]
+    call 30  $ 0.0000  drop=None provider_refusal           -  [identical re-ask]
+20260731T1310Z-A3-level2-carried-r2
+    call 3   $ 2.8611  drop=1    blocks_discarded           LOG,PLAYBOOK
+20260731T231654Z-R1-g50t-a
+    call 2   $ 2.7158  drop=1    transport_total_loss       -
+20260731T231654Z-R1-sk48-b
+    call 1   $ 2.9618  drop=1    blocks_discarded           LOG,PLAYBOOK
+    call 2   $ 2.8166  drop=1    blocks_discarded           LOG,PLAYBOOK
+    call 3   $ 1.8300  drop=0    used                       LOG,PLAYBOOK,THEORY  [identical re-ask]
+20260801T001851Z-R1b-g50t-a
+    call 2   $ 2.6961  drop=1    transport_total_loss       -
+    call 9   $ 2.9711  drop=1    blocks_discarded           LOG,PLAYBOOK
+20260801T001851Z-R1b-sk48-b
+    call 1   $ 3.3620  drop=1    used                       LOG,PLAYBOOK,THEORY
+    call 2   $ 2.7911  drop=1    truncated_theory_fragment  LOG,PLAYBOOK,THEORY
+    call 3   $ 2.8981  drop=1    blocks_discarded           LOG,PLAYBOOK
+    call 4   $ 2.6845  drop=1    transport_total_loss       -  [identical re-ask]
+    call 5   $ 2.6941  drop=1    transport_total_loss       -
+    call 6   $ 2.9608  drop=1    blocks_discarded           LOG,PLAYBOOK
+20260801T044640Z-R2b-g50t-a
+    call 5   $ 2.8640  drop=1    transport_total_loss       -
+    call 9   $ 3.1826  drop=1    blocks_discarded           LOG,PLAYBOOK
+20260801T044640Z-R2b-sk48-b
+    call 1   $ 3.5398  drop=1    used                       LOG,PLAYBOOK,THEORY
+    call 3   $ 2.7900  drop=1    blocks_discarded           LOG,PLAYBOOK
+    call 4   $ 2.8266  drop=1    blocks_discarded           LOG,PLAYBOOK
+    call 5   $ 4.6848  drop=2    blocks_discarded           LOG  [identical re-ask]
+    call 6   $ 4.6253  drop=2    blocks_discarded           LOG
+
+{
+ "counts": {
+  "blocks_discarded": 11,
+  "empty": 1,
+  "provider_refusal": 24,
+  "transport_total_loss": 5,
+  "truncated_theory_fragment": 1,
+  "used": 62
+ },
+ "usd": {
+  "blocks_discarded": 35.578917,
+  "empty": 0.730485,
+  "provider_refusal": 0.0,
+  "transport_total_loss": 13.654434,
+  "truncated_theory_fragment": 2.791139,
+  "used": 94.825307
+ }
+}
+{"calls": 11, "usd": 9.199279}
+
+$52.0245 of a $147.5803 desk bill bought a reply the arm did not use, 35.3% of the whole. It is not one defect: $35.5789 is a reply whose PLAYBOOK and LOG survived and were discarded for want of a THEORY block (a beat defect, 11 calls), $2.7911 is a THEORY block the parser refused for its marker (a parser defect, 1 calls), and $13.6544 reached the arm with no usable structure at all (a transport defect, 5 calls). The 24 provider refusals are not in that total and were not billed.

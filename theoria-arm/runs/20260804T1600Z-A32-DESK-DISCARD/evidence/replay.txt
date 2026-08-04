@@ -1,0 +1,35 @@
+20260731T1310Z-A3-level2-carri call 3   $ 2.8611 blocks_discarded           log=28   playbook=True  truncation_named=True
+20260731T231654Z-R1-g50t-a     call 2   $ 2.7158 transport_total_loss       log=0    playbook=False truncation_named=True
+20260731T231654Z-R1-sk48-b     call 1   $ 2.9618 blocks_discarded           log=25   playbook=True  truncation_named=True
+20260731T231654Z-R1-sk48-b     call 2   $ 2.8166 blocks_discarded           log=26   playbook=True  truncation_named=True
+20260801T001851Z-R1b-g50t-a    call 2   $ 2.6961 transport_total_loss       log=0    playbook=False truncation_named=True
+20260801T001851Z-R1b-g50t-a    call 9   $ 2.9711 blocks_discarded           log=28   playbook=True  truncation_named=True
+20260801T001851Z-R1b-sk48-b    call 2   $ 2.7911 truncated_theory_fragment  log=20   playbook=True  truncation_named=True
+20260801T001851Z-R1b-sk48-b    call 3   $ 2.8981 blocks_discarded           log=23   playbook=True  truncation_named=True
+20260801T001851Z-R1b-sk48-b    call 4   $ 2.6845 transport_total_loss       log=0    playbook=False truncation_named=True
+20260801T001851Z-R1b-sk48-b    call 5   $ 2.6941 transport_total_loss       log=0    playbook=False truncation_named=True
+20260801T001851Z-R1b-sk48-b    call 6   $ 2.9608 blocks_discarded           log=28   playbook=True  truncation_named=True
+20260801T044640Z-R2b-g50t-a    call 5   $ 2.8640 transport_total_loss       log=0    playbook=False truncation_named=True
+20260801T044640Z-R2b-g50t-a    call 9   $ 3.1826 blocks_discarded           log=31   playbook=True  truncation_named=True
+20260801T044640Z-R2b-sk48-b    call 3   $ 2.7900 blocks_discarded           log=19   playbook=True  truncation_named=True
+20260801T044640Z-R2b-sk48-b    call 4   $ 2.8266 blocks_discarded           log=22   playbook=True  truncation_named=True
+20260801T044640Z-R2b-sk48-b    call 5   $ 4.6848 blocks_discarded           log=29   playbook=False truncation_named=True
+20260801T044640Z-R2b-sk48-b    call 6   $ 4.6253 blocks_discarded           log=20   playbook=False truncation_named=True
+
+{
+ "caveat": "`recovered_share_of_discarded` is the share of discarded spend whose reply carried something the repaired beat keeps -- adjudications and a playbook. It is NOT a claim that the manual was recovered: no manual was. The transport repair is not exercised here at all.",
+ "complaints_still_the_old_constant": 0,
+ "complaints_that_now_name_the_truncation": 17,
+ "discarded_usd": 52.02449,
+ "identical_reask_usd_not_spent": 9.199279,
+ "kept": {
+  "log_entries": 299,
+  "playbooks": 10,
+  "usd_touched": 38.370056
+ },
+ "recovered_share_of_discarded": 0.7375,
+ "unrecoverable_by_replay": {
+  "calls": 5,
+  "usd": 13.654435
+ }
+}

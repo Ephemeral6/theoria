@@ -40,6 +40,21 @@ REPAIR_ROUNDS = 2
 BLOCK = re.compile(r"===\s*(THEORY|PLAYBOOK|LOG)\s*===\s*\n+```(?:\w+)?\n(.*?)```",
                    re.DOTALL)
 
+#: The same three names with whatever the desk wrote between the name and the
+#: closing `===`. A reply that spans more than one transport message comes back
+#: headed `=== THEORY (continued -- the remainder of theory.dsl, appended to the
+#: block above) ===`, which `BLOCK` refuses; the arm then recorded it as "no
+#: THEORY block in the reply" and paid to ask again. `[^=\n]*` holds the
+#: tolerance to one line so it cannot swallow the closing marker.
+#:
+#: A qualified block is **read, not accepted**: `parse_reply` reports it under
+#: `fragments`, never under `theory`. Writing the remainder of a manual into
+#: `theory.dsl` as though it were the manual would compile green over half a
+#: world, which is worse than the refusal it replaces.
+QUALIFIED_BLOCK = re.compile(
+    r"===\s*(THEORY|PLAYBOOK|LOG)\b([^=\n]*)===\s*\n+```(?:\w+)?\n(.*?)```",
+    re.DOTALL)
+
 
 class TheorizeResult(dict):
     pass
@@ -346,9 +361,25 @@ def _certify_digest(report: Dict[str, Any]) -> Dict[str, Any]:
 
 # --------------------------------------------------------------------- reply
 def parse_reply(text: str) -> Dict[str, Any]:
+    """The three blocks, plus what the beat needs to tell a book from a scrap.
+
+    `theory` and `playbook` are only ever filled from a **bare** marker -- that
+    is the contract and it is unchanged. `fragments` and `qualifiers` are new
+    and carry the qualified markers, so a caller can distinguish "the desk sent
+    nothing" from "the desk sent the second half and the first half never
+    arrived". Across the archive those were the same sentence and 17 calls,
+    $52.02, were adjudicated on it.
+    """
     blocks = {name: body for name, body in BLOCK.findall(text or "")}
+    qualified = {name: (qual.strip(), body)
+                 for name, qual, body in QUALIFIED_BLOCK.findall(text or "")}
     log: List[Dict[str, Any]] = []
-    raw_log = blocks.get("LOG", "").strip()
+    # The LOG is read from the bare block when there is one and from a qualified
+    # one otherwise. A log is a list of adjudications, and half a list of
+    # adjudications is still adjudications -- unlike half a manual, which is not
+    # a manual. This asymmetry is the reason the two are handled differently.
+    raw_log = (blocks.get("LOG") or
+               (qualified.get("LOG") or ("", ""))[1] or "").strip()
     if raw_log:
         try:
             parsed = json.loads(raw_log)
@@ -359,7 +390,13 @@ def parse_reply(text: str) -> Dict[str, Any]:
     return {"theory": blocks.get("THEORY", "").strip(),
             "playbook": blocks.get("PLAYBOOK", "").strip(),
             "log": log,
-            "blocks_found": sorted(blocks)}
+            "blocks_found": sorted(blocks),
+            # Every marker seen, bare or not. `blocks_found` stays the strict
+            # set so nothing downstream changes meaning.
+            "markers_found": sorted(qualified),
+            "qualifiers": {n: q for n, (q, _b) in qualified.items() if q},
+            "fragments": {n: b.strip() for n, (q, b) in qualified.items()
+                          if q and n not in blocks}}
 
 
 # ---------------------------------------------------------------------- beat
@@ -396,6 +433,9 @@ def run(desk, books, store: FrameStore, candidates_path: str, *,
 
     compile_errors: Optional[Dict[str, Any]] = None
     patch_refusal: Optional[deskdiet.PatchRefused] = None
+    #: Every prompt this beat has already paid for, in order. See the guard in
+    #: the loop below.
+    asked: List[str] = []
     census: List[Dict[str, Any]] = []
     result["prompt_census"] = census
     # The rider is the same on every attempt of this beat -- a repair call is
@@ -431,14 +471,39 @@ def run(desk, books, store: FrameStore, candidates_path: str, *,
                               surprises or [], compile_errors, certify_report,
                               goal_rider=goal_rider,
                               diet=diet, allow_patch=allow_patch)
+        # A repair that asks the same question cannot get a different answer,
+        # and it is not free. `compile_errors` for a missing THEORY block used
+        # to be a CONSTANT string, so attempt 3's prompt was byte-identical to
+        # attempt 2's -- 11 calls in the archive, $9.20 of them billed, every
+        # one labelled `round3`. It succeeded once in three, which is why it
+        # went unnoticed. The complaint above now varies with what actually
+        # happened, so this is a backstop rather than the fix: if the bytes
+        # would still repeat, the beat stops instead of paying.
+        if prompt in asked:
+            result["rounds"].append({
+                "attempt": attempt + 1,
+                "error": "the repair prompt is byte-identical to attempt %d's; "
+                         "refused rather than paid for" % (asked.index(prompt) + 1),
+                "not_sent": True,
+            })
+            break
+        asked.append(prompt)
         census.append(_census(prompt, attempt + 1, allow_patch))
         reply = desk.call(prompt, beat="theorize", step_idx=step_idx,
                           label="round%d" % (attempt + 1))
         result["calls"] += 1
         parsed = parse_reply(reply)
+        # How much of the reply the transport never handed over. The desk knows
+        # (its own usage records output tokens for the whole call and for the
+        # last message separately); the beat has to ask, and must treat "the
+        # desk does not report it" as not knowing rather than as zero.
+        dropped = getattr(desk, "last_messages_dropped", None)
         round_entry: Dict[str, Any] = {"attempt": attempt + 1,
                                        "blocks": parsed["blocks_found"],
-                                       "log_entries": len(parsed["log"])}
+                                       "log_entries": len(parsed["log"]),
+                                       "messages_dropped": dropped}
+        if parsed["qualifiers"]:
+            round_entry["marker_qualifiers"] = parsed["qualifiers"]
 
         theory_text = parsed["theory"]
 
@@ -463,9 +528,16 @@ def run(desk, books, store: FrameStore, candidates_path: str, *,
 
         if not theory_text:
             round_entry["error"] = "no THEORY block in the reply"
+            # Keep the log and the playbook rather than discarding a reply that
+            # was paid for in full. `result["log"]` is set here and may be
+            # overwritten by a later attempt that succeeds -- which is right:
+            # the later adjudication supersedes, and a beat that never succeeds
+            # still has adjudications to show for its money.
+            round_entry.update(_salvage(books, parsed))
+            if parsed["log"]:
+                result["log"] = parsed["log"]
             result["rounds"].append(round_entry)
-            compile_errors = {"reply": "the reply carried no === THEORY === "
-                                       "block; emit all three blocks"}
+            compile_errors = _missing_theory(parsed, dropped, allow_patch)
             continue
 
         books.write(theory=theory_text,
@@ -511,6 +583,75 @@ def run(desk, books, store: FrameStore, candidates_path: str, *,
     result["snapshot_after"] = books.snapshot("after-theorize")
     result["ok"] = bool((result.get("_compiled") or {}).get("ok"))
     return result
+
+
+def _salvage(books, parsed: Dict[str, Any]) -> Dict[str, Any]:
+    """Keep what survived a reply that carried no manual.
+
+    The beat used to discard the whole reply when `THEORY` was missing. On the
+    archive that threw away 11 replies carrying a complete `PLAYBOOK` and 272
+    adjudications between them, for $35.58 -- the arm asked for three blocks,
+    was sent two, and kept none. The manual is genuinely unusable (a playbook
+    written against a manual the arm does not have would be a guess), so the
+    manual is **not** touched here; the playbook and the log are.
+
+    Returns what was kept, for the round entry. Writing the playbook alone is
+    safe because `books.write` takes the current theory unchanged.
+    """
+    kept: Dict[str, Any] = {"salvaged_log_entries": len(parsed["log"]),
+                            "salvaged_playbook": False}
+    playbook = parsed["playbook"] or parsed["fragments"].get("PLAYBOOK", "")
+    if playbook.strip() and books.theory.strip():
+        # Only when a manual already exists: a playbook against an empty manual
+        # has nothing to be a playbook *for*, and writing one would put a claim
+        # in the books that no evidence reaches.
+        books.write(theory=books.theory, playbook=playbook)
+        kept["salvaged_playbook"] = True
+    return kept
+
+
+def _missing_theory(parsed: Dict[str, Any], dropped: Optional[int],
+                    allow_patch: bool) -> Dict[str, Any]:
+    """What to tell the desk when no bare THEORY block arrived.
+
+    Three different things happened under that one sentence and the desk was
+    told the same thing each time -- "emit all three blocks" -- which is wrong
+    advice in two of them and produced four consecutive void calls at $14.93 on
+    the R2b sk48 leg. The complaint now names which one it was.
+
+    `dropped` is how many assistant messages the transport did not deliver, as
+    the desk reports it (`ModelDesk.last_messages_dropped`). `None` means the
+    arm cannot tell -- which is recorded as not knowing, not as zero.
+    """
+    if dropped:
+        return {
+            "transport_truncation": (
+                "Your previous reply was NOT rejected for its content. It "
+                "exceeded the transport's per-message output ceiling, was split "
+                "across %d+1 messages, and only the LAST message reached me -- "
+                "so the beginning of your answer, including the THEORY block, "
+                "was never delivered. Repeating the same answer will be cut in "
+                "the same place." % dropped),
+            "what_to_do": (
+                "Send a THEORY-PATCH instead of the whole manual."
+                if allow_patch else
+                "Send the THEORY block ALONE, and make it short: reply with "
+                "the manual only, no PLAYBOOK and no LOG. A shorter reply is "
+                "one that arrives."),
+            "received": sorted(parsed["markers_found"]),
+        }
+    if "THEORY" in parsed["fragments"]:
+        return {
+            "reply": (
+                "Your reply carried a THEORY block whose marker was qualified "
+                "(%r), which names a fragment rather than the manual. I cannot "
+                "tell a remainder from a whole book, so I did not write it."
+                % parsed["qualifiers"].get("THEORY", "")),
+            "what_to_do": ("Emit the manual under a bare `=== THEORY ===` "
+                           "marker with no parenthetical, in one block."),
+        }
+    return {"reply": "the reply carried no === THEORY === block; emit all "
+                     "three blocks"}
 
 
 def _census(prompt: str, attempt: int, patch_asked: bool) -> Dict[str, Any]:
