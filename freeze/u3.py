@@ -952,11 +952,41 @@ def evaluate(path: Path, probe: bool = False,
     # book's file name is not evidence about a book, so every `.lean` file in
     # the directory that STATES A THEOREM is a candidate.  `lakefile.lean` and
     # friends state none and are skipped by that test, not by a name list.
+    #
+    # D1's second half (2026-08-02).  Before the repair a directory had exactly
+    # one candidate book, so "which book carried this directory" was not a
+    # question.  Widening to every theorem-stating `.lean` makes it one, and
+    # `consider` resolves it by STAGE RANK with a strict `>` — so among books
+    # that tie at the top, the one `find_books` sorts first wins, and every
+    # other book's verdict is dropped on the floor unrecorded.  Two things ride
+    # on that silence, both seen on the C4 development:
+    #
+    #   * a book that fails (a) for an ENVIRONMENTAL reason (Lean OOMs on the
+    #     28,672-leaf `corner` half of C4 on a loaded machine) is absorbed by a
+    #     sibling that compiles, and the directory reads `discharged` either
+    #     way.  The verdict is then memory-dependent while looking stable.
+    #   * `verify/` holds `Control_pair.lean`, a NEGATIVE control carrying
+    #     `sorryAx`.  It is correctly rejected — but nothing in the output says
+    #     a control was weighed, so a reader cannot check that it was rejected
+    #     rather than never reached.
+    #
+    # The roster is therefore recorded next to the verdict.  No arithmetic
+    # moves: `consider` is untouched and the label is what it was.  This is the
+    # audit trail the widened search needs in order to stay a census rather
+    # than a best-of.
     if best is None:
+        roster: List[Dict[str, Any]] = []
         for lean_file in find_books(path):
-            consider(eval_lean_source(lean_file, probe=probe,
-                                      lean_bin=lean_bin or find_lean(),
-                                      recorded={}))
+            v = eval_lean_source(lean_file, probe=probe,
+                                 lean_bin=lean_bin or find_lean(),
+                                 recorded={})
+            roster.append({"book": lean_file.name, "label": v["label"],
+                           "verdict": v["verdict"]})
+            consider(v)
+        if best is not None and roster:
+            best.setdefault("evidence", {})["books_considered"] = roster
+            best["evidence"]["carried_by"] = next(
+                (r["book"] for r in roster if r["label"] == best["label"]), None)
 
     if best is None:
         best = _verdict("no_evidence",

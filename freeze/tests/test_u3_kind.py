@@ -535,3 +535,80 @@ def test_shape_parser_fails_closed_on_an_unreadable_source():
                              {"source": "test"})
     assert v["label"] == "unclassified"
     assert v["verdict"] == "not_attained"
+
+
+# ======================= D1's second half: who carried the directory, and who lost
+
+#: `REAL_MANUAL` with its closure step holed.  Compiles (a `sorry` is a warning),
+#: reports `sorryAx`, and is therefore rejected by (b).  It stands in here for
+#: any book that must not be allowed to carry a directory.
+HOLED_MANUAL = REAL_MANUAL.replace(
+    """theorem inv_closed (s : St) : I s = true -> I (step s) = true := by
+  intro h
+  cases s with
+  | mk p => cases p <;> simp_all [I, step]""",
+    """theorem inv_closed (s : St) : I s = true -> I (step s) = true := by
+  sorry""")
+
+
+@needs_lean
+def test_D1_the_roster_names_every_book_weighed_and_which_one_carried(tmp_path):
+    """A per-directory verdict over N books must say which book it rests on.
+
+    Before D1 a directory had exactly one candidate, so this was not a
+    question.  Widening the search to every theorem-stating `.lean` makes the
+    directory verdict a MAX over books, and `consider`'s strict `>` means the
+    first book at the top rank wins while the rest vanish.  On the C4
+    development that silence hides two live cases: a book Lean OOMs on is
+    absorbed by a sibling that compiles, and `verify/Control_pair.lean` -- a
+    negative control carrying `sorryAx` -- is weighed and rejected with nothing
+    in the output to show it was ever reached.
+    """
+    d = _book(tmp_path, "pkg", HOLED_MANUAL, filename="Alpha.lean")
+    (d / "Zulu.lean").write_text(REAL_MANUAL, encoding="utf-8")
+    assert [p.name for p in u3.find_books(d)] == ["Alpha.lean", "Zulu.lean"]
+
+    v = u3.evaluate(d, lean_bin=LEAN)
+    assert v["verdict"] == "attained", v
+
+    roster = v["evidence"]["books_considered"]
+    assert [r["book"] for r in roster] == ["Alpha.lean", "Zulu.lean"], roster
+    # The losing book is not merely absent from the verdict -- it is named,
+    # with the verdict it got on its own.
+    losers = [r for r in roster if r["verdict"] != "attained"]
+    assert [r["book"] for r in losers] == ["Alpha.lean"], roster
+    assert v["evidence"]["carried_by"] == "Zulu.lean", v["evidence"]
+
+
+@needs_lean
+def test_D1_negative_control_the_roster_tracks_the_search_it_is_not_a_constant(
+        tmp_path, monkeypatch):
+    """Break the guarantee on purpose: blind the search to the second book.
+
+    A roster that reported both books whatever `find_books` returned would look
+    identical on the happy path and prove nothing.  With the attaining book
+    hidden the directory must fall to the holed one, and the roster must shrink
+    with it.
+    """
+    d = _book(tmp_path, "pkg", HOLED_MANUAL, filename="Alpha.lean")
+    (d / "Zulu.lean").write_text(REAL_MANUAL, encoding="utf-8")
+    monkeypatch.setattr(u3, "find_books", lambda p: sorted(
+        q for q in Path(p).glob("Alpha.lean")))
+
+    v = u3.evaluate(d, lean_bin=LEAN)
+    assert v["verdict"] == "not_attained", v
+    roster = v["evidence"]["books_considered"]
+    assert [r["book"] for r in roster] == ["Alpha.lean"], roster
+    assert v["evidence"]["carried_by"] == "Alpha.lean", v["evidence"]
+
+
+def test_D1_a_directory_with_no_book_gets_no_roster(tmp_path):
+    """`no_evidence` must not grow a books_considered key.  An empty roster and
+    an unasked question are different things, and the census reads this field
+    to decide whether the bare-book route was taken at all."""
+    d = tmp_path / "proj"
+    d.mkdir()
+    (d / "lakefile.lean").write_text("import Lake\n", encoding="utf-8")
+    v = u3.evaluate(d)
+    assert v["label"] == "no_evidence"
+    assert "books_considered" not in v["evidence"]

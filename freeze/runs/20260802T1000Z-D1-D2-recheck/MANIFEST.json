@@ -1,0 +1,43 @@
+{
+ "prompt_id": "freeze/d1-recheck",
+ "prompt": "Close D1 (u3.evaluate looks only for <dir>/theory.lean) and D2 (expand_targets descends one level), re-run the census, report attainment against 14/24, and say whether the C4 deadlock development attains.",
+ "branch": "w/freeze-d1",
+ "base_commit": "b4540026",
+ "utc": "2026-08-02T10:00:00Z",
+ "seed": null,
+ "files": [
+  {
+   "path": "freeze/u3.py",
+   "sha256": "ae742cf8768fb51ff8bbb26eab2b0dee12334e19b5e0fd50c1745067f1c24021"
+  },
+  {
+   "path": "freeze/tests/test_u3_kind.py",
+   "sha256": "5ae3a9388da55d8feaa92ba92ffdad174e2babf2151d5c6995a38f4579dfd1df"
+  },
+  {
+   "path": "freeze/runs/20260802T1000Z-D1-D2-recheck/census.py",
+   "sha256": "1780cecaae79f06d5a357dda6edf6538aa86ebd95eeee340d957d42834a9f39f"
+  },
+  {
+   "path": "freeze/runs/20260802T1000Z-D1-D2-recheck/per_book.py",
+   "sha256": "d6a377534685a38c9129b0020eec8b8696d0b16e5d68e1b8c0c745857fcf907a"
+  },
+  {
+   "path": "freeze/runs/20260802T1000Z-D1-D2-recheck/census.json",
+   "sha256": "f5e507743a9b2bec3b5fd912dfaa3e9333f4ac5fe57e9f5ecd76756da7469b7d"
+  },
+  {
+   "path": "freeze/runs/20260802T1000Z-D1-D2-recheck/per_book.json",
+   "sha256": "9f362a85adad9a551a3c38131475aad76570848b01055238bf8d72128179b70f"
+  },
+  {
+   "path": "freeze/runs/20260802T1000Z-D1-D2-recheck/CENSUS.md",
+   "sha256": "6234baeb47451a10c9e2c28457536c76c14ef0fe3bd18cd82ad242dbb81aa78b"
+  },
+  {
+   "path": "freeze/runs/20260802T1000Z-D1-D2-recheck/RUN_STATE.md",
+   "sha256": "0c6ef7b7667c1c5c542705e28bc42622e0c2a3c3808acb5925ae50e34987e939"
+  }
+ ],
+ "notes": "D1 and D2 were ALREADY CLOSED on master at 1c063290 (2026-08-01); the brief that commissioned this run was describing landed work. This run re-derives the census independently and reproduces it exactly: 24 books, discharged 17, vacuous 2, unclassified 4, failing_obligation 1, 17/24 attained.  50 directories today against 44 on 08-01 -- six theoria-arm run dirs appeared since, all bookless, and the book count is unchanged.  New work here is D1's second half: the widened search made the directory verdict a MAX over N books and nothing recorded which book carried it, so a book Lean OOMs on is absorbed by a sibling and two negative controls in C4's verify/ were weighed invisibly.  offline: Lean 4.9.0 only, no API/model/network/spend, no sealed-pile contact."
+}
