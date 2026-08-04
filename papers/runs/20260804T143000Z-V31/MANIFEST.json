@@ -32,7 +32,7 @@
     },
     {
       "path": "papers/runs/20260804T143000Z-V31/RUN_STATE.md",
-      "sha256": "27940001b002b990595e0cd5896e69857dd36c01ea4edb8c1bb1613535dd01c6"
+      "sha256": "1a5157e9898a1e92b415b5f966a6e37ef2b22bfe65869faf0b9dd5956313152b"
     },
     {
       "path": "papers/runs/20260804T143000Z-V31/baseline-verify.txt",
@@ -44,15 +44,15 @@
     },
     {
       "path": "papers/runs/20260804T143000Z-V31/after-verify-run1.txt",
-      "sha256": "ec03caa7bb6b02445fef4bfe55671d170130178df8a762386cb7b84c09295db1"
+      "sha256": "fddc8c787f64fe0ddc1019b3e868aaf37f567f8d7d962c2980d8756026fad7d7"
     },
     {
       "path": "papers/runs/20260804T143000Z-V31/after-verify-run2.txt",
-      "sha256": "d19f89ab042965d7714b582658594a00bc5f28917201557d5a7af8f9e3f8c998"
+      "sha256": "11f39fe2d096264ce3402980106df961911f7cfad1d764101db6ddfada206082"
     },
     {
       "path": "papers/runs/20260804T143000Z-V31/_mkmanifest.py",
-      "sha256": "dcedade74a9fe511d7e7020563a2a2d3090a59a69cf6a3897380fe82296f13e7"
+      "sha256": "d1c3a6e806f3888fd72fd91cab78baf36b4dc62325ce33229b9bcb74652490dc"
     },
     {
       "path": "papers/runs/20260804T143000Z-V31/_probe.py",

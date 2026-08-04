@@ -1,14 +1,23 @@
 # V31 — the papers gate is green, and one finding is held open in the light
 
 **Ticket** `monitor/board/items/V31-papers-gate-red-on-master.md` · **worker** W-9208
-· **branch** `agent/v31-papers-gate-red-on-master` · **base** `18e7d81b` ·
-**spend** zero, offline throughout.
+· **branch** `agent/v31-papers-gate-red-on-master` · **base** `18e7d81b`,
+re-verified after merging `origin/master` at `0f5aa797` · **spend** zero, offline
+throughout.
 
 `python papers/verify.py` on this branch: **exit 0, twice consecutively**
-(`after-verify-run1.txt`, `after-verify-run2.txt`). It was exit 1 with four
-problems on `18e7d81b` (`baseline-verify.txt`). The territory suite is
-**274 passed, 1 xfailed**, up from 270 passed / 4 of which the delegator's `-x`
-could only show one.
+(`after-verify-run1.txt`, `after-verify-run2.txt`), and green on five consecutive
+runs before that. It was exit 1 with four problems on `18e7d81b`
+(`baseline-verify.txt`). The territory suite is **323 passed, 1 xfailed**, against
+a baseline of 270 passed / 4 failed — of which the delegator's `-x` could only
+ever show one.
+
+`origin/master` moved three merges during this ticket and the merge is in:
+`0f5aa797` brought the zero-census work and edits to five sections
+(`00_abstract`, `01_intro`, `07_battery`, `11_limitations`, `12_related`) plus
+`test_zero_census.py`. No conflict — none of it touches the files this ticket
+changes — and the gate is green *after* the merge, not only before it, which is
+the state `ci_merge` will actually see.
 
 The ticket asked for a sentence of reason per fix. There are five, and the fourth
 is not a fix.

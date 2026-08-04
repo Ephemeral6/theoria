@@ -6,6 +6,6 @@
 [2/3] run the gate each paper ships
    ok    phase1-workshop -> verify_paper.py: verify_paper: PASS (7/7) [1 DEFERRED finding(s) held open, not fixed: 08_exam.md -- see check E]
 [3/3] run the suite that shows those gates can go red
-   ok    314 passed, 1 xfailed in 101.15s (0:01:41)
+   ok    323 passed, 1 xfailed in 88.01s (0:01:28)
 
 papers: green -- 1 paper(s), each gated by its own check, and the checks' own suite run

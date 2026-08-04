@@ -44,6 +44,23 @@ def git(*args):
                           capture_output=True, text=True).stdout.strip()
 
 
+def base_commit():
+    """The master commit this branch was cut from.
+
+    Walk this branch's own first-parent commits, take the earliest, and return
+    its parent. That is the branch point by construction and it does not move
+    when the remote does or when master is merged in.
+    """
+    own = git("rev-list", "--first-parent", "origin/master..HEAD").split()
+    return git("rev-parse", own[-1] + "^") if own else git("rev-parse", "HEAD")
+
+
+def merged_master():
+    """The master commit merged in, or None if none was."""
+    merge = git("rev-list", "--merges", "--first-parent", "-1", "HEAD")
+    return git("rev-parse", merge + "^2") if merge else None
+
+
 def sha256(rel):
     h = hashlib.sha256()
     with open(os.path.join(ROOT, rel), "rb") as fh:
@@ -66,13 +83,17 @@ def main():
         "worker": "W-9208",
         "territory": "papers",
         "branch": git("rev-parse", "--abbrev-ref", "HEAD"),
-        # The branch point, not `origin/master` -- which moves under a long
-        # ticket. The first version of this file read `rev-parse origin/master`
-        # and quietly started recording a commit this work had never seen, three
-        # merges after the one it was actually built on. A provenance field that
-        # tracks the remote is not provenance.
-        "base_commit": git("merge-base", "origin/master", "HEAD"),
-        "merged_master_at": git("rev-parse", "origin/master"),
+        # The branch point, and it has to be derived rather than read off the
+        # remote. The first version of this file used `rev-parse origin/master`,
+        # and `origin/master` moved three merges during this ticket -- so the
+        # manifest quietly started recording a commit the work had never seen.
+        # `merge-base origin/master HEAD` has the same defect once master is
+        # merged in: it returns the merged head. A provenance field that tracks
+        # the remote is not provenance.
+        "base_commit": base_commit(),
+        # ...and the master commit actually merged in, taken from the merge's own
+        # second parent rather than from wherever the remote has got to since.
+        "merged_master_at": merged_master(),
         "utc": f"{UTC[:4]}-{UTC[4:6]}-{UTC[6:8]}T{UTC[9:11]}:{UTC[11:13]}:{UTC[13:15]}Z",
         "seed": None,
         "spend": {"api_calls": 0, "usd": 0.0,
