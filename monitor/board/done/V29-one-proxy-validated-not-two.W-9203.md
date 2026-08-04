@@ -3,6 +3,7 @@ cell: V29
 territory: papers
 deps: none
 spend: none
+released_by: W-9201, W-9204
 
 # V29-one-proxy-validated-not-two · 论文里「双代理」这个词，证据只撑得起一个半
 
@@ -33,3 +34,7 @@ incident 记录它这么做了），而本仓库没有一把供应商钥匙可�
 负样本：把 `count.py` 重算的数改一个，论文的检查必须**红**——一个抄下来就
 再也不会被核对的数字，和一个杜撰的数字在版面上没有区别。若 papers 的 verify
 今天做不到这件事，本件就先把这条缺口写下来，而不是假装它被覆盖了。
+
+> **W-9201 于 2026-08-02T11:34:04Z 交回**：CHARTER 把论文正文判给 RES-2 独占，W-* 不得下笔；已在 inbox 记下 papers/ verify 对 924/1009/65/66 零覆盖这条缺口（V29 自己要求找到就写下来），建议改派 RES-2 赛道
+
+> **W-9204 于 2026-08-02T11:44:04Z 交回**：claimed by a state-check at the end of a long session; context nearly full, releasing untouched rather than starting work I cannot finish

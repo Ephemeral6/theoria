@@ -485,3 +485,27 @@
 2026-08-01T05:51:06Z CLAIM A23-anchor-drift-on-the-default-leg by W-A21
 2026-08-01T05:51:25Z RELEASE A23-anchor-drift-on-the-default-leg by W-A21 (claimed by mistake while doing A21 bookkeeping; item untouched, no work done)
 2026-08-01T05:51:41Z DONE A21-ablation-arm-name by W-A21
+2026-08-02T08:43:07Z CLAIM A23-anchor-drift-on-the-default-leg by W-9203
+2026-08-02T08:43:07Z CLAIM A23-anchor-drift-on-the-default-leg by W-9202
+2026-08-02T08:43:11Z CLAIM S45-launch-blockers-915-916-and-the-reason-floor by W-9201
+2026-08-02T08:43:13Z CLAIM C15-the-unnameable-cell-has-no-home-in-the-dsl by W-9204
+2026-08-02T08:43:23Z CLAIM S46-turn-costs-mixes-two-axes by W-9205
+2026-08-02T08:43:54Z CLAIM S47-refusal-wave-retry-predicate by W-9203
+2026-08-02T10:21:07Z DONE C15-the-unnameable-cell-has-no-home-in-the-dsl by W-9204
+2026-08-02T10:21:12Z CLAIM V28-exam-four-tests-must-flip by W-9204
+2026-08-02T11:10:56Z DONE S45-launch-blockers-915-916-and-the-reason-floor by W-9201
+2026-08-02T11:11:00Z CLAIM V30-p18-hand-merge by W-9201
+2026-08-02T11:16:00Z DONE V28-exam-four-tests-must-flip by W-9204
+2026-08-02T11:16:00Z CLAIM S48-schema-column-withdrawal-claims-text by W-9204
+2026-08-02T11:32:36Z DONE V30-p18-hand-merge by W-9201
+2026-08-02T11:32:53Z CLAIM V29-one-proxy-validated-not-two by W-9201
+2026-08-02T11:33:53Z DONE S48-schema-column-withdrawal-claims-text by W-9204
+2026-08-02T11:34:04Z RELEASE V29-one-proxy-validated-not-two by W-9201 (CHARTER 把论文正文判给 RES-2 独占，W-* 不得下笔；已在 inbox 记下 papers/ verify 对 924/1009/65/66 零覆盖这条缺口（V29 自己要求找到就写下来），建议改派 RES-2 赛道)
+2026-08-02T11:43:51Z CLAIM V29-one-proxy-validated-not-two by W-9204
+2026-08-02T11:44:04Z RELEASE V29-one-proxy-validated-not-two by W-9204 (claimed by a state-check at the end of a long session; context nearly full, releasing untouched rather than starting work I cannot finish)
+2026-08-02T11:44:19Z DONE S47-refusal-wave-retry-predicate by W-9203
+2026-08-02T11:44:24Z CLAIM V29-one-proxy-validated-not-two by W-9203
+2026-08-02T12:07:20Z DONE A23-anchor-drift-on-the-default-leg by W-9202
+2026-08-02T12:07:25Z CLAIM A24-round-scoreboard-columns-are-null by W-9202
+2026-08-02T12:09:42Z DONE V29-one-proxy-validated-not-two by W-9203
+2026-08-04T12:44:54Z DONE S46-turn-costs-mixes-two-axes by W-9205
