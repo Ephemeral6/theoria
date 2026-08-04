@@ -1,0 +1,292 @@
+{
+  "absence": {
+    "observed_run_ids": 57,
+    "observed_run_ids_with_a_recorded_allowance": 55,
+    "observed_run_ids_with_no_allowance_anywhere": 2,
+    "run_ids_with_no_allowance_anywhere": [
+      "bare_cc-ar25-claude-haiku-4-5-20251001-833db563",
+      "bare_cc-g50t-claude-haiku-4-5-20251001-29065be4"
+    ]
+  },
+  "per_game": {
+    "ar25-0c556536": {
+      "achieved_max": 67,
+      "achieved_max_run_id": "bare_cc-ar25-claude-haiku-4-5-20251001-76390591",
+      "adequate_runs_that_would_abort_under_current_rules": {
+        "no": 12
+      },
+      "allowance_covers_level_1": true,
+      "allowance_max": 748,
+      "allowance_max_run_id": "bare_cc-ar25-claude-haiku-4-5-20251001-0cd850f1",
+      "by_regime": {
+        "S1 baseline-parity": {
+          "achieved_max": 67,
+          "allowance_max": 748,
+          "allowance_source": "out/campaign/campaign_ar25.json:total_budget - actions_ok(prior episodes)",
+          "outcomes": {
+            "api_unusable": 11,
+            "game_over": 1
+          },
+          "runs": 12
+        },
+        "m4-pilot": {
+          "achieved_max": 15,
+          "allowance_max": 20,
+          "allowance_source": "runs/<id>/run.json:budget",
+          "outcomes": {
+            "api_unusable": 2,
+            "budget_exhausted": 2,
+            "model_error": 2
+          },
+          "runs": 6
+        },
+        "phase3-variance-envelope": {
+          "achieved_max": 19,
+          "allowance_max": 30,
+          "allowance_source": "runs/<id>/run.json:budget",
+          "outcomes": {
+            "api_unusable": 3
+          },
+          "runs": 3
+        }
+      },
+      "level_1_baseline": 32,
+      "level_baseline_actions": [
+        32,
+        50,
+        75,
+        37,
+        89,
+        159,
+        233,
+        73
+      ],
+      "runs_allowed_at_least_level_1": 12,
+      "runs_with_a_recorded_allowance": 21,
+      "terminal_game_end_at_or_over_level_1": [
+        "bare_cc-ar25-claude-haiku-4-5-20251001-76390591"
+      ],
+      "terminal_game_end_run_ids": [
+        "bare_cc-ar25-claude-haiku-4-5-20251001-76390591"
+      ],
+      "verdict": "capability_tested"
+    },
+    "g50t-5849a774": {
+      "achieved_max": 73,
+      "achieved_max_run_id": "bare_cc-g50t-claude-haiku-4-5-20251001-52bd4daf",
+      "adequate_runs_that_would_abort_under_current_rules": {
+        "no": 12
+      },
+      "allowance_covers_level_1": true,
+      "allowance_max": 879,
+      "allowance_max_run_id": "bare_cc-g50t-claude-haiku-4-5-20251001-5de89c63",
+      "by_regime": {
+        "S1 baseline-parity": {
+          "achieved_max": 73,
+          "allowance_max": 879,
+          "allowance_source": "out/campaign/campaign_g50t.json:total_budget - actions_ok(prior episodes)",
+          "outcomes": {
+            "api_unusable": 12
+          },
+          "runs": 12
+        },
+        "m4-pilot": {
+          "achieved_max": 14,
+          "allowance_max": 20,
+          "allowance_source": "runs/<id>/run.json:budget",
+          "outcomes": {
+            "budget_exhausted": 6,
+            "model_error": 2
+          },
+          "runs": 8
+        },
+        "phase3-unit-price-recheck": {
+          "achieved_max": 30,
+          "allowance_max": 30,
+          "allowance_source": "runs/<id>/run.json:budget",
+          "outcomes": {
+            "budget_exhausted": 1
+          },
+          "runs": 1
+        },
+        "phase3-unit-price-remeasure": {
+          "achieved_max": 30,
+          "allowance_max": 30,
+          "allowance_source": "runs/<id>/run.json:budget",
+          "outcomes": {
+            "budget_exhausted": 2
+          },
+          "runs": 2
+        },
+        "phase3-variance-envelope": {
+          "achieved_max": 30,
+          "allowance_max": 30,
+          "allowance_source": "runs/<id>/run.json:budget",
+          "outcomes": {
+            "budget_exhausted": 3
+          },
+          "runs": 3
+        }
+      },
+      "level_1_baseline": 78,
+      "level_baseline_actions": [
+        78,
+        175,
+        179,
+        230,
+        96,
+        54,
+        67
+      ],
+      "runs_allowed_at_least_level_1": 12,
+      "runs_with_a_recorded_allowance": 26,
+      "terminal_game_end_at_or_over_level_1": [],
+      "terminal_game_end_run_ids": [],
+      "verdict": "abort_artefact"
+    },
+    "sk48-d8078629": {
+      "achieved_max": 38,
+      "achieved_max_run_id": "bare_cc-sk48-claude-haiku-4-5-20251001-a6ec50e6",
+      "adequate_runs_that_would_abort_under_current_rules": {
+        "no": 12
+      },
+      "allowance_covers_level_1": true,
+      "allowance_max": 1070,
+      "allowance_max_run_id": "bare_cc-sk48-claude-haiku-4-5-20251001-89edd132",
+      "by_regime": {
+        "S1 baseline-parity": {
+          "achieved_max": 38,
+          "allowance_max": 1070,
+          "allowance_source": "out/campaign/campaign_sk48.json:total_budget - actions_ok(prior episodes)",
+          "outcomes": {
+            "api_unusable": 12
+          },
+          "runs": 12
+        },
+        "m4-pilot": {
+          "achieved_max": 15,
+          "allowance_max": 20,
+          "allowance_source": "runs/<id>/run.json:budget",
+          "outcomes": {
+            "budget_exhausted": 4,
+            "model_error": 4
+          },
+          "runs": 8
+        },
+        "phase3-unit-price-remeasure": {
+          "achieved_max": 26,
+          "allowance_max": 30,
+          "allowance_source": "runs/<id>/run.json:budget",
+          "outcomes": {
+            "budget_exhausted": 2
+          },
+          "runs": 2
+        },
+        "phase3-variance-envelope": {
+          "achieved_max": 28,
+          "allowance_max": 30,
+          "allowance_source": "runs/<id>/run.json:budget",
+          "outcomes": {
+            "budget_exhausted": 3
+          },
+          "runs": 3
+        }
+      },
+      "level_1_baseline": 61,
+      "level_baseline_actions": [
+        61,
+        177,
+        101,
+        103,
+        230,
+        181,
+        125,
+        92
+      ],
+      "runs_allowed_at_least_level_1": 12,
+      "runs_with_a_recorded_allowance": 25,
+      "terminal_game_end_at_or_over_level_1": [],
+      "terminal_game_end_run_ids": [],
+      "verdict": "abort_artefact"
+    },
+    "tn36-ef4dde99": {
+      "achieved_max": 32,
+      "achieved_max_run_id": "bare_cc-tn36-claude-haiku-4-5-20251001-a34b4342",
+      "adequate_runs_that_would_abort_under_current_rules": {
+        "no": 12
+      },
+      "allowance_covers_level_1": true,
+      "allowance_max": 317,
+      "allowance_max_run_id": "bare_cc-tn36-claude-haiku-4-5-20251001-0da9ce88",
+      "by_regime": {
+        "S1 baseline-parity": {
+          "achieved_max": 32,
+          "allowance_max": 317,
+          "allowance_source": "out/campaign/campaign_tn36.json:total_budget - actions_ok(prior episodes)",
+          "outcomes": {
+            "api_unusable": 12
+          },
+          "runs": 12
+        },
+        "m4-pilot": {
+          "achieved_max": 13,
+          "allowance_max": 20,
+          "allowance_source": "runs/<id>/run.json:budget",
+          "outcomes": {
+            "api_unusable": 2,
+            "budget_exhausted": 2,
+            "model_error": 2
+          },
+          "runs": 6
+        },
+        "phase3-unit-price-remeasure": {
+          "achieved_max": 12,
+          "allowance_max": 30,
+          "allowance_source": "runs/<id>/run.json:budget",
+          "outcomes": {
+            "api_unusable": 1,
+            "budget_exhausted": 1
+          },
+          "runs": 2
+        },
+        "phase3-variance-envelope": {
+          "achieved_max": 24,
+          "allowance_max": 30,
+          "allowance_source": "runs/<id>/run.json:budget",
+          "outcomes": {
+            "api_unusable": 2,
+            "budget_exhausted": 1,
+            "gave_up": 2,
+            "no_reset_window": 1
+          },
+          "runs": 6
+        }
+      },
+      "level_1_baseline": 32,
+      "level_baseline_actions": [
+        32,
+        72,
+        26,
+        40,
+        30,
+        55,
+        62
+      ],
+      "runs_allowed_at_least_level_1": 12,
+      "runs_with_a_recorded_allowance": 26,
+      "terminal_game_end_at_or_over_level_1": [],
+      "terminal_game_end_run_ids": [],
+      "verdict": "abort_artefact"
+    }
+  },
+  "stop_rule": {
+    "rule_in_force_when_s1_ran": "actions_failed >= 10 (absolute, cumulative)",
+    "rule_today_consecutive_abort": 10,
+    "rule_today_grind_cap_at_a_748_action_budget": 748,
+    "s1_episodes": 48,
+    "s1_episodes_that_would_abort_under_current_rules": 0,
+    "s1_episodes_whose_recorded_outcome_was_api_unusable": 47,
+    "s1_episodes_with_a_ledger_failure_shape": 48,
+    "s1_longest_consecutive_failure_run_anywhere": 5
+  }
+}

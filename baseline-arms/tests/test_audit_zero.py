@@ -11,10 +11,19 @@ checkable before this module existed:
      at all three nesting levels (card, environment, run) and at every level
      slot. The zero is real, not an artefact of a missed read.
   3. The zero is *not* uniformly a capability result. On two of four games no
-     run was ever allowed to spend as many actions as the level-1 baseline, so
-     for those games the zero is a budget artefact. On the other two, six runs
-     did reach the baseline and still scored zero -- that, and only that, is
-     capability evidence.
+     run ever *spent* as many actions as the level-1 baseline.
+
+**Claim 3's original wording said "was ever allowed", and that was wrong.** This
+module reads `budget` out of `runs/bare_cc-*/run.json`, which is a population of
+36 runs and is not the arm's ceiling: the 48 episodes of the approved S1
+baseline-parity campaign have no `runs/` directory at all
+(`runs/s1-full-run-not-archived/run.json`, INC-BA-003), and their allowance --
+recorded in `out/campaign/campaign_*.json` as `total_budget` -- clears the
+level-1 baseline on all four games. What stopped them was a stop rule that D-016
+has since replaced. See `harness/baseline_allowance.py`, its test module, and
+`BASELINE_COLUMN.md`; the assertions below are kept because they are true of the
+population they read, and renamed because their old names named a conclusion the
+whole archive does not support.
 
 These are regression tests over archived artefacts, not live runs. They make no
 network call.
@@ -94,12 +103,16 @@ def test_the_arm_never_persisted_the_authoritative_score(res):
     assert q1["archived_run_dirs"] >= 43
 
 
-def test_two_games_are_budget_limited_and_two_are_not(res):
-    """Claim 3, the finding that changes what the paper may say.
+def test_two_games_never_saw_a_run_spend_its_level_1_baseline(res):
+    """Claim 3, restated as what it actually measures: actions *spent*.
 
-    g50t and sk48: no run ever reached the level-1 baseline, so their zero
-    cannot be reported as a capability result.
-    ar25 and tn36: some runs did, so their zero can.
+    g50t and sk48: no run ever spent as many actions as the level-1 baseline.
+    ar25 and tn36: some runs did.
+
+    Spending the baseline is not the same as being allowed to, and it is not on
+    its own capability evidence -- `tn36`'s best run spent exactly 32 against a
+    32-action baseline and came back NOT_FINISHED. The verdict that separates
+    the two lives in `harness/baseline_allowance.py`.
     """
     per_game = res["question_3_budget"]["per_game"]
 
@@ -119,13 +132,18 @@ def test_two_games_are_budget_limited_and_two_are_not(res):
         assert d["best_pct_of_level_1"] >= 100.0
 
 
-def test_every_configured_budget_is_below_every_level_1_baseline(res):
-    """The structural fact. Budgets were 20 or 30 actions; the smallest level-1
-    baseline on the development pile is 32. No configured run could complete
-    level 1 of any game within budget.
+def test_every_run_carrying_a_budget_key_was_capped_below_its_level_1_baseline(res):
+    """True of 36 runs, and of exactly those 36.
+
+    Budgets written into `run.json` were 20 or 30 actions; the smallest level-1
+    baseline on the development pile is 32. So none of *these* runs could have
+    completed level 1 within budget -- which says nothing about the 48 S1
+    episodes, whose allowance is written somewhere else and is larger. The
+    denominator is asserted here so the sentence cannot be quoted without it.
     """
     q3 = res["question_3_budget"]
     assert set(q3["budgets_seen"]) <= {20, 30}
+    assert q3["runs_with_a_budget"] == 36
     assert q3["runs_whose_budget_is_below_level_1_baseline"] == q3["runs_with_a_budget"]
 
     smallest = min(d["level_1_baseline"] for d in q3["per_game"].values())

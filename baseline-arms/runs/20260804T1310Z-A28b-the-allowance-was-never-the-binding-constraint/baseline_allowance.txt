@@ -1,0 +1,49 @@
+A28b -- baseline arm: the allowance beside the achievement
+
+1. PER GAME -- level-1 baseline vs the most any run was ALLOWED vs what it DID
+   game               base_L1    allowed   achieved  verdict
+   ar25-0c556536           32        748         67  capability_tested
+   g50t-5849a774           78        879         73  abort_artefact
+   sk48-d8078629           61       1070         38  abort_artefact
+   tn36-ef4dde99           32        317         32  abort_artefact
+
+2. THE SAME NUMBERS SPLIT BY BUDGET REGIME (allowance is per run)
+   ar25-0c556536  (level-1 baseline 32)
+      S1 baseline-parity     runs=12  allowed<=748   achieved<=67   api_unusable=11, game_over=1
+      m4-pilot               runs=6   allowed<=20    achieved<=15   api_unusable=2, budget_exhausted=2, model_error=2
+      phase3-variance-envelope runs=3   allowed<=30    achieved<=19   api_unusable=3
+   g50t-5849a774  (level-1 baseline 78)
+      S1 baseline-parity     runs=12  allowed<=879   achieved<=73   api_unusable=12
+      m4-pilot               runs=8   allowed<=20    achieved<=14   budget_exhausted=6, model_error=2
+      phase3-unit-price-recheck runs=1   allowed<=30    achieved<=30   budget_exhausted=1
+      phase3-unit-price-remeasure runs=2   allowed<=30    achieved<=30   budget_exhausted=2
+      phase3-variance-envelope runs=3   allowed<=30    achieved<=30   budget_exhausted=3
+   sk48-d8078629  (level-1 baseline 61)
+      S1 baseline-parity     runs=12  allowed<=1070  achieved<=38   api_unusable=12
+      m4-pilot               runs=8   allowed<=20    achieved<=15   budget_exhausted=4, model_error=4
+      phase3-unit-price-remeasure runs=2   allowed<=30    achieved<=26   budget_exhausted=2
+      phase3-variance-envelope runs=3   allowed<=30    achieved<=28   budget_exhausted=3
+   tn36-ef4dde99  (level-1 baseline 32)
+      S1 baseline-parity     runs=12  allowed<=317   achieved<=32   api_unusable=12
+      m4-pilot               runs=6   allowed<=20    achieved<=13   api_unusable=2, budget_exhausted=2, model_error=2
+      phase3-unit-price-remeasure runs=2   allowed<=30    achieved<=12   api_unusable=1, budget_exhausted=1
+      phase3-variance-envelope runs=6   allowed<=30    achieved<=24   api_unusable=2, budget_exhausted=1, gave_up=2, no_reset_window=1
+
+3. WHAT ACTUALLY STOPPED THE RUNS THAT HAD ENOUGH ACTIONS
+   rule in force for S1 ....................... actions_failed >= 10 (absolute, cumulative)
+   today: consecutive-failure abort ........... 10
+   today: grind cap at a 748-action budget .... 748
+   S1 episodes ................................ 48 (48 with a ledger failure shape)
+   recorded outcome api_unusable .............. 47
+   longest back-to-back failure run anywhere .. 5
+   would abort under today's rules ............ 0
+
+4. THE ONLY RUNS WHOSE ZERO IS ABOUT THE ARM (the game ended, the harness did not)
+   ar25-0c556536    bare_cc-ar25-claude-haiku-4-5-20251001-76390591
+
+5. ABSENCE, RECORDED AS ABSENCE
+   run_ids with an authoritative scorecard body  57
+   of those, allowance on record ............... 55
+   of those, allowance ABSENT .................. 2
+      bare_cc-ar25-claude-haiku-4-5-20251001-833db563
+      bare_cc-g50t-claude-haiku-4-5-20251001-29065be4

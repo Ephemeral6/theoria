@@ -1,0 +1,55 @@
+{
+  "base_commit": "4846e66dee64940b3bb457b408db13775728915c",
+  "branch": "q/a28-budget-column",
+  "files": {
+    "baseline-arms/BASELINE_COLUMN.md": {
+      "bytes": 16627,
+      "sha256": "f2f515cecffbe8464ebffd0c7b00c26596204ef07308353b80042afb9c8d86d5"
+    },
+    "baseline-arms/harness/baseline_allowance.py": {
+      "bytes": 18103,
+      "sha256": "031309ee5ad63d51f28154cec17c84227e98b47da482f083d77bc500bd082477"
+    },
+    "baseline-arms/harness/run_manifest.py": {
+      "bytes": 6802,
+      "sha256": "df34ef4548f5123543bd97a6c2f43ea46800ef8670ecc50270d198cfc553f20b"
+    },
+    "baseline-arms/runs/20260804T1310Z-A28b-the-allowance-was-never-the-binding-constraint/RUN_STATE.md": {
+      "bytes": 11096,
+      "sha256": "844ebf6db3d711320624b5bca21ef456d7d8f611ddacbdbaa350641498b240dd"
+    },
+    "baseline-arms/runs/20260804T1310Z-A28b-the-allowance-was-never-the-binding-constraint/baseline_allowance.json": {
+      "bytes": 8629,
+      "sha256": "7fbdae2de4b2b7c89a0221ccad0ffdf67b7536e7fd458add075843034be9c8d8"
+    },
+    "baseline-arms/runs/20260804T1310Z-A28b-the-allowance-was-never-the-binding-constraint/baseline_allowance.txt": {
+      "bytes": 3208,
+      "sha256": "42f42e4fa8471767bcbb25362933bc1db4f1d7ec12f381653f00c7505ad255d6"
+    },
+    "baseline-arms/runs/20260804T1310Z-A28b-the-allowance-was-never-the-binding-constraint/unit_prices.txt": {
+      "bytes": 2485,
+      "sha256": "9e141fb58496016be12774a0c0df13a709e7281eef16ca63ad123d1a4d23398d"
+    },
+    "baseline-arms/tests/test_baseline_allowance.py": {
+      "bytes": 10936,
+      "sha256": "3b975febdbeed0ccb8f8bf75ad846105e30e1145a28995034b91b7ad055af1d9"
+    },
+    "baseline-arms/tests/test_run_manifest.py": {
+      "bytes": 4154,
+      "sha256": "b4679604052ab946fbbfc6632178a8c98e482d193dc959117aa1c2f17cc2c42c"
+    }
+  },
+  "network": "none",
+  "note": "A28b: the allowance was never the binding constraint. The S1 baseline-parity campaign granted 748/879/1070/317 actions against level-1 baselines of 32/78/61/32, so no dev-pile game's zero is a budget artefact; 47 of its 48 episodes stopped at an absolute ten-failure abort that D-016 replaced, and 0 of 48 would abort under the current rule. Offline audit of archived artefacts only.",
+  "prompt_id": "A28b",
+  "references_not_hashed": [
+    "monitor/inbox/20260804T1310Z-baseline-arms-to-freeze-the-bare-cc-comparator-is-not-a-measured-arm.md",
+    "monitor/inbox/20260804T1310Z-baseline-arms-to-papers-the-left-hand-column-is-an-external-number.md"
+  ],
+  "run_dir": "baseline-arms/runs/20260804T1310Z-A28b-the-allowance-was-never-the-binding-constraint",
+  "seed": null,
+  "spend": "none",
+  "territory": "baseline-arms",
+  "tests": "cold 6 failed / 571 passed / 1 skipped; warm 3 failed / 574 passed / 1 skipped; 18 new tests pass; the 6/3 pre-date this branch (test_schema_column payload absent in a fresh worktree; test_archive_runs cold-only, repaired by the first suite run)",
+  "utc": "2026-08-04T13:10:00Z"
+}
