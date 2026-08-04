@@ -55,7 +55,7 @@
     },
     {
       "path": "theory-compiler/runs/20260802T085557Z-C15-unnameable-cell-verdict/FOURTH_FORM.txt",
-      "sha256": "56f8661b1b872c0df8b5c41baa7811c2dc9260cf825e6f70bda43666db153cfa"
+      "sha256": "ba02f7df5328aceaf376e7696346cd81cdfb06549db63fae50afe96ea84f7222"
     },
     {
       "path": "theory-compiler/runs/20260802T085557Z-C15-unnameable-cell-verdict/GATES.txt",
@@ -75,7 +75,7 @@
     },
     {
       "path": "theory-compiler/runs/20260802T085557Z-C15-unnameable-cell-verdict/PDDL_LEAK.txt",
-      "sha256": "f4aca0fb7904e744219ec737b7c885ecbf845625815a6a015f593b139a5e27c6"
+      "sha256": "282ad50107382c8c8e152f4ad9e6adf916cbb5c3e013c8647edbee9b10407400"
     },
     {
       "path": "theory-compiler/runs/20260802T085557Z-C15-unnameable-cell-verdict/RUN_STATE.md",
@@ -95,11 +95,11 @@
     },
     {
       "path": "theory-compiler/runs/20260802T085557Z-C15-unnameable-cell-verdict/probe_fourth_form.py",
-      "sha256": "7a3d4f45d37394be6f30e4ababd4d3ab2dd34bee2f30f0bb42c62cc6ec474d9b"
+      "sha256": "23f960619285a271767aaea4b802054ac82c3fd126514e4fda552b17ee6c91d4"
     },
     {
       "path": "theory-compiler/runs/20260802T085557Z-C15-unnameable-cell-verdict/probe_pddl_leak.py",
-      "sha256": "c5696fef0e32352f19896c17c9867f1bd448e6ad75a9325f8c19d08f0ea15883"
+      "sha256": "c866cddc91e1f2e5dfb61620c28a6acea068305614791660572726fb706afd2a"
     },
     {
       "path": "theory-compiler/runs/20260802T085557Z-C15-unnameable-cell-verdict/probe_scratch.py",
