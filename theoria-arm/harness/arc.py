@@ -272,6 +272,68 @@ class ArcThroughProxy:
             self.sleep(0.4 * (k + 1))
         return None
 
+    def read_scorecard(self) -> Optional[Dict[str, Any]]:
+        """The open card, mid-leg, without closing it.
+
+        **Why this is here at all (A27).** `score`, `level_scores`,
+        `level_actions` and `level_baseline_actions` exist on no gameplay
+        response -- `_absorb` says so -- and until now the only code path that
+        fetched a scorecard was `close_scorecard`, which runs in `_finish`,
+        after the loop has returned, and which D-015 records as irreversible:
+        a closed card can never be re-fetched. So every scorecard-side fact
+        about a leg arrived after the leg could act on it. `GET
+        /api/scorecard/{card_id}` is the same document, non-destructively, and
+        `arc-recon/client.py:get_scorecard` has had it the whole time under a
+        heading that reads "read-only surface (costs no action quota)".
+
+        Three properties this deliberately has:
+
+        * **It never raises.** A scoreboard reading is an instrument, and an
+          instrument that can end a leg is a liability, not an instrument. Every
+          failure returns `None` and is written to `attempt_log`.
+        * **It goes through the spend gate first.** `_check_spend` is the one
+          exception to the line above -- a refused pool ends the leg, and a
+          read must not be the thing that spins against a red gate.
+        * **One attempt, no envelope.** Every other endpoint here retries into
+          the 400 wave because losing the command loses an action. Losing a
+          reading loses nothing: the next turn asks again. Retrying would spend
+          up to 40 requests to learn a number that has not moved in 2,700
+          recorded steps.
+        """
+        if not self.card_id:
+            return None
+        self._check_spend()
+        self.budget.check_readonly()
+        self.budget.command()
+        self.budget.read()
+        path = "/api/scorecard/%s" % self.card_id
+        status, parsed = self._get(path)
+        ok = status == 200 and isinstance(parsed, dict)
+        entry = {"note": "READ_SCORECARD", "path": path, "status": status,
+                 "attempts": 1, "ok": ok, "readonly": True}
+        self.attempt_log.append(entry)
+        if self.on_command:
+            self.on_command(entry)
+        return parsed if ok else None
+
+    def _get(self, path: str) -> Tuple[int, Any]:
+        request = urllib.request.Request(
+            self.env_base + path, method="GET",
+            headers={"Accept": "application/json"})
+        try:
+            with urllib.request.urlopen(request, timeout=self.timeout) as response:
+                raw = response.read().decode("utf-8", "replace")
+                status = response.status
+        except urllib.error.HTTPError as exc:
+            raw = exc.read().decode("utf-8", "replace")
+            status = exc.code
+        except Exception as exc:                     # transport to our own proxy
+            return -1, {"error": "%s: %s" % (type(exc).__name__, exc)}
+        try:
+            return status, json.loads(raw)
+        except json.JSONDecodeError:
+            return status, {"raw": raw}
+
     def reset(self) -> Tuple[int, Any]:
         body: Dict[str, Any] = {"game_id": self.game_id}
         if self.card_id:
