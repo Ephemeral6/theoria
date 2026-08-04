@@ -6,7 +6,8 @@ sha256: cec3bd3e35bae4572b1dedc6b35128443c76adfc48e12f4e0298a08d07057c08
 lines: 4057
 bytes: 260623
 scope: delta audit of the 2026-08-01 probe-frontier correction (six edited sites: the abstract, §1.5's closing note, §2.2, §2.3, new §11.3a and §11.4a, §11.5's closing note, §12); everything outside those edits is byte-unchanged from the state CITECHECK-2026-07-31.md pinned, and behind that the five-slice index in CITECHECK-2026-07-30.md remains the covering evidence
-status: binding
+status: stale
+superseded_by: CITECHECK-2026-08-04.md
 date: 2026-08-01
 ```
 

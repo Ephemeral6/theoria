@@ -148,9 +148,15 @@ miner refused all 48 dispatches, so no version space was ever handed to
 downward-closed ablation family, two predictions wide on every one of the 52
 completed probes, and 47 of those 52 observations fell outside it
 (`papers/phase1-workshop/runs/20260801T1200Z-P23-probe-frontier-contradicts-the-design/census.json`;
-§11.3a). The ancestry claim to the version-space literature stands; the claim
-that this work *adds* a use for the frontier's width does not yet, and is
-qualified here rather than in a footnote.
+§11.3a). A later frontier, generated rather than ablated, widened that to 6–10
+and contained the answer on 21 of 27 live probes
+(`theoria-arm/runs/_rounds/R2b-VERDICT.md`) — which moves the width from a design
+to a measurement, and still does not reach the miner: the version space the
+design assigns `engine-rig/engines/cegis_miner` to supply has never been handed
+to anything. The ancestry claim to the version-space literature stands; the claim
+that this work *adds* a use for the frontier's width now has one round of live
+evidence and no completed level behind it, and is qualified here rather than in a
+footnote.
 
 **Petri invariants and model checking / IC3.** The kinship is with place
 invariants — linear quantities preserved by every transition, computed as the left
