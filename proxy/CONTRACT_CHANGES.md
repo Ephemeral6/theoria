@@ -208,6 +208,22 @@ Append-only. Newest last.
 | C-006 | 2026-07-29 | `INCIDENT_KINDS` gains `variant_degenerate`; `win_tighten`'s `applied` record gains `reason`, `degenerate`, `occurrence` and (once per session) `note` (V22, D-032) | additive | n/a |
 | C-007 | 2026-08-01 | **`model_proxy` request semantics** (P-12, D-P12-001/002/003): its default guard becomes `unknown_policy="allow"`; a **development**-pile id in a model request is refused `game_id_in_prompt`; `ModelProxyConfig` gains an optional `client_token` that, when set, makes an unauthenticated caller 401 | widening + tightening — see below | this file; `runs/20260801T0000Z-P12-model-proxy-cli/FINDING.md` |
 | C-008 | 2026-08-01 | `ARMS` gains `ablation`, the ablation arm's own ledger name (A21, D-A21-001). `LEDGER_FORMAT.md`'s `arm` row now lists the vocabulary in full — it had been missing `mock_arm` since that name was registered | additive | n/a |
+| C-009 | 2026-08-02 | **`forward()`'s retry policy** (S47, D-S47-001): a keyword-only `retry_body` predicate, consulted only for `status >= 400` that `RETRY_STATUSES` declined. `env_proxy` supplies one for `/api/cmd/*`; an attempt retried by it is marked `body_retry` in `http.attempt_log` | widening + additive | this file |
+
+C-009 is §6's third bullet again — a **runtime contract that is not a field
+set**. `RETRY_STATUSES` is unchanged, no shape moved, and
+`python -m proxy.tools.contract --fingerprint` is byte-identical before and
+after, so §4's detector sees nothing and this row is the announcement. It is a
+widening by §2's table (the proxies retry more than they did, never less; unset,
+`forward()` is byte-for-byte what it was), so it lands without §3's wait.
+
+The additive half is the one a reader will meet in an artefact: entries in
+`http.attempt_log` may now carry `"body_retry": true`. `attempt_log` sits inside
+`http`, which `canon_contract.json` pins as an opaque leaf, so nothing refuses it
+— which is exactly why it is written down here. It appears **only** on attempts
+the body predicate authorised, so every `attempt_log` written before this change
+is unchanged, and a reader who has never seen the key is not reading an old
+record wrong. `LEDGER_FORMAT.md`'s `http` row now names it.
 
 C-007 is §6's third bullet arriving in person: it changes **the guard's verdict
 semantics**, which §2's rule covers by its own terms and which §4's detector

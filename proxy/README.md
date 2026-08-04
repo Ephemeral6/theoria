@@ -89,6 +89,7 @@ ARC_BASE_URL=http://127.0.0.1:8711 MODEL_BASE_URL=http://127.0.0.1:8712 <arm>
 | `LEDGER_FORMAT.md` | **normative**, written before the code. Two event shapes, `env_step` and `model_call`. The format three arms and the Phase 2 metric battery share. |
 | `ledger.py` | its executable form. Append-only by construction — no update, rewrite or delete path exists. |
 | `guard.py` | the sealed-pile guard, sourced from `arc-recon/data/piles.json` and integrity-checked against the digest the cut recorded |
+| `forward.py` | the only route to a socket in this package, and so the only place the spend gate has to sit. Knows nothing about ARC or about providers: it refuses redirects (RED-01), retries a fixed status set, and takes an optional caller-supplied `retry_body` predicate for the one case where the status line is terminal and the body is not (S47). |
 | `env_proxy.py` | the arm's only route to the environment; injects `ARC_API_KEY`, records, enforces the guard, applies variants |
 | `model_proxy.py` | the arm's only route to a provider; records the usage block verbatim |
 | `variants.py`, `variants/` | the wrapper-legal operator set, and four specs each carrying a constructive justification |
@@ -97,7 +98,7 @@ ARC_BASE_URL=http://127.0.0.1:8711 MODEL_BASE_URL=http://127.0.0.1:8712 <arm>
 | `CONTRACT_CHANGES.md`, `canon_contract.json`, `tools/contract.py` | widening the shared contract is free, narrowing it is a breaking change that must be announced. The pin and its direction classifier are what make that checkable rather than hoped for. |
 | `scoring/`, `SCORING.md` | the frozen scorer. `frozen.json` holds its source hash; a drifted scorer refuses to score rather than scoring under a changed rule. |
 | `reconcile.py` | the score obligation, plus a recompute of the derived `level` fields. Runs the frozen scorer's battery rather than a second copy of it. |
-| `tools/` | `validate_ledger.py` (§18), `upgrade_ledger.py` (§7, interface in `CANON_MIGRATION.md`), `replay_spotcheck.py`, `contract.py` (§8) |
+| `tools/` | `validate_ledger.py` (§18), `upgrade_ledger.py` (§7, interface in `CANON_MIGRATION.md`), `replay_spotcheck.py`, `refusal_replay.py` (S47, offline), `contract.py` (§8) |
 | `tests/fixtures/scorecard_corpus.json` | 32 real closed scorecards from `baseline-arms`'s campaign. The evidence behind the scorer's calibration and behind the mock's shape. |
 | `cost.py`, `pricing/` | cost as a conversion over a versioned price table. No dollar figure is ever written to the ledger. |
 | `runner.py` | orchestrates one game: one run, one scorecard, one shared step counter |

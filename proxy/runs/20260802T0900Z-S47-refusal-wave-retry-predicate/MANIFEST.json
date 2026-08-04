@@ -1,0 +1,137 @@
+{
+  "actions_charged": 0,
+  "api_calls": 0,
+  "base_commit": "1e5b3f00dfb40fcc73f582a5de2390d1d3466844",
+  "branch": "agent/s47-refusal-wave-retry-predicate",
+  "contract_fingerprint": "sha256:574a3dbff31d673b14443d27a2c63153f6c3d4ad166485d330abc8198b0ccea7",
+  "evidence_read_not_written": [
+    {
+      "path": "theoria-arm/runs/20260731T1240Z-A3-level2-carried/ledger.jsonl",
+      "sha256": "sha256:9e161455bf5ccfe1d4dfb4c2dd7ba7d53a41bba8060f392446550a1722918ed5"
+    },
+    {
+      "path": "theoria-arm/runs/20260731T1310Z-A3-level2-carried-r2/ledger.jsonl",
+      "sha256": "sha256:75e5fa0f51f035e568ac8101938f6c33858f2582c4a3118bf9c9253be937a99c"
+    },
+    {
+      "path": "theoria-arm/runs/20260731T1430Z-A3-level2-carried-r3/ledger.jsonl",
+      "sha256": "sha256:871283871820549888426d69ccf1fdbd892b8720fc983668fc97cbc86c0e2ed3"
+    },
+    {
+      "path": "theoria-arm/runs/20260731T1500Z-A3-sk48-carried-l1/ledger.jsonl",
+      "sha256": "sha256:88690c5cf32066c099d5403b105f2b976f04ae67a7adf13868c6c5c69256420e"
+    },
+    {
+      "path": "monitor/inbox/20260801T0400Z-theoria-arm-to-proxy-refusal-wave.md",
+      "sha256": "sha256:cd043850c3e52ac035ce53c30ddd5f78db304bb5e2d09b16b35049666a6e12eb"
+    }
+  ],
+  "files": [
+    {
+      "path": "proxy/forward.py",
+      "sha256": "sha256:2e8350047e3f6e8505efa0b86700b84cb9192f4f69691161215de4b4cf61d200"
+    },
+    {
+      "path": "proxy/env_proxy.py",
+      "sha256": "sha256:59dcc10f5d61f0a5d0a9c19fd51da141724cec7efe08a112b150860182e43662"
+    },
+    {
+      "path": "proxy/tests/test_forward_retry_predicate.py",
+      "sha256": "sha256:e846dc7acd8f42d2a3b0e8b60a544215d3194dca1c723090836991b335f785b0"
+    },
+    {
+      "path": "proxy/tools/refusal_replay.py",
+      "sha256": "sha256:55bb290f9d30aad502272e43629c17eebb54207aae78aa2888ce9e9702915876"
+    },
+    {
+      "path": "proxy/tests/test_refusal_replay.py",
+      "sha256": "sha256:68bbf8ee12915a71e5d4642fbd4bafb1dcab77bab4e8165bc4caec7da339c745"
+    },
+    {
+      "path": "proxy/DECISIONS.md",
+      "sha256": "sha256:8d3ce3c95a596915fc9b843b75037fd3619f3af6287477e3cd38b207e89fa5df"
+    },
+    {
+      "path": "proxy/CONTRACT_CHANGES.md",
+      "sha256": "sha256:b35147c386d98fdf379af59f3ddb4ff920e3c04e1c58067f14f241f9762db433"
+    },
+    {
+      "path": "proxy/LEDGER_FORMAT.md",
+      "sha256": "sha256:bc0111e7a0400df6b834d4ba8c79eb3e1057ce13d36d2ede489f052045f87c90"
+    },
+    {
+      "path": "proxy/STATUS.md",
+      "sha256": "sha256:fc19af67256a3f8fcb42a8c5864e27577dc87ee53ca09d9379876b5e057316f4"
+    },
+    {
+      "path": "proxy/README.md",
+      "sha256": "sha256:c207c6b4bc1306df7f2543346b59550f2775dd6fe90eafd7679b1fb2e0f599a3"
+    },
+    {
+      "path": "proxy/runs/20260802T0900Z-S47-refusal-wave-retry-predicate/RUN_STATE.md",
+      "sha256": "sha256:09e9f6440c60a11d8eb570eba65de163bbae2190ccc076a45e4d355e549153d3"
+    },
+    {
+      "path": "proxy/runs/20260802T0900Z-S47-refusal-wave-retry-predicate/NOTES.md",
+      "sha256": "sha256:26bc28bd5ac67cf7131b3fe02efb2ad4bb489c9fe4b93b33656c4fe9df3c710a"
+    },
+    {
+      "path": "proxy/runs/20260802T0900Z-S47-refusal-wave-retry-predicate/d-s47-001.md",
+      "sha256": "sha256:9529063589d747b22b62a41a6a6a508a10bf8bc49703f3b422b217a35adddf0a"
+    },
+    {
+      "path": "proxy/runs/20260802T0900Z-S47-refusal-wave-retry-predicate/refusal_replay.json",
+      "sha256": "sha256:22ad9801a158695abce01c50eb85337b738bfa3470d9ff0e0fce3c7ae340b2ef"
+    },
+    {
+      "path": "proxy/runs/20260802T0900Z-S47-refusal-wave-retry-predicate/verify_s47.sh",
+      "sha256": "sha256:5a44162163a6fbe788ade274d44106c3e22a1990fc3695f161cba67163552e0f"
+    },
+    {
+      "path": "proxy/runs/20260802T0900Z-S47-refusal-wave-retry-predicate/make_manifest.py",
+      "sha256": "sha256:45048e75aea43ba6ac73bbc9bbd0f0fa5affb420336788a22af620f9ddad28c3"
+    },
+    {
+      "path": "monitor/inbox/20260802T0930Z-W-9203-proxy-to-theoria-arm-s47-landed-retry-is-now-nested.md",
+      "sha256": "sha256:6d89e7351d6cb477cbec381ec1834d124c3e17bf2bd795c3c2ea83f8db133479"
+    }
+  ],
+  "gate": {
+    "baseline": "497 passed at 1e5b3f00, before anything changed",
+    "suite": "534 passed, 0 failed (cd proxy && python -m pytest)",
+    "verify_contract_sh": "9 of 10 steps ok; the tenth runs pytest from the repo root, where the repo-root tools/ package shadows proxy/tools -- red on master at 1e5b3f00 for the same reason, not caused or fixed here",
+    "verify_py": "green on all five rungs",
+    "verify_s47_sh": "green"
+  },
+  "head_commit": "1e5b3f00dfb40fcc73f582a5de2390d1d3466844",
+  "network": "none -- every far end is a loopback fixture or a file on disk",
+  "prompt": "monitor/board: 87% of live commands are refused upstream and the byte-identical retry succeeds -- give forward() a retry predicate for that one response, item 1 only",
+  "prompt_id": "S47-refusal-wave-retry-predicate",
+  "reproduce": [
+    "cd proxy && python -m pytest",
+    "cd proxy && python verify.py",
+    "python -m proxy.tools.refusal_replay --verify --leg theoria-arm/runs/20260731T1240Z-A3-level2-carried/ledger.jsonl --leg theoria-arm/runs/20260731T1310Z-A3-level2-carried-r2/ledger.jsonl --leg theoria-arm/runs/20260731T1430Z-A3-level2-carried-r3/ledger.jsonl --leg theoria-arm/runs/20260731T1500Z-A3-sk48-carried-l1/ledger.jsonl",
+    "bash proxy/runs/20260802T0900Z-S47-refusal-wave-retry-predicate/verify_s47.sh"
+  ],
+  "result": {
+    "actions_agree_after": true,
+    "actions_agree_before": true,
+    "env_steps_after": 149,
+    "env_steps_before": 570,
+    "legs": 4,
+    "max_attempts": 5,
+    "note": "149 and not 76: the replay models forward()'s bounded loop, and 73 rows exist because the 5-attempt budget ran out while the predicate still wanted to retry",
+    "outbound_attempts_after": 570,
+    "outbound_attempts_before": 570,
+    "row_reduction": 0.7386,
+    "scorecard_total_actions": 72,
+    "sockets_unchanged": true,
+    "wave_attempts": 494
+  },
+  "sealed_pile_contact": "none",
+  "seed": null,
+  "spend_usd": 0.0,
+  "territory": "proxy",
+  "utc": "2026-08-02T09:00:45Z",
+  "worker": "W-9203"
+}

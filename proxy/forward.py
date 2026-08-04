@@ -4,6 +4,11 @@ Nothing here knows about ARC or about model providers. It opens the socket, it
 retries the retryable, and it reports what happened -- including the per-attempt
 statuses, which the ledger records when there was more than one.
 
+"The retryable" is a status set plus, since S47, an optional caller-supplied
+`retry_body` predicate for the case where the status line is terminal and the
+body is not. The predicate is the caller's, precisely so that the first sentence
+of this paragraph stays true.
+
 **It does not follow redirects.** `urllib`'s default handler does, and its
 redirect handler copies every request header except `Content-Length` and
 `Content-Type` onto the new request -- so a `302` from the upstream would
@@ -22,11 +27,27 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
-#: Retried: rate limits, gateway-class failures, and transport errors. A 4xx
-#: that is not 429 is the upstream telling us something true; retrying it would
-#: only burn quota.
+#: `(status, response_headers, body_bytes) -> bool`. The caller's answer to
+#: "this status line is terminal, but is this particular *body* a transient?".
+#: Raw bytes, not parsed JSON: this module does not know what the body is, and
+#: a caller that wants JSON knows how to call `json.loads` on it.
+RetryBody = Callable[[int, Dict[str, str], bytes], bool]
+
+#: Retried on the status line alone: rate limits, gateway-class failures, and
+#: transport errors. A 4xx that is not 429 is *usually* the upstream telling us
+#: something true, and retrying it would only burn quota -- so it is not on this
+#: list and never will be.
+#:
+#: "Usually" is S47's correction. The premise held for every response this proxy
+#: had seen until the arm's four 2026-07-31 legs, where **494 of 570** outbound
+#: commands came back `400` with the upstream's own `SERVER_ERROR` label and a
+#: byte-identical retry succeeded seconds later. A status set cannot express
+#: that: the discriminator is in the body, and bodies are protocol-shaped, which
+#: this module refuses to be. Hence `retry_body` -- the caller brings the
+#: predicate, `RETRY_STATUSES` keeps its meaning, and neither one has to lie
+#: about the other.
 RETRY_STATUSES = frozenset({429, 500, 502, 503, 504})
 TRANSPORT_STATUS = -1
 
@@ -89,7 +110,8 @@ class Response:
 def forward(url: str, method: str, headers: Dict[str, str],
             body: Optional[bytes] = None, timeout: float = 60.0,
             max_attempts: int = 5, backoff: float = 0.25,
-            sleep=time.sleep, *, permit) -> Response:
+            sleep=time.sleep, *, permit,
+            retry_body: Optional[RetryBody] = None) -> Response:
     """Open a socket to `url`. Requires a live spend permit.
 
     `permit` is keyword-only and has **no default**, so a caller that forgot the
@@ -108,6 +130,34 @@ def forward(url: str, method: str, headers: Dict[str, str],
     reach the caller as an exception, because the alternative -- returning a
     Response that looks like an upstream error -- would let a budget breach be
     retried as though it were weather.
+
+    `retry_body` is the second, optional retry rule (S47). It is consulted
+    **only for `status >= 400` that `RETRY_STATUSES` has already declined**, so
+    it can widen the policy and can never narrow it: whatever was retried before
+    this parameter existed is still retried, in the same order, with the same
+    backoff. Unset -- and it is unset for `model_proxy` and for every caller
+    that does not opt in -- this function is byte-for-byte what it was.
+
+    The `>= 400` floor is not decoration. Without it the predicate is asked
+    about the `200` that ends a successful retry, and a predicate that answered
+    yes there would make this loop throw away a response the pool has already
+    paid for and go buy another one. A hook whose worst case is "discards
+    successes" is a worse hook than one that cannot see them; and a redirect,
+    which the module refuses on purpose (RED-01), is likewise not something a
+    caller gets a second opinion on.
+
+    It is deliberately a *callback*, not a status set and not a body matcher
+    written here. The discriminator for the one response that needs it is an
+    ARC game id inside an ARC error envelope, and the first line of this
+    module's docstring is that nothing here knows about ARC. A predicate
+    parameter keeps that true: `env_proxy` owns the protocol knowledge, this
+    function owns the loop. See `D-S47-001`.
+
+    An exception raised by `retry_body` is **not** caught. Swallowing it would
+    turn a caller's bug into the silent answer "do not retry", which is the
+    answer that looks correct in every log. It propagates, and `env_proxy`'s
+    `_charge` still bills the sockets that were really opened, because that
+    runs on the exception path too.
     """
     attempt_log: List[Dict[str, Any]] = []
     started = time.time()
@@ -136,12 +186,35 @@ def forward(url: str, method: str, headers: Dict[str, str],
             final_url = None
             raw = json.dumps({"error": "%s: %s" % (type(exc).__name__, exc)}).encode()
 
-        attempt_log.append({"attempt": attempt, "status": status,
-                            "ms": int((time.time() - attempt_started) * 1000)})
-        if status not in RETRY_STATUSES and status != TRANSPORT_STATUS:
+        entry = {"attempt": attempt, "status": status,
+                 "ms": int((time.time() - attempt_started) * 1000)}
+        attempt_log.append(entry)
+
+        by_body = False
+        if status in RETRY_STATUSES or status == TRANSPORT_STATUS:
+            pass                                   # the status line says retry
+        elif (retry_body is not None and status >= 400
+                and retry_body(status, response_headers, raw)):
+            by_body = True
+        else:
             break
-        if attempt < max_attempts:
-            sleep(backoff * attempt)
+
+        # The budget is checked *before* the mark, not after. `body_retry` says
+        # "this attempt was retried", and on the last attempt of an exhausted
+        # call nothing is retried -- the loop stops and the caller gets the
+        # refusal. Marking it anyway made a counter over `body_retry` over-count
+        # by one per exhausted call, and made the field disagree with
+        # `LEDGER_FORMAT.md`'s own sentence for it.
+        if attempt >= max_attempts:
+            break
+        if by_body:
+            # Retried on the body, not the status. Marked, because a collapsed
+            # row otherwise cannot be told from a rate-limit retry -- and the
+            # whole point of collapsing this wave is that its size stops being
+            # invisible. `body_retry` appears only on attempts this rule
+            # authorised, so every attempt_log written before S47 is unchanged.
+            entry["body_retry"] = True
+        sleep(backoff * attempt)
 
     redirect_to = None
     if 300 <= status < 400:

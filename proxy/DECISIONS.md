@@ -1071,3 +1071,129 @@ and `tests/test_ledger_format_sync.py` gained an arm-vocabulary check with
 negative controls in both directions — a name in the code and not the document,
 and a name in the document the writer would refuse. F-16 makes
 `LEDGER_FORMAT.md` the canon; a canon nothing checks is a description.
+
+## D-S47-001 · The one `400` that is weather gets a predicate, and the predicate is the caller's
+
+`forward.py`'s retry rule was a status set with a comment asserting its own
+completeness: "A 4xx that is not 429 is the upstream telling us something true;
+retrying it would only burn quota." Four live legs on 2026-07-31 falsified that
+for exactly one response. `400` with `error: SERVER_ERROR` and
+`message: "game <id> not found"` is the upstream's own transient — it labels the
+response `SERVER_ERROR` itself, and the byte-identical retry, same
+`request_sha256` and same `final_url`, succeeds seconds later. It was **494 of
+570** outbound commands, and the closing scorecards charged for the 200s only.
+
+The consequence was never a wrong answer. `theoria-arm/harness/arc.py` retries at
+its own level and gets there. The consequence is that the retry happens one layer
+too high, where each attempt is a fresh request through the proxy and therefore a
+**fresh `env_step` row** — so 570 outbound rows bought 72 actions, and
+`LEDGER_FORMAT.md`'s "retries collapse into one record" was true of every retry
+except the one that mattered.
+
+**Three things were decided, and the second is the one worth arguing about.**
+
+* **The status set keeps its meaning.** `RETRY_STATUSES` still means "retryable
+  from the status line alone", and 400 is still not in it and never will be. The
+  discriminator for this response is in the body. Widening a status set to carry
+  a body-shaped fact would make the set say something false about every other
+  400, which is exactly the mistake being corrected.
+
+* **The predicate is a caller-supplied callback, not code in `forward.py`.** The
+  first line of that module's docstring is that nothing there knows about ARC or
+  about model providers, and it is not decoration: `forward` is the single seam
+  both proxies share, the one `verify_spend.sh` whitelists by filename as the
+  only route to a socket. A function that matched an ARC game id inside an ARC
+  error envelope would make the shared transport protocol-aware, and the next
+  protocol's transient would be added beside it. So `forward()` gained
+  `retry_body`, a keyword-only `(status, headers, body) -> bool` with a default
+  of `None`, and the three conjuncts live in `env_proxy.game_not_found_retry`,
+  which is the ARC-shaped half. `model_proxy` passes nothing and is unchanged.
+
+  The board item said "a sibling predicate to `RETRY_STATUSES`" and left the
+  layering open. This is the reading that does not cost the module its stated
+  property.
+
+* **The hook can widen and cannot narrow.** It is consulted only for
+  `status >= 400` that `RETRY_STATUSES` has already declined. The upper bound is
+  the interesting half: without it the predicate is asked about the `200` that
+  ends a successful retry, and a predicate answering yes there would make the
+  loop discard a response the pool had already paid for and buy another. A hook
+  whose worst case is "discards successes" is worse than one that cannot see
+  them. `429` is likewise not offered for a second opinion, or a caller could
+  vote against a retry the status set had granted. Both are pinned by a test
+  that installs a predicate returning `True` unconditionally and asserts it is
+  never asked.
+
+### Why the signature is as tight as the accounting classifier, not as loose as the wire one
+
+`theoria-arm` runs two predicates for this wave and its docstring insists they
+are allowed to differ: `harness/arc.py:_retryable` matches `"not found"` in any
+`400` message, while `armtools/refusal.py` requires the anchored message and the
+id identity. Its argument is that a false positive in accounting launders a real
+failure into weather, while a false negative on the wire costs a leg.
+
+This predicate sits on the wire and is written to the accounting standard
+anyway, for a reason that only applies inside the proxy: **a false positive here
+is multiplied by `max_attempts` against a pool that is shared with every other
+campaign.** Above the proxy, a loose predicate costs the arm its own envelope.
+Below it, the same looseness spends other people's reservations. Cheap to be
+wrong upward, expensive to be wrong outward — so the loose one stays where it is
+and this one gets all three conjuncts, plus the refusal to build a predicate at
+all when there is no id to check against.
+
+That last clause is the one a reader will be tempted to drop. `/api/scorecard/*`
+names no game, so `game_not_found_retry(None)` returns `None` rather than a
+predicate that skips conjunct 3. The alternative — "no id, so accept any id" —
+is how the negative sample living in the very same legs gets swept in: a `404`
+with `error: VALIDATION_ERROR` and `message: "scorecard <uuid> not found"`, a
+card the server auto-closed, which is a real failure that ends in the same two
+words.
+
+### What this does not fix, stated plainly
+
+**The retry is now nested, and nobody removed the outer one.** `arc.py` still
+retries a `400`-not-found up to 40 times, and each of those is now up to 5
+attempts inside the proxy. On the transient this changes almost nothing — the
+arm only re-enters when it gets a non-200, so the total sockets are roughly the
+same requests, regrouped. On a **permanently** failing id (a typo, an id the
+upstream really does not have) the worst case goes from 40 sockets to 200.
+
+**An earlier draft of this paragraph said "the pool ceiling is unaffected". That
+is false, and the correction matters more than the original claim.**
+`permit.check()` reads the pool ledger *on disk*, and `env_proxy._charge`
+records once **after** the whole loop — so every attempt inside one `forward()`
+checks against the same stale total, and a reservation binds at
+`action_cap + (max_attempts - 1)` rather than at `action_cap`. `SPEND_GATE.md`
+§5 already says this ("the action total can overshoot by up to
+`concurrency × max_attempts`"); what S47 changes is that the overshoot moves
+from a rare path — 429s and 5xx — onto **87% of live traffic**. The ceiling is
+soft, it was always soft, and this change makes the softness routine. Closing it
+means reserve-commit-settle, which is the redesign `runs/20260728T083000Z-s3/
+ADVERSARIAL.md` already records as open; it is not S47's to do, but S47 is why
+it now matters more.
+
+What is genuinely unaffected is that every socket is still checked and still
+charged: no attempt happens un-gated, and `permit.attempts_made` counts them all.
+
+**A third bound is not ours and is quietly re-based.** `theoria-arm`'s
+`harness/budget.py` carries `Budget(commands=2000)` with the stated purpose of
+stopping "a wave of transient 400s from turning into an unbounded run", and it
+increments once per *arm-level* attempt. After this change one such attempt is
+up to five sockets, so the counter built for this exact wave no longer counts
+the wave. That is theirs to re-unit; it is named in the inbox note rather than
+left to be found by a bill.
+
+`arc.py` is `theoria-arm`'s file; the recommendation to drop its `400` branch
+now that the transport handles it went to `monitor/inbox/`. Until it does, the
+nesting is a known property and is written here rather than discovered later.
+
+**And the signature cannot tell weather from truth.** A genuinely retired game
+id produces a byte-identical body to the transient — the only evidence any
+instance is weather is that a retry sometimes clears it. So "a permanent failure
+costs 200 sockets" is not a worst case the predicate could have avoided with
+more conjuncts; it is the limit of what this response distinguishes. The three
+conjuncts keep *other* refusals out; they do not, and cannot, sort this one.
+
+`step_idx` still numbers attempts rather than actions. That is item 2 of the same
+report and it is deliberately untouched: renumbering rewrites the meaning of a
+field in already-published manifests.
