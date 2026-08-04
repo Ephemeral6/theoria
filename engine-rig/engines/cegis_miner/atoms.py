@@ -13,10 +13,22 @@ exactly what a probe is for.  See DECISIONS.md D-002.
 a position literal costs twice what a predicate costs.  Minimising atom *count*
 alone would let `at(r,c)` -- the maximally specific literal, true of exactly one
 transition -- win every synthesis with a single positive example.
+
+**The action alphabet is read off the evidence, not assumed.** `DIRECTIONS` is
+two different things wearing one name: a set of *geometric* directions, which
+`strip_cells` needs and which every grid world has, and a guess at the world's
+*action alphabet*, which only a compass-labelled world has.  A world whose
+actions are `ACTION1..ACTION5` makes every `act==UP` literal identically false
+and every `!act==UP` identically true, so the miner cannot see which action was
+taken and `synthesize` reports that no literal separates two transitions -- a
+true statement about a vocabulary that was never given the words.  Pass
+`actions` to `build_vocabulary` and the `act` atoms come from the alphabet the
+evidence actually contains.  Omit it and the compass is assumed, as before.
+See DECISIONS.md D-E20-001.
 """
 
 from dataclasses import dataclass
-from typing import Callable, Dict, List, Sequence, Tuple, Union
+from typing import Callable, Dict, List, Optional, Sequence, Tuple, Union
 
 DIRECTIONS = ("UP", "DOWN", "LEFT", "RIGHT")
 
@@ -130,12 +142,25 @@ def _evaluate_positive(kind: str, arg, state: State, action: str) -> bool:
     raise ValueError(kind)
 
 
-def build_vocabulary(states: Sequence[State]) -> List[Atom]:
-    """Every atom the evidence could possibly need, positive and negated."""
+def build_vocabulary(states: Sequence[State],
+                     actions: Optional[Sequence[str]] = None) -> List[Atom]:
+    """Every atom the evidence could possibly need, positive and negated.
+
+    `actions` supplies the world's action alphabet.  When it is omitted the
+    compass is assumed and the result is exactly what it has always been; when
+    it is given, the `act` atoms name the actions the evidence actually
+    contains.  The strip predicates always range over the four geometric
+    directions, because those are a fact about a grid and not about an alphabet.
+
+    Order is deterministic and independent of the input's order: the alphabet is
+    sorted, so two runs over the same evidence build the same vocabulary.
+    """
     atoms: List[Atom] = []
+    alphabet = sorted(set(actions)) if actions is not None else list(DIRECTIONS)
+    for name in alphabet:
+        atoms.append(Atom("act", name))
+        atoms.append(Atom("act", name, negated=True))
     for direction in DIRECTIONS:
-        atoms.append(Atom("act", direction))
-        atoms.append(Atom("act", direction, negated=True))
         for kind in ("free", "in_bounds", "clear"):
             atoms.append(Atom(kind, direction))
             atoms.append(Atom(kind, direction, negated=True))
