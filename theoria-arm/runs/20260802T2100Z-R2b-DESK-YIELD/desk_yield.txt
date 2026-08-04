@@ -1,0 +1,35 @@
+== 20260801T044640Z-R2b-g50t-a  (9 desk calls)
+   #   label    step    usd    min   out_tok reply_ch   same?  blocks
+   1   round1      6   1.57    8.8     45604    56369          LOG+PLAYBOOK+THEORY
+   2   round1     10   1.69   10.0     51251    66123          LOG+PLAYBOOK+THEORY
+   3   round1     14   1.89   11.4     57386    74617          LOG+PLAYBOOK+THEORY
+   4   round2     14   1.41    6.4     36283    73820          LOG+PLAYBOOK+THEORY
+   5   round1     18   2.86   13.5     67701     9588          (none)   <- VOID: no THEORY
+   6   round2     18   2.01   11.7     60173    90374          LOG+PLAYBOOK+THEORY
+   7   round1     22   2.09   11.5     61744    95898          LOG+PLAYBOOK+THEORY
+   8   round1     26   2.02   10.4     57138    98861          LOG+PLAYBOOK+THEORY
+   9   round1     30   3.18   15.0     75842    28478          LOG+PLAYBOOK   <- VOID: no THEORY
+   -- spend $18.74 over 9 calls; 2 void ($6.05 = 32% of spend)
+   -- $0.646 per billed action over 29 actions; 4.14 actions per productive call
+   -- implied $/Mtok: cache_write 10.65, cache_read -0.31, output 25.07 (worst residual $0.0045 = 0.2% of the mean bill)
+      (cache_read came out negative -- not identified by these calls; nonzero in cache_read=2 of them)
+   -- output tokens carry 69% of the leg's bill
+   -- manual after each theorize: [38044, 45055, 53662, 59866, 68129, 72299] (carried 48472)
+   -- ended LONGER than the seed it carried (+23827 chars); 0 trailing writes changed the size not at all
+
+== 20260801T044640Z-R2b-sk48-b  (6 desk calls)
+   #   label    step    usd    min   out_tok reply_ch   same?  blocks
+   1   round1      6   3.54   22.9    109763    40415          LOG+PLAYBOOK+THEORY
+   2   round1      6   1.84   11.5     59167    46094          LOG+PLAYBOOK+THEORY
+   3   round1     10   2.79   13.7     69743    14693          LOG+PLAYBOOK   <- VOID: no THEORY
+   4   round2     10   2.83   14.2     71146    16033          LOG+PLAYBOOK   <- VOID: no THEORY
+   5   round3     10   4.68   25.3    132309    10342    SAME  LOG   <- VOID: no THEORY
+   6   round1     10   4.63   25.3    131033     7211          LOG   <- VOID: no THEORY
+   -- spend $20.30 over 6 calls; 4 void ($14.93 = 74% of spend)
+   -- $2.256 per billed action over 9 actions; 4.50 actions per productive call
+   -- implied $/Mtok: cache_write 11.11, cache_read -1.11, output 24.59 (worst residual $0.0124 = 0.4% of the mean bill)
+      (cache_read came out negative -- not identified by these calls; nonzero in cache_read=5 of them)
+   -- output tokens carry 69% of the leg's bill
+   -- manual after each theorize: [27479, 32522, 32522] (carried 48472)
+   -- ended SHORTER than the seed it carried (-15950 chars); 1 trailing writes changed the size not at all
+

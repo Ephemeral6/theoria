@@ -1,0 +1,53 @@
+{
+ "base_commit": "1f100130ed0e26671e54b5e0412469c164dfc49e",
+ "branch": "w/r2b-desk-cost",
+ "built_by": [
+  "armtools/desk_yield.py (new)",
+  "armtools/prompt_census.py"
+ ],
+ "files": [
+  {
+   "bytes": 9053,
+   "path": "RUN_STATE.md",
+   "sha256": "902b712f8745d5df201150cacae6e41a6ef59a602f7bbed472b565a1774e32d5"
+  },
+  {
+   "bytes": 21985,
+   "path": "desk_yield.json",
+   "sha256": "43c99961926b33530659517fa1bad67c770446bbb7548a52ab32de426d606b51"
+  },
+  {
+   "bytes": 2751,
+   "path": "desk_yield.txt",
+   "sha256": "8d071eddecde01803edcff0105287bc8bf3eac21cb65d573d69568b91cd1267a"
+  },
+  {
+   "bytes": 4298,
+   "path": "make_manifest.py",
+   "sha256": "d1e0417eac152bff9f45a5f5413c4378f7a456218539f65000df995f12e21a94"
+  },
+  {
+   "bytes": 39040,
+   "path": "prompt_census.json",
+   "sha256": "545147d9a7d5403875aeb1d0262f710eba555a25104bd24e5f236d93bc5f7612"
+  }
+ ],
+ "inputs": [
+  "runs/20260801T044640Z-R2b-g50t-a (desk/, desk_log.json, ledger.jsonl, books/snapshots)",
+  "runs/20260801T044640Z-R2b-sk48-b (same)",
+  "armtools/prompt_census.py -- the input-side census, used as given"
+ ],
+ "lane": "campaign",
+ "leg": "offline forensics -- no model call, no API call, no spend",
+ "prompt_id": "R2b-desk-cost-forensics",
+ "sealed_pile_contact": "none -- both legs are development-pile games, and nothing under environment_files/ was opened",
+ "seed": null,
+ "spend": {
+  "model_calls": 0,
+  "note": "reads archived records only",
+  "usd": 0.0
+ },
+ "territory": "theoria-arm",
+ "utc": "2026-08-02T21:00:00Z",
+ "what": "Why the two R2b legs disagreed. The obvious hypothesis -- desk cost proportional to manual size -- is refuted in both directions: sk48 sent the SMALLER prompt (85,904 vs 128,759 chars), carried the SMALLER manual (32,522 vs 72,299), and paid 3.5x per action. Output tokens carry 69% of the bill on both legs, and four consecutive sk48 calls -- $14.93, 74% of the leg's spend -- returned replies with no === THEORY === block, so the books never moved and the leg never left step 10."
+}
