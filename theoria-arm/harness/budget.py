@@ -38,6 +38,11 @@ class Budget:
         self.probe_actions = 0
         self.resets = 0
         self.commands_sent = 0
+        #: Read-only requests (scorecard fetches). Counted separately from
+        #: `commands_sent` as well as inside it, so a reader can subtract them:
+        #: a leg whose command count is inflated by scoreboard reads must not
+        #: look like a leg whose retry envelope ran away.
+        self.reads = 0
 
     # -- the two ceilings --------------------------------------------------
     @property
@@ -87,6 +92,30 @@ class Budget:
         if not is_reset:
             self.actions_failed += 1
 
+    # -- read-only traffic -------------------------------------------------
+    def check_readonly(self) -> None:
+        """Called before a request that returns state and changes none.
+
+        `GET /api/scorecard/{card_id}` is the only such request the arm makes.
+        It costs a command -- it is a socket through the proxy and the shared
+        pool counts it -- and it costs no action, because `total_actions` on the
+        card counts successful ACTIONs and a read is not one. The action ceiling
+        must therefore not gate it, exactly as it does not gate RESET, and for
+        the symmetrical reason: a leg that has spent its last action is the leg
+        that most needs to be able to read its own scorecard.
+
+        It is a separate method rather than `check(is_reset=True)` so that
+        `resets` stays a count of RESETs.
+        """
+        if self.commands_sent >= self.commands:
+            raise BudgetExhausted(
+                "HTTP command ceiling reached: %d commands sent, and a "
+                "read-only scorecard fetch is still a request."
+                % self.commands_sent)
+
+    def read(self) -> None:
+        self.reads += 1
+
     def as_json(self) -> Dict[str, Any]:
         return {
             "ceiling_actions": self.actions,
@@ -97,6 +126,7 @@ class Budget:
             "probe_actions": self.probe_actions,
             "resets": self.resets,
             "commands_sent": self.commands_sent,
+            "reads": self.reads,
             "actions_left": self.actions_left,
             # Attempts, not outbound requests. `Budget.command()` is called once
             # per arm-level attempt, and an attempt that the proxy refuses
@@ -143,4 +173,5 @@ def resume(state: Optional[Dict[str, Any]], **kwargs: Any) -> Budget:
     budget.probe_actions = int(state.get("probe_actions") or 0)
     budget.resets = int(state.get("resets") or 0)
     budget.commands_sent = int(state.get("commands_sent") or 0)
+    budget.reads = int(state.get("reads") or 0)
     return budget

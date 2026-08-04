@@ -479,3 +479,96 @@ rather than as zero. One certify round on each of R1-g50t-a, R1-sk48-b,
 R1b-g50t-a and R1b-sk48-b is `unreconstructed` for the honest reason that the
 archived report carries no replay to reproduce (the manual would not compile
 that round); those four contribute nothing to any number here.
+
+# GAPS — A27's instrument, line by line
+
+## GAP A27-1 · The detector has never fired on a real positive, and cannot until one exists
+
+Every positive case in `tests/test_scoreboard.py` is synthetic. The evidence for
+that claim, recomputed on this branch rather than quoted:
+
+* Across all `env_step` records written by `theoria-arm`, `baseline-arms` and
+  `ablation-arm` — **2,700 rows** — `levels_completed` is `0` on the 547 rows
+  that carry it and absent on the rest, and `state` is `NOT_FINISHED` on all
+  547. Never `WIN`, never `GAME_OVER`.
+* All **47** scorecard documents recoverable from those ledgers read
+  `total_levels_completed: 0` and `score: 0.0`, and every `level_scores` array
+  in them is all zeros. The largest `sum(level_actions)` on any single run row
+  is **33**.
+* The only rows anywhere in the repository with `state: "WIN"` or
+  `levels_completed > 0` are in `ablation-arm`'s own offline A0/A2 worlds and in
+  `proxy/runs/.../real_arm_probe.records.jsonl` — mocks, not ARC.
+
+So the boundary path is exercised only by fabricated envelopes and hand-built
+scorecards. What that does and does not buy: it establishes that the detector
+fires on a jump, that it does not fire on a floor, a plateau or a decrease, and
+that it distinguishes the two absences. It establishes **nothing** about which
+field ARC actually moves first at a real boundary, whether the envelope counter
+and the scorecard move in the same command, or whether `level_scores[i]` becomes
+non-zero at the moment of completion or at the close. `corroborate` exists
+because those are open questions; it reports a disagreement instead of resolving
+one, and on the first real boundary its answer is a measurement worth keeping.
+
+`test_no_recorded_leg_contains_a_real_boundary` asserts the state of the record
+above. It is written to fail the day a real boundary lands, which is the day
+somebody should re-read the synthetic positives against a real one.
+
+## GAP A27-2 · The paid rung has never dialled anything
+
+`ScoreWatch("scorecard")` and `ArcThroughProxy.read_scorecard` are tested against
+a stubbed `_get` and against `proxy/mock` never at all: the loop's per-turn
+consult skips the read when `offline` is set, and every gate in this territory
+runs offline. So the following are asserted and not measured:
+
+* that the env proxy forwards a `GET` at all (`proxy/forward.py` is another
+  track's file; every call this arm has ever made is a `POST`),
+* that ARC's `GET /api/scorecard/{card_id}` returns the same document shape as
+  the close response — `arc-recon/client.py` has the method, but no run in this
+  repository has a recorded response body from it,
+* that a mid-leg read is genuinely free of the action quota rather than merely
+  documented as such.
+
+Until a live leg turns the rung on, the honest reading of a `scoreboard` block
+is: on the `envelope` rung it is a complete record of what the arm saw; on the
+`scorecard` rung it is untested plumbing.
+
+## GAP A27-3 · The path to a goal is designed, half-built, and stops at the seam
+
+`witness_from_boundary` and `witnessed_wins.json` are the observation half and
+are wired into the live boundary path. `witness_rider` renders the ask and is
+never called by the loop. Nothing puts it on a theorize call.
+
+That is deliberate (D-A27-001) and it is still a gap: a leg that clears a level
+today keeps the winning frame and does not tell the desk about it in the same
+leg. Closing it needs one thing this repository does not have — a recorded
+boundary, so that the turn the rider should ride on can be observed rather than
+guessed at. The cost of the gap is bounded: the frame is the part that cannot be
+recovered afterwards, and it is kept.
+
+## GAP A27-4 · The 对账义务 is still unmet, and this moves it only one step
+
+`Theoria.md` Phase 2 layer 4: 账本推得的分数必须等于 API scorecard 分数,不等 =
+incident. `armtools/archive.reconcile` writes `score_reconciliation:
+"unavailable"` because no `env_step` row carries a score, and that is still true
+after this ticket — `ScoreWatch` puts scorecard readings into `run.json`'s
+summary and into the turn records, not into `env_step`. A ledger-derived score
+therefore still does not exist and the obligation is still owed. What changed is
+only that a leg can now hold a score at all while it is running.
+
+## GAP A27-5 · The mock's `[8, 8, 8]` is in the archive and now needs a reader who knows
+
+Scanning for the denominator turned up a hazard that predates this ticket.
+`level_baseline_actions: [8, 8, 8]` with `level_count: 3` is recorded against
+**three different game ids** — `g50t-5849a774` (6 files), `sk48-d8078629` (1) and
+`ar25-0c556536` (1). A roster is a property of a game and cannot belong to three,
+so that vector is not a roster: it is `proxy/mock`'s constant answer, and those
+are mock legs. The real g50t is `[78, 175, 179, 230, 96, 54, 67]` (12 files) and
+the real sk48 is eight levels long.
+
+`ScoreWatch` carries the leg's `offline` flag and labels the number, so a mock
+leg's `reach` report cannot read `at_or_above_reference` against a reference cost
+of 8 without saying where the 8 came from. What is **not** fixed is the archive:
+those seven files still carry the vector with nothing next to it saying it is the
+mock's, and any future tool that harvests baselines across `runs/` will pick it
+up. `MEASUREMENT.json` in this run directory names the files; correcting them is
+not this ticket's, and rewriting a ledger would be worse than the confusion.

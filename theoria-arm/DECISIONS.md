@@ -1383,3 +1383,119 @@ This closes the configuration half only. Axis 2 — a run whose `run_start` name
 a non-localhost upstream — costs money and is not this item's to authorise; the
 first live leg after this lands is where "跑完即打分" produces its first live
 evidence, and it will produce it without anyone remembering to ask.
+
+## D-A27-001 · The arm was never blind to a win; it was blind to the price of one
+
+The board item says "the arm cannot see a win even if it gets one". Read against
+the code that is half right, and the half that is right is the expensive half.
+Both halves are recorded here rather than the one that makes a better story.
+
+**What the arm already read, before this ticket.** `inner/loop.py:_record`
+passes `levels_completed` off *every* gameplay envelope into
+`LevelLog.observe`, and an increase fires `_on_level_boundary` on that same
+call, mid-leg, before `_record` returns. `_main_loop` reads `state == "WIN"` at
+the top of every turn and drives `_try_advance_level`. Both of ARC's two
+plausible level signals are handled and have been since `inner/levels.py` was
+written; `LEVEL_SIGNAL_UNKNOWN` is a note about which one fires, not about
+whether either is watched. Nothing in this ticket changes that path, and the
+detector added here deliberately does **not** feed it — see the third decision
+below.
+
+**What the arm did not read, at any point in a leg.** `score`, `level_scores`,
+`level_actions`, `level_count`, `level_baseline_actions`. Not one of these
+appears on any ARC gameplay response — the key set is `action_input,
+available_actions, frame, full_reset, game_id, guid, levels_completed, state,
+win_levels`, and `_summary` states the consequence in a single line, `"score":
+None`. All five exist only on a scorecard, and the only code path that fetched
+one was `close_scorecard`, called from `_finish`, **after `_main_loop` has
+returned**, on a card that D-015 records as unrecoverable once closed. Every
+scorecard-side fact about a leg therefore arrived strictly after the leg could
+use it.
+
+**The number that makes this matter.** The closed g50t card in
+`runs/20260728T012311Z-g50t-first-contact-salvage2/ledger.jsonl` carries
+`level_baseline_actions: [78, 175, 179, 230, 96, 54, 67]`. Level 1 costs a
+reference solver 78 actions; the best leg this arm has ever run spent 33 in
+total, and a $25 leg buys about 32. That ratio was legible from the first RESET
+onward, in a document the arm could have asked for at any moment without
+spending an action, and the arm asked for it once — at the end, where it is a
+post-mortem. The blindness is real and it is narrower and worse than the board
+item's wording: not "a win would go unnoticed", but "the leg never knew what a
+win costs".
+
+Four decisions, each of which could have gone another way.
+
+**1. `GET /api/scorecard/{card_id}`, not an earlier close.** The obvious way to
+see a score mid-leg is to close the card and open another. That is wrong twice:
+D-015 makes a close irreversible, and `Theoria.md` Phase 2 layer 4 fixes 一局一张
+scorecard — a leg that closes three cards has three partial scores and no
+scorecard to reconcile against, which breaks the 对账义务 in the same paragraph
+that asks for it. The GET has been in `arc-recon/client.py` the whole time,
+under a heading that reads "read-only surface (costs no action quota)". It is
+non-destructive, it does not consume the action budget, and it returns the same
+document. `Budget.check_readonly` is a separate method rather than
+`check(is_reset=True)` so that `resets` stays a count of RESETs, and
+`budget.reads` is reported separately as well as inside `commands_sent` so a leg
+whose command count is lifted by scoreboard reads cannot be mistaken for a leg
+whose retry envelope ran away.
+
+**2. One attempt, and the read may never end a leg.** Every other endpoint in
+`harness/arc.py` retries into the 400 wave with a 40-attempt envelope, because
+losing a command loses an action. Losing a reading loses nothing: the next turn
+asks again. Retrying would spend up to 40 requests to learn a number that has
+not moved in 2,700 recorded steps. And `read_scorecard` swallows every failure
+and returns `None` — an instrument that can kill a run is a liability, not an
+instrument. The single exception is the spend gate, which is asked *first*: a
+read must not be the thing that spins against a red gate.
+
+**3. The watch is a witness, not a trigger.** `ScoreWatch` never calls
+`_on_level_boundary`. `LevelLog` remains the sole authority over `starts`,
+snapshots and the dropped problem. The alternative — letting a score jump cut
+the trajectory — would mean a scorecard glitch, a mis-selected run row, or a
+resumed card could manufacture a level completion in the arm's own record, and
+`_try_advance_level` already says at length why a fabricated boundary is the
+worst outcome available here, worse than stopping. What the watch does when the
+two witnesses disagree is **report it** (`corroborate`) and pick neither.
+
+**4. The default rung is `envelope`, not `off`.** `inner/goal.py` defaults to
+`off` so a run's artefacts stay byte-identical, and that discipline is right for
+a change that spends. It is the wrong default here for the free rung, and D-A3-B
+is the evidence: change B has been prepared-and-not-adopted since 2026-07-31 and
+has never run, which is GAP A3-B-1. The `envelope` rung opens no socket, spends
+no action, buys no model call and reads only fields already sitting on every
+recorded `Step`; the only thing it changes is that the record now says what it
+saw. A27's whole finding is that the record was silent. `off` is kept and does
+restore byte-identical artefacts; the paid rung, `scorecard`, defaults off,
+because spending against the shared pool is not a decision this file gets to
+make on its own.
+
+**What is deliberately not built.** The path from "a boundary was observed" to
+"the manual may now state a goal" is designed and half-built.
+`witness_from_boundary` and the `witnessed_wins.json` artefact are the
+observation half and they are complete: at a boundary the arm now keeps the last
+frame of the level it cleared, its hash, the level's opening hash, the action
+that carried the signal, the actions the level cost it, and the reach reading
+that stood at that moment. That frame is the evidence R1b measured the desk
+waiting for — three refusals in three asks, each resting on the fact that no
+winning state had ever been seen. `witness_rider` renders it as a prompt block
+and is a pure function that costs nothing.
+
+Wiring that rider onto a theorize call is **not** done, and the seam is drawn
+where the evidence stops. A rider must ride on a call some surprise has already
+bought (`inner/surprise.py` closes the set at seven; an eighth is a change to
+`Theoria.md` 1.10(d), not to a file). The call it should ride on is the one a
+boundary itself provokes — and since no live leg has ever crossed a boundary,
+the shape of that call has never been observed. Every claim about which turn it
+lands on, and about what the desk does with a positive example, would be a guess
+dressed as a design. The first recorded boundary is the evidence that decision
+needs. Until then the arm keeps the frame, which is the part that cannot be
+recovered afterwards.
+
+**Absence is absence.** `boundary_verdict` returns `not_measured` /
+`boundary_observed: null` when fewer than two readings have been taken, and
+`measured_absent` / `false` when readings were taken and nothing moved. Every
+live leg in this repository's history is in the first category, and reporting it
+as the second would turn "we did not look" into "we looked and there was
+nothing". `tests/test_scoreboard.py` is mostly about that distinction, and
+`test_no_recorded_leg_contains_a_real_boundary` states the caveat as a test so
+that it fails on the day it stops being true.

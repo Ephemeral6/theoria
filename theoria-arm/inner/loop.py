@@ -46,10 +46,11 @@ from world.frames import FrameStore, Step, grid_hash
 
 from . import (anchor as anchor_beat, certify, commit, deskdiet,
                goal as goal_beat, plan as plan_beat, probe as probe_beat,
-               theorize, transfer)
+               scoreboard as scoreboard_beat, theorize, transfer)
 from .books import Books
 from .goal import GoalState
 from .levels import LevelLog
+from .scoreboard import ScoreWatch
 from .surprise import Register
 
 #: A first manual needs more than one frame. The sweep tries each legal action
@@ -151,6 +152,12 @@ MAX_LEVEL_ADVANCE_ATTEMPTS = 2
 #: separate decision from preparing one.
 DEFAULT_GOAL_PROTOCOL = goal_beat.DEFAULT_PROTOCOL
 
+#: A27. `envelope` -- the free rung: it reads only fields already on every
+#: recorded `Step` and opens no socket. `scorecard` adds mid-leg
+#: `GET /api/scorecard/{card_id}` readings and is opt-in. `off` restores the
+#: byte-for-byte artefacts of a run made before `inner/scoreboard.py` existed.
+DEFAULT_SCOREBOARD_PROTOCOL = scoreboard_beat.DEFAULT_PROTOCOL
+
 
 def _forbidden_substrings(game_id: str) -> Tuple[str, ...]:
     """Every id that may not appear in a prompt this run sends.
@@ -212,6 +219,7 @@ class TheoriaArm:
                  carry_source_game: Optional[str] = None,
                  tags: Optional[List[str]] = None,
                  goal_protocol: str = DEFAULT_GOAL_PROTOCOL,
+                 scoreboard_protocol: str = DEFAULT_SCOREBOARD_PROTOCOL,
                  prompt_id: str = "P-8",
                  probe_economy: "Optional[probe_beat.ProbeEconomyConfig]" = None,
                  frontier: "Optional[probe_beat.FrontierConfig]" = None,
@@ -246,6 +254,16 @@ class TheoriaArm:
         #: Validated in the constructor, so a typo is a refusal at launch and
         #: not a silently-off protocol discovered at the end of a paid leg.
         self.goal = GoalState(goal_protocol)
+        #: A27, and validated in the constructor for the same reason `goal` is:
+        #: a typo is a refusal at launch, not a silently-off instrument
+        #: discovered at the end of a paid leg.
+        self.scoreboard = ScoreWatch(scoreboard_protocol, game_id=game_id,
+                                     offline=offline)
+        #: The witnesses this leg collected, one per level boundary. Written to
+        #: `witnessed_wins.json` as they arrive: this is the artefact the desk
+        #: has never had, and a leg that dies after crossing a boundary must
+        #: not take it with it.
+        self.witnessed_wins: List[Dict[str, Any]] = []
         #: The ask waiting for the next theorize call to carry it. `None` most
         #: of the time; never a call of its own (constraint 8).
         self._goal_rider: Optional[str] = None
@@ -418,6 +436,16 @@ class TheoriaArm:
             # forms, and cuts `starts`. A *winning* run would end with no
             # `problem.json` and a `levels.level` of 8 for a 7-level game.
             final_level=self.arc.win_levels)
+        # The second witness, on the free rung. It sees the same envelope
+        # `LevelLog` just saw, and it will report `measured_absent` rather than
+        # silence when nothing moves -- which is the whole of A27's complaint
+        # about the old record. It fires no side effect: `_on_level_boundary`
+        # below is still driven by `LevelLog` alone, so adding this cannot
+        # manufacture a boundary.
+        if self.scoreboard.enabled and isinstance(envelope, dict):
+            self.scoreboard.observe_envelope(
+                envelope, turn=self.current_turn, step_idx=step.step_idx,
+                actions_spent=self.budget.actions_ok)
         if event is not None:
             self._on_level_boundary(event)
         return added
@@ -488,6 +516,7 @@ class TheoriaArm:
         except OSError:                                # noqa: BLE001
             pass
         event["pending_surprises_carried"] = len(self.register.pending)
+        self._witness_the_win(event)
         self._frames_at_last_theorize = -1
         self._certify_reports_at_level_start = len(self.certify_reports)
         self.turns.append({"turn": "%s-boundary" % self.current_turn,
@@ -497,6 +526,142 @@ class TheoriaArm:
                            "actions_before": self.budget.actions_ok,
                            "actions_spent": self.budget.actions_ok})
         self._write_run_state()
+
+    # -- the witness -------------------------------------------------------
+    def _witness_the_win(self, event: Dict[str, Any]) -> None:
+        """Keep the evidence a boundary makes available, before it is dropped.
+
+        `_on_level_boundary` deletes `problem.json` and the whole of
+        `generated/` for reasons that are correct and documented above. What it
+        has never kept is the thing those files were derived from: **the state
+        the world was in when it decided the level was won.** `books.snapshot`
+        preserves the two books; nothing preserved the frame.
+
+        That frame is the evidence `inner/goal.py` records the desk waiting
+        for. R1b's three refusals all rest on the same footing -- no winning
+        state has been seen, so no goal clause can be checked against one --
+        and a boundary is the first time that footing changes. Written to disk
+        the instant it exists (`witnessed_wins.json`), because a leg that dies
+        two actions after its first ever level completion must not take the
+        only positive example in the project's history with it.
+
+        Nothing here calls the desk, changes a beat or costs an action. It is
+        the observation half; `scoreboard.witness_rider` is the other half and
+        says at its own docstring why it is not wired.
+        """
+        if not self.scoreboard.enabled:
+            return
+        try:
+            boundary_idx = event.get("step_idx")
+            # The step carrying the increment is the FIRST frame of the new
+            # level (`inner/levels.py`), so the last frame of the level that was
+            # cleared is the step before it. Searched backwards for a step that
+            # actually has a grid: a failed command in between carries none.
+            final_grid = None
+            final_idx = None
+            if isinstance(boundary_idx, int):
+                for i in range(boundary_idx - 1, -1, -1):
+                    if i >= len(self.store.steps):
+                        continue
+                    grid = self.store.steps[i].grid
+                    if grid is not None:
+                        final_grid, final_idx = grid, i
+                        break
+            # `starts` already has the new level appended, so the level that
+            # just ended began at the entry before it.
+            opening_grid = None
+            if len(self.levels.starts) >= 2:
+                begin = self.levels.starts[-2]
+                for i in range(begin, len(self.store.steps)):
+                    grid = self.store.steps[i].grid
+                    if grid is not None:
+                        opening_grid = grid
+                        break
+            previous = [e for e in self.levels.events if e is not event]
+            actions_at_level_start = (previous[-1].get("actions_spent") or 0
+                                      if previous else 0)
+            spent = event.get("actions_spent")
+            witness = scoreboard_beat.witness_from_boundary(
+                event,
+                final_grid=final_grid,
+                final_grid_hash=grid_hash(final_grid) if final_grid else None,
+                opening_grid_hash=grid_hash(opening_grid) if opening_grid else None,
+                actions_this_level=(None if spent is None
+                                    else spent - actions_at_level_start),
+                reach=self._reach_now(),
+                corroboration=self.scoreboard.corroborate(
+                    self.levels.completed),
+            )
+            witness["final_step_idx"] = final_idx
+            self.witnessed_wins.append(witness)
+            event["witnessed"] = True
+            _dump(os.path.join(self.dir, "witnessed_wins.json"),
+                  self.witnessed_wins)
+        except Exception as exc:                       # noqa: BLE001
+            # An instrument may not be the thing that ends a leg -- least of all
+            # on the one turn in this project's history where a level was
+            # cleared. The failure is recorded on the event and the boundary
+            # handling continues.
+            event["witness_error"] = "%s: %s" % (type(exc).__name__, exc)
+
+    def _reach_now(self) -> Dict[str, Any]:
+        """The denominator, as it stands this instant.
+
+        `actions_spent_this_level` comes from the scorecard when a reading has
+        one and from the arm's own boundary record otherwise, and the report
+        says which -- the two count different things (the card counts billed
+        ACTIONs, the arm counts its own successes) and a silent substitution
+        would put one number under the other's name.
+        """
+        card = self.scoreboard.last.get("scorecard") or {}
+        level = self.levels.level
+        per_level = card.get("level_actions")
+        spent: Optional[int] = None
+        if isinstance(per_level, list) and 0 <= level - 1 < len(per_level):
+            spent = per_level[level - 1]
+        else:
+            previous = self.levels.events
+            at_start = (previous[-1].get("actions_spent") or 0) if previous else 0
+            spent = max(0, self.budget.actions_ok - at_start)
+        return self.scoreboard.reach(
+            level=level, actions_spent_this_level=spent,
+            actions_left=self.budget.actions_left, turn=self.current_turn)
+
+    def _consult_scoreboard(self, record: Dict[str, Any], turn: int) -> None:
+        """The per-turn beat. A27 asks for the boundary to be consulted every
+        turn, and this is that; it decides nothing.
+
+        On the `envelope` rung it costs nothing at all -- the readings were
+        taken in `_record` and this only writes down what they add up to. On the
+        `scorecard` rung it may spend one read-only request, at a bounded
+        cadence, and the cadence's refusals are written down with the numbers
+        they read whether they fired or not.
+        """
+        if not self.scoreboard.enabled:
+            return
+        due = self.scoreboard.due_for_scorecard(turn)
+        read_result: Optional[str] = None
+        if due["due"] and not self.offline:
+            card = self.arc.read_scorecard()
+            if card is None:
+                read_result = "read_failed"
+            else:
+                read_result = "read"
+                self.scoreboard.observe_scorecard(
+                    card, guid=self.arc.guid, turn=turn,
+                    actions_spent=self.budget.actions_ok)
+        elif due["due"] and self.offline:
+            read_result = "skipped_offline"
+
+        record["scoreboard"] = {
+            "protocol": self.scoreboard.protocol,
+            "turn": turn,
+            "scorecard_read": read_result,
+            "scorecard_due": due,
+            "boundary": self.scoreboard.boundary_verdict(),
+            "corroboration": self.scoreboard.corroborate(self.levels.completed),
+            "reach": self._reach_now(),
+        }
 
     def _send(self, action_id: int, *, probe: bool = False, note: str = ""):
         status, envelope = self.arc.act(action_id, probe=probe)
@@ -906,6 +1071,14 @@ class TheoriaArm:
             # instead, and `_save_all` adopts it if the run dies before the
             # append. See `_adopt_the_turn_in_flight`.
             self._turn_in_flight = record
+
+            # 0. the scoreboard. FIRST in the turn, before theorize, because
+            #    the number it carries -- what the level costs a reference
+            #    solver against what this leg has left -- is only worth
+            #    anything to a leg that still has money. Read after the desk
+            #    has been paid it is a post-mortem, which is exactly the state
+            #    A27 found the arm in.
+            self._consult_scoreboard(record, turn)
 
             # 1 + 2. theorize (only on surprise, or when there is no manual
             #        at all), then certify.
@@ -1546,6 +1719,16 @@ class TheoriaArm:
     # -- the account -------------------------------------------------------
     def _finish(self) -> Dict[str, Any]:
         self.scorecard = self.arc.close_scorecard()
+        # The closing card is a reading like any other, and on a leg that never
+        # read one mid-flight it is the ONLY reading -- which is why the watch
+        # reports `not_measured` rather than `measured_absent` in that case: one
+        # reading cannot contain a jump. Feeding it here also means the
+        # envelope/scorecard cross-check runs on every leg, including the ones
+        # that never turned the paid rung on.
+        if self.scoreboard.enabled and self.scorecard:
+            self.scoreboard.observe_scorecard(
+                self.scorecard, guid=self.arc.guid, source="scorecard",
+                actions_spent=self.budget.actions_ok)
         if not self.outcome or self.outcome == "not_started":
             self.outcome = self._terminal() or "budget_exhausted"
         self._save_all()
@@ -1558,6 +1741,13 @@ class TheoriaArm:
         # complete on the other two -- including the zeros.
         if self.goal.enabled:
             out["goal"] = self.goal.summary()
+        # Same discipline, same reason (A27). `witnessed_wins` is present and
+        # empty rather than absent whenever the rung is on: an empty list is
+        # "this leg cleared no level", which is a fact, and its absence would
+        # be indistinguishable from an old run.
+        if self.scoreboard.enabled:
+            out["scoreboard"] = self.scoreboard.summary()
+            out["witnessed_wins"] = list(self.witnessed_wins)
         return out
 
     def _summary(self) -> Dict[str, Any]:

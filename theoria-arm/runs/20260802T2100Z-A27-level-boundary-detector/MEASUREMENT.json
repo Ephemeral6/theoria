@@ -1,0 +1,125 @@
+{
+ "arms_scanned": [
+  "theoria-arm",
+  "baseline-arms",
+  "ablation-arm"
+ ],
+ "baseline_provenance_note": "`level_baseline_actions` is a per-game roster, so one vector cannot belong to two games. Any vector listed above therefore came from something that is not the game -- in this archive that is `proxy/mock`, which answers [8, 8, 8] with `level_count: 3` for whatever id it is handed. A `reach` report built on it would compare a leg against a reference cost of 8 when the real g50t level 1 is 78, so `ScoreWatch` carries the leg's `offline` flag and labels the number rather than leaving it to the reader.",
+ "baseline_vectors_seen_against_more_than_one_game": {
+  "8,8,8": [
+   "ar25-0c556536",
+   "g50t-5849a774",
+   "sk48-d8078629"
+  ]
+ },
+ "boundaries_found": [],
+ "env_step_rows": 2700,
+ "env_step_rows_carrying_the_counter": 547,
+ "env_step_rows_with_the_counter_absent": 2153,
+ "envelope_state_histogram": {
+  "<absent>": 2153,
+  "NOT_FINISHED": 547
+ },
+ "jsonl_files_scanned": 140,
+ "level_baseline_actions_by_game": {
+  "ar25-0c556536": {
+   "vectors": [
+    {
+     "file_count": 1,
+     "files": [
+      "theoria-arm/runs/audit-smoke/ledger.jsonl"
+     ],
+     "vector": [
+      8,
+      8,
+      8
+     ]
+    }
+   ]
+  },
+  "g50t-5849a774": {
+   "vectors": [
+    {
+     "file_count": 6,
+     "files": [
+      "theoria-arm/runs/20260728T235841Z-leg01/ledger.jsonl",
+      "theoria-arm/runs/20260728T235842Z-leg02/ledger.jsonl",
+      "theoria-arm/runs/20260729T0030Z-a3-desk-live-proof/ledger.jsonl",
+      "theoria-arm/runs/20260729T0035Z-a3-desk-live-proof2/ledger.jsonl",
+      "theoria-arm/runs/20260729T105653Z-leg01/ledger.jsonl",
+      "theoria-arm/runs/a3-gate-mock/ledger.jsonl"
+     ],
+     "vector": [
+      8,
+      8,
+      8
+     ]
+    },
+    {
+     "file_count": 12,
+     "files": [
+      "theoria-arm/runs/20260728T012311Z-g50t-first-contact-salvage2/ledger.jsonl",
+      "theoria-arm/runs/20260728T014402Z-g50t-first-contact-salvage/ledger.jsonl",
+      "theoria-arm/runs/20260728T015354Z-g50t-first-contact-salvage/ledger.jsonl",
+      "theoria-arm/runs/20260729T004020Z-leg01-salvage/ledger.jsonl",
+      "theoria-arm/runs/20260729T105729Z-leg01/ledger.jsonl",
+      "theoria-arm/runs/20260731T1240Z-A3-level2-carried/ledger.jsonl",
+      "theoria-arm/runs/20260731T1310Z-A3-level2-carried-r2/ledger.jsonl",
+      "theoria-arm/runs/20260731T1430Z-A3-level2-carried-r3/ledger.jsonl"
+     ],
+     "vector": [
+      78,
+      175,
+      179,
+      230,
+      96,
+      54,
+      67
+     ]
+    }
+   ]
+  },
+  "sk48-d8078629": {
+   "vectors": [
+    {
+     "file_count": 1,
+     "files": [
+      "theoria-arm/runs/20260728T235843Z-leg01/ledger.jsonl"
+     ],
+     "vector": [
+      8,
+      8,
+      8
+     ]
+    },
+    {
+     "file_count": 5,
+     "files": [
+      "theoria-arm/runs/20260728T072604Z-E3-sk48-carried-salvage/ledger.jsonl",
+      "theoria-arm/runs/20260728T083400Z-E3-sk48-carried-v2/ledger.jsonl",
+      "theoria-arm/runs/20260731T1500Z-A3-sk48-carried-l1/ledger.jsonl",
+      "theoria-arm/runs/20260731T231654Z-R1-sk48-b/ledger.jsonl",
+      "theoria-arm/runs/preflight-20260728T074237Z/ledger.jsonl"
+     ],
+     "vector": [
+      61,
+      177,
+      101,
+      103,
+      230,
+      181,
+      125,
+      92
+     ]
+    }
+   ]
+  }
+ },
+ "max_levels_completed_on_any_envelope": 0,
+ "max_score_on_any_scorecard": 0.0,
+ "max_sum_level_actions_on_one_run_row": 33,
+ "max_total_levels_completed_on_any_scorecard": 0,
+ "scorecards_found": 47,
+ "scorecards_with_any_nonzero_level_score": 0,
+ "verdict": "no level boundary exists anywhere in this arm's, the baseline arms' or the ablation arm's recorded ARC traffic. The detector added by A27 is therefore untested on a real positive; every positive in tests/test_scoreboard.py is synthetic."
+}
