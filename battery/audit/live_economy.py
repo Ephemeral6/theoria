@@ -192,13 +192,22 @@ def turn_cost_curve(run) -> List[Dict[str, Any]]:
     Computed from `Run.turn_costs()` — the frozen accessor E2 and E3 read —
     so the curve this artefact publishes and the curve those two metrics are
     defined over cannot drift apart.  The turn labels come from the calls'
-    own `turn` field when they carry one, so a curve on the exact axis is
-    labelled with the archive's turn numbers rather than with 0..n.
+    own `turn` field, so a curve on the exact axis is labelled with the
+    archive's turn numbers rather than with 0..n.
+
+    Empty when the axis cannot be rebuilt (S46).  That emptiness is *not*
+    self-explaining — an unlabelled leg that really did spend money renders
+    the same `[]` as a leg that never called a model — so `build()` writes the
+    leg's `turn_axis` beside the curve and files an `absences` row carrying the
+    money that is off it.  This module's third promise is "records absence with
+    its reason, per leg and per metric, and never as a zero", and an empty
+    curve without that row would be exactly the zero it forbids.
     """
     costs = run.turn_costs()
-    labels = sorted(set(c.turn for c in run.calls if c.turn is not None))
-    if len(labels) != len(costs):
-        labels = list(range(len(costs)))
+    # No `range(len(costs))` fallback here either: `turn_costs` only returns a
+    # non-empty list on an `exact` axis, where every call carries a label, so
+    # the label set and the bucket list have the same length by construction.
+    labels = sorted({c.turn for c in run.calls if c.turn is not None})
     total = sum(costs)
     out: List[Dict[str, Any]] = []
     running = 0.0
@@ -309,6 +318,7 @@ def build(runs_root: Optional[str] = None) -> Dict[str, Any]:
     legs: Dict[str, Any] = {}
     inputs: Dict[str, Any] = {}
     absences: List[Dict[str, Any]] = []
+    unshaped: List[Dict[str, Any]] = []
     axis_moved: List[Dict[str, Any]] = []
 
     for run in runs:
@@ -318,6 +328,30 @@ def build(runs_root: Optional[str] = None) -> Dict[str, Any]:
         alt, axis_note = exact_axis(run, leg_dir)
         on_exact = ({mid: REGISTRY[mid].fn(alt) for mid in ids}
                     if alt is not None else None)
+
+        # The curve's own absence (S46).  Deliberately *not* in `absences`:
+        # that list is one row per metric and carries metric statuses, and an
+        # axis is neither.  An empty `turn_cost_curve_of_record` is otherwise
+        # indistinguishable from the curve of a leg that never called a model,
+        # and on this arm the difference is real money -- leg
+        # 20260731T231654Z-R1-sk48-b bills three calls and carries no turn
+        # label on any of them.  Money that has no shape is not absent money.
+        axis = run.turn_axis()
+        if run.calls and not axis.usable:
+            billed = sum(c.cost_usd or 0.0 for c in run.calls)
+            unshaped.append({
+                "leg": run.run_id,
+                "axis": axis.status,
+                "calls": axis.n_calls,
+                "labelled_calls": axis.n_labelled,
+                "unshaped_usd": round(billed, 9),
+                "reason": "%d of %d call(s) carry a turn label, so the "
+                          "decision axis cannot be rebuilt, the curve is "
+                          "empty and E2/E3 decline; the %.6f USD billed over "
+                          "those calls was spent, and is reported here rather "
+                          "than left to be read off an empty curve as zero"
+                          % (axis.n_labelled, axis.n_calls, billed),
+            })
 
         for mid in ids:
             value = of_record[mid]
@@ -349,6 +383,10 @@ def build(runs_root: Optional[str] = None) -> Dict[str, Any]:
             "billed_calls": len(run.calls),
             "ledger_cost_usd": run.notes.get("ledger_cost_usd"),
             "adapter_turn_join": run.notes.get("turn_join"),
+            # What the leg's *own* record can say about its decision axis,
+            # separately from what `bill_shape.json` can rebuild for it.
+            "turn_axis": {"status": axis.status, "calls": axis.n_calls,
+                          "labelled_calls": axis.n_labelled},
             "exact_axis": axis_note,
             "reconciliation": reconcile(run, leg_dir),
             "turn_cost_curve_of_record": turn_cost_curve(run),
@@ -458,6 +496,10 @@ def build(runs_root: Optional[str] = None) -> Dict[str, Any]:
         "progressions": progressions,
         "measured_by_metric": measured,
         "absences": absences,
+        # Legs whose money was billed but cannot be laid on a decision axis.
+        # Empty is the good state; a non-empty entry is spend that no shape
+        # metric will ever account for, said out loud (S46).
+        "spend_with_no_shape": unshaped,
         "axis_sensitivity": {
             "cells_that_moved": axis_moved,
             "turn_counts_that_moved": turn_counts_moved,

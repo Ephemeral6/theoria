@@ -315,16 +315,47 @@ def leg_reading(slug: str, path: str) -> Dict[str, object]:
     priced = [r for r in rows if float(r.get("usd") or 0.0) > 0]
     total = sum(float(r.get("usd") or 0.0) for r in rows)
     anchored = [r for r in priced if r.get("step_idx") is not None]
+    self_check = curves.get("self_check") or {}
+    accounts = (self_check.get("accounts_for_every_billed_call") is True
+                and self_check.get("accounts_for_every_dollar") is True)
 
     base: Dict[str, object] = {
         "leg": slug,
         "game_id": curves.get("game_id"),
         "join_confidence": curves.get("join_confidence"),
+        "accounts_for_the_bill": accounts,
         "turn_rows": len(rows),
         "priced_rows": len(priced),
         "anchored_priced_rows": len(anchored),
         "total_usd": round(total, 9),
     }
+
+    # G6 (S46), checked before G2 because it is what makes G2's sentence true.
+    #
+    # G2 says "total cost is zero" about the sum of the curve's own rows, and
+    # then E2L reports that as a fact about the leg.  Those are the same
+    # sentence only if the curve accounts for the leg's bill, and the archive
+    # publishes exactly that certificate in `curves.json`'s `self_check`.
+    # Leg 20260731T231654Z-R1-sk48-b does not carry it: its curve totals $0.00
+    # over two rows claiming zero model calls, while the proxy ledger bills
+    # three calls for $7.6085275.  E2L published "total cost is zero" for that
+    # leg -- 看不出钱少了一截 in the artefact rather than in `turn_costs`,
+    # which is the same defect S46 was opened for, one file further on.
+    #
+    # This gates on the *money*, deliberately not on `join_confidence`.  A
+    # degraded join is a defect of the **turn** spine, and `PREREG_E2L.md` §1
+    # makes the step axis E2L's whole reason for existing; refusing a leg whose
+    # step axis is provably intact (`anchored == priced`) because its turn
+    # spine is not would re-couple E2L to the axis it was built to escape, and
+    # would convert six exploratory readings into refusals after seeing that
+    # they point against C2 -- which `freeze/STATS_RULES.md` §8 seals off.
+    if not accounts:                                            # G6
+        return {**base, "status": "unsound", "value": None,
+                "reason": "curves.json does not certify that it accounts for "
+                          "the leg's billed calls and dollars, so its "
+                          "%.6f USD total is this join's total and not this "
+                          "leg's, and neither a zero nor a share may be read "
+                          "off it" % total}
 
     if total <= 0:                                              # G2
         return {**base, "status": "thin", "value": None,
@@ -388,9 +419,21 @@ def paired_material(readings: List[Dict[str, object]]) -> Dict[str, object]:
     """
     ok = [r for r in readings if r.get("status") == "ok"]
     games = sorted({str(r.get("game_id")) for r in ok if r.get("game_id")})
+    # Split by the join's own confidence rather than gating on it (S46).  Every
+    # evaluable leg here rebuilt its step axis cleanly -- that is G4 -- but most
+    # of them did so from a join the archive itself labels `degraded`, and a
+    # bare `n_evaluable` reads as that many clean legs. The label is a property
+    # of the turn spine and so does not bear on E2L's own axis, which is why it
+    # counts rather than refuses; it is reported here so that no reader has to
+    # take `n_evaluable` for more than it is.
+    by_join: Dict[str, int] = {}
+    for row in ok:
+        by_join[str(row.get("join_confidence"))] = (
+            by_join.get(str(row.get("join_confidence")), 0) + 1)
     return {
         "evaluable_legs": [r["leg"] for r in ok],
         "n_evaluable": len(ok),
+        "n_evaluable_by_join_confidence": dict(sorted(by_join.items())),
         "arms": ["theoria"],
         "control_arm_legs": 0,
         "n_paired_games": 0,
@@ -425,7 +468,21 @@ def build() -> Dict[str, object]:
                    "fallback to call order"),
             "G5": ("fewer than %d new states after the head -> thin"
                    % MIN_POST_HEAD_STATES),
+            "G6": ("curves.json does not certify that it accounts for the "
+                   "leg's billed calls and dollars -> unsound; added by S46, "
+                   "after the numbers were seen, and it only ever refuses "
+                   "(PREREG_V9 R1's safe direction). See PREREG_E2L.md 修订 1"),
         },
+        "axis_caveat": (
+            "每一个前载数字都带着同一个缺陷。E2 的分桶轴是 `Call.turn`——记录方"
+            "写下的一个标签，而跨臂的回合标签约定在冻结包里没有被钉死；"
+            "`freeze/STATS_RULES.md` §3.0 据此把前载终点撤出确证家族。S46 拿掉了"
+            "`Run.turn_costs()` 里那条把枚举下标与真实标签装进同一个桶的回落，"
+            "所以轴不可重建时 E2/E3 拒答而不再换轴；但**降级不修指标**，"
+            "轴的效度问题在探索性读数上照样存在。E2L 换的是步轴，"
+            "不受 `Call.turn` 约束，然而它自己也已被 `first-turn-bill-coherent` "
+            "刷到 1.0，并且下面每一条腿的 `join_confidence` 都随数一起带着。"
+            "`freeze/RESIDUALS.json` 的 `E2-AXIS` 与 `E2-BACK` 收着这两笔。"),
         "probes": probes,
         "n_probes_landing_on_E2": sum(1 for p in probes if p["lands_on_E2"]),
         "n_probes_landing_on_E2L": sum(1 for p in probes if p["lands_on_E2L"]),

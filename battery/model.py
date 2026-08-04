@@ -98,6 +98,43 @@ class Call:
 
 
 @dataclass(frozen=True)
+class TurnAxis:
+    """Whether a run's decision axis can be rebuilt from what was recorded.
+
+    `Call.turn` is a label the *recorder* writes, and a record may carry it on
+    every call, on some of them, or on none.  Until S46 those three cases were
+    not distinguished: `Run.turn_costs()` substituted the call's position in
+    the list wherever the label was missing, and put that position into the
+    same bucket dictionary as the real labels.  A partly labelled record
+    therefore summed the unlabelled call at position 7 into the bucket of the
+    call genuinely labelled `turn=7`, which are unrelated quantities.
+
+    The discipline here is `PREREG_E2L.md` §2 G4's, applied to the turn axis:
+    an axis that cannot be rebuilt is a measurement that was not taken, not a
+    measurement whose value is doubtful.  So the axis is *reported*, and the
+    metrics that are defined over it refuse rather than degrade.
+
+    `status` is one of:
+
+    * `exact`     — every call carries a turn label; the axis is the record's.
+    * `partial`   — some do and some do not.  This is the incoherent case: the
+                    record claims a turn axis and does not supply one.
+    * `absent`    — no call carries a label.  Not incoherent, just unmeasured;
+                    every pre-`attempt` ledger row looks like this.
+    * `no-calls`  — there are no model calls at all, so there is no material.
+    """
+
+    status: str
+    n_calls: int = 0
+    n_labelled: int = 0
+
+    @property
+    def usable(self) -> bool:
+        """May a per-turn quantity be computed from this record?"""
+        return self.status == "exact"
+
+
+@dataclass(frozen=True)
 class Concept:
     """One entry in the manual's word table."""
 
@@ -281,6 +318,22 @@ class Run:
     def ok_steps(self) -> List[Step]:
         return [s for s in self.steps if not s.failed]
 
+    def turn_axis(self) -> TurnAxis:
+        """Can this record's decision axis be rebuilt?  See `TurnAxis`.
+
+        Asked of *every* call, not only the priced ones, because every call is
+        what `turn_costs` buckets: an unlabelled unpriced call still occupies a
+        key, and under the old fallback it occupied a real turn's key.
+        """
+        calls = self.calls
+        if not calls:
+            return TurnAxis("no-calls")
+        labelled = [c for c in calls if c.turn is not None]
+        if not labelled:
+            return TurnAxis("absent", len(calls), 0)
+        status = "exact" if len(labelled) == len(calls) else "partial"
+        return TurnAxis(status, len(calls), len(labelled))
+
     def turn_costs(self) -> List[float]:
         """Cost per *decision*, in decision order.
 
@@ -291,12 +344,20 @@ class Run:
         not read as an arm that thought three times.  Total cost is unaffected;
         only its distribution over the axis is.
 
-        Falls back to one-call-per-turn when the source carries no turn index,
-        which is what every pre-`attempt` ledger row looks like.
+        **There is no fallback** (S46).  Through v2 this substituted the call's
+        enumeration index wherever `Call.turn` was `None`, sharing one bucket
+        dictionary with the real labels; `freeze/RESIDUALS.json` registers that
+        as `E2-AXIS`.  An unrebuildable axis now yields the empty list, and the
+        caller that needs to say *why* asks `turn_axis()`.  Returning `[]` is
+        deliberate: every caller that only wanted a length already renders 0 as
+        absent (`len(...) or None`), and the two metrics that would otherwise
+        read `[]` as "cost is zero" gate on the axis before they sum.
         """
+        if not self.turn_axis().usable:
+            return []
         buckets: Dict[int, float] = {}
-        for i, call in enumerate(sorted(self.calls, key=lambda c: c.idx)):
-            turn = call.turn if call.turn is not None else i
+        for call in sorted(self.calls, key=lambda c: c.idx):
+            turn = call.turn
             buckets[turn] = buckets.get(turn, 0.0) + (call.cost_usd or 0.0)
         return [buckets[t] for t in sorted(buckets)]
 

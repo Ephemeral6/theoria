@@ -1,0 +1,221 @@
+{
+  "api_spend_usd": 0.0,
+  "base_commit": "d10788f7",
+  "branch": "agent/s46-turn-costs-mixes-two-axes",
+  "deviations": [
+    "Acceptance item 3 was delivered differently: E2L is NOT gated on join_confidence. Reasons and evidence in RUN_STATE.md section 5; reported to monitor at monitor/inbox/2026-08-02T0000Z-W-9205-s46-turn-axis-landed-and-one-deviation.md"
+  ],
+  "evidence": [
+    {
+      "bytes": 13132,
+      "path": "RUN_STATE.md",
+      "sha256": "306e645e9572cbdce9256ca20dfd28214048f35e21d5f6997a9b3ae25cecbf24"
+    },
+    {
+      "bytes": 5419,
+      "path": "append_prereg_amendment.py",
+      "sha256": "5a73d129557e40a3dde76ebed449cebb232ed1e14f13f2a8201f949facb729c2"
+    },
+    {
+      "bytes": 218,
+      "path": "blast_radius.json",
+      "sha256": "ab0bf747ac1510cd8cffc69d28f3bea0452a265caaa1209b762bd1099f9a76c1"
+    },
+    {
+      "bytes": 745572,
+      "path": "cells_branch.json",
+      "sha256": "a3ffd68a81e1e19cc6712e1d6972bfe062fad6144185be0eee67484d6b2b90a2"
+    },
+    {
+      "bytes": 745572,
+      "path": "cells_master.json",
+      "sha256": "a3ffd68a81e1e19cc6712e1d6972bfe062fad6144185be0eee67484d6b2b90a2"
+    },
+    {
+      "bytes": 10753,
+      "path": "live_legs.json",
+      "sha256": "3611cf68aad1de43fde6f6c963236b370c87badfac7747477160590271a18a74"
+    },
+    {
+      "bytes": 5065,
+      "path": "make_manifest.py",
+      "sha256": "a83e3c07b3bcdd3b39e0b212c673c0883395ae0f10656e4e7d478746805bbc9a"
+    },
+    {
+      "bytes": 4388,
+      "path": "probe_blast_radius.py",
+      "sha256": "4e58e3ba568985106351c1aa3a27c372cf5f4b3f17d069e1f9028b791d3f9a2d"
+    },
+    {
+      "bytes": 3268,
+      "path": "probe_cells.py",
+      "sha256": "fce140a9c3f50cf4879d51b67c02f742d13c5fcf06908d9da474aee20f6429cd"
+    },
+    {
+      "bytes": 3840,
+      "path": "probe_live_legs.py",
+      "sha256": "c07db267074745e02568ef84f6ba5caaf3dbf95e1e6c3057e5bd60a514ce9dbb"
+    },
+    {
+      "bytes": 2217,
+      "path": "probe_tiers.py",
+      "sha256": "ba5ab20f8ca04724ad86bb10c4c0723a8c4afcb90abbe8e07e8b08ab9bcb0508"
+    },
+    {
+      "bytes": 2787,
+      "path": "repin_freeze.py",
+      "sha256": "5e04854ad231ef50507cff016dd1cd5c00bcda396bcbc6e65ff42ace20068c2c"
+    },
+    {
+      "bytes": 4202,
+      "path": "tiers_branch.json",
+      "sha256": "ab3679c305615db4444d91f422cb97204465bf139b643a8c7c62f02b3e4d042e"
+    },
+    {
+      "bytes": 3983,
+      "path": "tiers_branch2.json",
+      "sha256": "7cb2e6032f1455c7b4fa767b88ae25529c1d9d48fe1fb0ed9341d400d7be626d"
+    },
+    {
+      "bytes": 3982,
+      "path": "tiers_master.json",
+      "sha256": "f927bf443f760a39b9b971d8b48fd7353f6ee8cf053866229178ab1596c86322"
+    }
+  ],
+  "files": [
+    {
+      "bytes": 61963,
+      "path": "battery/BATTERY_V1.md",
+      "sha256": "c2065236f583737f3d60d1fd766ba338144111e3b52c99a92ed996d2c3690f7d"
+    },
+    {
+      "bytes": 10897,
+      "path": "battery/PREREG_E2L.md",
+      "sha256": "62ef1c12520ebf2b573bf071db5f5c1576f33eb70f58befaaec96590da469f3e"
+    },
+    {
+      "bytes": 12463,
+      "path": "battery/adapters/ledger_jsonl.py",
+      "sha256": "2ed988947b33f224378be927f9643f3bba5c71d403f7eafbfe62ae1b400e6a36"
+    },
+    {
+      "bytes": 10228,
+      "path": "battery/artifacts_live/frontload_e2l.json",
+      "sha256": "6deadace384a00848a945f226958f6db85ae8197ef1fb7cd1c2a1836d0b1406f"
+    },
+    {
+      "bytes": 142175,
+      "path": "battery/artifacts_live/live_arm_readings.json",
+      "sha256": "a6d2602714f630b6a36ab7fed249c61637baac7f8d36979a0907707b304b5d3b"
+    },
+    {
+      "bytes": 99356,
+      "path": "battery/artifacts_live/live_economy.json",
+      "sha256": "fa23ad802df8b883e3e81184d274b0013ad1d0e4e2482d921140c59ac38055dc"
+    },
+    {
+      "bytes": 28679,
+      "path": "battery/audit/exploits/economy.py",
+      "sha256": "43af26980114d98b3f19a578119633525dfd8fc26ecd80c9589f210bee81e240"
+    },
+    {
+      "bytes": 24123,
+      "path": "battery/audit/frontload.py",
+      "sha256": "f73af86bfb49496b053dce065f73a9688b88a2ed2a3faf8b01f8f6b7fc472a83"
+    },
+    {
+      "bytes": 10625,
+      "path": "battery/audit/live_arm.py",
+      "sha256": "eac82aaf1e237c617a87888330d1471f400f0c76068ba0c3f68f84858bf0cbe8"
+    },
+    {
+      "bytes": 26491,
+      "path": "battery/audit/live_economy.py",
+      "sha256": "284903121b6c9f5aaec919ee9235413017827f9f6b63e9e96be8e08c0083a3f0"
+    },
+    {
+      "bytes": 18126,
+      "path": "battery/audit/v9/mutants.py",
+      "sha256": "9634c7016c9b0fc76f0ec72efc18c5c178d1fea06dd531bcd30353d613843cf2"
+    },
+    {
+      "bytes": 22666,
+      "path": "battery/freeze.py",
+      "sha256": "8844d38021a59acc74f32c9e4fa71c2a38d947da2ffd554f1d54632905049efc"
+    },
+    {
+      "bytes": 17116,
+      "path": "battery/metrics/economy.py",
+      "sha256": "445e7fd1747b9cb19e0fae5defa193143c29dddc7aebdca5acfbbec9876a8df3"
+    },
+    {
+      "bytes": 17730,
+      "path": "battery/model.py",
+      "sha256": "f7793573d7bb509f9b05852a3a38955ac201da3e4c8ceff4589a39decb68a897"
+    },
+    {
+      "bytes": 17451,
+      "path": "battery/run_battery.py",
+      "sha256": "891ce0eb6d2fbd8217064e03fa1cb4d7c821f92f80c2a6c7cfef359b77d159bb"
+    },
+    {
+      "bytes": 13121,
+      "path": "battery/tests/test_live_economy.py",
+      "sha256": "4c2d99c7b111afe6aa669bc44596c8cce59c33d7c8f2a4abb006f8d93090515a"
+    },
+    {
+      "bytes": 11056,
+      "path": "battery/tests/test_metrics.py",
+      "sha256": "a4d1324c3ec79877b5dd7c1ba8d125880ba2d7cbcdd9c23a1f24daceb30d7085"
+    },
+    {
+      "bytes": 18610,
+      "path": "battery/tests/test_threat_and_frontload.py",
+      "sha256": "ef17a8811a2d5d71490a2d9157c14e012596cca84e98c0724e090e13446ff63c"
+    },
+    {
+      "bytes": 11859,
+      "path": "battery/tests/test_turn_axis.py",
+      "sha256": "31a4c70a2e1647ec94fdcd08620e5972a9904528c1fe5f9c4c00e49b67d1966b"
+    },
+    {
+      "bytes": 6885,
+      "path": "battery/tests/test_v9_defences.py",
+      "sha256": "c6c2b2ee23f28a5ed063cfdeddbe36c3e40590e8beaedebc3be91ba9ffc2f890"
+    }
+  ],
+  "gaps": [
+    "E2-AXIS clears_when (b) needs `轴的效度` in papers/*.md; papers/ is another territory and was not touched.",
+    "adapters/theoria_live.py:268 still hardcodes Call.step_idx=None (PREREG_E2L.md section 5 defers it to its own ticket).",
+    "battery/artifacts/gaming_audit.json still drifts by design (PREREG_V9.md section 5)."
+  ],
+  "head_commit": "7befaef7924ef56f7147a490391cc64e504f9737",
+  "network": "none -- every number here is recomputed offline",
+  "prompt": "monitor/board/items/S46-turn-costs-mixes-two-axes.md",
+  "prompt_id": "S46-turn-costs-mixes-two-axes",
+  "results": {
+    "frontload_n_evaluable": {
+      "after": 7,
+      "before": 8
+    },
+    "legs_refused_by_G6": [
+      "20260731T231654Z-R1-g50t-a",
+      "20260731T231654Z-R1-sk48-b"
+    ],
+    "metric_cells_compared": 4028,
+    "metric_cells_moved": 0,
+    "suite": "470 passed, 0 failed",
+    "tier_moves": 0,
+    "v9_demotions": {
+      "branch": 38,
+      "master": 38,
+      "promotions": 0
+    },
+    "verify_py": "green on all 8 rungs"
+  },
+  "sealed_pile_contact": "none; dev-pile g50t/sk48 legs read only",
+  "territory": "battery",
+  "utc": "2026-08-02T00:00:00Z",
+  "what": "Removes the fallback in Run.turn_costs() that substituted a call's enumeration index for a missing Call.turn and shared one bucket dictionary with the real labels (freeze/RESIDUALS.json E2-AXIS). The axis is now reported by Run.turn_axis() and E2/E3 refuse rather than degrade.",
+  "worker": "W-9205"
+}

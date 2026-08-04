@@ -215,8 +215,16 @@ def parse_rows(rows: Iterable[Dict[str, Any]], *, source: str,
         # writes one row per model retry, with genuinely different token counts
         # and genuinely different prices each time -- so the rows are kept
         # whole (the money was really spent) and grouped onto the step they
-        # were deciding.  Rows with no `step_idx` fall back to their own order,
-        # which is what every pre-`attempt` ledger row looks like.
+        # were deciding.
+        #
+        # A row with no `step_idx` gets **no turn label** (S46).  It used to
+        # get its own position in the row list, drawn from the same 0-based
+        # integer space as `turn_of`, so a partly stamped ledger could collide
+        # an unstamped row with an unrelated real turn one layer below where
+        # anyone was looking.  `Run.turn_axis()` now reports the gap and E2/E3
+        # refuse on it; measured over the whole corpus on 2026-08-02 this
+        # changes nothing, because every priced call in every loaded ledger
+        # does carry a `step_idx` -- the fabrication was reachable, not live.
         distinct_steps = sorted({row["step_idx"] for row in call_rows
                                  if row.get("step_idx") is not None})
         turn_of = {step: n for n, step in enumerate(distinct_steps)}
@@ -238,7 +246,7 @@ def parse_rows(rows: Iterable[Dict[str, Any]], *, source: str,
                 is_error=bool(row.get("is_error")),
                 prompt_chars=row.get("prompt_chars"),
                 attempt=row.get("attempt"),
-                turn=turn_of.get(step_idx) if step_idx is not None else i,
+                turn=turn_of.get(step_idx),
             ))
 
         game_id = bucket["game_id"]
@@ -257,7 +265,12 @@ def parse_rows(rows: Iterable[Dict[str, Any]], *, source: str,
             notes={
                 "env_rows": len(env_rows),
                 "call_rows": len(call_rows),
-                "turns": len(distinct_steps) or len(call_rows),
+                # `None`, not the row count, when nothing was stamped (S46):
+                # substituting the number of *calls* for the number of
+                # *decisions* is the same axis swap one line up, and a note
+                # that reads 40 where the record can support no answer is a
+                # fabricated one whether or not anything happens to read it.
+                "turns": len(distinct_steps) or None,
                 "retry_rows": sum(1 for r in call_rows
                                   if (r.get("attempt") or 1) > 1),
                 "http_tries": sum(r.get("http_tries") or 0

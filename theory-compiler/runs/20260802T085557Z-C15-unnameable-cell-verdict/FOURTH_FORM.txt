@@ -34,4 +34,4 @@ landmark in the GUARD, instance in the effect
    gen_pddl      UnsupportedClause
        colored(NameRef(name='edge'), 9): this cell term has no STRIPS image in this subset. Refusing rather than dropping the precondition.
 
-wrote C:\Users\user\Desktop\theoria\.worktrees\c15-the-unnameable-cell-has-no-home-in-the-dsl\theory-compiler\runs\20260802T085557Z-C15-unnameable-cell-verdict\FOURTH_FORM.json (16 rows, width 45)
+wrote FOURTH_FORM.json (16 rows, width 45)

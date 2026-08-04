@@ -150,7 +150,13 @@ def main():
     with open(out, "w", encoding="utf-8", newline="\n") as fh:
         json.dump({"cases": rows}, fh, indent=2, sort_keys=True)
         fh.write("\n")
-    print("wrote %s (%d rows, width %d)" % (out, len(rows), width))
+    # The BASENAME, not `out`. `out` is absolute, and this line is captured into
+    # a tracked artefact -- printing it recorded the worktree this happened to
+    # run in, which `tools/check_locations.py` refuses and which is right to
+    # refuse: to a reader of the release manifest it is noise plus a disclosure
+    # of local directory structure, and it makes the artefact non-reproducible.
+    print("wrote %s (%d rows, width %d)"
+          % (os.path.basename(out), len(rows), width))
 
 
 if __name__ == "__main__":

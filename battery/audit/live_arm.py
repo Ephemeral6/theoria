@@ -114,6 +114,10 @@ def build(runs_root: Optional[str] = None) -> Dict[str, Any]:
             "failed_steps": sum(1 for s in run.steps if s.failed),
             "model_calls": len(run.calls),
             "turns": len(run.turn_costs()) or None,
+            # See `run_battery.spectrum`: a null turn count is ambiguous
+            # between "no decisions" and "decisions this record did not
+            # label", and on this arm both shapes occur (S46).
+            "turn_axis": run.turn_axis().status,
             "notes": run.notes,
             "metrics": {mid: value.as_dict()
                         for mid, value in sorted(values[run.run_id].items())},

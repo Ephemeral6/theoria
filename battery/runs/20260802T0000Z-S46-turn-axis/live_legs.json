@@ -1,0 +1,404 @@
+{
+  "live_legs": [
+    {
+      "E2": {
+        "reason": "the run records no model calls",
+        "status": "not-applicable",
+        "value": null
+      },
+      "E3": {
+        "reason": "the run records no model calls",
+        "status": "not-applicable",
+        "value": null
+      },
+      "axis": {
+        "all_labelled": 0,
+        "calls": 0,
+        "distinct_turns": 0,
+        "priced": 0,
+        "priced_labelled": 0
+      },
+      "collision_keys": [],
+      "run_id": "20260729T004020Z-leg01",
+      "turn_costs_len": 0,
+      "turn_join": {
+        "join_confidence": "exact",
+        "joined_calls": 0,
+        "ledger_calls": 0,
+        "source": "turn_series.json"
+      }
+    },
+    {
+      "E2": {
+        "reason": "the run records no model calls",
+        "status": "not-applicable",
+        "value": null
+      },
+      "E3": {
+        "reason": "the run records no model calls",
+        "status": "not-applicable",
+        "value": null
+      },
+      "axis": {
+        "all_labelled": 0,
+        "calls": 0,
+        "distinct_turns": 0,
+        "priced": 0,
+        "priced_labelled": 0
+      },
+      "collision_keys": [],
+      "run_id": "20260729T105729Z-leg01",
+      "turn_costs_len": 0,
+      "turn_join": {
+        "join_confidence": "exact",
+        "joined_calls": 0,
+        "ledger_calls": 0,
+        "source": "turn_series.json"
+      }
+    },
+    {
+      "E2": {
+        "reason": "the run records no model calls",
+        "status": "not-applicable",
+        "value": null
+      },
+      "E3": {
+        "reason": "the run records no model calls",
+        "status": "not-applicable",
+        "value": null
+      },
+      "axis": {
+        "all_labelled": 0,
+        "calls": 0,
+        "distinct_turns": 0,
+        "priced": 0,
+        "priced_labelled": 0
+      },
+      "collision_keys": [],
+      "run_id": "20260731T1240Z-A3-level2-carried",
+      "turn_costs_len": 0,
+      "turn_join": {
+        "join_confidence": "exact",
+        "joined_calls": 0,
+        "ledger_calls": 0,
+        "source": "unjoined: curves.json counts 0 billed call(s), the ledger has 0"
+      }
+    },
+    {
+      "E2": {
+        "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+        "status": "insufficient-data",
+        "value": null
+      },
+      "E3": {
+        "reason": "fewer than 8 turns; the same early-exit confound as E2",
+        "status": "insufficient-data",
+        "value": null
+      },
+      "axis": {
+        "all_labelled": 5,
+        "calls": 5,
+        "distinct_turns": 3,
+        "priced": 5,
+        "priced_labelled": 5
+      },
+      "collision_keys": [],
+      "run_id": "20260731T1310Z-A3-level2-carried-r2",
+      "turn_costs_len": 3,
+      "turn_join": {
+        "join_confidence": "degraded",
+        "joined_calls": 5,
+        "ledger_calls": 5,
+        "source": "curves.json"
+      }
+    },
+    {
+      "E2": {
+        "status": "ok",
+        "support": {
+          "billed_calls": 8,
+          "head_turns": 2.0,
+          "turns": 8
+        },
+        "value": 0.255664307
+      },
+      "E3": {
+        "status": "ok",
+        "support": {
+          "turn": 8,
+          "turns": 8
+        },
+        "value": 1.0
+      },
+      "axis": {
+        "all_labelled": 8,
+        "calls": 8,
+        "distinct_turns": 8,
+        "priced": 8,
+        "priced_labelled": 8
+      },
+      "collision_keys": [],
+      "run_id": "20260731T1430Z-A3-level2-carried-r3",
+      "turn_costs_len": 8,
+      "turn_join": {
+        "join_confidence": "degraded",
+        "joined_calls": 8,
+        "ledger_calls": 8,
+        "source": "curves.json"
+      }
+    },
+    {
+      "E2": {
+        "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+        "status": "insufficient-data",
+        "value": null
+      },
+      "E3": {
+        "reason": "fewer than 8 turns; the same early-exit confound as E2",
+        "status": "insufficient-data",
+        "value": null
+      },
+      "axis": {
+        "all_labelled": 9,
+        "calls": 9,
+        "distinct_turns": 4,
+        "priced": 9,
+        "priced_labelled": 9
+      },
+      "collision_keys": [],
+      "run_id": "20260731T1500Z-A3-sk48-carried-l1",
+      "turn_costs_len": 4,
+      "turn_join": {
+        "join_confidence": "exact",
+        "joined_calls": 9,
+        "ledger_calls": 9,
+        "source": "curves.json"
+      }
+    },
+    {
+      "E2": {
+        "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+        "status": "insufficient-data",
+        "value": null
+      },
+      "E3": {
+        "reason": "fewer than 8 turns; the same early-exit confound as E2",
+        "status": "insufficient-data",
+        "value": null
+      },
+      "axis": {
+        "all_labelled": 4,
+        "calls": 4,
+        "distinct_turns": 2,
+        "priced": 4,
+        "priced_labelled": 4
+      },
+      "collision_keys": [],
+      "run_id": "20260731T231654Z-R1-g50t-a",
+      "turn_costs_len": 2,
+      "turn_join": {
+        "join_confidence": "exact",
+        "joined_calls": 4,
+        "ledger_calls": 4,
+        "source": "curves.json"
+      }
+    },
+    {
+      "E2": {
+        "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+        "status": "insufficient-data",
+        "value": null
+      },
+      "E3": {
+        "reason": "fewer than 8 turns; the same early-exit confound as E2",
+        "status": "insufficient-data",
+        "value": null
+      },
+      "axis": {
+        "all_labelled": 0,
+        "calls": 3,
+        "distinct_turns": 0,
+        "priced": 3,
+        "priced_labelled": 0
+      },
+      "collision_keys": [],
+      "run_id": "20260731T231654Z-R1-sk48-b",
+      "turn_costs_len": 3,
+      "turn_join": {
+        "join_confidence": "degraded",
+        "joined_calls": 0,
+        "ledger_calls": 3,
+        "source": "unjoined: curves.json counts 0 billed call(s), the ledger has 3"
+      }
+    },
+    {
+      "E2": {
+        "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+        "status": "insufficient-data",
+        "value": null
+      },
+      "E3": {
+        "reason": "fewer than 8 turns; the same early-exit confound as E2",
+        "status": "insufficient-data",
+        "value": null
+      },
+      "axis": {
+        "all_labelled": 9,
+        "calls": 9,
+        "distinct_turns": 6,
+        "priced": 9,
+        "priced_labelled": 9
+      },
+      "collision_keys": [],
+      "run_id": "20260801T001851Z-R1b-g50t-a",
+      "turn_costs_len": 6,
+      "turn_join": {
+        "join_confidence": "degraded",
+        "joined_calls": 9,
+        "ledger_calls": 9,
+        "source": "curves.json"
+      }
+    },
+    {
+      "E2": {
+        "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+        "status": "insufficient-data",
+        "value": null
+      },
+      "E3": {
+        "reason": "fewer than 8 turns; the same early-exit confound as E2",
+        "status": "insufficient-data",
+        "value": null
+      },
+      "axis": {
+        "all_labelled": 6,
+        "calls": 6,
+        "distinct_turns": 2,
+        "priced": 6,
+        "priced_labelled": 6
+      },
+      "collision_keys": [],
+      "run_id": "20260801T001851Z-R1b-sk48-b",
+      "turn_costs_len": 2,
+      "turn_join": {
+        "join_confidence": "degraded",
+        "joined_calls": 6,
+        "ledger_calls": 6,
+        "source": "curves.json"
+      }
+    },
+    {
+      "E2": {
+        "reason": "the run records no model calls",
+        "status": "not-applicable",
+        "value": null
+      },
+      "E3": {
+        "reason": "the run records no model calls",
+        "status": "not-applicable",
+        "value": null
+      },
+      "axis": {
+        "all_labelled": 0,
+        "calls": 0,
+        "distinct_turns": 0,
+        "priced": 0,
+        "priced_labelled": 0
+      },
+      "collision_keys": [],
+      "run_id": "20260801T043743Z-R2-g50t-a",
+      "turn_costs_len": 0,
+      "turn_join": {
+        "join_confidence": null,
+        "joined_calls": 0,
+        "ledger_calls": 0,
+        "source": "unjoined: no turn_series.json and no curves.json"
+      }
+    },
+    {
+      "E2": {
+        "reason": "the run records no model calls",
+        "status": "not-applicable",
+        "value": null
+      },
+      "E3": {
+        "reason": "the run records no model calls",
+        "status": "not-applicable",
+        "value": null
+      },
+      "axis": {
+        "all_labelled": 0,
+        "calls": 0,
+        "distinct_turns": 0,
+        "priced": 0,
+        "priced_labelled": 0
+      },
+      "collision_keys": [],
+      "run_id": "20260801T043743Z-R2-sk48-b",
+      "turn_costs_len": 0,
+      "turn_join": {
+        "join_confidence": null,
+        "joined_calls": 0,
+        "ledger_calls": 0,
+        "source": "unjoined: no turn_series.json and no curves.json"
+      }
+    },
+    {
+      "E2": {
+        "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+        "status": "insufficient-data",
+        "value": null
+      },
+      "E3": {
+        "reason": "fewer than 8 turns; the same early-exit confound as E2",
+        "status": "insufficient-data",
+        "value": null
+      },
+      "axis": {
+        "all_labelled": 9,
+        "calls": 9,
+        "distinct_turns": 7,
+        "priced": 9,
+        "priced_labelled": 9
+      },
+      "collision_keys": [],
+      "run_id": "20260801T044640Z-R2b-g50t-a",
+      "turn_costs_len": 7,
+      "turn_join": {
+        "join_confidence": "degraded",
+        "joined_calls": 9,
+        "ledger_calls": 9,
+        "source": "curves.json"
+      }
+    },
+    {
+      "E2": {
+        "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+        "status": "insufficient-data",
+        "value": null
+      },
+      "E3": {
+        "reason": "fewer than 8 turns; the same early-exit confound as E2",
+        "status": "insufficient-data",
+        "value": null
+      },
+      "axis": {
+        "all_labelled": 6,
+        "calls": 6,
+        "distinct_turns": 3,
+        "priced": 6,
+        "priced_labelled": 6
+      },
+      "collision_keys": [],
+      "run_id": "20260801T044640Z-R2b-sk48-b",
+      "turn_costs_len": 3,
+      "turn_join": {
+        "join_confidence": "degraded",
+        "joined_calls": 6,
+        "ledger_calls": 6,
+        "source": "curves.json"
+      }
+    }
+  ],
+  "offline_unanchored": []
+}
