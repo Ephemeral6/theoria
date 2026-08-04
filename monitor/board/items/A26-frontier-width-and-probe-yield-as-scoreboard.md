@@ -1,7 +1,7 @@
 priority: 2
 cell: A26
 territory: theoria-arm
-deps: A24
+deps: A24-round-scoreboard-columns-are-null
 spend: none
 
 # A26-frontier-width-and-probe-yield-as-scoreboard · 记分板分不出「有信息的反驳」和「没信息的反驳」
