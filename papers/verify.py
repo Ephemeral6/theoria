@@ -139,7 +139,45 @@ PAPER_MARKER = "PAPER.md"
 
 #: Directories under `papers/` that are not papers and are not defects.
 #: `runs/` is CLAUDE.md's provenance convention, mandatory repository-wide.
-NOT_PAPERS = frozenset({"runs"})
+#:
+#: The other two are the use the docstring above anticipated -- "any committed
+#: top-level directory under `papers/` -- shared figures, templates, an archive,
+#: a second paper's assets -- did the same thing". Both arrived together on
+#: 2026-07-31 in `b8a7d6bc`, "salvage: paid P11 transport shards and two
+#: never-committed paper corpora", which committed the complete contents of two
+#: abandoned worktrees that "existed on no ref at all". Each entry carries its
+#: reason, in the form `monitor/gates.py:59` uses for `NOT_TERRITORIES`: a
+#: registration whose reason is not written down is a line added, not a ruling.
+#:
+#: Registering is the right half of the choice rather than the cheap half.
+#: `GATE_NAMES` below makes a paper directory that ships no gate RED, so a
+#: skeleton `PAPER.md` does not turn either of these green -- it turns "neither
+#: a paper nor declared provenance" into "ships no gate", and buys the cost of a
+#: whole gate implementation for a directory that is not a paper anyway.
+NOT_PAPERS = frozenset({
+    "runs",
+    # 2026-07-31, registered 2026-08-04 (V31): P-23's citation library for
+    # `Theoria.md` §3.2 item 7 and its downstream section, not a paper. Its own
+    # `related-work/README.md:7` opens "This directory is **not** a paper. It is
+    # the evidence base a paper draws on", and it was superseded before it was
+    # committed: 16 of its 48 BibTeX keys are already in
+    # `papers/phase1-workshop/references.bib`, phase1-workshop's own P-7 search
+    # traces cover all seven literature lines including the two `lines/` never
+    # wrote, and the `[bib: TODO]` markers it existed to fill are gone.
+    "related-work",
+    # 2026-07-31, registered 2026-08-04 (V31): P3's chart data and prose bodies
+    # for figures 5 and 6, not a paper. `case-studies/README.md:20-22` says so
+    # itself -- "Figures themselves are the P21-figures ticket's territory; this
+    # directory ships the numbers and the words, not the plots" -- and
+    # `README.md:40-47` records that the 死锁定理集 half of the Phase 3 unit it
+    # was drafted against "is not here", it is `engine-rig`'s. `README.md:28-38`
+    # calls its three cases "pre-campaign case studies standing in for the ones
+    # the clause asks for", to be re-cut on live material. Nothing in the tree
+    # cites it. The nearest thing to a counter-argument is `Theoria.md:381`,
+    # which books the Phase 3 boundary as a 最小可发表单元; a unit that ships one
+    # of its two named halves, on self-built worlds, is not that unit yet.
+    "case-studies",
+})
 
 #: At least one paper must exist. The floor is the point: a walk over nothing
 #: returns success from every check written above it.
@@ -281,7 +319,12 @@ def main(argv=None):
     print("[1/3] classify the directories under papers/")
     papers, skipped, strays = classify(root)
     for name in skipped:
-        print("   --    %s (provenance, not a paper)" % name)
+        # Not "provenance": that was true while `runs/` was the only entry, and
+        # stopped being true the moment the set had to carry a judgement call.
+        # A line that names the register a directory is in can be checked
+        # against it; a line that asserts what the directory *is* goes quietly
+        # wrong when the register grows.
+        print("   --    %s (declared not a paper, see NOT_PAPERS)" % name)
     for name in strays:
         problems.append("%s is neither a paper (no %s) nor declared provenance"
                         % (name, PAPER_MARKER))

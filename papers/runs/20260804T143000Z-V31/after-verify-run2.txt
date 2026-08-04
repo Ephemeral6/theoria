@@ -1,0 +1,11 @@
+﻿[1/3] classify the directories under papers/
+   --    case-studies (declared not a paper, see NOT_PAPERS)
+   --    related-work (declared not a paper, see NOT_PAPERS)
+   --    runs (declared not a paper, see NOT_PAPERS)
+   ok    1 paper(s): phase1-workshop
+[2/3] run the gate each paper ships
+   ok    phase1-workshop -> verify_paper.py: verify_paper: PASS (7/7) [1 DEFERRED finding(s) held open, not fixed: 08_exam.md -- see check E]
+[3/3] run the suite that shows those gates can go red
+   ok    307 passed, 1 xfailed in 33.81s
+
+papers: green -- 1 paper(s), each gated by its own check, and the checks' own suite run

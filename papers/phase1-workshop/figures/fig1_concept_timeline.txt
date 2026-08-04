@@ -64,6 +64,8 @@ WHAT THE WORLD SAID THAT THE GRAMMAR COULD NOT (expressivity ledger)
          cost  : the rung below it is a quantifier and it is deliberately not taken
   E-09   wanted: putting a *named track* in a *place*: "the object I am about to step onto is **that** one" (`faces(T,D)`) — the miner vocabulary, not the grammar
          cost  : 2 bits per repaired transition paid in the segmentation script, and the pass that pays them is the one place the pipeline does not adjudicate by compression
+  E-10   wanted: a rule about a cell that has never varied — `theoria-arm`'s leading-edge burn (GAP R2-2)
+         cost  : the DSL is **not** extended. What it cost was one round of R2's probe budget and the mis-routing of a gap to the wrong territory
 
 ------------------------------------------------------------------------------
 The A0 manual was revised zero times by certify: both certify layers went green against revision 1. The iterations that did happen were in the compiler, not in the manual.

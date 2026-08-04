@@ -1,0 +1,78 @@
+{
+  "base_commit": "b207d752978a0d849e85529cf9c29677ee5ed51d",
+  "branch": "agent/v31-papers-gate-red-on-master",
+  "files": [
+    {
+      "path": "papers/verify.py",
+      "sha256": "55ecebec3ffbcec57954b4300683c529800e6649a17b572937f05a4a076c0b6a"
+    },
+    {
+      "path": "papers/phase1-workshop/verify_paper.py",
+      "sha256": "a49f393a64bddc67bfb387facc7cf23b04eba19ed83bf10b10a0388aaa5e538c"
+    },
+    {
+      "path": "papers/phase1-workshop/test_deferred_uncited.py",
+      "sha256": "0a79106a6eae110e6cfe4cba966b15e375c3959a2080c02cce5efa7a89fcf0a1"
+    },
+    {
+      "path": "papers/phase1-workshop/figures/data/fig1_concept_timeline.json",
+      "sha256": "1e263efcea0dd43d1bd3e2bf10c7eae9804eeb9fc1c96faf3b522a8b103a68e5"
+    },
+    {
+      "path": "papers/phase1-workshop/figures/fig1_concept_timeline.txt",
+      "sha256": "f7065bc620bf8cbf6111441e07f007dddf89e3104813b79a5fb5082a7ef33649"
+    },
+    {
+      "path": "papers/runs/20260804T143000Z-V31/NOTES.md",
+      "sha256": "9c26aaaa20d603b05af1dc431afaf856d15551ce04e24f9a8f8b127548f76eb5"
+    },
+    {
+      "path": "papers/runs/20260804T143000Z-V31/E-UNCITED-DEFERRED.md",
+      "sha256": "a860f0be248db5f64a7b9373f403ca89c7d6e5768058320fe695b219d8dfb989"
+    },
+    {
+      "path": "papers/runs/20260804T143000Z-V31/RUN_STATE.md",
+      "sha256": "a1d0f2105d2a68be4a433fcbf114d8ee2f8667fb411893c542299fbdab99f5b4"
+    },
+    {
+      "path": "papers/runs/20260804T143000Z-V31/baseline-verify.txt",
+      "sha256": "b6bf01052936e757bf26b06a10862e2456d9f91725d2b9dfcae8ca1161066d5c"
+    },
+    {
+      "path": "papers/runs/20260804T143000Z-V31/baseline-verify_paper.txt",
+      "sha256": "f0543303a0adb1126c4fdfef7e7d3438cfec4bb3b862ce4294fa58bec4e9b6eb"
+    },
+    {
+      "path": "papers/runs/20260804T143000Z-V31/after-verify-run1.txt",
+      "sha256": "25210188dd2c6a66a973e82b5598f13256485f1434080a337c2f59e890e18f8d"
+    },
+    {
+      "path": "papers/runs/20260804T143000Z-V31/after-verify-run2.txt",
+      "sha256": "87edd2f0c4edd78aba20029bb08e83c8105c04555d016126ce96ac293df02398"
+    },
+    {
+      "path": "papers/runs/20260804T143000Z-V31/_mkmanifest.py",
+      "sha256": "f67fd470bccecc80485fda7b7edc4056d67570aa3e4eb53deeef237092fa5675"
+    },
+    {
+      "path": "papers/runs/20260804T143000Z-V31/_probe.py",
+      "sha256": "a75924f63737f36c7ed5633dae96d3a637dac908b193d4c1c2145a43c12cda6a"
+    }
+  ],
+  "prompt": "monitor/board/items/V31-papers-gate-red-on-master.md",
+  "prompt_id": "V31-papers-gate-red-on-master",
+  "seed": null,
+  "spend": {
+    "api_calls": 0,
+    "note": "offline; no network, no model call, no game API",
+    "usd": 0.0
+  },
+  "territory": "papers",
+  "utc": "2026-08-04T14:30:00Z",
+  "verdict": {
+    "after": "papers: green -- exit 0, twice consecutively",
+    "before": "papers: RED (4 problem(s)) -- exit 1",
+    "deferred": 1
+  },
+  "worker": "W-9208"
+}

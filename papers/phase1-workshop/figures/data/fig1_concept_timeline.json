@@ -190,6 +190,12 @@
       "id": "E-09",
       "wanted": "putting a *named track* in a *place*: \"the object I am about to step onto is **that** one\" (`faces(T,D)`) — the miner vocabulary, not the grammar",
       "worked_around_by": "**discharged** — one rung, mover-relative, one step; see below"
+    },
+    {
+      "cost": "the DSL is **not** extended. What it cost was one round of R2's probe budget and the mis-routing of a gap to the wrong territory",
+      "id": "E-10",
+      "wanted": "a rule about a cell that has never varied — `theoria-arm`'s leading-edge burn (GAP R2-2)",
+      "worked_around_by": "**REFUSED — not an expressivity gap.** The grammar states the law already; the level has to seat an instance. Two compiler defects that disguised this are fixed instead; see below"
     }
   ],
   "revisions": [

@@ -591,15 +591,35 @@ def check_figdata() -> tuple[bool, list[str]]:
     `fig[0-9]*.py` glob printed `2 extractors reran in place, 3 payloads
     unchanged` and passed. Two numbers that must agree, printed side by side and
     compared by nobody. They are reconciled now: an orphan payload fails.
+
+    **A third hole, closed 2026-08-04 under V31: half the output was neither
+    checked nor put back.** `common.emit()` writes two files per extractor --
+    `figures/data/<name>.json` *and* the `figures/<name>.txt` rendering beside it
+    -- and this check knew about the first only. So a run left the `.txt` sibling
+    rewritten in the working tree, and V30 hit it: its worker found
+    `figures/fig1_concept_timeline.txt` modified after running the papers suite,
+    reverted it, and filed it rather than commit an artefact it had not authored.
+    Two costs, and the second is the one that matters. A gate that mutates the
+    tracked tree it is auditing makes every `git status` after it lie, which is
+    how that drift stayed a puzzle while this check was printing the JSON half of
+    the same staleness in red. And a rendering nothing compares can go stale on
+    its own: the property under test is that the extractors are byte-deterministic,
+    and a renderer is as much a part of an extractor as its payload writer. Both
+    files are now snapshotted, removed, regenerated, compared and restored on the
+    same footing.
     """
     notes: list[str] = []
     scripts = sorted(HERE.glob("figures/fig[0-9]*.py"))
     if not scripts:
         return False, [fail("  no figure extractors found under figures/")]
 
-    data_dir = HERE / "figures" / "data"
-    before = {p: p.read_bytes() for p in sorted(data_dir.glob("*.json"))}
+    fig_dir = HERE / "figures"
+    data_dir = fig_dir / "data"
+    before = {p: p.read_bytes()
+              for p in sorted(data_dir.glob("*.json"))
+              + sorted(fig_dir.glob("fig[0-9]*.txt"))}
     expected = {data_dir / f"{s.stem}.json" for s in scripts}
+    expected |= {fig_dir / f"{s.stem}.txt" for s in scripts}
     drifted: list[str] = []
 
     for orphan in sorted(set(before) - expected):
@@ -620,16 +640,25 @@ def check_figdata() -> tuple[bool, list[str]]:
                 last = (r.stderr or r.stdout).strip().splitlines()[-1:] or ["(no output)"]
                 drifted.append(f"{script.name} exited {r.returncode}: {last[0]}")
                 continue
-            payload = data_dir / f"{script.stem}.json"
-            if not payload.exists():
-                drifted.append(f"{script.stem}.json was not regenerated -- the "
-                               f"extractor exited 0 and produced no payload")
-            elif payload not in before:
-                drifted.append(f"{script.stem}.json is new: the extractor produces "
-                               f"a payload that was never committed")
-            elif payload.read_bytes() != before[payload]:
-                drifted.append(f"{script.stem}.json changed on rerun -- the committed payload "
-                               f"is stale, or the extractor is not deterministic")
+            for payload in (data_dir / f"{script.stem}.json",
+                            fig_dir / f"{script.stem}.txt"):
+                if payload.suffix == ".txt" and payload not in before:
+                    # An extractor is required to produce its JSON payload; a
+                    # rendering beside it is a convention `common.emit()` follows
+                    # and nothing enforces. So a committed `.txt` that stops being
+                    # regenerated is a finding -- it is in `before` and falls
+                    # through to the checks below -- while an extractor that never
+                    # shipped one is not accused of losing it.
+                    continue
+                if not payload.exists():
+                    drifted.append(f"{payload.name} was not regenerated -- the "
+                                   f"extractor exited 0 and produced no payload")
+                elif payload not in before:
+                    drifted.append(f"{payload.name} is new: the extractor produces "
+                                   f"a payload that was never committed")
+                elif payload.read_bytes() != before[payload]:
+                    drifted.append(f"{payload.name} changed on rerun -- the committed payload "
+                                   f"is stale, or the extractor is not deterministic")
     finally:
         for path, blob in before.items():
             if not path.exists() or path.read_bytes() != blob:
@@ -639,8 +668,10 @@ def check_figdata() -> tuple[bool, list[str]]:
     if drifted:
         notes.extend(fail(f"  {d}") for d in drifted)
         return False, notes
-    notes.append(f"  {len(scripts)} extractors each removed and regenerated their "
-                 f"payload byte-for-byte ({len(before)} payloads, no orphans)")
+    n_txt = sum(1 for p in before if p.suffix == ".txt")
+    notes.append(f"  {len(scripts)} extractors each removed and regenerated "
+                 f"their payload byte-for-byte ({len(before) - n_txt} data/*.json "
+                 f"payload(s) and {n_txt} *.txt rendering(s), no orphans)")
     return True, notes
 
 
@@ -1558,6 +1589,102 @@ _WALK_SKIP = {
     ".claude", ".pytest_cache", ".venv", "node_modules", ".mypy_cache",
 }
 
+#: The same judgement as `_WALK_SKIP`, for a checkout that got *committed*.
+#:
+#: Note what this is **not** claiming. An adversarial pass killed the first
+#: version of this comment, which said the archive is "not the published tree":
+#: that is checkably false. `release/enumerate.py:123` enumerates by a bare
+#: `git ls-files` with no filter, all 3965 archive files are tracked, and
+#: `release/MANIFEST.jsonl` already carries 488 `runs/` paths -- so on the next
+#: regeneration the release publishes every one of them, and a reader of the
+#: tarball does see sixteen `PARTNER_SYNC.md`. Excluding tracked, releasable
+#: content is nonetheless the established category and not a new one: of the nine
+#: names in `_WALK_SKIP` above, `.claude` has 22 tracked files. The claim here is
+#: the narrower and true one -- this is a *snapshot of checkouts*, and a snapshot
+#: is not a second live copy of anything. Making the argument on the false premise
+#: would have been the failure this file records against its own `theory.dsl`
+#: ruling: "a ruling whose stated evidence was false, and nothing here would have
+#: caught that."
+#:
+#: `_WALK_SKIP` is a set of directory *names*, so it can say ".worktrees" and
+#: cannot say "this one path". On 2026-07-31 that gap opened. `31de4964`
+#: ("salvage: the worktree scratch archive -- everything unique outside any
+#: ref, in one place") and `8bf33ed2` ("sweep: 328 worktrees removed (~73GB),
+#: every dirty authored file copied out first") moved 3965 files out of
+#: `.worktrees/` and into `monitor/runs/_worktree-scratch-archive/`, where the
+#: name-based skip could not see them. The archive holds whole second copies of
+#: the repository -- `PARTNER_SYNC.md` fifteen times over, `exam/grading/mark.py`,
+#: `engine-rig/engines/fd_adapter/validate.py`, this paper's own
+#: `inputs-verbatim/SURVEY-*.md` -- so every basename in it became "ambiguous".
+#:
+#: Check F went red on 2026-07-31 with 24 ambiguous citations. The paper's
+#: citations were last touched on 2026-07-29 (`8a56976e`) and did not move: the
+#: tree grew a second copy of itself two days later and the gate measured the
+#: copy. Excluding the archive is not a lowered bar, it is the bar the comment
+#: above already states -- *a basename that is "ambiguous" only because it also
+#: appears in a sibling worktree is not ambiguous to a reader of the repository*
+#: -- applied to sibling worktrees that were archived rather than deleted. It is
+#: also the narrowest instrument available: 20 of the 24 could not be ruled at
+#: all, because `ADJUDICATED_BARE` refuses a token appearing more than once in a
+#: section (`BROAD`), so a ruling route would have left F red anyway.
+#:
+#: Entries are load-bearing and are checked: `check_bare` fails on a prefix that
+#: matches nothing, so a prefix outlives the tree it excused by exactly one run.
+_WALK_SKIP_PREFIXES = (
+    "monitor/runs/_worktree-scratch-archive/",
+)
+
+
+def _bad_skip_prefixes() -> list[tuple[str, str]]:
+    """`(prefix, why)` for every entry that is malformed or names nothing.
+
+    Named for what it returns. The first draft was `_skip_prefixes_present()`
+    and returned the *absent* ones, so `if _skip_prefixes_present():` read as
+    exactly its own negation -- the call site had to rename the result to stay
+    legible, which is the sign that the function was named wrong.
+
+    Two failure modes, both of which have to be a gate rather than a test:
+
+    * **names nothing.** Same rule as a stale ruling: a declaration that has
+      stopped being true is removed rather than left to excuse a regression that
+      comes back the other way. If the archive is dropped or moved, this says so
+      on the next run instead of narrowing the corpus for a tree that is not
+      there. (Its milder cousin -- the directory exists but is empty -- is not
+      checked, because a vacuous exclusion *widens* the corpus and can only make
+      check F stricter. Fail-safe, so it is stated and not guarded.)
+    * **no trailing slash.** `monitor/runs/_worktree-scratch-archive` without the
+      slash also prunes `monitor/runs/_worktree-scratch-archive-2/`, which nobody
+      declared. Demonstrated by an adversarial pass against a synthetic tree, so
+      it is enforced here rather than left to the reviewer who adds entry two.
+    """
+    out = []
+    for p in _WALK_SKIP_PREFIXES:
+        if not p.endswith("/") or p.startswith("/") or "\\" in p:
+            out.append((p, "must be a repo-relative POSIX path ending in '/'; "
+                           "without the trailing slash it also prunes any "
+                           "sibling directory whose name merely starts the same"))
+        elif not os.path.isdir(os.path.join(ROOT, p.rstrip("/"))):
+            out.append((p, "names no directory"))
+    return out
+
+
+def _skip_prefix_size(prefix: str) -> tuple[int, int]:
+    """`(files, basenames that exist nowhere else)` under one excluded prefix.
+
+    The second number is the one that matters, and it is the one the exclusion
+    could get wrong: a basename whose only copy was in here would go from
+    *ambiguous* to *absent*, which check F reports differently and which would be
+    a citation the narrowing broke rather than fixed.
+    """
+    root = os.path.join(ROOT, prefix.rstrip("/"))
+    names: set[str] = set()
+    files = 0
+    for path, dirs, found in os.walk(root):
+        dirs[:] = [d for d in dirs if d not in _WALK_SKIP]
+        files += len(found)
+        names.update(found)
+    return files, sum(1 for n in names if not _candidates(n))
+
 
 def _candidates(token: str) -> list[str]:
     """Every repo-relative path whose basename is this token.
@@ -1569,7 +1696,12 @@ def _candidates(token: str) -> list[str]:
     if _BASENAMES is None:
         _BASENAMES = {}
         for path, dirs, files in os.walk(ROOT):
-            dirs[:] = [d for d in dirs if d not in _WALK_SKIP]
+            dirs[:] = [
+                d for d in dirs
+                if d not in _WALK_SKIP
+                and not (os.path.relpath(os.path.join(path, d), ROOT)
+                         .replace("\\", "/") + "/").startswith(_WALK_SKIP_PREFIXES)
+            ]
             for f in files:
                 rel = os.path.relpath(os.path.join(path, f), ROOT)
                 _BASENAMES.setdefault(f, []).append(rel.replace("\\", "/"))
@@ -1926,6 +2058,79 @@ def scan_uncited(sections=None, rulings=None):
 #: free -- but the escape hatch was one character wide and nothing said so.
 MIN_ANCHOR = 24
 
+#: Findings this check has made, that are true, and that the worker who ran into
+#: them was not allowed to fix. Keyed like a ruling; the value is
+#: `(opened, owner, record, one-line reason)`.
+#:
+#: **This is not `ADJUDICATED_UNCITED` with a friendlier name, and the difference
+#: is the whole justification.** A ruling asserts *this block needs no citation*
+#: and suppresses the finding: the block stops being reported, and the reader of
+#: the output cannot tell it exists. A deferral asserts *this block is uncited,
+#: here is who owns the repair and where the argument is written down*. It prints
+#: the finding in full, in the same shape as an UNCITED line, on every run, and it
+#: prints again on the summary line so a caller that reads only the last line --
+#: `papers/verify.py` stage 2 does exactly that -- still sees it. It changes the
+#: exit code and nothing else. `PASS` is never printed clean while one is live.
+#:
+#: The distinction is not invented for the occasion; it is the one the withdrawal
+#: note above draws. That note refused a *re-worded ruling* on the grounds that a
+#: false green is worse than a red gate, and it is right: the §8.4 ruling had
+#: silenced five further bullets, three of them carrying claims the repository
+#: refutes. A deferral silences nothing. The three refuted bullets are named, with
+#: their refuting artefacts, in the record this entry points at.
+#:
+#: **Why a deferral instead of the repair.** The repair is a paper-body edit --
+#: cite the two handover reports on the `n = 1` bullet, and correct the bullets
+#: whose factual content has decayed -- and `monitor/CHARTER.md` reserves paper
+#: body text to RES-2. `origin/agent/v30-p18-hand-merge` hit the same wall and
+#: took the same decision, stating it as a gap rather than working around it. The
+#: cost of leaving the gate red instead is not local: a red `papers/verify.py`
+#: stops `ci_merge` from landing *anything* touching this territory, and it had
+#: already stranded two branches of finished work for a day. A red gate is a
+#: brake on the whole territory, so it is the wrong instrument for holding one
+#: section's todo -- the board is that instrument, and this entry is on it.
+#:
+#: Four guards, so an entry cannot rot the way a ruling can:
+#:
+#: * it must match **exactly one** currently-flagged block -- an entry matching
+#:   none is STALE (the claim was cited or rewritten, so the deferral is over),
+#:   and one matching several is BROAD;
+#: * its anchor obeys `MIN_ANCHOR`, so it identifies a claim and not prose;
+#: * it may not also be in `ADJUDICATED_UNCITED` -- a block is ruled *or*
+#:   deferred, never both, or the ruling would hide what the deferral discloses;
+#: * `record` must resolve to a file that exists. A deferral whose written
+#:   argument has gone is a deferral nobody can audit, and it fails.
+#:
+#: There is deliberately no expiry date. A calendar-triggered red would re-block
+#: every papers merge on a day nobody chose, for a reason unconnected to the
+#: commit that tripped it, in a repository whose stated requirement is
+#: determinism. The anchor is the expiry: the moment the bullet is edited, the
+#: entry stops matching and the gate says so. `MAX_DEFERRED` is the other half of
+#: that argument -- no expiry only stays defensible while the table cannot grow.
+#:
+#: One residual, stated rather than papered over: a deferral naming a section that
+#: is absent from the tree being scanned is skipped in silence, which is what lets
+#: the negative controls point `SECTIONS` at a scratch directory. On the live tree
+#: that escape needs a section to vanish from `sections/` -- which trips
+#: `A GENERATED` (PAPER.md would no longer equal `assemble(sections/)`) and the
+#: `MIN_SECTIONS` floor before it gets here. `test_deferred_uncited.py` pins that
+#: every live entry is applicable, and a test is weaker than a gate; it is the
+#: strongest instrument available without making the check unable to be driven red.
+MAX_DEFERRED = 1
+DEFERRED_UNCITED: dict[tuple[str, str], tuple[str, str, str, str]] = {
+    ("08_exam.md", "**n = 1 per handover tier**, on a saturated"): (
+        "2026-08-04", "RES-2",
+        "papers/runs/20260804T143000Z-V31/E-UNCITED-DEFERRED.md",
+        "True and unfixable from here: the `n = 1` sample size is evidenced by "
+        "`exam/artifacts/reports/p15-handover-a0.reader-tier{1,2}.report.json`, "
+        "cited twelve blocks earlier in §8.2 and not in this block. Citing it "
+        "here is a body edit, and it would also clear four sibling bullets in "
+        "the same merged list, three of which state things the repository now "
+        "refutes -- so the repair is the citation *and* those corrections "
+        "together, which is RES-2's to make. Filed by W-9208 under V31.",
+    ),
+}
+
 
 def check_uncited() -> tuple[bool, list[str]]:
     """E. No quantitative claim block in the body cites nothing at all."""
@@ -1982,17 +2187,103 @@ def check_uncited() -> tuple[bool, list[str]]:
     # `len(glob) - len(EXEMPT_SECTIONS)` printed `-1 body sections` on an empty
     # tree, and printed it on a PASS line. Counting what was actually walked
     # cannot go negative, and cannot disagree with the loop above it.
+    # Deferrals partition `flagged`; they do not filter it. Everything below
+    # still prints, and a deferred block prints the same finding under a
+    # different label. `deferred_hits` is built from the scan's own output rather
+    # than from a second pass, so an entry cannot claim a block the scan did not
+    # flag.
+    deferred_hits: dict[tuple[str, str], list] = {k: [] for k in DEFERRED_UNCITED}
+    still_open: list = []
+    for row in flagged:
+        key = next((k for k in DEFERRED_UNCITED
+                    if k[0] == row[0] and k[1] in row[2]), None)
+        (deferred_hits[key] if key else still_open).append(row)
+
+    deferrals_broken: list[str] = []
+    for key, (opened, owner, record, _reason) in sorted(DEFERRED_UNCITED.items()):
+        if not (SECTIONS / key[0]).is_file():
+            # The section this deferral is about is not in the tree being
+            # scanned, so nothing here can be said about it. That is the negative
+            # controls' case, not the paper's: they point `SECTIONS` at a scratch
+            # directory to watch the check go red, and a live deferral firing
+            # STALE against a synthetic tree would report on a section the run
+            # never looked at. On the live tree the section is present and the
+            # STALE branch below is what holds the entry honest;
+            # `test_deferred_uncited.py` pins that it is applicable there, so
+            # this escape cannot become the way an entry stops being checked.
+            continue
+        n = len(deferred_hits[key])
+        if len(key[1]) < MIN_ANCHOR:
+            deferrals_broken.append(fail(
+                f"  ANCHOR    deferral {key[0]} → {key[1]!r} is {len(key[1])} "
+                f"characters. An anchor under {MIN_ANCHOR} matches prose rather "
+                f"than a claim, and would defer blocks nobody looked at."))
+        if key in ADJUDICATED_UNCITED:
+            deferrals_broken.append(fail(
+                f"  DOUBLE    {key[0]} → {key[1]!r} is both ruled and deferred. "
+                f"A ruling clears the block, so it would hide the finding this "
+                f"deferral exists to keep visible. Pick one."))
+        if n == 0:
+            deferrals_broken.append(fail(
+                f"  STALE     deferral {key[0]} → {key[1]!r} matches no uncited "
+                f"block. The claim was cited or rewritten, so the deferral is "
+                f"over: delete the entry. Owner was {owner}, opened {opened}."))
+        elif n > 1:
+            deferrals_broken.append(fail(
+                f"  BROAD     deferral {key[0]} → {key[1]!r} matches {n} blocks. "
+                f"A deferral is opened against one finding; matching several "
+                f"defers findings nobody adjudicated."))
+        if not (ROOT / record).is_file():
+            deferrals_broken.append(fail(
+                f"  NORECORD  deferral {key[0]} → {key[1]!r} cites `{record}`, "
+                f"which does not exist. A deferral is only as good as the written "
+                f"argument behind it; with the record gone there is nothing to "
+                f"audit and nothing to hand {owner}."))
+    # A ceiling, because the docstring's argument against an expiry date is not
+    # an argument against there being twenty of these next month. One deferral is
+    # a disclosure; a table of them is the lowered bar this ticket was told not
+    # to build. Raising the ceiling has to be its own commit, which a reviewer
+    # sees -- adding one more entry under a generous limit is not.
+    if len(DEFERRED_UNCITED) > MAX_DEFERRED:
+        deferrals_broken.append(fail(
+            f"  TOOMANY   {len(DEFERRED_UNCITED)} deferrals, ceiling is "
+            f"{MAX_DEFERRED}. A deferral discloses one finding its owner could "
+            f"not fix; a table of them is a check that has been switched off "
+            f"one row at a time. Fix one, or raise the ceiling deliberately."))
+    notes.extend(deferrals_broken)
+
+    # Counted apart from `stale`, which is about `ADJUDICATED_UNCITED`. An
+    # earlier draft appended a sentinel to `stale` to carry the failure, which
+    # made `len(ADJUDICATED_UNCITED) - len(stale)` report one fewer *ruling* and
+    # one more *stale ruling* -- true numbers about the wrong table, printed on
+    # the summary line. The verdict was right and the arithmetic was a lie, which
+    # is the worse half: a reader checks the numbers, not the exit code.
     notes.append(
         f"  {scanned} claim blocks scanned across {len(body_sections())} "
-        f"body sections: {len(flagged)} uncited, "
-        f"{len(ADJUDICATED_UNCITED) - len(stale)} ruled, {len(stale)} stale rulings"
+        f"body sections: {len(still_open)} uncited, "
+        f"{sum(len(v) for v in deferred_hits.values())} uncited-and-deferred, "
+        f"{len(ADJUDICATED_UNCITED) - len(stale)} ruled, {len(stale)} stale "
+        f"rulings, {len(deferrals_broken)} broken deferral(s)"
     )
-    for name, lineno, flat, nums, words in flagged:
+    for name, lineno, flat, nums, words in still_open:
         tokens = ", ".join(nums[:6] + words[:3]) or "?"
         notes.append(fail(
             f"  UNCITED   {name}:{lineno} -- quantities [{tokens}] with no "
             f"resolvable path anywhere in the block"))
         notes.append(fail(f"            {flat[:140]}"))
+    for key, rows in sorted(deferred_hits.items()):
+        opened, owner, record, reason = DEFERRED_UNCITED[key]
+        for name, lineno, flat, nums, words in rows:
+            tokens = ", ".join(nums[:6] + words[:3]) or "?"
+            # Same shape as UNCITED above, deliberately: the finding is not
+            # softened, only routed. What follows is who has it and where the
+            # argument is, which is the only thing a deferral adds.
+            notes.append(fail(
+                f"  DEFERRED  {name}:{lineno} -- quantities [{tokens}] with no "
+                f"resolvable path anywhere in the block. STILL TRUE, not fixed; "
+                f"owned by {owner} since {opened}, argued in `{record}`"))
+            notes.append(fail(f"            {flat[:140]}"))
+            notes.append(fail(f"            {reason}"))
     for key, reason in ADJUDICATED_UNCITED.items():
         # `and not hits.get(key)` because `stale` also collects BROAD, ANCHOR and
         # LOCATOR failures, each of which has already printed its own reason.
@@ -2007,7 +2298,7 @@ def check_uncited() -> tuple[bool, list[str]]:
                 f"leave it to excuse the next one."))
         else:
             notes.append(f"  ruled     {key[0]} ({hits[key]}×) -- {reason}")
-    return not (flagged or stale), notes
+    return not (still_open or stale or deferrals_broken), notes
 
 
 #: Bare filenames that name a *kind* of file rather than one artefact, each with
@@ -2149,10 +2440,36 @@ def check_bare() -> tuple[bool, list[str]]:
                 f"or cite the paths."))
             stale.append(key)
 
+    # `_WALK_SKIP_PREFIXES` narrows the corpus this check counts against, so it
+    # is an exemption like any other and it decays like one. Reported here rather
+    # than inside `_candidates`, because a corpus narrowing that nothing announces
+    # is the same silence as a ruling nobody re-read.
+    bad_prefixes = _bad_skip_prefixes()
+    for prefix, why in bad_prefixes:
+        notes.append(fail(
+            f"  STALESKIP `{prefix}` narrows the corpus this check counts "
+            f"against, and it {why}. An exclusion is a ruling about what a "
+            f"reader could confuse; one that excuses nothing, or excuses more "
+            f"than it declares, is removed rather than left in place."))
+
     notes.append(
         f"  {seen} bare-filename citations: {len(flagged)} ambiguous, "
         f"{len(ADJUDICATED_BARE) - len(stale)} ruled, {len(stale)} stale rulings, "
         f"{len(overran)} line anchors past the end of the file")
+    broken = {p for p, _ in bad_prefixes}
+    for prefix in _WALK_SKIP_PREFIXES:
+        if prefix in broken:
+            continue
+        # With its size. Disclosing that an exclusion exists is not the same as
+        # disclosing how much it excuses, and a reader of the green line cannot
+        # otherwise tell whether three files were set aside or four thousand.
+        n_files, n_only = _skip_prefix_size(prefix)
+        notes.append(
+            f"  excluded  `{prefix}` -- {n_files} file(s), {n_only} basename(s) "
+            f"that exist nowhere else. A committed snapshot of removed agent "
+            f"worktrees: tracked and released like anything else, but a snapshot "
+            f"of checkouts is not a second live copy a citation could mean. "
+            f"See _WALK_SKIP_PREFIXES.")
     for name, lineno, token, anchor, cand, (last, total) in overran:
         notes.append(fail(
             f"  OUTOFRANGE {name}:{lineno} -- `{token}:{anchor}` resolves to "
@@ -2186,7 +2503,7 @@ def check_bare() -> tuple[bool, list[str]]:
             f"  STALE     {key[0]} `{key[1]}` is ruled and no longer appears. "
             f"A ruling that excuses nothing is removed, not left to excuse a "
             f"regression that comes back the other way."))
-    return not flagged and not stale and not overran, notes
+    return not flagged and not stale and not overran and not bad_prefixes, notes
 
 
 #: (tag, blurb, fn, reads_sections).
@@ -2269,9 +2586,21 @@ def main() -> int:
         for n, cites, name, lineno in worst:
             print(f"    {n:>3} quantities / {cites} citation(s)   {name}:{lineno}")
 
+    # Callers that read one line read this one -- `papers/verify.py` stage 2
+    # prints a sub-gate's last stdout line and nothing else. A deferral that is
+    # visible only in the body of check E's output is invisible to the delegator,
+    # to `monitor/ci/merge.log`, and to everyone who reads either. So it rides on
+    # the verdict line itself, on the FAIL path as well as the PASS one.
+    deferred = ""
+    if DEFERRED_UNCITED:
+        where = ", ".join(sorted(k[0] for k in DEFERRED_UNCITED))
+        deferred = (f" [{len(DEFERRED_UNCITED)} DEFERRED finding(s) held open, "
+                    f"not fixed: {where} -- see check E]")
+
     print()
     if failures:
-        print(f"verify_paper: FAIL ({len(failures)}/{len(CHECKS)}) -- {', '.join(failures)}")
+        print(f"verify_paper: FAIL ({len(failures)}/{len(CHECKS)}) -- "
+              f"{', '.join(failures)}{deferred}")
         if not generated_ok:
             passed_on_sections = [t for t, _, _, r in CHECKS
                                   if r and t not in failures]
@@ -2281,7 +2610,7 @@ def main() -> int:
                       f"PAPER.md holds something else. Rerun assemble.py before "
                       f"reading any of those greens as being about the paper.")
         return 1
-    print(f"verify_paper: PASS ({len(CHECKS)}/{len(CHECKS)})")
+    print(f"verify_paper: PASS ({len(CHECKS)}/{len(CHECKS)}){deferred}")
     return 0
 
 
