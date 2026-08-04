@@ -1177,6 +1177,24 @@ class TheoriaArm:
             if not need:
                 record.setdefault("theorize", "skipped: no surprise pending")
                 break
+            if rounds and self.economy.config.gate_every_round:
+                # The second adjudication of a turn has never met a gate --
+                # which is why 24 recorded calls had a gap of zero, and why
+                # the only lever aimed at them refuses nothing until this is
+                # switched on. Guarded on the config rather than called
+                # unconditionally so a default leg's `action_economy.json`
+                # does not gain a row it never had.
+                cont = self.economy.gate_continuation(
+                    has_manual=bool(self.books.theory.strip()),
+                    pending=len(self.register.pending),
+                    pending_kinds=tuple(getattr(s, "kind", None) or "unknown"
+                                        for s in self.register.pending))
+                self.economy.note_decision(
+                    cont, step_idx=len(self.store.steps), new_frames=0,
+                    new_actions=0, pending=len(self.register.pending))
+                if not cont.allow:
+                    record["theorize"] = cont.reason
+                    break
             if self.offline:
                 record["theorize"] = "skipped: offline dry run makes no model calls"
                 self.register.handled("offline")
@@ -1250,8 +1268,12 @@ class TheoriaArm:
                 break
             self.register.handled("theorize")
             self.theorize_reports.append(report)
+            kinds = tuple(getattr(s, "kind", None) or "unknown"
+                          for s in pending)
             self.economy.note_adjudication(
-                manual_moved=_manual_moved(report))
+                manual_moved=_manual_moved(report),
+                bought_nothing=self._inertia_at_call(report, kinds),
+                pending_kinds=kinds)
             rounds += 1
             # The manual has been adjudicated, so the ablation frontier is a
             # different set now and the probe caps start again. Reset here
@@ -1288,6 +1310,36 @@ class TheoriaArm:
             self._actions_at_last_theorize = self.budget.actions_ok
         if not self._certified_this_level() and self.books.theory.strip():
             record["certify"] = _certify_line(self._certify())
+
+    def _inertia_at_call(self, report: Dict[str, Any],
+                         kinds: Tuple[str, ...]) -> Optional[bool]:
+        """Did the manual just paid for predict anything new? Ask now, not later.
+
+        `None` on the default rung, where the signal is not computed at all --
+        `inner/inertia.py` is not even imported, so a default leg pays nothing
+        for a knob it is not using.
+
+        Everything here is offline: two compiles of snapshots already on disk
+        and two replays over frames already recorded. No desk, no network, no
+        spend. And it is wrapped, because a *measurement* that raises must not
+        end a leg that the desk has already been paid for -- an instrument
+        failure is recorded as an unknown, which `note_adjudication` treats as
+        an unknown rather than as an inert call.
+        """
+        if not self.economy.config.measures_inertia:
+            return None
+        from . import inertia as inertia_mod           # noqa: PLC0415
+        before = (report.get("snapshot_before") or {}).get("dir")
+        after = (report.get("snapshot_after") or {}).get("dir")
+        try:
+            verdict = inertia_mod.verdict_at_call(before, after,
+                                                  self._level_store())
+        except Exception as exc:                       # noqa: BLE001
+            verdict = {"verdict": None,
+                       "error": "%s: %s" % (type(exc).__name__, exc)}
+        self.economy.note_inertia(verdict, step_idx=len(self.store.steps),
+                                  pending_kinds=kinds)
+        return inertia_mod.bought_nothing(verdict.get("verdict"))
 
     def _certified_this_level(self) -> bool:
         """Has certify run since the current level began?

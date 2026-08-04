@@ -1,0 +1,62 @@
+A25 action-economy census -- runs
+  legs with desk calls   : 15
+  legs without desk calls: 22 (not averaged in)
+  adjudications          : 73
+  paid invocations       : 104  (of which 31 are compile repairs against the same evidence)
+  billed actions         : 226
+  spend                  : $148.89
+  ACTIONS PER ADJUDICATION   : 3.096
+  ACTIONS PER PAID CALL      : 2.173
+  usd per action         : 0.658797
+  usd per adjudication   : 2.039562
+
+  gap (billed actions between one adjudication and the next):
+    min 0  median 4  mean 2.836  max 5
+    histogram {'0': 24, '1': 1, '3': 1, '4': 32, '5': 15}
+
+  the gate's unit is not the bill's unit:
+    16 adjudication(s) were released by 34 command(s) that bought no transition
+    worst leg: 20260801T001851Z-R1b-sk48-b (6)
+
+  what triggered the calls: {'render_mismatch': 5, 'replay_mismatch': 50, 'probe_refutation': 113, 'heuristic_miss': 14}
+  downstream verdicts:
+    changed_a_later_prediction                 31
+    no_later_prediction_changed                23
+    no_snapshot_pair_recorded                  10
+    no_later_transition_to_predict             5
+    gained_a_predictor_where_there_was_none    4
+  adjudications whose manual text did not move: 10
+  adjudications that changed no later prediction: 23 of 58 scored (0.3966)
+
+  the signal the arm could have had AT the call:
+    moved_a_prediction                             32
+    predicted_what_the_old_manual_predicted        25
+    no_snapshot_pair_on_disk                       10
+    gained_a_predictor_where_there_was_none        6
+    $38.82 went on calls the arm could have called inert at the time
+    of 54 call(s) comparable on both windows:
+      it would have flagged 23, 23 of which changed no later prediction (precision 1.0)
+      it would have missed 0 downstream-inert call(s) (recall 1.0)
+      base rate of downstream-inert among them: 0.4259
+    cross tab (at_call | downstream): {'moved_a_prediction|changed_a_later_prediction': 31, 'predicted_what_the_old_manual_predicted|no_later_prediction_changed': 23}
+    prefix window (steps the arm had in hand): min 5 median 13.0 max 29
+    31 of 31 moved-and-changed calls have a tail that diverges at its very first step
+    3 call(s) the at-call signal scores and the audit cannot
+
+  per leg:
+    leg                                           adj  inv  acts act/adj     usd
+    20260728T012311Z-g50t-first-contact-aborted     1    1     5     5.0    1.31
+    20260728T014402Z-g50t-first-contact-aborted     1    1     6     6.0    0.73
+    20260728T015354Z-g50t-first-contact             4    5     7    1.75    6.32
+    20260728T025503Z-g50t-e08-fixed                 4    5    13    3.25    7.09
+    20260728T083400Z-E3-sk48-carried-v2            14   30    30   2.143    8.40
+    20260729T0035Z-a3-desk-live-proof2              3    3    12     4.0    0.39
+    20260731T1310Z-A3-level2-carried-r2             4    5    13    3.25    9.56
+    20260731T1430Z-A3-level2-carried-r3             8    8    33   4.125   13.44
+    20260731T1500Z-A3-sk48-carried-l1               8    9    21   2.625   12.25
+    20260731T231654Z-R1-g50t-a                      3    4    13   4.333    7.60
+    20260731T231654Z-R1-sk48-b                      1    3     5     5.0    7.61
+    20260801T001851Z-R1b-g50t-a                     8    9    25   3.125   17.75
+    20260801T001851Z-R1b-sk48-b                     3    6     5   1.667   17.39
+    20260801T044640Z-R2b-g50t-a                     7    9    29   4.143   18.74
+    20260801T044640Z-R2b-sk48-b                     4    6     9    2.25   20.30

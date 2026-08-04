@@ -1,0 +1,3959 @@
+{
+ "at_call_signal": {
+  "comparable_calls": 54,
+  "cross_tab": {
+   "moved_a_prediction|changed_a_later_prediction": 31,
+   "predicted_what_the_old_manual_predicted|no_later_prediction_changed": 23
+  },
+  "if_the_arm_had_believed_the_signal": {
+   "base_rate": 0.4259,
+   "calls_it_would_have_called_inert": 23,
+   "downstream_inert_calls_it_would_have_missed": 0,
+   "of_those_also_inert_downstream": 23,
+   "precision": 1.0,
+   "recall": 1.0
+  },
+  "note": "cross_tab keys are 'at_call|downstream'; only the calls where BOTH verdicts are moved/inert are comparable, so the counts here are smaller than either column on its own.",
+  "prefix_window_steps": {
+   "max": 29,
+   "median": 13.0,
+   "min": 5
+  },
+  "scored_only_by_the_at_call_signal": 3,
+  "usd_on_calls_the_arm_could_have_called_inert_at_the_time": 38.8209,
+  "verdicts": {
+   "gained_a_predictor_where_there_was_none": 6,
+   "moved_a_prediction": 32,
+   "no_snapshot_pair_on_disk": 10,
+   "predicted_what_the_old_manual_predicted": 25
+  },
+  "why_the_two_agree": {
+   "moved_and_changed": 31,
+   "of_which_the_tail_diverges_at_its_very_first_step": 31,
+   "reading": "these two are not independent tests. `step` is a fold: once two revisions disagree about a state they carry the disagreement forward, so a pair that parted company inside the call's own window is still parted at every later step. Where this count equals `moved_and_changed`, the tail told us nothing the prefix had not already said -- which is why the agreement below is mechanical rather than lucky, and why it should be expected to hold on the next leg. What the prefix genuinely cannot see is a rewrite whose only effect is under an action the arm has never taken; that is the `inert|changed` cell, and on this archive it is empty."
+  }
+ },
+ "calls_that_bought_nothing": {
+  "fraction_of_scored": 0.3966,
+  "inert": 23,
+  "manual_text_unchanged": 10,
+  "scored": 58
+ },
+ "downstream": {
+  "changed_a_later_prediction": 31,
+  "gained_a_predictor_where_there_was_none": 4,
+  "no_later_prediction_changed": 23,
+  "no_later_transition_to_predict": 5,
+  "no_snapshot_pair_recorded": 10
+ },
+ "gap_actions_between_adjudications": {
+  "histogram": {
+   "0": 24,
+   "1": 1,
+   "3": 1,
+   "4": 32,
+   "5": 15
+  },
+  "max": 5,
+  "mean": 2.836,
+  "median": 4,
+  "min": 0,
+  "n": 73,
+  "zero_gap_adjudications": 24
+ },
+ "gate_counts_what_the_bill_does_not": {
+  "adjudications_with_a_gap": 16,
+  "note": "`_frames_this_level` counts `len(store.steps)`, and `loop._record` appends a Step for every arm-level command including the ones the world refused. So the floor can be met by commands that bought no transition. This is the size of that gap across the archive.",
+  "total_frames_that_were_not_actions": 34,
+  "worst_leg": [
+   "20260801T001851Z-R1b-sk48-b",
+   6
+  ]
+ },
+ "legs": [
+  {
+   "action_ceiling": null,
+   "actions_after_last_call": 0,
+   "actions_per_adjudication": 5.0,
+   "actions_per_paid_invocation": 5.0,
+   "adjudications": 1,
+   "billed_actions": 5,
+   "calls": [
+    {
+     "actions_since_prev_adjudication": 5,
+     "adjudication_idx": 0,
+     "at_call": {
+      "verdict": "no_snapshot_pair_on_disk"
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 85,
+     "cost_usd": 1.307727,
+     "downstream": {
+      "verdict": "no_snapshot_pair_recorded"
+     },
+     "elapsed_ms": 548605,
+     "frames_not_actions": 2,
+     "frames_since_prev_adjudication": 7,
+     "labels": [
+      "round1"
+     ],
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": false,
+     "seq": 88,
+     "step_idx": 6,
+     "triggers": {},
+     "ts": "2026-07-28T01:38:44.505Z"
+    }
+   ],
+   "carried": false,
+   "game": "g50t-5849a774",
+   "leg": "20260728T012311Z-g50t-first-contact-aborted",
+   "level_baseline_actions": [
+    78,
+    175,
+    179,
+    230,
+    96,
+    54,
+    67
+   ],
+   "level_baseline_source": "borrowed from another leg of g50t-5849a774 -- this leg recorded no env_meta",
+   "levels_completed": null,
+   "observed_frames": 6,
+   "outcome": null,
+   "paid_invocations": 1,
+   "repair_invocations": 0,
+   "snapshot_attribution": "unattributed: 1 adjudications but only 0 snapshot records",
+   "usd": 1.307727,
+   "usd_per_action": 0.261545
+  },
+  {
+   "action_ceiling": null,
+   "actions_after_last_call": 1,
+   "actions_per_adjudication": 6.0,
+   "actions_per_paid_invocation": 6.0,
+   "adjudications": 1,
+   "billed_actions": 6,
+   "calls": [
+    {
+     "actions_since_prev_adjudication": 5,
+     "adjudication_idx": 0,
+     "at_call": {
+      "verdict": "no_snapshot_pair_on_disk"
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 40,
+     "cost_usd": 0.730485,
+     "downstream": {
+      "verdict": "no_snapshot_pair_recorded"
+     },
+     "elapsed_ms": 253110,
+     "frames_not_actions": 2,
+     "frames_since_prev_adjudication": 7,
+     "labels": [
+      "round1"
+     ],
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": false,
+     "seq": 43,
+     "step_idx": 6,
+     "triggers": {},
+     "ts": "2026-07-28T01:50:25.290Z"
+    }
+   ],
+   "carried": false,
+   "game": "g50t-5849a774",
+   "leg": "20260728T014402Z-g50t-first-contact-aborted",
+   "level_baseline_actions": [
+    78,
+    175,
+    179,
+    230,
+    96,
+    54,
+    67
+   ],
+   "level_baseline_source": "borrowed from another leg of g50t-5849a774 -- this leg recorded no env_meta",
+   "levels_completed": null,
+   "observed_frames": 7,
+   "outcome": null,
+   "paid_invocations": 1,
+   "repair_invocations": 0,
+   "snapshot_attribution": "unattributed: 1 adjudications but only 0 snapshot records",
+   "usd": 0.730485,
+   "usd_per_action": 0.121748
+  },
+  {
+   "action_ceiling": 109,
+   "actions_after_last_call": 1,
+   "actions_per_adjudication": 1.75,
+   "actions_per_paid_invocation": 1.4,
+   "adjudications": 4,
+   "billed_actions": 7,
+   "calls": [
+    {
+     "actions_since_prev_adjudication": 5,
+     "adjudication_idx": 0,
+     "at_call": {
+      "verdict": "no_snapshot_pair_on_disk"
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 32,
+     "cost_usd": 2.201177,
+     "downstream": {
+      "verdict": "no_snapshot_pair_recorded"
+     },
+     "elapsed_ms": 920307,
+     "frames_not_actions": 2,
+     "frames_since_prev_adjudication": 7,
+     "labels": [
+      "round1",
+      "round2"
+     ],
+     "paid_invocations": 2,
+     "repair_invocations": 1,
+     "returned_a_manual": true,
+     "seq": 35,
+     "step_idx": 6,
+     "triggers": {},
+     "ts": "2026-07-28T02:05:18.446Z"
+    },
+    {
+     "actions_since_prev_adjudication": 0,
+     "adjudication_idx": 1,
+     "at_call": {
+      "divergent_steps": 5,
+      "evidence_frames": 6,
+      "first_divergent_step": 0,
+      "steps_in_window": 5,
+      "verdict": "moved_a_prediction",
+      "window": [
+       0,
+       5
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 0,
+     "cost_usd": 1.425431,
+     "downstream": {
+      "divergent_steps": 2,
+      "first_divergent_step": 5,
+      "tail_transitions": 2,
+      "verdict": "changed_a_later_prediction"
+     },
+     "elapsed_ms": 608195,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 0,
+     "labels": [
+      "round1"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 1639,
+      "playbook_chars_before": 1012,
+      "theory_changed": true,
+      "theory_chars_after": 15104,
+      "theory_chars_before": 11217
+     },
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 37,
+     "snapshot_after": "rev04-after-theorize",
+     "snapshot_before": "rev03-before-theorize",
+     "step_idx": 6,
+     "triggers": {
+      "render_mismatch": 1,
+      "replay_mismatch": 1
+     },
+     "ts": "2026-07-28T02:21:18.668Z"
+    },
+    {
+     "actions_since_prev_adjudication": 1,
+     "adjudication_idx": 2,
+     "at_call": {
+      "divergent_steps": 6,
+      "evidence_frames": 7,
+      "first_divergent_step": 0,
+      "steps_in_window": 6,
+      "verdict": "moved_a_prediction",
+      "window": [
+       0,
+       6
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 7,
+     "cost_usd": 1.489011,
+     "downstream": {
+      "divergent_steps": 1,
+      "first_divergent_step": 6,
+      "tail_transitions": 1,
+      "verdict": "changed_a_later_prediction"
+     },
+     "elapsed_ms": 603414,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 1,
+     "labels": [
+      "round1"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 2799,
+      "playbook_chars_before": 1639,
+      "theory_changed": true,
+      "theory_chars_after": 19315,
+      "theory_chars_before": 15104
+     },
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 45,
+     "snapshot_after": "rev06-after-theorize",
+     "snapshot_before": "rev05-before-theorize",
+     "step_idx": 7,
+     "triggers": {
+      "render_mismatch": 1,
+      "replay_mismatch": 1
+     },
+     "ts": "2026-07-28T02:31:59.363Z"
+    },
+    {
+     "actions_since_prev_adjudication": 0,
+     "adjudication_idx": 3,
+     "at_call": {
+      "divergent_steps": 0,
+      "evidence_frames": 7,
+      "first_divergent_step": null,
+      "steps_in_window": 6,
+      "verdict": "predicted_what_the_old_manual_predicted",
+      "window": [
+       0,
+       6
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 0,
+     "cost_usd": 1.202039,
+     "downstream": {
+      "divergent_steps": 0,
+      "first_divergent_step": null,
+      "tail_transitions": 1,
+      "verdict": "no_later_prediction_changed"
+     },
+     "elapsed_ms": 449304,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 0,
+     "labels": [
+      "round1"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 3597,
+      "playbook_chars_before": 2799,
+      "theory_changed": true,
+      "theory_chars_after": 21329,
+      "theory_chars_before": 19315
+     },
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 46,
+     "snapshot_after": "rev08-after-theorize",
+     "snapshot_before": "rev07-before-theorize",
+     "step_idx": 7,
+     "triggers": {
+      "render_mismatch": 1,
+      "replay_mismatch": 1
+     },
+     "ts": "2026-07-28T02:39:49.553Z"
+    }
+   ],
+   "carried": false,
+   "game": "g50t-5849a774",
+   "leg": "20260728T015354Z-g50t-first-contact",
+   "level_baseline_actions": [
+    78,
+    175,
+    179,
+    230,
+    96,
+    54,
+    67
+   ],
+   "level_baseline_source": "borrowed from another leg of g50t-5849a774 -- this leg recorded no env_meta",
+   "levels_completed": null,
+   "observed_frames": 8,
+   "outcome": null,
+   "paid_invocations": 5,
+   "repair_invocations": 1,
+   "snapshot_attribution": "front_aligned: 5 snapshot records, 4 adjudications",
+   "usd": 6.317658,
+   "usd_per_action": 0.902523
+  },
+  {
+   "action_ceiling": null,
+   "actions_after_last_call": 4,
+   "actions_per_adjudication": 3.25,
+   "actions_per_paid_invocation": 2.6,
+   "adjudications": 4,
+   "billed_actions": 13,
+   "calls": [
+    {
+     "actions_since_prev_adjudication": 5,
+     "adjudication_idx": 0,
+     "at_call": {
+      "verdict": "no_snapshot_pair_on_disk"
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 41,
+     "cost_usd": 1.659996,
+     "downstream": {
+      "verdict": "no_snapshot_pair_recorded"
+     },
+     "elapsed_ms": 746757,
+     "frames_not_actions": 2,
+     "frames_since_prev_adjudication": 7,
+     "labels": [
+      "round1"
+     ],
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 44,
+     "step_idx": 6,
+     "triggers": {},
+     "ts": "2026-07-28T03:10:16.342Z"
+    },
+    {
+     "actions_since_prev_adjudication": 0,
+     "adjudication_idx": 1,
+     "at_call": {
+      "divergent_steps": 4,
+      "evidence_frames": 6,
+      "first_divergent_step": 1,
+      "steps_in_window": 5,
+      "verdict": "moved_a_prediction",
+      "window": [
+       0,
+       5
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 0,
+     "cost_usd": 1.25345,
+     "downstream": {
+      "divergent_steps": 8,
+      "first_divergent_step": 5,
+      "tail_transitions": 8,
+      "verdict": "changed_a_later_prediction"
+     },
+     "elapsed_ms": 513761,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 0,
+     "labels": [
+      "round1"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 1385,
+      "playbook_chars_before": 994,
+      "theory_changed": true,
+      "theory_chars_after": 12661,
+      "theory_chars_before": 8692
+     },
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 45,
+     "snapshot_after": "rev04-after-theorize",
+     "snapshot_before": "rev03-before-theorize",
+     "step_idx": 6,
+     "triggers": {
+      "replay_mismatch": 1
+     },
+     "ts": "2026-07-28T03:19:12.060Z"
+    },
+    {
+     "actions_since_prev_adjudication": 4,
+     "adjudication_idx": 2,
+     "at_call": {
+      "divergent_steps": 8,
+      "evidence_frames": 10,
+      "first_divergent_step": 1,
+      "steps_in_window": 9,
+      "verdict": "moved_a_prediction",
+      "window": [
+       0,
+       9
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 66,
+     "cost_usd": 2.455394,
+     "downstream": {
+      "divergent_steps": 4,
+      "first_divergent_step": 9,
+      "tail_transitions": 4,
+      "verdict": "changed_a_later_prediction"
+     },
+     "elapsed_ms": 986122,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 4,
+     "labels": [
+      "round1",
+      "round2"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 2217,
+      "playbook_chars_before": 1385,
+      "theory_changed": true,
+      "theory_chars_after": 18078,
+      "theory_chars_before": 12661
+     },
+     "paid_invocations": 2,
+     "repair_invocations": 1,
+     "returned_a_manual": true,
+     "seq": 112,
+     "snapshot_after": "rev06-after-theorize",
+     "snapshot_before": "rev05-before-theorize",
+     "step_idx": 10,
+     "triggers": {
+      "replay_mismatch": 1
+     },
+     "ts": "2026-07-28T03:35:18.389Z"
+    },
+    {
+     "actions_since_prev_adjudication": 0,
+     "adjudication_idx": 3,
+     "at_call": {
+      "divergent_steps": 0,
+      "evidence_frames": 10,
+      "first_divergent_step": null,
+      "steps_in_window": 9,
+      "verdict": "predicted_what_the_old_manual_predicted",
+      "window": [
+       0,
+       9
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 0,
+     "cost_usd": 1.725836,
+     "downstream": {
+      "divergent_steps": 0,
+      "first_divergent_step": null,
+      "tail_transitions": 4,
+      "verdict": "no_later_prediction_changed"
+     },
+     "elapsed_ms": 732291,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 0,
+     "labels": [
+      "round1"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 2903,
+      "playbook_chars_before": 2217,
+      "theory_changed": true,
+      "theory_chars_after": 23168,
+      "theory_chars_before": 18078
+     },
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 114,
+     "snapshot_after": "rev08-after-theorize",
+     "snapshot_before": "rev07-before-theorize",
+     "step_idx": 10,
+     "triggers": {
+      "replay_mismatch": 1
+     },
+     "ts": "2026-07-28T03:53:54.876Z"
+    }
+   ],
+   "carried": false,
+   "game": "g50t-5849a774",
+   "leg": "20260728T025503Z-g50t-e08-fixed",
+   "level_baseline_actions": [
+    78,
+    175,
+    179,
+    230,
+    96,
+    54,
+    67
+   ],
+   "level_baseline_source": "borrowed from another leg of g50t-5849a774 -- this leg recorded no env_meta",
+   "levels_completed": null,
+   "observed_frames": 14,
+   "outcome": null,
+   "paid_invocations": 5,
+   "repair_invocations": 1,
+   "snapshot_attribution": "front_aligned: 5 snapshot records, 4 adjudications",
+   "usd": 7.094676,
+   "usd_per_action": 0.545744
+  },
+  {
+   "action_ceiling": 120,
+   "actions_after_last_call": 1,
+   "actions_per_adjudication": 2.143,
+   "actions_per_paid_invocation": 1.0,
+   "adjudications": 14,
+   "billed_actions": 30,
+   "calls": [
+    {
+     "actions_since_prev_adjudication": 5,
+     "adjudication_idx": 0,
+     "at_call": {
+      "divergent_steps": 5,
+      "evidence_frames": 6,
+      "first_divergent_step": 0,
+      "steps_in_window": 5,
+      "verdict": "moved_a_prediction",
+      "window": [
+       0,
+       5
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 63,
+     "cost_usd": 1.493268,
+     "downstream": {
+      "divergent_steps": 25,
+      "first_divergent_step": 5,
+      "tail_transitions": 25,
+      "verdict": "changed_a_later_prediction"
+     },
+     "elapsed_ms": 569232,
+     "frames_not_actions": 2,
+     "frames_since_prev_adjudication": 7,
+     "labels": [
+      "round1"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 3000,
+      "playbook_chars_before": 3597,
+      "theory_changed": true,
+      "theory_chars_after": 16883,
+      "theory_chars_before": 21508
+     },
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 129,
+     "snapshot_after": "rev04-after-theorize",
+     "snapshot_before": "rev03-before-theorize",
+     "step_idx": 6,
+     "triggers": {
+      "render_mismatch": 1,
+      "replay_mismatch": 1
+     },
+     "ts": "2026-07-28T08:43:54.155Z"
+    },
+    {
+     "actions_since_prev_adjudication": 0,
+     "adjudication_idx": 1,
+     "at_call": {
+      "divergent_steps": 0,
+      "evidence_frames": 6,
+      "first_divergent_step": null,
+      "steps_in_window": 5,
+      "verdict": "predicted_what_the_old_manual_predicted",
+      "window": [
+       0,
+       5
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 0,
+     "cost_usd": 1.48341,
+     "downstream": {
+      "divergent_steps": 0,
+      "first_divergent_step": null,
+      "tail_transitions": 25,
+      "verdict": "no_later_prediction_changed"
+     },
+     "elapsed_ms": 610485,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 0,
+     "labels": [
+      "round1"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 3346,
+      "playbook_chars_before": 3000,
+      "theory_changed": true,
+      "theory_chars_after": 21764,
+      "theory_chars_before": 16883
+     },
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 130,
+     "snapshot_after": "rev06-after-theorize",
+     "snapshot_before": "rev05-before-theorize",
+     "step_idx": 6,
+     "triggers": {
+      "replay_mismatch": 1
+     },
+     "ts": "2026-07-28T08:54:05.036Z"
+    },
+    {
+     "actions_since_prev_adjudication": 4,
+     "adjudication_idx": 2,
+     "at_call": {
+      "divergent_steps": 0,
+      "evidence_frames": 10,
+      "first_divergent_step": null,
+      "steps_in_window": 9,
+      "verdict": "predicted_what_the_old_manual_predicted",
+      "window": [
+       0,
+       9
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 38,
+     "cost_usd": 1.416019,
+     "downstream": {
+      "divergent_steps": 0,
+      "first_divergent_step": null,
+      "tail_transitions": 21,
+      "verdict": "no_later_prediction_changed"
+     },
+     "elapsed_ms": 529099,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 4,
+     "labels": [
+      "round1"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 3815,
+      "playbook_chars_before": 3346,
+      "theory_changed": true,
+      "theory_chars_after": 26909,
+      "theory_chars_before": 21764
+     },
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 207,
+     "snapshot_after": "rev08-after-theorize",
+     "snapshot_before": "rev07-before-theorize",
+     "step_idx": 10,
+     "triggers": {
+      "probe_refutation": 2,
+      "replay_mismatch": 1
+     },
+     "ts": "2026-07-28T09:11:57.486Z"
+    },
+    {
+     "actions_since_prev_adjudication": 0,
+     "adjudication_idx": 3,
+     "at_call": {
+      "divergent_steps": 0,
+      "evidence_frames": 10,
+      "first_divergent_step": null,
+      "steps_in_window": 9,
+      "verdict": "predicted_what_the_old_manual_predicted",
+      "window": [
+       0,
+       9
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 0,
+     "cost_usd": 1.047438,
+     "downstream": {
+      "divergent_steps": 0,
+      "first_divergent_step": null,
+      "tail_transitions": 21,
+      "verdict": "no_later_prediction_changed"
+     },
+     "elapsed_ms": 351840,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 0,
+     "labels": [
+      "round1"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 4011,
+      "playbook_chars_before": 3815,
+      "theory_changed": true,
+      "theory_chars_after": 28607,
+      "theory_chars_before": 26909
+     },
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 208,
+     "snapshot_after": "rev10-after-theorize",
+     "snapshot_before": "rev09-before-theorize",
+     "step_idx": 10,
+     "triggers": {
+      "replay_mismatch": 1
+     },
+     "ts": "2026-07-28T09:17:49.666Z"
+    },
+    {
+     "actions_since_prev_adjudication": 4,
+     "adjudication_idx": 4,
+     "at_call": {
+      "divergent_steps": 7,
+      "evidence_frames": 14,
+      "first_divergent_step": 6,
+      "steps_in_window": 13,
+      "verdict": "moved_a_prediction",
+      "window": [
+       0,
+       13
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 53,
+     "cost_usd": 1.742637,
+     "downstream": {
+      "divergent_steps": 17,
+      "first_divergent_step": 13,
+      "tail_transitions": 17,
+      "verdict": "changed_a_later_prediction"
+     },
+     "elapsed_ms": 642721,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 4,
+     "labels": [
+      "round1"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 4993,
+      "playbook_chars_before": 4011,
+      "theory_changed": true,
+      "theory_chars_after": 29920,
+      "theory_chars_before": 28607
+     },
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 315,
+     "snapshot_after": "rev12-after-theorize",
+     "snapshot_before": "rev11-before-theorize",
+     "step_idx": 14,
+     "triggers": {
+      "probe_refutation": 4,
+      "replay_mismatch": 1
+     },
+     "ts": "2026-07-28T09:39:34.688Z"
+    },
+    {
+     "actions_since_prev_adjudication": 0,
+     "adjudication_idx": 5,
+     "at_call": {
+      "divergent_steps": 0,
+      "evidence_frames": 14,
+      "first_divergent_step": null,
+      "steps_in_window": 13,
+      "verdict": "predicted_what_the_old_manual_predicted",
+      "window": [
+       0,
+       13
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 0,
+     "cost_usd": 1.222096,
+     "downstream": {
+      "divergent_steps": 0,
+      "first_divergent_step": null,
+      "tail_transitions": 17,
+      "verdict": "no_later_prediction_changed"
+     },
+     "elapsed_ms": 401042,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 0,
+     "labels": [
+      "round1"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 5215,
+      "playbook_chars_before": 4993,
+      "theory_changed": true,
+      "theory_chars_after": 36237,
+      "theory_chars_before": 29920
+     },
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 316,
+     "snapshot_after": "rev14-after-theorize",
+     "snapshot_before": "rev13-before-theorize",
+     "step_idx": 14,
+     "triggers": {
+      "replay_mismatch": 1
+     },
+     "ts": "2026-07-28T09:46:16.214Z"
+    },
+    {
+     "actions_since_prev_adjudication": 4,
+     "adjudication_idx": 6,
+     "at_call": {
+      "divergent_steps": 0,
+      "evidence_frames": 18,
+      "first_divergent_step": null,
+      "steps_in_window": 17,
+      "verdict": "predicted_what_the_old_manual_predicted",
+      "window": [
+       0,
+       17
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 25,
+     "cost_usd": 0.0,
+     "downstream": {
+      "divergent_steps": 0,
+      "first_divergent_step": null,
+      "tail_transitions": 13,
+      "verdict": "no_later_prediction_changed"
+     },
+     "elapsed_ms": 12484,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 4,
+     "labels": [
+      "round1",
+      "round2",
+      "round3"
+     ],
+     "manual": {
+      "playbook_changed": false,
+      "playbook_chars_after": 5215,
+      "playbook_chars_before": 5215,
+      "theory_changed": false,
+      "theory_chars_after": 36237,
+      "theory_chars_before": 36237
+     },
+     "paid_invocations": 3,
+     "repair_invocations": 2,
+     "returned_a_manual": true,
+     "seq": 367,
+     "snapshot_after": "rev16-after-theorize",
+     "snapshot_before": "rev15-before-theorize",
+     "step_idx": 18,
+     "triggers": {
+      "probe_refutation": 4,
+      "replay_mismatch": 1
+     },
+     "ts": "2026-07-28T09:54:43.159Z"
+    },
+    {
+     "actions_since_prev_adjudication": 0,
+     "adjudication_idx": 7,
+     "at_call": {
+      "divergent_steps": 0,
+      "evidence_frames": 18,
+      "first_divergent_step": null,
+      "steps_in_window": 17,
+      "verdict": "predicted_what_the_old_manual_predicted",
+      "window": [
+       0,
+       17
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 0,
+     "cost_usd": 0.0,
+     "downstream": {
+      "divergent_steps": 0,
+      "first_divergent_step": null,
+      "tail_transitions": 13,
+      "verdict": "no_later_prediction_changed"
+     },
+     "elapsed_ms": 12877,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 0,
+     "labels": [
+      "round1",
+      "round2",
+      "round3"
+     ],
+     "manual": {
+      "playbook_changed": false,
+      "playbook_chars_after": 5215,
+      "playbook_chars_before": 5215,
+      "theory_changed": false,
+      "theory_chars_after": 36237,
+      "theory_chars_before": 36237
+     },
+     "paid_invocations": 3,
+     "repair_invocations": 2,
+     "returned_a_manual": true,
+     "seq": 370,
+     "snapshot_after": "rev18-after-theorize",
+     "snapshot_before": "rev17-before-theorize",
+     "step_idx": 18,
+     "triggers": {
+      "replay_mismatch": 1
+     },
+     "ts": "2026-07-28T09:54:57.060Z"
+    },
+    {
+     "actions_since_prev_adjudication": 4,
+     "adjudication_idx": 8,
+     "at_call": {
+      "divergent_steps": 0,
+      "evidence_frames": 22,
+      "first_divergent_step": null,
+      "steps_in_window": 21,
+      "verdict": "predicted_what_the_old_manual_predicted",
+      "window": [
+       0,
+       21
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 26,
+     "cost_usd": 0.0,
+     "downstream": {
+      "divergent_steps": 0,
+      "first_divergent_step": null,
+      "tail_transitions": 9,
+      "verdict": "no_later_prediction_changed"
+     },
+     "elapsed_ms": 14066,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 4,
+     "labels": [
+      "round1",
+      "round2",
+      "round3"
+     ],
+     "manual": {
+      "playbook_changed": false,
+      "playbook_chars_after": 5215,
+      "playbook_chars_before": 5215,
+      "theory_changed": false,
+      "theory_chars_after": 36237,
+      "theory_chars_before": 36237
+     },
+     "paid_invocations": 3,
+     "repair_invocations": 2,
+     "returned_a_manual": true,
+     "seq": 425,
+     "snapshot_after": "rev20-after-theorize",
+     "snapshot_before": "rev19-before-theorize",
+     "step_idx": 22,
+     "triggers": {
+      "probe_refutation": 4,
+      "replay_mismatch": 1
+     },
+     "ts": "2026-07-28T10:04:13.560Z"
+    },
+    {
+     "actions_since_prev_adjudication": 0,
+     "adjudication_idx": 9,
+     "at_call": {
+      "divergent_steps": 0,
+      "evidence_frames": 22,
+      "first_divergent_step": null,
+      "steps_in_window": 21,
+      "verdict": "predicted_what_the_old_manual_predicted",
+      "window": [
+       0,
+       21
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 0,
+     "cost_usd": 0.0,
+     "downstream": {
+      "divergent_steps": 0,
+      "first_divergent_step": null,
+      "tail_transitions": 9,
+      "verdict": "no_later_prediction_changed"
+     },
+     "elapsed_ms": 14420,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 0,
+     "labels": [
+      "round1",
+      "round2",
+      "round3"
+     ],
+     "manual": {
+      "playbook_changed": false,
+      "playbook_chars_after": 5215,
+      "playbook_chars_before": 5215,
+      "theory_changed": false,
+      "theory_chars_after": 36237,
+      "theory_chars_before": 36237
+     },
+     "paid_invocations": 3,
+     "repair_invocations": 2,
+     "returned_a_manual": true,
+     "seq": 428,
+     "snapshot_after": "rev22-after-theorize",
+     "snapshot_before": "rev21-before-theorize",
+     "step_idx": 22,
+     "triggers": {
+      "replay_mismatch": 1
+     },
+     "ts": "2026-07-28T10:04:30.715Z"
+    },
+    {
+     "actions_since_prev_adjudication": 4,
+     "adjudication_idx": 10,
+     "at_call": {
+      "divergent_steps": 0,
+      "evidence_frames": 26,
+      "first_divergent_step": null,
+      "steps_in_window": 25,
+      "verdict": "predicted_what_the_old_manual_predicted",
+      "window": [
+       0,
+       25
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 9,
+     "cost_usd": 0.0,
+     "downstream": {
+      "divergent_steps": 0,
+      "first_divergent_step": null,
+      "tail_transitions": 5,
+      "verdict": "no_later_prediction_changed"
+     },
+     "elapsed_ms": 14789,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 4,
+     "labels": [
+      "round1",
+      "round2",
+      "round3"
+     ],
+     "manual": {
+      "playbook_changed": false,
+      "playbook_chars_after": 5215,
+      "playbook_chars_before": 5215,
+      "theory_changed": false,
+      "theory_chars_after": 36237,
+      "theory_chars_before": 36237
+     },
+     "paid_invocations": 3,
+     "repair_invocations": 2,
+     "returned_a_manual": true,
+     "seq": 449,
+     "snapshot_after": "rev24-after-theorize",
+     "snapshot_before": "rev23-before-theorize",
+     "step_idx": 26,
+     "triggers": {
+      "probe_refutation": 4,
+      "replay_mismatch": 1
+     },
+     "ts": "2026-07-28T10:12:46.421Z"
+    },
+    {
+     "actions_since_prev_adjudication": 0,
+     "adjudication_idx": 11,
+     "at_call": {
+      "divergent_steps": 0,
+      "evidence_frames": 26,
+      "first_divergent_step": null,
+      "steps_in_window": 25,
+      "verdict": "predicted_what_the_old_manual_predicted",
+      "window": [
+       0,
+       25
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 0,
+     "cost_usd": 0.0,
+     "downstream": {
+      "divergent_steps": 0,
+      "first_divergent_step": null,
+      "tail_transitions": 5,
+      "verdict": "no_later_prediction_changed"
+     },
+     "elapsed_ms": 19878,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 0,
+     "labels": [
+      "round1",
+      "round2",
+      "round3"
+     ],
+     "manual": {
+      "playbook_changed": false,
+      "playbook_chars_after": 5215,
+      "playbook_chars_before": 5215,
+      "theory_changed": false,
+      "theory_chars_after": 36237,
+      "theory_chars_before": 36237
+     },
+     "paid_invocations": 3,
+     "repair_invocations": 2,
+     "returned_a_manual": true,
+     "seq": 452,
+     "snapshot_after": "rev26-after-theorize",
+     "snapshot_before": "rev25-before-theorize",
+     "step_idx": 26,
+     "triggers": {
+      "replay_mismatch": 1
+     },
+     "ts": "2026-07-28T10:13:04.493Z"
+    },
+    {
+     "actions_since_prev_adjudication": 4,
+     "adjudication_idx": 12,
+     "at_call": {
+      "divergent_steps": 0,
+      "evidence_frames": 30,
+      "first_divergent_step": null,
+      "steps_in_window": 29,
+      "verdict": "predicted_what_the_old_manual_predicted",
+      "window": [
+       0,
+       29
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 34,
+     "cost_usd": 0.0,
+     "downstream": {
+      "divergent_steps": 0,
+      "first_divergent_step": null,
+      "tail_transitions": 1,
+      "verdict": "no_later_prediction_changed"
+     },
+     "elapsed_ms": 13917,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 4,
+     "labels": [
+      "round1",
+      "round2",
+      "round3"
+     ],
+     "manual": {
+      "playbook_changed": false,
+      "playbook_chars_after": 5215,
+      "playbook_chars_before": 5215,
+      "theory_changed": false,
+      "theory_chars_after": 36237,
+      "theory_chars_before": 36237
+     },
+     "paid_invocations": 3,
+     "repair_invocations": 2,
+     "returned_a_manual": true,
+     "seq": 523,
+     "snapshot_after": "rev28-after-theorize",
+     "snapshot_before": "rev27-before-theorize",
+     "step_idx": 30,
+     "triggers": {
+      "probe_refutation": 4,
+      "replay_mismatch": 1
+     },
+     "ts": "2026-07-28T10:23:45.009Z"
+    },
+    {
+     "actions_since_prev_adjudication": 0,
+     "adjudication_idx": 13,
+     "at_call": {
+      "divergent_steps": 0,
+      "evidence_frames": 30,
+      "first_divergent_step": null,
+      "steps_in_window": 29,
+      "verdict": "predicted_what_the_old_manual_predicted",
+      "window": [
+       0,
+       29
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 0,
+     "cost_usd": 0.0,
+     "downstream": {
+      "divergent_steps": 0,
+      "first_divergent_step": null,
+      "tail_transitions": 1,
+      "verdict": "no_later_prediction_changed"
+     },
+     "elapsed_ms": 15964,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 0,
+     "labels": [
+      "round1",
+      "round2",
+      "round3"
+     ],
+     "manual": {
+      "playbook_changed": false,
+      "playbook_chars_after": 5215,
+      "playbook_chars_before": 5215,
+      "theory_changed": false,
+      "theory_chars_after": 36237,
+      "theory_chars_before": 36237
+     },
+     "paid_invocations": 3,
+     "repair_invocations": 2,
+     "returned_a_manual": true,
+     "seq": 526,
+     "snapshot_after": "rev30-after-theorize",
+     "snapshot_before": "rev29-before-theorize",
+     "step_idx": 30,
+     "triggers": {
+      "replay_mismatch": 1
+     },
+     "ts": "2026-07-28T10:24:01.624Z"
+    }
+   ],
+   "carried": false,
+   "game": "sk48-d8078629",
+   "leg": "20260728T083400Z-E3-sk48-carried-v2",
+   "level_baseline_actions": [
+    61,
+    177,
+    101,
+    103,
+    230,
+    181,
+    125,
+    92
+   ],
+   "level_baseline_source": "this leg's own env_meta",
+   "levels_completed": 0,
+   "observed_frames": 31,
+   "outcome": "budget_exhausted",
+   "paid_invocations": 30,
+   "repair_invocations": 16,
+   "snapshot_attribution": "front_aligned: 14 snapshot records, 14 adjudications",
+   "usd": 8.404868,
+   "usd_per_action": 0.280162
+  },
+  {
+   "action_ceiling": 12,
+   "actions_after_last_call": 4,
+   "actions_per_adjudication": 4.0,
+   "actions_per_paid_invocation": 4.0,
+   "adjudications": 3,
+   "billed_actions": 12,
+   "calls": [
+    {
+     "actions_since_prev_adjudication": 5,
+     "adjudication_idx": 0,
+     "at_call": {
+      "verdict": "no_snapshot_pair_on_disk"
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 6,
+     "cost_usd": 0.114256,
+     "downstream": {
+      "verdict": "no_snapshot_pair_recorded"
+     },
+     "elapsed_ms": 179764,
+     "frames_not_actions": 2,
+     "frames_since_prev_adjudication": 7,
+     "labels": [
+      "round1"
+     ],
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 9,
+     "step_idx": 6,
+     "triggers": {},
+     "ts": "2026-07-29T00:29:20.297Z"
+    },
+    {
+     "actions_since_prev_adjudication": 0,
+     "adjudication_idx": 1,
+     "at_call": {
+      "divergent_steps": 5,
+      "evidence_frames": 6,
+      "first_divergent_step": 0,
+      "steps_in_window": 5,
+      "verdict": "moved_a_prediction",
+      "window": [
+       0,
+       5
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 0,
+     "cost_usd": 0.146292,
+     "downstream": {
+      "divergent_steps": 7,
+      "first_divergent_step": 5,
+      "tail_transitions": 7,
+      "verdict": "changed_a_later_prediction"
+     },
+     "elapsed_ms": 241344,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 0,
+     "labels": [
+      "round1"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 132,
+      "playbook_chars_before": 172,
+      "theory_changed": true,
+      "theory_chars_after": 1372,
+      "theory_chars_before": 749
+     },
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 10,
+     "snapshot_after": "rev04-after-theorize",
+     "snapshot_before": "rev03-before-theorize",
+     "step_idx": 6,
+     "triggers": {
+      "render_mismatch": 1,
+      "replay_mismatch": 1
+     },
+     "ts": "2026-07-29T00:33:21.841Z"
+    },
+    {
+     "actions_since_prev_adjudication": 3,
+     "adjudication_idx": 2,
+     "at_call": {
+      "divergent_steps": 0,
+      "evidence_frames": 9,
+      "first_divergent_step": null,
+      "steps_in_window": 8,
+      "verdict": "predicted_what_the_old_manual_predicted",
+      "window": [
+       0,
+       8
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 3,
+     "cost_usd": 0.132608,
+     "downstream": {
+      "divergent_steps": 0,
+      "first_divergent_step": null,
+      "tail_transitions": 4,
+      "verdict": "no_later_prediction_changed"
+     },
+     "elapsed_ms": 207993,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 3,
+     "labels": [
+      "round1"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 176,
+      "playbook_chars_before": 132,
+      "theory_changed": true,
+      "theory_chars_after": 1623,
+      "theory_chars_before": 1372
+     },
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 14,
+     "snapshot_after": "rev06-after-theorize",
+     "snapshot_before": "rev05-before-theorize",
+     "step_idx": 9,
+     "triggers": {
+      "probe_refutation": 3,
+      "replay_mismatch": 1
+     },
+     "ts": "2026-07-29T00:36:50.394Z"
+    }
+   ],
+   "carried": false,
+   "game": "g50t-5849a774",
+   "leg": "20260729T0035Z-a3-desk-live-proof2",
+   "level_baseline_actions": [
+    8,
+    8,
+    8
+   ],
+   "level_baseline_source": "this leg's own env_meta",
+   "levels_completed": 0,
+   "observed_frames": 13,
+   "outcome": "budget_exhausted",
+   "paid_invocations": 3,
+   "repair_invocations": 0,
+   "snapshot_attribution": "front_aligned: 7 snapshot records, 3 adjudications",
+   "usd": 0.393156,
+   "usd_per_action": 0.032763
+  },
+  {
+   "action_ceiling": 295,
+   "actions_after_last_call": 0,
+   "actions_per_adjudication": 3.25,
+   "actions_per_paid_invocation": 2.6,
+   "adjudications": 4,
+   "billed_actions": 13,
+   "calls": [
+    {
+     "actions_since_prev_adjudication": 5,
+     "adjudication_idx": 0,
+     "at_call": {
+      "divergent_steps": 0,
+      "evidence_frames": 6,
+      "first_divergent_step": null,
+      "steps_in_window": 5,
+      "verdict": "predicted_what_the_old_manual_predicted",
+      "window": [
+       0,
+       5
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 39,
+     "cost_usd": 1.487855,
+     "downstream": {
+      "divergent_steps": 0,
+      "first_divergent_step": null,
+      "tail_transitions": 8,
+      "verdict": "no_later_prediction_changed"
+     },
+     "elapsed_ms": 587049,
+     "frames_not_actions": 2,
+     "frames_since_prev_adjudication": 7,
+     "labels": [
+      "round1"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 3903,
+      "playbook_chars_before": 2903,
+      "theory_changed": true,
+      "theory_chars_after": 29007,
+      "theory_chars_before": 23243
+     },
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 81,
+     "snapshot_after": "rev04-after-theorize",
+     "snapshot_before": "rev03-before-theorize",
+     "step_idx": 6,
+     "triggers": {
+      "replay_mismatch": 1
+     },
+     "ts": "2026-07-31T12:44:25.457Z"
+    },
+    {
+     "actions_since_prev_adjudication": 0,
+     "adjudication_idx": 1,
+     "at_call": {
+      "divergent_steps": 1,
+      "evidence_frames": 6,
+      "first_divergent_step": 4,
+      "steps_in_window": 5,
+      "verdict": "moved_a_prediction",
+      "window": [
+       0,
+       5
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 0,
+     "cost_usd": 1.662984,
+     "downstream": {
+      "divergent_steps": 8,
+      "first_divergent_step": 5,
+      "tail_transitions": 8,
+      "verdict": "changed_a_later_prediction"
+     },
+     "elapsed_ms": 650691,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 0,
+     "labels": [
+      "round1"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 4297,
+      "playbook_chars_before": 3903,
+      "theory_changed": true,
+      "theory_chars_after": 35274,
+      "theory_chars_before": 29007
+     },
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 82,
+     "snapshot_after": "rev06-after-theorize",
+     "snapshot_before": "rev05-before-theorize",
+     "step_idx": 6,
+     "triggers": {
+      "replay_mismatch": 1
+     },
+     "ts": "2026-07-31T12:55:16.658Z"
+    },
+    {
+     "actions_since_prev_adjudication": 4,
+     "adjudication_idx": 2,
+     "at_call": {
+      "divergent_steps": 8,
+      "evidence_frames": 10,
+      "first_divergent_step": 1,
+      "steps_in_window": 9,
+      "verdict": "moved_a_prediction",
+      "window": [
+       0,
+       9
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 20,
+     "cost_usd": 4.775528,
+     "downstream": {
+      "divergent_steps": 4,
+      "first_divergent_step": 9,
+      "tail_transitions": 4,
+      "verdict": "changed_a_later_prediction"
+     },
+     "elapsed_ms": 1623939,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 4,
+     "labels": [
+      "round1",
+      "round2"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 4319,
+      "playbook_chars_before": 4297,
+      "theory_changed": true,
+      "theory_chars_after": 32349,
+      "theory_chars_before": 35274
+     },
+     "paid_invocations": 2,
+     "repair_invocations": 1,
+     "returned_a_manual": true,
+     "seq": 123,
+     "snapshot_after": "rev08-after-theorize",
+     "snapshot_before": "rev07-before-theorize",
+     "step_idx": 10,
+     "triggers": {
+      "probe_refutation": 4,
+      "replay_mismatch": 1
+     },
+     "ts": "2026-07-31T13:11:44.282Z"
+    },
+    {
+     "actions_since_prev_adjudication": 4,
+     "adjudication_idx": 3,
+     "at_call": {
+      "divergent_steps": 2,
+      "evidence_frames": 14,
+      "first_divergent_step": 9,
+      "steps_in_window": 13,
+      "verdict": "moved_a_prediction",
+      "window": [
+       0,
+       13
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 40,
+     "cost_usd": 1.630485,
+     "downstream": {
+      "tail_transitions": 0,
+      "verdict": "no_later_transition_to_predict"
+     },
+     "elapsed_ms": 604437,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 4,
+     "labels": [
+      "round1"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 4266,
+      "playbook_chars_before": 4319,
+      "theory_changed": true,
+      "theory_chars_after": 32900,
+      "theory_chars_before": 32349
+     },
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 205,
+     "snapshot_after": "rev10-after-theorize",
+     "snapshot_before": "rev09-before-theorize",
+     "step_idx": 14,
+     "triggers": {
+      "probe_refutation": 4
+     },
+     "ts": "2026-07-31T13:37:27.879Z"
+    }
+   ],
+   "carried": true,
+   "game": "g50t-5849a774",
+   "leg": "20260731T1310Z-A3-level2-carried-r2",
+   "level_baseline_actions": [
+    78,
+    175,
+    179,
+    230,
+    96,
+    54,
+    67
+   ],
+   "level_baseline_source": "this leg's own env_meta",
+   "levels_completed": 0,
+   "observed_frames": 14,
+   "outcome": "spend_gate_tripped",
+   "paid_invocations": 5,
+   "repair_invocations": 1,
+   "snapshot_attribution": "front_aligned: 5 snapshot records, 4 adjudications",
+   "usd": 9.556852,
+   "usd_per_action": 0.735142
+  },
+  {
+   "action_ceiling": 300,
+   "actions_after_last_call": 0,
+   "actions_per_adjudication": 4.125,
+   "actions_per_paid_invocation": 4.125,
+   "adjudications": 8,
+   "billed_actions": 33,
+   "calls": [
+    {
+     "actions_since_prev_adjudication": 5,
+     "adjudication_idx": 0,
+     "at_call": {
+      "divergent_steps": 1,
+      "evidence_frames": 6,
+      "first_divergent_step": 4,
+      "steps_in_window": 5,
+      "verdict": "moved_a_prediction",
+      "window": [
+       0,
+       5
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 44,
+     "cost_usd": 1.554791,
+     "downstream": {
+      "divergent_steps": 28,
+      "first_divergent_step": 5,
+      "tail_transitions": 28,
+      "verdict": "changed_a_later_prediction"
+     },
+     "elapsed_ms": 548477,
+     "frames_not_actions": 2,
+     "frames_since_prev_adjudication": 7,
+     "labels": [
+      "round1"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 4729,
+      "playbook_chars_before": 4266,
+      "theory_changed": true,
+      "theory_chars_after": 34350,
+      "theory_chars_before": 32921
+     },
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 91,
+     "snapshot_after": "rev04-after-theorize",
+     "snapshot_before": "rev03-before-theorize",
+     "step_idx": 6,
+     "triggers": {
+      "replay_mismatch": 1
+     },
+     "ts": "2026-07-31T14:24:27.308Z"
+    },
+    {
+     "actions_since_prev_adjudication": 4,
+     "adjudication_idx": 1,
+     "at_call": {
+      "divergent_steps": 4,
+      "evidence_frames": 10,
+      "first_divergent_step": 5,
+      "steps_in_window": 9,
+      "verdict": "moved_a_prediction",
+      "window": [
+       0,
+       9
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 25,
+     "cost_usd": 1.881302,
+     "downstream": {
+      "divergent_steps": 24,
+      "first_divergent_step": 9,
+      "tail_transitions": 24,
+      "verdict": "changed_a_later_prediction"
+     },
+     "elapsed_ms": 714628,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 4,
+     "labels": [
+      "round1"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 5976,
+      "playbook_chars_before": 4729,
+      "theory_changed": true,
+      "theory_chars_after": 34547,
+      "theory_chars_before": 34350
+     },
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 142,
+     "snapshot_after": "rev06-after-theorize",
+     "snapshot_before": "rev05-before-theorize",
+     "step_idx": 10,
+     "triggers": {
+      "probe_refutation": 4
+     },
+     "ts": "2026-07-31T14:38:10.242Z"
+    },
+    {
+     "actions_since_prev_adjudication": 4,
+     "adjudication_idx": 2,
+     "at_call": {
+      "divergent_steps": 4,
+      "evidence_frames": 14,
+      "first_divergent_step": 9,
+      "steps_in_window": 13,
+      "verdict": "moved_a_prediction",
+      "window": [
+       0,
+       13
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 16,
+     "cost_usd": 1.569824,
+     "downstream": {
+      "divergent_steps": 20,
+      "first_divergent_step": 13,
+      "tail_transitions": 20,
+      "verdict": "changed_a_later_prediction"
+     },
+     "elapsed_ms": 546430,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 4,
+     "labels": [
+      "round1"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 8322,
+      "playbook_chars_before": 5976,
+      "theory_changed": true,
+      "theory_chars_after": 38306,
+      "theory_chars_before": 34547
+     },
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 175,
+     "snapshot_after": "rev08-after-theorize",
+     "snapshot_before": "rev07-before-theorize",
+     "step_idx": 14,
+     "triggers": {
+      "probe_refutation": 4
+     },
+     "ts": "2026-07-31T14:48:26.324Z"
+    },
+    {
+     "actions_since_prev_adjudication": 4,
+     "adjudication_idx": 3,
+     "at_call": {
+      "divergent_steps": 4,
+      "evidence_frames": 18,
+      "first_divergent_step": 13,
+      "steps_in_window": 17,
+      "verdict": "moved_a_prediction",
+      "window": [
+       0,
+       17
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 23,
+     "cost_usd": 1.665686,
+     "downstream": {
+      "divergent_steps": 16,
+      "first_divergent_step": 17,
+      "tail_transitions": 16,
+      "verdict": "changed_a_later_prediction"
+     },
+     "elapsed_ms": 568962,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 4,
+     "labels": [
+      "round1"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 8044,
+      "playbook_chars_before": 8322,
+      "theory_changed": true,
+      "theory_chars_after": 44020,
+      "theory_chars_before": 38306
+     },
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 222,
+     "snapshot_after": "rev10-after-theorize",
+     "snapshot_before": "rev09-before-theorize",
+     "step_idx": 18,
+     "triggers": {
+      "probe_refutation": 4
+     },
+     "ts": "2026-07-31T14:59:29.886Z"
+    },
+    {
+     "actions_since_prev_adjudication": 4,
+     "adjudication_idx": 4,
+     "at_call": {
+      "divergent_steps": 4,
+      "evidence_frames": 22,
+      "first_divergent_step": 17,
+      "steps_in_window": 21,
+      "verdict": "moved_a_prediction",
+      "window": [
+       0,
+       21
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 17,
+     "cost_usd": 1.68914,
+     "downstream": {
+      "divergent_steps": 12,
+      "first_divergent_step": 21,
+      "tail_transitions": 12,
+      "verdict": "changed_a_later_prediction"
+     },
+     "elapsed_ms": 555781,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 4,
+     "labels": [
+      "round1"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 6970,
+      "playbook_chars_before": 8044,
+      "theory_changed": true,
+      "theory_chars_after": 46056,
+      "theory_chars_before": 44020
+     },
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 257,
+     "snapshot_after": "rev12-after-theorize",
+     "snapshot_before": "rev11-before-theorize",
+     "step_idx": 22,
+     "triggers": {
+      "probe_refutation": 4
+     },
+     "ts": "2026-07-31T15:10:20.115Z"
+    },
+    {
+     "actions_since_prev_adjudication": 4,
+     "adjudication_idx": 5,
+     "at_call": {
+      "divergent_steps": 4,
+      "evidence_frames": 26,
+      "first_divergent_step": 21,
+      "steps_in_window": 25,
+      "verdict": "moved_a_prediction",
+      "window": [
+       0,
+       25
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 51,
+     "cost_usd": 1.907144,
+     "downstream": {
+      "divergent_steps": 8,
+      "first_divergent_step": 25,
+      "tail_transitions": 8,
+      "verdict": "changed_a_later_prediction"
+     },
+     "elapsed_ms": 654448,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 4,
+     "labels": [
+      "round1"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 7602,
+      "playbook_chars_before": 6970,
+      "theory_changed": true,
+      "theory_chars_after": 50205,
+      "theory_chars_before": 46056
+     },
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 360,
+     "snapshot_after": "rev14-after-theorize",
+     "snapshot_before": "rev13-before-theorize",
+     "step_idx": 26,
+     "triggers": {
+      "probe_refutation": 4
+     },
+     "ts": "2026-07-31T15:25:29.066Z"
+    },
+    {
+     "actions_since_prev_adjudication": 4,
+     "adjudication_idx": 6,
+     "at_call": {
+      "divergent_steps": 4,
+      "evidence_frames": 30,
+      "first_divergent_step": 25,
+      "steps_in_window": 29,
+      "verdict": "moved_a_prediction",
+      "window": [
+       0,
+       29
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 37,
+     "cost_usd": 1.493166,
+     "downstream": {
+      "divergent_steps": 4,
+      "first_divergent_step": 29,
+      "tail_transitions": 4,
+      "verdict": "changed_a_later_prediction"
+     },
+     "elapsed_ms": 422347,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 4,
+     "labels": [
+      "round1"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 8400,
+      "playbook_chars_before": 7602,
+      "theory_changed": true,
+      "theory_chars_after": 51216,
+      "theory_chars_before": 50205
+     },
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 435,
+     "snapshot_after": "rev16-after-theorize",
+     "snapshot_before": "rev15-before-theorize",
+     "step_idx": 30,
+     "triggers": {
+      "probe_refutation": 4
+     },
+     "ts": "2026-07-31T15:36:00.002Z"
+    },
+    {
+     "actions_since_prev_adjudication": 4,
+     "adjudication_idx": 7,
+     "at_call": {
+      "verdict": "no_snapshot_pair_on_disk"
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 21,
+     "cost_usd": 1.678809,
+     "downstream": {
+      "verdict": "no_snapshot_pair_recorded"
+     },
+     "elapsed_ms": 567998,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 4,
+     "labels": [
+      "round1"
+     ],
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": false,
+     "seq": 478,
+     "step_idx": 34,
+     "triggers": {
+      "probe_refutation": 4
+     },
+     "ts": "2026-07-31T15:47:18.168Z"
+    }
+   ],
+   "carried": true,
+   "game": "g50t-5849a774",
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "level_baseline_actions": [
+    78,
+    175,
+    179,
+    230,
+    96,
+    54,
+    67
+   ],
+   "level_baseline_source": "this leg's own env_meta",
+   "levels_completed": 0,
+   "observed_frames": 34,
+   "outcome": "spend_gate_tripped",
+   "paid_invocations": 8,
+   "repair_invocations": 0,
+   "snapshot_attribution": "front_aligned: 8 snapshot records, 8 adjudications",
+   "usd": 13.439862,
+   "usd_per_action": 0.407269
+  },
+  {
+   "action_ceiling": 300,
+   "actions_after_last_call": 4,
+   "actions_per_adjudication": 2.625,
+   "actions_per_paid_invocation": 2.333,
+   "adjudications": 8,
+   "billed_actions": 21,
+   "calls": [
+    {
+     "actions_since_prev_adjudication": 5,
+     "adjudication_idx": 0,
+     "at_call": {
+      "divergent_steps": 0,
+      "evidence_frames": 6,
+      "first_divergent_step": null,
+      "steps_in_window": 5,
+      "verdict": "predicted_what_the_old_manual_predicted",
+      "window": [
+       0,
+       5
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 38,
+     "cost_usd": 1.20151,
+     "downstream": {
+      "divergent_steps": 0,
+      "first_divergent_step": null,
+      "tail_transitions": 16,
+      "verdict": "no_later_prediction_changed"
+     },
+     "elapsed_ms": 412705,
+     "frames_not_actions": 2,
+     "frames_since_prev_adjudication": 7,
+     "labels": [
+      "round1"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 4989,
+      "playbook_chars_before": 5215,
+      "theory_changed": true,
+      "theory_chars_after": 34353,
+      "theory_chars_before": 36510
+     },
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 79,
+     "snapshot_after": "rev04-after-theorize",
+     "snapshot_before": "rev03-before-theorize",
+     "step_idx": 6,
+     "triggers": {
+      "replay_mismatch": 1
+     },
+     "ts": "2026-07-31T15:21:32.522Z"
+    },
+    {
+     "actions_since_prev_adjudication": 0,
+     "adjudication_idx": 1,
+     "at_call": {
+      "divergent_steps": 0,
+      "evidence_frames": 6,
+      "first_divergent_step": null,
+      "steps_in_window": 5,
+      "verdict": "predicted_what_the_old_manual_predicted",
+      "window": [
+       0,
+       5
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 0,
+     "cost_usd": 1.368456,
+     "downstream": {
+      "divergent_steps": 0,
+      "first_divergent_step": null,
+      "tail_transitions": 16,
+      "verdict": "no_later_prediction_changed"
+     },
+     "elapsed_ms": 475741,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 0,
+     "labels": [
+      "round1"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 5406,
+      "playbook_chars_before": 4989,
+      "theory_changed": true,
+      "theory_chars_after": 36319,
+      "theory_chars_before": 34353
+     },
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 80,
+     "snapshot_after": "rev06-after-theorize",
+     "snapshot_before": "rev05-before-theorize",
+     "step_idx": 6,
+     "triggers": {
+      "replay_mismatch": 1
+     },
+     "ts": "2026-07-31T15:29:28.834Z"
+    },
+    {
+     "actions_since_prev_adjudication": 4,
+     "adjudication_idx": 2,
+     "at_call": {
+      "divergent_steps": 4,
+      "evidence_frames": 10,
+      "first_divergent_step": 5,
+      "steps_in_window": 9,
+      "verdict": "moved_a_prediction",
+      "window": [
+       0,
+       9
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 32,
+     "cost_usd": 1.630981,
+     "downstream": {
+      "divergent_steps": 12,
+      "first_divergent_step": 9,
+      "tail_transitions": 12,
+      "verdict": "changed_a_later_prediction"
+     },
+     "elapsed_ms": 600244,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 4,
+     "labels": [
+      "round1"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 5305,
+      "playbook_chars_before": 5406,
+      "theory_changed": true,
+      "theory_chars_after": 35805,
+      "theory_chars_before": 36319
+     },
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 145,
+     "snapshot_after": "rev08-after-theorize",
+     "snapshot_before": "rev07-before-theorize",
+     "step_idx": 10,
+     "triggers": {
+      "probe_refutation": 2,
+      "replay_mismatch": 1
+     },
+     "ts": "2026-07-31T15:47:43.970Z"
+    },
+    {
+     "actions_since_prev_adjudication": 0,
+     "adjudication_idx": 3,
+     "at_call": {
+      "divergent_steps": 0,
+      "evidence_frames": 10,
+      "first_divergent_step": null,
+      "steps_in_window": 9,
+      "verdict": "predicted_what_the_old_manual_predicted",
+      "window": [
+       0,
+       9
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 0,
+     "cost_usd": 1.219472,
+     "downstream": {
+      "divergent_steps": 0,
+      "first_divergent_step": null,
+      "tail_transitions": 12,
+      "verdict": "no_later_prediction_changed"
+     },
+     "elapsed_ms": 392103,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 0,
+     "labels": [
+      "round1"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 5174,
+      "playbook_chars_before": 5305,
+      "theory_changed": true,
+      "theory_chars_after": 39736,
+      "theory_chars_before": 35805
+     },
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 146,
+     "snapshot_after": "rev10-after-theorize",
+     "snapshot_before": "rev09-before-theorize",
+     "step_idx": 10,
+     "triggers": {
+      "replay_mismatch": 1
+     },
+     "ts": "2026-07-31T15:54:16.816Z"
+    },
+    {
+     "actions_since_prev_adjudication": 4,
+     "adjudication_idx": 4,
+     "at_call": {
+      "divergent_steps": 6,
+      "evidence_frames": 14,
+      "first_divergent_step": 5,
+      "steps_in_window": 13,
+      "verdict": "moved_a_prediction",
+      "window": [
+       0,
+       13
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 12,
+     "cost_usd": 1.539587,
+     "downstream": {
+      "divergent_steps": 8,
+      "first_divergent_step": 13,
+      "tail_transitions": 8,
+      "verdict": "changed_a_later_prediction"
+     },
+     "elapsed_ms": 532049,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 4,
+     "labels": [
+      "round1"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 5704,
+      "playbook_chars_before": 5174,
+      "theory_changed": true,
+      "theory_chars_after": 38053,
+      "theory_chars_before": 39736
+     },
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 171,
+     "snapshot_after": "rev12-after-theorize",
+     "snapshot_before": "rev11-before-theorize",
+     "step_idx": 14,
+     "triggers": {
+      "probe_refutation": 3,
+      "replay_mismatch": 1
+     },
+     "ts": "2026-07-31T16:09:48.091Z"
+    },
+    {
+     "actions_since_prev_adjudication": 0,
+     "adjudication_idx": 5,
+     "at_call": {
+      "divergent_steps": 0,
+      "evidence_frames": 14,
+      "first_divergent_step": null,
+      "steps_in_window": 13,
+      "verdict": "predicted_what_the_old_manual_predicted",
+      "window": [
+       0,
+       13
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 0,
+     "cost_usd": 2.2156,
+     "downstream": {
+      "divergent_steps": 0,
+      "first_divergent_step": null,
+      "tail_transitions": 8,
+      "verdict": "no_later_prediction_changed"
+     },
+     "elapsed_ms": 634022,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 0,
+     "labels": [
+      "round1",
+      "round2"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 6363,
+      "playbook_chars_before": 5704,
+      "theory_changed": true,
+      "theory_chars_after": 43388,
+      "theory_chars_before": 38053
+     },
+     "paid_invocations": 2,
+     "repair_invocations": 1,
+     "returned_a_manual": true,
+     "seq": 172,
+     "snapshot_after": "rev14-after-theorize",
+     "snapshot_before": "rev13-before-theorize",
+     "step_idx": 14,
+     "triggers": {
+      "replay_mismatch": 1
+     },
+     "ts": "2026-07-31T16:16:29.111Z"
+    },
+    {
+     "actions_since_prev_adjudication": 4,
+     "adjudication_idx": 6,
+     "at_call": {
+      "divergent_steps": 7,
+      "evidence_frames": 18,
+      "first_divergent_step": 10,
+      "steps_in_window": 17,
+      "verdict": "moved_a_prediction",
+      "window": [
+       0,
+       17
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 53,
+     "cost_usd": 1.63675,
+     "downstream": {
+      "divergent_steps": 4,
+      "first_divergent_step": 17,
+      "tail_transitions": 4,
+      "verdict": "changed_a_later_prediction"
+     },
+     "elapsed_ms": 586556,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 4,
+     "labels": [
+      "round1"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 7128,
+      "playbook_chars_before": 6363,
+      "theory_changed": true,
+      "theory_chars_after": 44167,
+      "theory_chars_before": 43388
+     },
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 280,
+     "snapshot_after": "rev16-after-theorize",
+     "snapshot_before": "rev15-before-theorize",
+     "step_idx": 18,
+     "triggers": {
+      "probe_refutation": 4,
+      "replay_mismatch": 1
+     },
+     "ts": "2026-07-31T16:40:49.155Z"
+    },
+    {
+     "actions_since_prev_adjudication": 0,
+     "adjudication_idx": 7,
+     "at_call": {
+      "divergent_steps": 0,
+      "evidence_frames": 18,
+      "first_divergent_step": null,
+      "steps_in_window": 17,
+      "verdict": "predicted_what_the_old_manual_predicted",
+      "window": [
+       0,
+       17
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 0,
+     "cost_usd": 1.439363,
+     "downstream": {
+      "divergent_steps": 0,
+      "first_divergent_step": null,
+      "tail_transitions": 4,
+      "verdict": "no_later_prediction_changed"
+     },
+     "elapsed_ms": 469279,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 0,
+     "labels": [
+      "round1"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 7719,
+      "playbook_chars_before": 7128,
+      "theory_changed": true,
+      "theory_chars_after": 45250,
+      "theory_chars_before": 44167
+     },
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 281,
+     "snapshot_after": "rev18-after-theorize",
+     "snapshot_before": "rev17-before-theorize",
+     "step_idx": 18,
+     "triggers": {
+      "replay_mismatch": 1
+     },
+     "ts": "2026-07-31T16:48:39.610Z"
+    }
+   ],
+   "carried": true,
+   "game": "sk48-d8078629",
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "level_baseline_actions": [
+    61,
+    177,
+    101,
+    103,
+    230,
+    181,
+    125,
+    92
+   ],
+   "level_baseline_source": "this leg's own env_meta",
+   "levels_completed": 0,
+   "observed_frames": 22,
+   "outcome": "spend_gate_tripped",
+   "paid_invocations": 9,
+   "repair_invocations": 1,
+   "snapshot_attribution": "front_aligned: 9 snapshot records, 8 adjudications",
+   "usd": 12.251719,
+   "usd_per_action": 0.583415
+  },
+  {
+   "action_ceiling": 300,
+   "actions_after_last_call": 4,
+   "actions_per_adjudication": 4.333,
+   "actions_per_paid_invocation": 3.25,
+   "adjudications": 3,
+   "billed_actions": 13,
+   "calls": [
+    {
+     "actions_since_prev_adjudication": 5,
+     "adjudication_idx": 0,
+     "at_call": {
+      "before_error": "theory.py has not been generated",
+      "evidence_frames": 6,
+      "verdict": "gained_a_predictor_where_there_was_none"
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 37,
+     "cost_usd": 1.651009,
+     "downstream": {
+      "before_error": "theory.py has not been generated",
+      "tail_transitions": 8,
+      "verdict": "gained_a_predictor_where_there_was_none"
+     },
+     "elapsed_ms": 568892,
+     "frames_not_actions": 2,
+     "frames_since_prev_adjudication": 7,
+     "labels": [
+      "round1"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 7619,
+      "playbook_chars_before": 7100,
+      "theory_changed": true,
+      "theory_chars_after": 37569,
+      "theory_chars_before": 48472
+     },
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 77,
+     "snapshot_after": "rev04-after-theorize",
+     "snapshot_before": "rev03-before-theorize",
+     "step_idx": 6,
+     "triggers": {
+      "replay_mismatch": 1
+     },
+     "ts": "2026-07-31T23:28:45.801Z"
+    },
+    {
+     "actions_since_prev_adjudication": 4,
+     "adjudication_idx": 1,
+     "at_call": {
+      "divergent_steps": 8,
+      "evidence_frames": 10,
+      "first_divergent_step": 1,
+      "steps_in_window": 9,
+      "verdict": "moved_a_prediction",
+      "window": [
+       0,
+       9
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 30,
+     "cost_usd": 4.438339,
+     "downstream": {
+      "divergent_steps": 4,
+      "first_divergent_step": 9,
+      "tail_transitions": 4,
+      "verdict": "changed_a_later_prediction"
+     },
+     "elapsed_ms": 1435297,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 4,
+     "labels": [
+      "round1",
+      "round2"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 9564,
+      "playbook_chars_before": 7619,
+      "theory_changed": true,
+      "theory_chars_after": 43202,
+      "theory_chars_before": 37569
+     },
+     "paid_invocations": 2,
+     "repair_invocations": 1,
+     "returned_a_manual": true,
+     "seq": 138,
+     "snapshot_after": "rev06-after-theorize",
+     "snapshot_before": "rev05-before-theorize",
+     "step_idx": 10,
+     "triggers": {
+      "heuristic_miss": 1,
+      "probe_refutation": 2
+     },
+     "ts": "2026-07-31T23:44:11.473Z"
+    },
+    {
+     "actions_since_prev_adjudication": 0,
+     "adjudication_idx": 2,
+     "at_call": {
+      "divergent_steps": 8,
+      "evidence_frames": 10,
+      "first_divergent_step": 1,
+      "steps_in_window": 9,
+      "verdict": "moved_a_prediction",
+      "window": [
+       0,
+       9
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 0,
+     "cost_usd": 1.514071,
+     "downstream": {
+      "divergent_steps": 4,
+      "first_divergent_step": 9,
+      "tail_transitions": 4,
+      "verdict": "changed_a_later_prediction"
+     },
+     "elapsed_ms": 498020,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 0,
+     "labels": [
+      "round1"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 9308,
+      "playbook_chars_before": 9564,
+      "theory_changed": true,
+      "theory_chars_after": 47004,
+      "theory_chars_before": 43202
+     },
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 140,
+     "snapshot_after": "rev08-after-theorize",
+     "snapshot_before": "rev07-before-theorize",
+     "step_idx": 10,
+     "triggers": {
+      "replay_mismatch": 1
+     },
+     "ts": "2026-08-01T00:03:04.822Z"
+    }
+   ],
+   "carried": true,
+   "game": "g50t-5849a774",
+   "leg": "20260731T231654Z-R1-g50t-a",
+   "level_baseline_actions": [
+    78,
+    175,
+    179,
+    230,
+    96,
+    54,
+    67
+   ],
+   "level_baseline_source": "this leg's own env_meta",
+   "levels_completed": 0,
+   "observed_frames": 14,
+   "outcome": "spend_gate_tripped",
+   "paid_invocations": 4,
+   "repair_invocations": 1,
+   "snapshot_attribution": "front_aligned: 4 snapshot records, 3 adjudications",
+   "usd": 7.603419,
+   "usd_per_action": 0.584878
+  },
+  {
+   "action_ceiling": 300,
+   "actions_after_last_call": 0,
+   "actions_per_adjudication": 5.0,
+   "actions_per_paid_invocation": 1.667,
+   "adjudications": 1,
+   "billed_actions": 5,
+   "calls": [
+    {
+     "actions_since_prev_adjudication": 5,
+     "adjudication_idx": 0,
+     "at_call": {
+      "before_error": "theory.py has not been generated",
+      "evidence_frames": 6,
+      "verdict": "gained_a_predictor_where_there_was_none"
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 38,
+     "cost_usd": 7.608528,
+     "downstream": {
+      "tail_transitions": 0,
+      "verdict": "no_later_transition_to_predict"
+     },
+     "elapsed_ms": 2483526,
+     "frames_not_actions": 2,
+     "frames_since_prev_adjudication": 7,
+     "labels": [
+      "round1",
+      "round2",
+      "round3"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 4447,
+      "playbook_chars_before": 7100,
+      "theory_changed": true,
+      "theory_chars_after": 21035,
+      "theory_chars_before": 48472
+     },
+     "paid_invocations": 3,
+     "repair_invocations": 2,
+     "returned_a_manual": true,
+     "seq": 79,
+     "snapshot_after": "rev04-after-theorize",
+     "snapshot_before": "rev03-before-theorize",
+     "step_idx": 6,
+     "triggers": {
+      "replay_mismatch": 1
+     },
+     "ts": "2026-07-31T23:40:17.751Z"
+    }
+   ],
+   "carried": true,
+   "game": "sk48-d8078629",
+   "leg": "20260731T231654Z-R1-sk48-b",
+   "level_baseline_actions": [
+    61,
+    177,
+    101,
+    103,
+    230,
+    181,
+    125,
+    92
+   ],
+   "level_baseline_source": "this leg's own env_meta",
+   "levels_completed": 0,
+   "observed_frames": 6,
+   "outcome": "spend_gate_tripped",
+   "paid_invocations": 3,
+   "repair_invocations": 2,
+   "snapshot_attribution": "front_aligned: 2 snapshot records, 1 adjudications",
+   "usd": 7.608528,
+   "usd_per_action": 1.521706
+  },
+  {
+   "action_ceiling": 300,
+   "actions_after_last_call": 0,
+   "actions_per_adjudication": 3.125,
+   "actions_per_paid_invocation": 2.778,
+   "adjudications": 8,
+   "billed_actions": 25,
+   "calls": [
+    {
+     "actions_since_prev_adjudication": 5,
+     "adjudication_idx": 0,
+     "at_call": {
+      "before_error": "theory.py has not been generated",
+      "evidence_frames": 6,
+      "verdict": "gained_a_predictor_where_there_was_none"
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 35,
+     "cost_usd": 1.536699,
+     "downstream": {
+      "before_error": "theory.py has not been generated",
+      "tail_transitions": 20,
+      "verdict": "gained_a_predictor_where_there_was_none"
+     },
+     "elapsed_ms": 537624,
+     "frames_not_actions": 2,
+     "frames_since_prev_adjudication": 7,
+     "labels": [
+      "round1"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 6643,
+      "playbook_chars_before": 7100,
+      "theory_changed": true,
+      "theory_chars_after": 37172,
+      "theory_chars_before": 48472
+     },
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 73,
+     "snapshot_after": "rev04-after-theorize",
+     "snapshot_before": "rev03-before-theorize",
+     "step_idx": 6,
+     "triggers": {
+      "replay_mismatch": 1
+     },
+     "ts": "2026-08-01T00:30:00.555Z"
+    },
+    {
+     "actions_since_prev_adjudication": 4,
+     "adjudication_idx": 1,
+     "at_call": {
+      "divergent_steps": 4,
+      "evidence_frames": 10,
+      "first_divergent_step": 5,
+      "steps_in_window": 9,
+      "verdict": "moved_a_prediction",
+      "window": [
+       0,
+       9
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 20,
+     "cost_usd": 4.615694,
+     "downstream": {
+      "divergent_steps": 16,
+      "first_divergent_step": 9,
+      "tail_transitions": 16,
+      "verdict": "changed_a_later_prediction"
+     },
+     "elapsed_ms": 1539827,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 4,
+     "labels": [
+      "round1",
+      "round2"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 7375,
+      "playbook_chars_before": 6643,
+      "theory_changed": true,
+      "theory_chars_after": 36563,
+      "theory_chars_before": 37172
+     },
+     "paid_invocations": 2,
+     "repair_invocations": 1,
+     "returned_a_manual": true,
+     "seq": 114,
+     "snapshot_after": "rev06-after-theorize",
+     "snapshot_before": "rev05-before-theorize",
+     "step_idx": 10,
+     "triggers": {
+      "heuristic_miss": 1,
+      "probe_refutation": 2
+     },
+     "ts": "2026-08-01T00:44:45.064Z"
+    },
+    {
+     "actions_since_prev_adjudication": 4,
+     "adjudication_idx": 2,
+     "at_call": {
+      "divergent_steps": 4,
+      "evidence_frames": 14,
+      "first_divergent_step": 9,
+      "steps_in_window": 13,
+      "verdict": "moved_a_prediction",
+      "window": [
+       0,
+       13
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 29,
+     "cost_usd": 1.961036,
+     "downstream": {
+      "divergent_steps": 12,
+      "first_divergent_step": 13,
+      "tail_transitions": 12,
+      "verdict": "changed_a_later_prediction"
+     },
+     "elapsed_ms": 755423,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 4,
+     "labels": [
+      "round1"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 9182,
+      "playbook_chars_before": 7375,
+      "theory_changed": true,
+      "theory_chars_after": 40355,
+      "theory_chars_before": 36563
+     },
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 174,
+     "snapshot_after": "rev08-after-theorize",
+     "snapshot_before": "rev07-before-theorize",
+     "step_idx": 14,
+     "triggers": {
+      "heuristic_miss": 1,
+      "probe_refutation": 3
+     },
+     "ts": "2026-08-01T01:11:43.785Z"
+    },
+    {
+     "actions_since_prev_adjudication": 4,
+     "adjudication_idx": 3,
+     "at_call": {
+      "divergent_steps": 5,
+      "evidence_frames": 18,
+      "first_divergent_step": 12,
+      "steps_in_window": 17,
+      "verdict": "moved_a_prediction",
+      "window": [
+       0,
+       17
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 7,
+     "cost_usd": 1.961056,
+     "downstream": {
+      "divergent_steps": 8,
+      "first_divergent_step": 17,
+      "tail_transitions": 8,
+      "verdict": "changed_a_later_prediction"
+     },
+     "elapsed_ms": 722188,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 4,
+     "labels": [
+      "round1"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 10430,
+      "playbook_chars_before": 9182,
+      "theory_changed": true,
+      "theory_chars_after": 47273,
+      "theory_chars_before": 40355
+     },
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 189,
+     "snapshot_after": "rev10-after-theorize",
+     "snapshot_before": "rev09-before-theorize",
+     "step_idx": 18,
+     "triggers": {
+      "heuristic_miss": 1,
+      "probe_refutation": 3
+     },
+     "ts": "2026-08-01T01:24:26.429Z"
+    },
+    {
+     "actions_since_prev_adjudication": 0,
+     "adjudication_idx": 4,
+     "at_call": {
+      "divergent_steps": 0,
+      "evidence_frames": 18,
+      "first_divergent_step": null,
+      "steps_in_window": 17,
+      "verdict": "predicted_what_the_old_manual_predicted",
+      "window": [
+       0,
+       17
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 0,
+     "cost_usd": 1.615296,
+     "downstream": {
+      "divergent_steps": 0,
+      "first_divergent_step": null,
+      "tail_transitions": 8,
+      "verdict": "no_later_prediction_changed"
+     },
+     "elapsed_ms": 532640,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 0,
+     "labels": [
+      "round1"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 11166,
+      "playbook_chars_before": 10430,
+      "theory_changed": true,
+      "theory_chars_after": 45610,
+      "theory_chars_before": 47273
+     },
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 190,
+     "snapshot_after": "rev12-after-theorize",
+     "snapshot_before": "rev11-before-theorize",
+     "step_idx": 18,
+     "triggers": {
+      "replay_mismatch": 1
+     },
+     "ts": "2026-08-01T01:33:20.318Z"
+    },
+    {
+     "actions_since_prev_adjudication": 4,
+     "adjudication_idx": 5,
+     "at_call": {
+      "divergent_steps": 5,
+      "evidence_frames": 22,
+      "first_divergent_step": 16,
+      "steps_in_window": 21,
+      "verdict": "moved_a_prediction",
+      "window": [
+       0,
+       21
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 15,
+     "cost_usd": 1.719291,
+     "downstream": {
+      "divergent_steps": 4,
+      "first_divergent_step": 21,
+      "tail_transitions": 4,
+      "verdict": "changed_a_later_prediction"
+     },
+     "elapsed_ms": 573317,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 4,
+     "labels": [
+      "round1"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 11921,
+      "playbook_chars_before": 11166,
+      "theory_changed": true,
+      "theory_chars_after": 46645,
+      "theory_chars_before": 45610
+     },
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 221,
+     "snapshot_after": "rev14-after-theorize",
+     "snapshot_before": "rev13-before-theorize",
+     "step_idx": 22,
+     "triggers": {
+      "heuristic_miss": 1,
+      "probe_refutation": 3,
+      "replay_mismatch": 1
+     },
+     "ts": "2026-08-01T01:44:01.535Z"
+    },
+    {
+     "actions_since_prev_adjudication": 0,
+     "adjudication_idx": 6,
+     "at_call": {
+      "divergent_steps": 0,
+      "evidence_frames": 22,
+      "first_divergent_step": null,
+      "steps_in_window": 21,
+      "verdict": "predicted_what_the_old_manual_predicted",
+      "window": [
+       0,
+       21
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 0,
+     "cost_usd": 1.368904,
+     "downstream": {
+      "divergent_steps": 0,
+      "first_divergent_step": null,
+      "tail_transitions": 4,
+      "verdict": "no_later_prediction_changed"
+     },
+     "elapsed_ms": 384806,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 0,
+     "labels": [
+      "round1"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 12490,
+      "playbook_chars_before": 11921,
+      "theory_changed": true,
+      "theory_chars_after": 45400,
+      "theory_chars_before": 46645
+     },
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 222,
+     "snapshot_after": "rev16-after-theorize",
+     "snapshot_before": "rev15-before-theorize",
+     "step_idx": 22,
+     "triggers": {
+      "replay_mismatch": 1
+     },
+     "ts": "2026-08-01T01:50:27.797Z"
+    },
+    {
+     "actions_since_prev_adjudication": 4,
+     "adjudication_idx": 7,
+     "at_call": {
+      "verdict": "no_snapshot_pair_on_disk"
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 26,
+     "cost_usd": 2.971131,
+     "downstream": {
+      "verdict": "no_snapshot_pair_recorded"
+     },
+     "elapsed_ms": 854966,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 4,
+     "labels": [
+      "round1"
+     ],
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": false,
+     "seq": 275,
+     "step_idx": 26,
+     "triggers": {
+      "heuristic_miss": 1,
+      "probe_refutation": 3,
+      "replay_mismatch": 1
+     },
+     "ts": "2026-08-01T02:07:09.340Z"
+    }
+   ],
+   "carried": true,
+   "game": "g50t-5849a774",
+   "leg": "20260801T001851Z-R1b-g50t-a",
+   "level_baseline_actions": [
+    78,
+    175,
+    179,
+    230,
+    96,
+    54,
+    67
+   ],
+   "level_baseline_source": "this leg's own env_meta",
+   "levels_completed": 0,
+   "observed_frames": 26,
+   "outcome": "spend_gate_tripped",
+   "paid_invocations": 9,
+   "repair_invocations": 1,
+   "snapshot_attribution": "front_aligned: 8 snapshot records, 8 adjudications",
+   "usd": 17.749107,
+   "usd_per_action": 0.709964
+  },
+  {
+   "action_ceiling": 300,
+   "actions_after_last_call": 0,
+   "actions_per_adjudication": 1.667,
+   "actions_per_paid_invocation": 0.833,
+   "adjudications": 3,
+   "billed_actions": 5,
+   "calls": [
+    {
+     "actions_since_prev_adjudication": 5,
+     "adjudication_idx": 0,
+     "at_call": {
+      "before_error": "theory.py has not been generated",
+      "evidence_frames": 6,
+      "verdict": "gained_a_predictor_where_there_was_none"
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 46,
+     "cost_usd": 3.362011,
+     "downstream": {
+      "tail_transitions": 0,
+      "verdict": "no_later_transition_to_predict"
+     },
+     "elapsed_ms": 1287126,
+     "frames_not_actions": 2,
+     "frames_since_prev_adjudication": 7,
+     "labels": [
+      "round1"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 5489,
+      "playbook_chars_before": 7100,
+      "theory_changed": true,
+      "theory_chars_after": 25656,
+      "theory_chars_before": 48472
+     },
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 95,
+     "snapshot_after": "rev04-after-theorize",
+     "snapshot_before": "rev03-before-theorize",
+     "step_idx": 6,
+     "triggers": {
+      "replay_mismatch": 1
+     },
+     "ts": "2026-08-01T00:48:42.842Z"
+    },
+    {
+     "actions_since_prev_adjudication": 0,
+     "adjudication_idx": 1,
+     "at_call": {
+      "divergent_steps": 0,
+      "evidence_frames": 6,
+      "first_divergent_step": null,
+      "steps_in_window": 5,
+      "verdict": "predicted_what_the_old_manual_predicted",
+      "window": [
+       0,
+       5
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 0,
+     "cost_usd": 8.373724,
+     "downstream": {
+      "tail_transitions": 0,
+      "verdict": "no_later_transition_to_predict"
+     },
+     "elapsed_ms": 2499386,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 0,
+     "labels": [
+      "round1",
+      "round2",
+      "round3"
+     ],
+     "manual": {
+      "playbook_changed": false,
+      "playbook_chars_after": 5489,
+      "playbook_chars_before": 5489,
+      "theory_changed": false,
+      "theory_chars_after": 25656,
+      "theory_chars_before": 25656
+     },
+     "paid_invocations": 3,
+     "repair_invocations": 2,
+     "returned_a_manual": true,
+     "seq": 96,
+     "snapshot_after": "rev06-after-theorize",
+     "snapshot_before": "rev05-before-theorize",
+     "step_idx": 6,
+     "triggers": {
+      "replay_mismatch": 1
+     },
+     "ts": "2026-08-01T01:02:49.421Z"
+    },
+    {
+     "actions_since_prev_adjudication": 0,
+     "adjudication_idx": 2,
+     "at_call": {
+      "verdict": "no_snapshot_pair_on_disk"
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 160,
+     "cost_usd": 5.654987,
+     "downstream": {
+      "verdict": "no_snapshot_pair_recorded"
+     },
+     "elapsed_ms": 1748751,
+     "frames_not_actions": 4,
+     "frames_since_prev_adjudication": 4,
+     "labels": [
+      "round1",
+      "round2"
+     ],
+     "paid_invocations": 2,
+     "repair_invocations": 1,
+     "returned_a_manual": false,
+     "seq": 419,
+     "step_idx": 10,
+     "triggers": {
+      "heuristic_miss": 1,
+      "probe_refutation": 1,
+      "replay_mismatch": 1
+     },
+     "ts": "2026-08-01T01:59:16.677Z"
+    }
+   ],
+   "carried": true,
+   "game": "sk48-d8078629",
+   "leg": "20260801T001851Z-R1b-sk48-b",
+   "level_baseline_actions": [
+    61,
+    177,
+    101,
+    103,
+    230,
+    181,
+    125,
+    92
+   ],
+   "level_baseline_source": "borrowed from another leg of sk48-d8078629 -- this leg recorded no env_meta",
+   "levels_completed": null,
+   "observed_frames": 6,
+   "outcome": "spend_gate_tripped",
+   "paid_invocations": 6,
+   "repair_invocations": 3,
+   "snapshot_attribution": "front_aligned: 3 snapshot records, 3 adjudications",
+   "usd": 17.390722,
+   "usd_per_action": 3.478144
+  },
+  {
+   "action_ceiling": 300,
+   "actions_after_last_call": 0,
+   "actions_per_adjudication": 4.143,
+   "actions_per_paid_invocation": 3.222,
+   "adjudications": 7,
+   "billed_actions": 29,
+   "calls": [
+    {
+     "actions_since_prev_adjudication": 5,
+     "adjudication_idx": 0,
+     "at_call": {
+      "before_error": "theory.py has not been generated",
+      "evidence_frames": 6,
+      "verdict": "gained_a_predictor_where_there_was_none"
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 77,
+     "cost_usd": 1.573059,
+     "downstream": {
+      "before_error": "theory.py has not been generated",
+      "tail_transitions": 24,
+      "verdict": "gained_a_predictor_where_there_was_none"
+     },
+     "elapsed_ms": 530104,
+     "frames_not_actions": 2,
+     "frames_since_prev_adjudication": 7,
+     "labels": [
+      "round1"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 6986,
+      "playbook_chars_before": 7100,
+      "theory_changed": true,
+      "theory_chars_after": 38044,
+      "theory_chars_before": 48472
+     },
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 157,
+     "snapshot_after": "rev04-after-theorize",
+     "snapshot_before": "rev03-before-theorize",
+     "step_idx": 6,
+     "triggers": {
+      "replay_mismatch": 1
+     },
+     "ts": "2026-08-01T05:01:44.002Z"
+    },
+    {
+     "actions_since_prev_adjudication": 4,
+     "adjudication_idx": 1,
+     "at_call": {
+      "divergent_steps": 4,
+      "evidence_frames": 10,
+      "first_divergent_step": 5,
+      "steps_in_window": 9,
+      "verdict": "moved_a_prediction",
+      "window": [
+       0,
+       9
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 38,
+     "cost_usd": 1.689508,
+     "downstream": {
+      "divergent_steps": 20,
+      "first_divergent_step": 9,
+      "tail_transitions": 20,
+      "verdict": "changed_a_later_prediction"
+     },
+     "elapsed_ms": 602394,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 4,
+     "labels": [
+      "round1"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 11820,
+      "playbook_chars_before": 6986,
+      "theory_changed": true,
+      "theory_chars_after": 45055,
+      "theory_chars_before": 38044
+     },
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 234,
+     "snapshot_after": "rev06-after-theorize",
+     "snapshot_before": "rev05-before-theorize",
+     "step_idx": 10,
+     "triggers": {
+      "heuristic_miss": 1,
+      "probe_refutation": 4
+     },
+     "ts": "2026-08-01T05:15:09.470Z"
+    },
+    {
+     "actions_since_prev_adjudication": 4,
+     "adjudication_idx": 2,
+     "at_call": {
+      "divergent_steps": 4,
+      "evidence_frames": 14,
+      "first_divergent_step": 9,
+      "steps_in_window": 13,
+      "verdict": "moved_a_prediction",
+      "window": [
+       0,
+       13
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 52,
+     "cost_usd": 3.304402,
+     "downstream": {
+      "divergent_steps": 16,
+      "first_divergent_step": 13,
+      "tail_transitions": 16,
+      "verdict": "changed_a_later_prediction"
+     },
+     "elapsed_ms": 1068497,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 4,
+     "labels": [
+      "round1",
+      "round2"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 13963,
+      "playbook_chars_before": 11820,
+      "theory_changed": true,
+      "theory_chars_after": 53662,
+      "theory_chars_before": 45055
+     },
+     "paid_invocations": 2,
+     "repair_invocations": 1,
+     "returned_a_manual": true,
+     "seq": 339,
+     "snapshot_after": "rev08-after-theorize",
+     "snapshot_before": "rev07-before-theorize",
+     "step_idx": 14,
+     "triggers": {
+      "heuristic_miss": 1,
+      "probe_refutation": 4
+     },
+     "ts": "2026-08-01T05:31:00.445Z"
+    },
+    {
+     "actions_since_prev_adjudication": 4,
+     "adjudication_idx": 3,
+     "at_call": {
+      "divergent_steps": 4,
+      "evidence_frames": 18,
+      "first_divergent_step": 13,
+      "steps_in_window": 17,
+      "verdict": "moved_a_prediction",
+      "window": [
+       0,
+       17
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 14,
+     "cost_usd": 4.876913,
+     "downstream": {
+      "divergent_steps": 12,
+      "first_divergent_step": 17,
+      "tail_transitions": 12,
+      "verdict": "changed_a_later_prediction"
+     },
+     "elapsed_ms": 1507980,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 4,
+     "labels": [
+      "round1",
+      "round2"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 15844,
+      "playbook_chars_before": 13963,
+      "theory_changed": true,
+      "theory_chars_after": 59866,
+      "theory_chars_before": 53662
+     },
+     "paid_invocations": 2,
+     "repair_invocations": 1,
+     "returned_a_manual": true,
+     "seq": 369,
+     "snapshot_after": "rev10-after-theorize",
+     "snapshot_before": "rev09-before-theorize",
+     "step_idx": 18,
+     "triggers": {
+      "heuristic_miss": 1,
+      "probe_refutation": 4
+     },
+     "ts": "2026-08-01T05:52:00.289Z"
+    },
+    {
+     "actions_since_prev_adjudication": 4,
+     "adjudication_idx": 4,
+     "at_call": {
+      "divergent_steps": 4,
+      "evidence_frames": 22,
+      "first_divergent_step": 17,
+      "steps_in_window": 21,
+      "verdict": "moved_a_prediction",
+      "window": [
+       0,
+       21
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 51,
+     "cost_usd": 2.089105,
+     "downstream": {
+      "divergent_steps": 8,
+      "first_divergent_step": 21,
+      "tail_transitions": 8,
+      "verdict": "changed_a_later_prediction"
+     },
+     "elapsed_ms": 689519,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 4,
+     "labels": [
+      "round1"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 15997,
+      "playbook_chars_before": 15844,
+      "theory_changed": true,
+      "theory_chars_after": 68129,
+      "theory_chars_before": 59866
+     },
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 473,
+     "snapshot_after": "rev12-after-theorize",
+     "snapshot_before": "rev11-before-theorize",
+     "step_idx": 22,
+     "triggers": {
+      "heuristic_miss": 1,
+      "probe_refutation": 4
+     },
+     "ts": "2026-08-01T06:22:41.296Z"
+    },
+    {
+     "actions_since_prev_adjudication": 4,
+     "adjudication_idx": 5,
+     "at_call": {
+      "divergent_steps": 4,
+      "evidence_frames": 26,
+      "first_divergent_step": 21,
+      "steps_in_window": 25,
+      "verdict": "moved_a_prediction",
+      "window": [
+       0,
+       25
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 39,
+     "cost_usd": 2.020405,
+     "downstream": {
+      "divergent_steps": 4,
+      "first_divergent_step": 25,
+      "tail_transitions": 4,
+      "verdict": "changed_a_later_prediction"
+     },
+     "elapsed_ms": 624999,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 4,
+     "labels": [
+      "round1"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 17397,
+      "playbook_chars_before": 15997,
+      "theory_changed": true,
+      "theory_chars_after": 72299,
+      "theory_chars_before": 68129
+     },
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 552,
+     "snapshot_after": "rev14-after-theorize",
+     "snapshot_before": "rev13-before-theorize",
+     "step_idx": 26,
+     "triggers": {
+      "heuristic_miss": 1,
+      "probe_refutation": 4
+     },
+     "ts": "2026-08-01T06:36:29.170Z"
+    },
+    {
+     "actions_since_prev_adjudication": 4,
+     "adjudication_idx": 6,
+     "at_call": {
+      "verdict": "no_snapshot_pair_on_disk"
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 19,
+     "cost_usd": 3.182616,
+     "downstream": {
+      "verdict": "no_snapshot_pair_recorded"
+     },
+     "elapsed_ms": 898079,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 4,
+     "labels": [
+      "round1"
+     ],
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": false,
+     "seq": 591,
+     "step_idx": 30,
+     "triggers": {
+      "heuristic_miss": 1,
+      "probe_refutation": 4
+     },
+     "ts": "2026-08-01T06:52:49.623Z"
+    }
+   ],
+   "carried": true,
+   "game": "g50t-5849a774",
+   "leg": "20260801T044640Z-R2b-g50t-a",
+   "level_baseline_actions": [
+    78,
+    175,
+    179,
+    230,
+    96,
+    54,
+    67
+   ],
+   "level_baseline_source": "this leg's own env_meta",
+   "levels_completed": 0,
+   "observed_frames": 30,
+   "outcome": "spend_gate_tripped",
+   "paid_invocations": 9,
+   "repair_invocations": 2,
+   "snapshot_attribution": "front_aligned: 7 snapshot records, 7 adjudications",
+   "usd": 18.736008,
+   "usd_per_action": 0.646069
+  },
+  {
+   "action_ceiling": 300,
+   "actions_after_last_call": 0,
+   "actions_per_adjudication": 2.25,
+   "actions_per_paid_invocation": 1.5,
+   "adjudications": 4,
+   "billed_actions": 9,
+   "calls": [
+    {
+     "actions_since_prev_adjudication": 5,
+     "adjudication_idx": 0,
+     "at_call": {
+      "before_error": "theory.py has not been generated",
+      "evidence_frames": 6,
+      "verdict": "gained_a_predictor_where_there_was_none"
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 19,
+     "cost_usd": 3.539843,
+     "downstream": {
+      "before_error": "theory.py has not been generated",
+      "tail_transitions": 4,
+      "verdict": "gained_a_predictor_where_there_was_none"
+     },
+     "elapsed_ms": 1371088,
+     "frames_not_actions": 2,
+     "frames_since_prev_adjudication": 7,
+     "labels": [
+      "round1"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 5345,
+      "playbook_chars_before": 7100,
+      "theory_changed": true,
+      "theory_chars_after": 27479,
+      "theory_chars_before": 48472
+     },
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 41,
+     "snapshot_after": "rev04-after-theorize",
+     "snapshot_before": "rev03-before-theorize",
+     "step_idx": 6,
+     "triggers": {
+      "replay_mismatch": 1
+     },
+     "ts": "2026-08-01T05:16:05.086Z"
+    },
+    {
+     "actions_since_prev_adjudication": 0,
+     "adjudication_idx": 1,
+     "at_call": {
+      "divergent_steps": 1,
+      "evidence_frames": 6,
+      "first_divergent_step": 0,
+      "steps_in_window": 5,
+      "verdict": "moved_a_prediction",
+      "window": [
+       0,
+       5
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 0,
+     "cost_usd": 1.836808,
+     "downstream": {
+      "divergent_steps": 2,
+      "first_divergent_step": 5,
+      "tail_transitions": 4,
+      "verdict": "changed_a_later_prediction"
+     },
+     "elapsed_ms": 687514,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 0,
+     "labels": [
+      "round1"
+     ],
+     "manual": {
+      "playbook_changed": true,
+      "playbook_chars_after": 5844,
+      "playbook_chars_before": 5345,
+      "theory_changed": true,
+      "theory_chars_after": 32522,
+      "theory_chars_before": 27479
+     },
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": true,
+     "seq": 42,
+     "snapshot_after": "rev06-after-theorize",
+     "snapshot_before": "rev05-before-theorize",
+     "step_idx": 6,
+     "triggers": {
+      "replay_mismatch": 1
+     },
+     "ts": "2026-08-01T05:27:33.293Z"
+    },
+    {
+     "actions_since_prev_adjudication": 4,
+     "adjudication_idx": 2,
+     "at_call": {
+      "divergent_steps": 0,
+      "evidence_frames": 10,
+      "first_divergent_step": null,
+      "steps_in_window": 9,
+      "verdict": "predicted_what_the_old_manual_predicted",
+      "window": [
+       0,
+       9
+      ]
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 33,
+     "cost_usd": 10.301291,
+     "downstream": {
+      "tail_transitions": 0,
+      "verdict": "no_later_transition_to_predict"
+     },
+     "elapsed_ms": 3188176,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 4,
+     "labels": [
+      "round1",
+      "round2",
+      "round3"
+     ],
+     "manual": {
+      "playbook_changed": false,
+      "playbook_chars_after": 5844,
+      "playbook_chars_before": 5844,
+      "theory_changed": false,
+      "theory_chars_after": 32522,
+      "theory_chars_before": 32522
+     },
+     "paid_invocations": 3,
+     "repair_invocations": 2,
+     "returned_a_manual": true,
+     "seq": 109,
+     "snapshot_after": "rev08-after-theorize",
+     "snapshot_before": "rev07-before-theorize",
+     "step_idx": 10,
+     "triggers": {
+      "heuristic_miss": 1,
+      "probe_refutation": 2,
+      "replay_mismatch": 1
+     },
+     "ts": "2026-08-01T05:49:16.582Z"
+    },
+    {
+     "actions_since_prev_adjudication": 0,
+     "adjudication_idx": 3,
+     "at_call": {
+      "verdict": "no_snapshot_pair_on_disk"
+     },
+     "beat": "theorize",
+     "commands_since_prev_adjudication": 0,
+     "cost_usd": 4.625281,
+     "downstream": {
+      "verdict": "no_snapshot_pair_recorded"
+     },
+     "elapsed_ms": 1517135,
+     "frames_not_actions": 0,
+     "frames_since_prev_adjudication": 0,
+     "labels": [
+      "round1"
+     ],
+     "paid_invocations": 1,
+     "repair_invocations": 0,
+     "returned_a_manual": false,
+     "seq": 112,
+     "step_idx": 10,
+     "triggers": {
+      "replay_mismatch": 1
+     },
+     "ts": "2026-08-01T06:54:03.859Z"
+    }
+   ],
+   "carried": true,
+   "game": "sk48-d8078629",
+   "leg": "20260801T044640Z-R2b-sk48-b",
+   "level_baseline_actions": [
+    61,
+    177,
+    101,
+    103,
+    230,
+    181,
+    125,
+    92
+   ],
+   "level_baseline_source": "borrowed from another leg of sk48-d8078629 -- this leg recorded no env_meta",
+   "levels_completed": 0,
+   "observed_frames": 10,
+   "outcome": "spend_gate_tripped",
+   "paid_invocations": 6,
+   "repair_invocations": 2,
+   "snapshot_attribution": "front_aligned: 4 snapshot records, 4 adjudications",
+   "usd": 20.303223,
+   "usd_per_action": 2.255914
+  }
+ ],
+ "legs_with_desk_calls": 15,
+ "legs_without_desk_calls": 22,
+ "legs_without_desk_calls_names": [
+  "20260728T012311Z-g50t-first-contact-salvage",
+  "20260728T012311Z-g50t-first-contact-salvage2",
+  "20260728T014402Z-g50t-first-contact-salvage",
+  "20260728T015354Z-g50t-first-contact-salvage",
+  "20260728T072604Z-E3-sk48-carried",
+  "20260728T072604Z-E3-sk48-carried-salvage",
+  "20260728T235841Z-leg01",
+  "20260728T235842Z-leg02",
+  "20260728T235843Z-leg01",
+  "20260729T0030Z-a3-desk-live-proof",
+  "20260729T004020Z-leg01",
+  "20260729T004020Z-leg01-salvage",
+  "20260729T105653Z-leg01",
+  "20260729T105729Z-leg01",
+  "20260731T1240Z-A3-level2-carried",
+  "20260801T043743Z-R2-g50t-a",
+  "20260801T043743Z-R2-sk48-b",
+  "a3-gate-mock",
+  "audit-smoke",
+  "preflight-20260728T012031Z",
+  "preflight-20260728T012057Z",
+  "preflight-20260728T074237Z"
+ ],
+ "runs_root": "runs",
+ "skipped": [],
+ "tool": "armtools.action_economy",
+ "totals": {
+  "actions_per_adjudication": 3.096,
+  "actions_per_paid_invocation": 2.173,
+  "adjudications": 73,
+  "billed_actions": 226,
+  "paid_invocations": 104,
+  "repair_invocations": 31,
+  "usd": 148.88801,
+  "usd_per_action": 0.658797,
+  "usd_per_adjudication": 2.039562
+ },
+ "triggers": {
+  "heuristic_miss": 14,
+  "probe_refutation": 113,
+  "render_mismatch": 5,
+  "replay_mismatch": 50
+ }
+}

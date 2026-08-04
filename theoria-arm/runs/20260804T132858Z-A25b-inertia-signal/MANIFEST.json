@@ -1,0 +1,145 @@
+{
+ "base_commit": "4846e66dee64940b3bb457b408db13775728915c",
+ "branch": "q/a25b",
+ "cell": "A25",
+ "changed": [
+  "theoria-arm/inner/inertia.py (new)",
+  "theoria-arm/inner/economy.py",
+  "theoria-arm/inner/loop.py",
+  "theoria-arm/armtools/action_economy.py",
+  "theoria-arm/tests/test_action_economy_inertia.py (new)",
+  "theoria-arm/runs/20260804T132858Z-A25b-inertia-signal/ (new)"
+ ],
+ "defect_found_not_fixed": [
+  "An unbounded `defer_after_inert` is a trap: nothing clears the guard except a call that fires, so a guard that refuses every call is never cleared. FOUND by the replay parking the desk for ten consecutive adjudications on 20260728T083400Z-E3-sk48-carried-v2. FIXED here by bounding the clause at adapt_max new frames, with a test.",
+  "The replay attributed every first-round refusal to the floor, including ten the kind guard had refused. FOUND while reading the per-leg refusal histogram. FIXED: GateDecision now carries the clause that refused and the histogram reports it.",
+  "A25's replay judged every leg against g50t level 1's 78 actions; a third of the archive is sk48, whose level 1 is 61. FIXED: each leg is judged against its own env_meta, and the six legs that recorded none borrow their own game's number with the borrowing declared.",
+  "`_frames_this_level` still counts failed commands as evidence and the line written into turns.json still calls them transitions. NOT FIXED, unchanged from A25: the switchable form is `actions-unit` and it is off."
+ ],
+ "files": [
+  {
+   "path": "RUN_STATE.md",
+   "sha256": "1cb0e8bd5219dfba399ae03f179bdca76de4ec977c8e66c15e7822ca7c7e68b8",
+   "what": "the narrative: what was measured, what was built, what is still unknown"
+  },
+  {
+   "path": "census.json",
+   "sha256": "70297d883ed824e3ed04f8ae13ee2888cd45e2023703d7315d027ddd4c891212",
+   "what": "the same, machine-readable: every adjudication with its gap, its trigger kinds, its cost, the after-the-fact verdict A25 published, and the at_call verdict a running arm could have computed the instant the call returned"
+  },
+  {
+   "path": "census.txt",
+   "sha256": "d53b957c3d13e5ca6862cdc94566da6a717d01fde9ab775cff7f09748be2bfde",
+   "what": "the cadence census over every leg that ever reached a desk, now carrying the at-call inertia signal beside A25's after-the-fact verdict; human-readable"
+  },
+  {
+   "path": "constants.txt",
+   "sha256": "ba086fd3ca4a92d261e54b5fa9af2dd8433fc0befd399372440e8b8c2c12f041",
+   "what": "every constant in the loop that gates how often the arm stops to think, with the effective ratio each imposes"
+  },
+  {
+   "path": "replay.json",
+   "sha256": "8d07aeafa96483431bd19a27e588544746917e53eedcf83ccd0651d752107274",
+   "what": "the same, machine-readable, including which legs ran differently under each policy and which policies discriminate inert calls from productive ones"
+  },
+  {
+   "path": "replay.txt",
+   "sha256": "ee079568295d6f1ab09b360dcae0e120bac89ef1ef170a375d8826e9d19b32bc",
+   "what": "the offline counterfactual: thirteen policies re-decided over the recorded stream, per policy and per leg, with actions bought per dollar under two readings and each leg's own level-1 boundary; human-readable"
+  }
+ ],
+ "implemented": {
+  "armtools/action_economy.py": "one pair of replays now yields both windows; the census cross-tabulates them; each leg is judged against its own level-1 baseline; the replay reports per-leg acts/$ under two readings, which legs ran differently, and how many continuation rounds a kind clause would have refused if the gate had been asked.",
+  "inner/economy.py": "four levers, all historic by default: `inertia` (compute the signal), `adapt=by_prediction_delta`, `defer_after_inert` (bounded by adapt_max), `min_surprises` (clause skipped at 1), and `gate_every_round` with `gate_continuation`. GateDecision now names the clause that refused. Five new policies.",
+  "inner/inertia.py": "compile a book snapshot in a scratch copy, draw one hash per step, and judge two revisions over a named window. `verdict_at_call` is the runtime entry; `bought_nothing` is three-valued.",
+  "inner/loop.py": "`_inertia_at_call` computes the verdict after an adjudication and only when a policy asked; the continuation gate is consulted inside the while loop and only under `gate_every_round`.",
+  "tests/test_action_economy_inertia.py": "37 tests, including two archived snapshot pairs as fixtures for the detector."
+ },
+ "lane": "framework-change",
+ "leg": "offline only -- no ARC action, no live model call, no credential read, no sealed-pile contact, no spend. The A26b legs in flight were skipped by name (SKIP_MARKERS) and the skip is recorded in census.json's `skipped` field.",
+ "measurement_first": {
+  "actions_per_dollar_whole_leg": {
+   "defer-explained-every-round": 1.6799,
+   "floor-12": 7.2744,
+   "floor-8": 2.8596,
+   "inert-guard": 1.8035,
+   "inert-guard-one-round": 2.2048,
+   "measure-inertia": 1.5459,
+   "min-info-2": 2.1471,
+   "one-round": 2.0424,
+   "one-round-floor-8": 3.5823,
+   "today": 1.5459
+  },
+  "at_call_vs_after_the_fact": {
+   "agreed": 54,
+   "base_rate": 0.4259,
+   "comparable_calls": 54,
+   "precision": 1.0,
+   "recall": 1.0,
+   "what_it_cannot_see": "a rewrite whose only effect is under an action the arm has never taken. Empty on this archive; recorded as absent, not as zero.",
+   "why_not_luck": "31 of 31 moved-and-changed calls have a tail that diverges at its very first step: `step` is a fold, so a divergence inside the call's own window is still there at every later step."
+  },
+  "discrimination_inert_per_productive_beyond_the_control": {
+   "defer-explained-every-round": 5.0,
+   "floor-12": 0.75,
+   "floor-8": 1.0,
+   "inert-guard": 3.0,
+   "inert-guard-one-round": 1.89,
+   "min-info-2": 1.0,
+   "one-round": 2.33,
+   "one-round-floor-8": 1.19,
+   "reading": "the floors do not discriminate; they spend less. Only the signal-driven levers refuse mostly-inert calls."
+  },
+  "money_on_calls_that_bought_nothing": {
+   "a25_after_the_fact_usd": 20.15,
+   "a25b_at_the_call_usd": 38.82,
+   "difference": "two end-of-leg calls the audit cannot score at all ($8.37 on 20260801T001851Z-R1b-sk48-b, $10.30 on 20260801T044640Z-R2b-sk48-b)"
+  },
+  "the_lever_that_refuses_nothing": {
+   "all_of_them": "second rounds of a turn, which the historic gate is never asked about",
+   "candidate_calls_in_the_archive": 8,
+   "defer-explained_refusals": 0
+  }
+ },
+ "negative_controls": [
+  "measure-inertia replays to today's numbers in every behavioural field, per leg and pooled -- computing the signal changes no decision, which is what makes every other row readable.",
+  "the published A25 census reproduces byte for byte from this checkout (sha256 85b4c0d0...c934a03) BEFORE the refactor, and after it a recursive comparison reports 0 changed values and 3 added keys.",
+  "a book revision compared against itself is inert.",
+  "a missing snapshot, an uncompilable revision and an empty window are unknowns; the floor moves on none of them and a measurement that raises is an unknown too.",
+  "min_surprises at its historic 1 refuses nothing at any pending count.",
+  "the defer guard passes a novel kind, an unattributed call, and a call after a productive one -- it refuses a repeat, not the next question.",
+  "a default arm never imports inner/inertia.py.",
+  "from_env reads 'false' as False rather than through bool()."
+ ],
+ "not_changed": [
+  "harness/run.py -- the flag's `choices` is built from POLICIES, so five new policies are selectable without editing it. A25's plumbing held.",
+  "inner/theorize.py -- REPAIR_ROUNDS is measured and still not a cadence lever.",
+  "the default decision path -- ActionEconomyConfig() decides what it decided before A25b and writes the same strings."
+ ],
+ "prompt_id": "A25b",
+ "reproduce": [
+  "cd theoria-arm",
+  "python -m armtools.action_economy census --json --out census.json",
+  "python -m armtools.action_economy replay --census census.json",
+  "python -m armtools.action_economy constants",
+  "python -m pytest tests/test_action_economy.py tests/test_action_economy_inertia.py -q"
+ ],
+ "residual_gaps": [
+  "the at-call signal has never run live -- everything here is the signal computed offline over recorded snapshots. `measure-inertia` is the round that buys the live measurement without the intervention.",
+  "the counterfactual is a replay, not a simulation: only which recorded calls a policy refuses, and what they cost, are facts.",
+  "productive_calls_refused overstates the loss by an unknown amount (Register.handled closes all pending surprises in one call).",
+  "10 adjudications have no snapshot pair on disk and cannot be scored by either window.",
+  "no policy reaches 78 actions in aggregate on either reading without refusing more productive calls than inert ones.",
+  "REPAIR_ROUNDS -- $32.53, 22% of desk spend, zero new evidence -- is still measured and still not switchable.",
+  "the level-boundary re-arming path still has no measurement: no leg in this repo has completed a level."
+ ],
+ "sealed_pile_contact": "none -- the census reads only theoria-arm/runs, whose legs are g50t-5849a774, sk48-d8078629 and ar25-0c556536, all development pile",
+ "spend": {
+  "arc_actions": 0,
+  "model_calls": 0,
+  "usd": 0.0
+ },
+ "territory": "theoria-arm",
+ "utc": "2026-08-04T13:28:58Z",
+ "what": "A25's after-the-fact audit of inert desk calls made available AT the call, wired to four switchable levers whose default is today's behaviour, and replayed over every archived leg with actions-bought-per-dollar reported per leg and pooled."
+}

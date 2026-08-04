@@ -39,13 +39,13 @@ verdict says so; a manual with no predictor is not scored as agreeing with one.
 import argparse
 import json
 import os
-import shutil
 import statistics
 import sys
-import tempfile
 from typing import Any, Dict, List, Optional, Tuple
 
 import _bootstrap                                     # noqa: F401  (sys.path)
+
+from inner import inertia
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 ARM_ROOT = os.path.dirname(_HERE)
@@ -155,107 +155,77 @@ class _LedgerStore:
 # the books, recompiled from a snapshot
 # ---------------------------------------------------------------------------
 
-def _compile_snapshot(snap_dir: str) -> Tuple[Optional[Dict[str, Any]], Optional[str]]:
-    """Compile one `rev<N>-<tag>` snapshot in a scratch copy and load it.
+#: The at-call verdict's name for each after-the-fact one. The compile-level
+#: verdicts are facts about the two revisions rather than about a window, so
+#: `inner/inertia.py` and this module have always agreed on their spelling; the
+#: two that differ are the two that name a window.
+_DOWNSTREAM_OF_INERTIA = {
+    inertia.MOVED: DOWNSTREAM_CHANGED,
+    inertia.INERT: DOWNSTREAM_INERT,
+    inertia.GAINED: DOWNSTREAM_GAINED,
+    inertia.LOST: DOWNSTREAM_LOST,
+    inertia.BLIND: DOWNSTREAM_BLIND,
+    inertia.UNPAIRED: DOWNSTREAM_UNPAIRED,
+    inertia.NO_EVIDENCE: DOWNSTREAM_NO_TAIL,
+}
 
-    The copy matters: `Books.compile_all` writes `generated/` beside the DSL,
-    and a census must not add a byte to a recorded run directory. The scratch
-    tree is removed whether or not the compile succeeded.
+
+def _revision_verdicts(before_dir: Optional[str], after_dir: Optional[str],
+                       store: _LedgerStore, first_tail_step: int,
+                       evidence_frames: int,
+                       deep: bool) -> Tuple[Dict[str, Any], Dict[str, Any]]:
+    """Both halves of the question, off one pair of replays.
+
+    **After the fact** -- did this call change what the arm predicts about the
+    world it went on to see? The tail is the transitions recorded *after* the
+    call. A call answered at the very end of a leg has no tail, and that is
+    reported as `no_later_transition_to_predict` rather than as agreement: an
+    unanswerable question is not a negative answer. This is A25's verdict and
+    its wording is unchanged, because the archive's published numbers are
+    stated in it.
+
+    **At the call** -- did the new manual predict what the old one predicted
+    about the frames the arm *already had*? Same two compiled revisions, same
+    drawn series, the complementary window `[0, first_tail_step)`. This is the
+    half a running arm can compute for itself, and it is added here so the two
+    can be cross-tabulated over the archive instead of one being assumed to
+    stand for the other.
+
+    The compile is shared. Judging both windows costs one extra list
+    comparison, not one extra replay.
     """
-    from inner.books import Books                      # noqa: PLC0415
-
-    tmp = tempfile.mkdtemp(prefix="a25-census-")
-    try:
-        for name in ("theory.dsl", "playbook.dsl", "problem.json"):
-            src = os.path.join(snap_dir, name)
-            if os.path.exists(src):
-                shutil.copy2(src, os.path.join(tmp, name))
-        books = Books(tmp)
-        try:
-            books.compile_all()
-        except Exception as exc:                       # noqa: BLE001
-            return None, "compile raised: %s: %s" % (type(exc).__name__, exc)
-        namespace, error = books.load_predictor()
-        return namespace, error
-    finally:
-        shutil.rmtree(tmp, ignore_errors=True)
-
-
-def _drawn_series(namespace: Dict[str, Any], store: _LedgerStore,
-                  limit: int) -> List[Optional[str]]:
-    """What this predictor says the world looks like at each step.
-
-    One hash per step so two revisions can be compared without holding two
-    64x64 grid series in memory at once. A step the predictor could not reach
-    -- `step` raised, `render` raised -- is `None` and compares unequal to a
-    frame, which is correct: a predictor that crashes has not agreed with one
-    that draws.
-    """
-    from inner.commit import action_to_manual          # noqa: PLC0415
-    from world.frames import grid_hash                 # noqa: PLC0415
-
-    out: List[Optional[str]] = []
-    try:
-        state = namespace["initial_state"]()
-    except Exception:                                  # noqa: BLE001
-        return [None] * limit
-    for t in range(limit):
-        arc_action = store.actions[t] if t < len(store.actions) else None
-        if arc_action is None:
-            out.append(None)
-            continue
-        try:
-            state = namespace["step"](state, action_to_manual(arc_action))
-            out.append(grid_hash(namespace["render"](state)))
-        except Exception:                              # noqa: BLE001
-            out.extend([None] * (limit - t))
-            break
-    return out
-
-
-def _downstream_verdict(before_dir: Optional[str], after_dir: Optional[str],
-                        store: _LedgerStore, first_tail_step: int,
-                        deep: bool) -> Dict[str, Any]:
-    """Did this call change what the arm predicts about the world it went on
-    to see?
-
-    The tail is the transitions recorded *after* the call. A call answered at
-    the very end of a leg has no tail, and that is reported as
-    `no_later_transition_to_predict` rather than as agreement -- an unanswerable
-    question is not a negative answer.
-    """
-    if not before_dir or not after_dir:
-        return {"verdict": DOWNSTREAM_UNPAIRED}
     n = len(store.grids)
-    if first_tail_step >= max(n - 1, 0):
-        return {"verdict": DOWNSTREAM_NO_TAIL, "tail_transitions": 0}
+    limit = max(n - 1, 0)
+    tail = limit - first_tail_step
+    no_tail = first_tail_step >= limit
+
+    if not before_dir or not after_dir:
+        return ({"verdict": DOWNSTREAM_UNPAIRED},
+                {"verdict": inertia.UNPAIRED})
     if not deep:
-        return {"verdict": None, "tail_transitions": (n - 1) - first_tail_step}
+        down = ({"verdict": DOWNSTREAM_NO_TAIL, "tail_transitions": 0}
+                if no_tail else {"verdict": None, "tail_transitions": tail})
+        return down, {"verdict": None}
 
-    before_ns, before_err = _compile_snapshot(before_dir)
-    after_ns, after_err = _compile_snapshot(after_dir)
-    tail = (n - 1) - first_tail_step
-    if before_ns is None and after_ns is None:
-        return {"verdict": DOWNSTREAM_BLIND, "tail_transitions": tail,
-                "before_error": before_err, "after_error": after_err}
-    if before_ns is None:
-        return {"verdict": DOWNSTREAM_GAINED, "tail_transitions": tail,
-                "before_error": before_err}
-    if after_ns is None:
-        return {"verdict": DOWNSTREAM_LOST, "tail_transitions": tail,
-                "after_error": after_err}
+    judged = inertia.compare_revisions(
+        before_dir, after_dir, store.actions,
+        {"at_call": (0, first_tail_step), "tail": (first_tail_step, limit)},
+        limit)
+    at_call = judged["at_call"]
+    at_call["evidence_frames"] = evidence_frames
+    if no_tail:
+        return {"verdict": DOWNSTREAM_NO_TAIL, "tail_transitions": 0}, at_call
 
-    limit = n - 1
-    before_series = _drawn_series(before_ns, store, limit)
-    after_series = _drawn_series(after_ns, store, limit)
-    diverged = [t for t in range(first_tail_step, limit)
-                if before_series[t] != after_series[t]]
-    return {
-        "verdict": DOWNSTREAM_CHANGED if diverged else DOWNSTREAM_INERT,
-        "tail_transitions": tail,
-        "first_divergent_step": diverged[0] if diverged else None,
-        "divergent_steps": len(diverged),
-    }
+    t = judged["tail"]
+    verdict = _DOWNSTREAM_OF_INERTIA[t["verdict"]]
+    down: Dict[str, Any] = {"verdict": verdict, "tail_transitions": tail}
+    for key in ("before_error", "after_error"):
+        if key in t:
+            down[key] = t[key]
+    if verdict in (DOWNSTREAM_CHANGED, DOWNSTREAM_INERT):
+        down["first_divergent_step"] = t["first_divergent_step"]
+        down["divergent_steps"] = t["divergent_steps"]
+    return down, at_call
 
 
 # ---------------------------------------------------------------------------
@@ -478,8 +448,12 @@ def leg_census(run_dir: str, *, deep: bool = True) -> Optional[Dict[str, Any]]:
             record["manual"] = _dsl_delta(pair[0], pair[1])
             record["snapshot_before"] = os.path.basename(pair[0])
             record["snapshot_after"] = os.path.basename(pair[1])
-        record["downstream"] = _downstream_verdict(
-            pair[0], pair[1], store, first_tail_step, deep)
+        # Two windows, one pair of replays. `downstream` is A25's verdict and
+        # its numbers are published; `at_call` is the half the running arm can
+        # compute for itself, and the census exists to say how far the two
+        # agree rather than to assume they do.
+        record["downstream"], record["at_call"] = _revision_verdicts(
+            pair[0], pair[1], store, first_tail_step, frames_before_call, deep)
         records.append(record)
         prev_seq = group[-1].get("seq") or seq
         if head_step is not None:
@@ -496,6 +470,7 @@ def leg_census(run_dir: str, *, deep: bool = True) -> Optional[Dict[str, Any]]:
         "outcome": run_end.get("outcome"),
         "levels_completed": run_end.get("levels_completed"),
         "action_ceiling": _action_ceiling(run_dir),
+        "level_baseline_actions": _level_baselines(rows),
         # A carried leg starts its first turn with a manual already in hand, so
         # the floor applies to its very first adjudication. A cold one does
         # not, and the historic gate lets that first call through unconditioned.
@@ -515,6 +490,26 @@ def leg_census(run_dir: str, *, deep: bool = True) -> Optional[Dict[str, Any]]:
         "usd_per_action": (round(spend / billed, 6) if billed else None),
         "calls": records,
     }
+
+
+def _level_baselines(rows: List[Dict[str, Any]]) -> Optional[List[int]]:
+    """What the world itself says a level costs, off the leg's own `env_meta`.
+
+    A25's replay quoted one number for every leg -- 78, g50t level 1's
+    baseline -- and 5 of the 15 legs in the archive are sk48, whose level 1
+    baseline is 61. Judging an sk48 leg against g50t's boundary overstates how
+    far it had to go by 28%. The number is in each leg's own ledger; there is
+    no reason to borrow another game's.
+    """
+    for row in rows:
+        if row.get("event") != "env_meta":
+            continue
+        for env in ((row.get("response") or {}).get("environments") or []):
+            for run in (env.get("runs") or []):
+                baselines = run.get("level_baseline_actions")
+                if baselines:
+                    return [int(x) for x in baselines]
+    return None
 
 
 def _action_ceiling(run_dir: str) -> Optional[int]:
@@ -583,7 +578,9 @@ def census(runs_root: str = DEFAULT_RUNS, *, deep: bool = True) -> Dict[str, Any
             continue
         legs.append(record)
 
+    _fill_level_baselines(legs)
     all_calls = [c for leg in legs for c in leg["calls"]]
+    at_call_signal = _at_call_signal(all_calls)
     gaps = [c["actions_since_prev_adjudication"] for c in all_calls]
     verdicts: Dict[str, int] = {}
     trigger_totals: Dict[str, int] = {}
@@ -652,6 +649,7 @@ def census(runs_root: str = DEFAULT_RUNS, *, deep: bool = True) -> Dict[str, Any
         },
         "triggers": trigger_totals,
         "downstream": verdicts,
+        "at_call_signal": at_call_signal,
         "calls_that_bought_nothing": {
             "manual_text_unchanged": manual_unchanged,
             "inert": inert,
@@ -659,6 +657,138 @@ def census(runs_root: str = DEFAULT_RUNS, *, deep: bool = True) -> Dict[str, Any
             "fraction_of_scored": (round(inert / scored, 4) if scored else None),
         },
         "legs": legs,
+    }
+
+
+def _fill_level_baselines(legs: List[Dict[str, Any]]) -> None:
+    """Give a leg that never recorded an `env_meta` its own game's baselines.
+
+    Six of the fifteen legs have no `env_meta` row -- a carried leg does not
+    re-open the environment, and a salvaged ledger may have lost the row. The
+    baseline is a property of the GAME, not of the leg, so the same game's
+    number from another leg is the right answer and `None` is not. It is a
+    borrowed number all the same, so the source is written down beside it: a
+    reader must be able to tell a measurement from a lookup.
+    """
+    # The donor must have played the real world. `proxy/mock` reports
+    # `[8, 8, 8]`, and lending that to a leg that played ARC would say a level
+    # costs 8 actions when it costs 78 -- which would make every policy look
+    # like it clears the boundary. A leg whose OWN record says 8 keeps it and
+    # is flagged `mock_world`; only the silent ones are lent to.
+    by_game: Dict[str, List[int]] = {}
+    for leg in legs:
+        rec = leg.get("level_baseline_actions")
+        if rec and leg.get("game") and max(rec) > 8:
+            by_game.setdefault(leg["game"], rec)
+    for leg in legs:
+        if leg.get("level_baseline_actions"):
+            leg["level_baseline_source"] = "this leg's own env_meta"
+            continue
+        borrowed = by_game.get(leg.get("game"))
+        if borrowed:
+            leg["level_baseline_actions"] = list(borrowed)
+            leg["level_baseline_source"] = (
+                "borrowed from another leg of %s -- this leg recorded no "
+                "env_meta" % leg.get("game"))
+        else:
+            leg["level_baseline_source"] = None
+
+
+def _histogram_str(values: List[str]) -> Dict[str, int]:
+    out: Dict[str, int] = {}
+    for v in values:
+        out[str(v)] = out.get(str(v), 0) + 1
+    return dict(sorted(out.items()))
+
+
+def _at_call_signal(all_calls: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """How far the signal the arm can compute agrees with the audit it cannot.
+
+    The at-call verdict is available the instant a call returns; the downstream
+    verdict needs the rest of the leg. A policy that acts on the first is
+    making a bet about the second, and this is the table that prices the bet.
+
+    Both are reported and neither is called the truth. The downstream verdict
+    is not ground truth about waste either -- it is a statement about the frames
+    this particular leg happened to visit next, and a call that changed a
+    prediction the leg never tested reads as inert there too. What the table
+    supports is a conditional: *given* the archive's downstream verdicts, this
+    is how often an arm following the at-call signal would have been right.
+    """
+    cells: Dict[str, int] = {}
+    counts: Dict[str, int] = {}
+    both = 0
+    absorbing = 0
+    moved_and_changed = 0
+    prefix_windows: List[int] = []
+    only_at_call = 0
+    for call in all_calls:
+        a = (call.get("at_call") or {}).get("verdict")
+        d = (call.get("downstream") or {}).get("verdict")
+        counts[str(a)] = counts.get(str(a), 0) + 1
+        if a in (inertia.MOVED, inertia.INERT) and d in (DOWNSTREAM_CHANGED,
+                                                         DOWNSTREAM_INERT):
+            both += 1
+            prefix_windows.append(call["at_call"].get("steps_in_window") or 0)
+            cells["%s|%s" % (a, d)] = cells.get("%s|%s" % (a, d), 0) + 1
+            if a == inertia.MOVED and d == DOWNSTREAM_CHANGED:
+                moved_and_changed += 1
+                # The tail's first divergence is the tail's first STEP: the two
+                # predictors had already parted company before the call's
+                # window ended, and a `step` fold carries a divergence forward.
+                if (call["downstream"].get("first_divergent_step")
+                        == (call["at_call"].get("window") or [0, 0])[1]):
+                    absorbing += 1
+        elif a in (inertia.MOVED, inertia.INERT):
+            only_at_call += 1
+    said_inert = (cells.get("%s|%s" % (inertia.INERT, DOWNSTREAM_INERT), 0)
+                  + cells.get("%s|%s" % (inertia.INERT, DOWNSTREAM_CHANGED), 0))
+    hit = cells.get("%s|%s" % (inertia.INERT, DOWNSTREAM_INERT), 0)
+    was_inert = (hit + cells.get("%s|%s" % (inertia.MOVED, DOWNSTREAM_INERT), 0))
+    usd_at_call_inert = round(sum(
+        c["cost_usd"] for c in all_calls
+        if (c.get("at_call") or {}).get("verdict") == inertia.INERT), 4)
+    return {
+        "verdicts": dict(sorted(counts.items())),
+        "usd_on_calls_the_arm_could_have_called_inert_at_the_time":
+            usd_at_call_inert,
+        "cross_tab": dict(sorted(cells.items())),
+        "comparable_calls": both,
+        "prefix_window_steps": {
+            "min": min(prefix_windows) if prefix_windows else None,
+            "median": (statistics.median(prefix_windows)
+                       if prefix_windows else None),
+            "max": max(prefix_windows) if prefix_windows else None,
+        },
+        "scored_only_by_the_at_call_signal": only_at_call,
+        "why_the_two_agree": {
+            "moved_and_changed": moved_and_changed,
+            "of_which_the_tail_diverges_at_its_very_first_step": absorbing,
+            "reading": "these two are not independent tests. `step` is a fold: "
+                       "once two revisions disagree about a state they carry "
+                       "the disagreement forward, so a pair that parted "
+                       "company inside the call's own window is still parted "
+                       "at every later step. Where this count equals "
+                       "`moved_and_changed`, the tail told us nothing the "
+                       "prefix had not already said -- which is why the "
+                       "agreement below is mechanical rather than lucky, and "
+                       "why it should be expected to hold on the next leg. "
+                       "What the prefix genuinely cannot see is a rewrite "
+                       "whose only effect is under an action the arm has never "
+                       "taken; that is the `inert|changed` cell, and on this "
+                       "archive it is empty.",
+        },
+        "note": "cross_tab keys are 'at_call|downstream'; only the calls where "
+                "BOTH verdicts are moved/inert are comparable, so the counts "
+                "here are smaller than either column on its own.",
+        "if_the_arm_had_believed_the_signal": {
+            "calls_it_would_have_called_inert": said_inert,
+            "of_those_also_inert_downstream": hit,
+            "precision": round(hit / said_inert, 4) if said_inert else None,
+            "downstream_inert_calls_it_would_have_missed": was_inert - hit,
+            "recall": round(hit / was_inert, 4) if was_inert else None,
+            "base_rate": (round(was_inert / both, 4) if both else None),
+        },
     }
 
 
@@ -709,10 +839,20 @@ def replay_policy(report: Dict[str, Any], name: str) -> Dict[str, Any]:
     and it is stated here so that a reader who doubts it knows exactly which
     number to attack.
     """
+    from dataclasses import replace                    # noqa: PLC0415
     from inner import economy as economy_mod           # noqa: PLC0415
 
     cfg = economy_mod.policy(name)
+    # A shallow census carries no verdicts, so an inertia-driven policy
+    # replayed against one silently degrades to its floor and reports a null
+    # that means "not measured" while looking like "no effect". Counted and
+    # published rather than guarded against, because the shallow census is
+    # legitimately useful for the cadence arithmetic that does not need them.
+    scored = sum(1 for leg in report["legs"] for c in leg["calls"]
+                 if (c.get("at_call") or {}).get("verdict")
+                 in (inertia.MOVED, inertia.INERT))
     legs_out: List[Dict[str, Any]] = []
+    unreachable = 0
     for leg in report["legs"]:
         econ = economy_mod.ActionEconomy(cfg)
         fired: List[Dict[str, Any]] = []
@@ -741,8 +881,29 @@ def replay_policy(report: Dict[str, Any], name: str) -> Dict[str, Any]:
                 # recorded adjudications had a gap of zero and why the control
                 # must not refuse them. Gating here would make `today` disagree
                 # with the record, and a control that disagrees with the record
-                # invalidates every row beside it.
-                decision = economy_mod.GateDecision(True, None, econ.floor)
+                # invalidates every row beside it. `gate_every_round` is the
+                # policy that changes that, and `gate_continuation` returns
+                # allow for every policy that does not set it.
+                decision = econ.gate_continuation(
+                    has_manual=(call["adjudication_idx"] > 0
+                                or bool(leg.get("carried"))),
+                    pending=sum((call.get("triggers") or {}).values()) or 1,
+                    pending_kinds=tuple(call.get("triggers") or ()))
+                if decision.allow and not cfg.gate_every_round:
+                    # Would the kind clauses have refused this round, had they
+                    # been asked? Counted for every policy, acted on by none
+                    # that leaves `gate_every_round` off. This is the number
+                    # that explains a lever which refuses nothing: it is not
+                    # that the condition never held, it is that the gate is
+                    # never consulted where it holds.
+                    probe = economy_mod.ActionEconomy(
+                        replace(cfg, gate_every_round=True))
+                    probe._inert_kinds = econ._inert_kinds
+                    if not probe.gate_continuation(
+                            has_manual=True,
+                            pending=sum((call.get("triggers") or {}).values()) or 1,
+                            pending_kinds=tuple(call.get("triggers") or ())).allow:
+                        unreachable += 1
             else:
                 decision = econ.gate(
                     has_manual=(call["adjudication_idx"] > 0
@@ -754,22 +915,75 @@ def replay_policy(report: Dict[str, Any], name: str) -> Dict[str, Any]:
                     pending_kinds=tuple(call.get("triggers") or ()),
                 )
             if not decision.allow:
-                refused.append(dict(call, refused_by="floor",
-                                    floor_at_refusal=decision.floor))
+                refused.append(dict(
+                    call,
+                    refused_by=(decision.clause or
+                                ("gate_continuation" if taken else "floor")),
+                    floor_at_refusal=decision.floor))
                 continue
             rounds_this_step[step] = taken + 1
             fired.append(dict(call, floor_at_call=decision.floor,
                               actions_bought=carried_actions))
+            # The at-call verdict is fed here and only here. It is the same
+            # number a live arm would have had in hand the instant this call
+            # returned -- `_revision_verdicts` computes it over the frames
+            # recorded BEFORE the call -- so a policy that reads it in the
+            # replay is not reading the future. That is the whole reason the
+            # signal was built; a replay that fed it the downstream verdict
+            # would be measuring an oracle.
             econ.note_adjudication(
-                manual_moved=(call.get("manual") or {}).get("theory_changed"))
+                manual_moved=(call.get("manual") or {}).get("theory_changed"),
+                bought_nothing=inertia.bought_nothing(
+                    (call.get("at_call") or {}).get("verdict")),
+                pending_kinds=tuple(call.get("triggers") or ()))
             carried_frames = 0
             carried_actions = 0
 
         usd_fired = sum(c["cost_usd"] for c in fired)
         usd_refused = sum(c["cost_usd"] for c in refused)
         actions_fired = sum(c["actions_bought"] for c in fired)
+        leg_per_dollar = (actions_fired / usd_fired) if usd_fired else None
+        # The same question asked without the late-refusal bias. Every action
+        # in `billed_actions` happened and is recorded; the strict replay does
+        # not un-play them. Dividing them by the reduced bill is the pessimistic
+        # reading -- the leg goes exactly as it went, for less money -- while
+        # `actions_per_dollar` credits a call only with the actions between it
+        # and the previous one, so refusing a leg's LAST call silently drops
+        # that leg's trailing actions out of the numerator. Both are reported
+        # because they bracket the answer and neither alone is honest.
+        leg_per_dollar_all = ((leg["billed_actions"] / usd_fired)
+                              if usd_fired else None)
         legs_out.append({
             "leg": leg["leg"],
+            "game": leg.get("game"),
+            "outcome_recorded": leg.get("outcome"),
+            "levels_completed_recorded": leg.get("levels_completed"),
+            "actions_per_dollar": (round(leg_per_dollar, 4)
+                                   if leg_per_dollar else None),
+            "actions_per_dollar_whole_leg": (round(leg_per_dollar_all, 4)
+                                             if leg_per_dollar_all else None),
+            "actions_at_leg_cap": (round(_leg_cap() * leg_per_dollar, 1)
+                                   if leg_per_dollar else None),
+            "actions_at_leg_cap_whole_leg": (
+                round(_leg_cap() * leg_per_dollar_all, 1)
+                if leg_per_dollar_all else None),
+            # This leg's own level-1 boundary, from its own `env_meta`: 78 for
+            # g50t, 61 for sk48, 8 on the legs that played a mock world.
+            "level_1_needs": ((leg.get("level_baseline_actions") or [None])[0]),
+            "level_1_needs_source": leg.get("level_baseline_source"),
+            "mock_world": bool(leg.get("level_baseline_actions")
+                               and max(leg["level_baseline_actions"]) <= 8),
+            # How many of this leg's decisions rest on a call with no
+            # attributed trigger kind. `pending` falls back to 1 for those, so
+            # a threshold policy is deciding on missing data rather than on a
+            # measured surprise count -- named per leg because it is not spread
+            # evenly across them.
+            "calls_with_no_attributed_trigger": sum(
+                1 for c in leg["calls"] if not (c.get("triggers") or {})),
+            "refused_by": _histogram_str([c["refused_by"] for c in refused]),
+            "refused_on_a_continuation_round": sum(
+                1 for c in refused
+                if str(c["refused_by"]).startswith("continuation:")),
             "adjudications_recorded": leg["adjudications"],
             "adjudications_fired": len(fired),
             "adjudications_refused": len(refused),
@@ -786,10 +1000,19 @@ def replay_policy(report: Dict[str, Any], name: str) -> Dict[str, Any]:
                 if (c.get("downstream") or {}).get("verdict") == DOWNSTREAM_CHANGED),
         })
 
+    for row in legs_out:
+        target = row["level_1_needs"]
+        reach = row["actions_at_leg_cap_whole_leg"]
+        row["clears_level_1_on_the_projection"] = (
+            None if (target is None or reach is None or row["mock_world"])
+            else reach >= target)
+
     usd = sum(x["usd_under_policy"] for x in legs_out)
     actions = sum(x["actions_covered"] for x in legs_out)
+    billed = sum(x["actions_recorded"] for x in legs_out)
     cap = _leg_cap()
     per_dollar = (actions / usd) if usd else None
+    per_dollar_all = (billed / usd) if usd else None
     return {
         "policy": name,
         "why": economy_mod.POLICIES[name]["why"],
@@ -800,6 +1023,13 @@ def replay_policy(report: Dict[str, Any], name: str) -> Dict[str, Any]:
         "usd_saved": round(sum(x["usd_saved"] for x in legs_out), 4),
         "actions_covered": actions,
         "actions_per_dollar": round(per_dollar, 4) if per_dollar else None,
+        "actions_per_dollar_whole_leg": (round(per_dollar_all, 4)
+                                         if per_dollar_all else None),
+        "actions_recorded": billed,
+        "continuation_rounds_the_kind_clauses_would_refuse_if_asked":
+            unreachable,
+        "at_call_verdicts_in_this_census": scored,
+        "reads_the_at_call_signal": cfg.measures_inertia,
         "inert_calls_refused": sum(x["inert_calls_refused"] for x in legs_out),
         "productive_calls_refused": sum(
             x["productive_calls_refused"] for x in legs_out),
@@ -807,6 +1037,8 @@ def replay_policy(report: Dict[str, Any], name: str) -> Dict[str, Any]:
             "leg_usd_cap": cap,
             "actions_at_leg_cap": (round(cap * per_dollar, 1)
                                    if per_dollar else None),
+            "actions_at_leg_cap_whole_leg": (round(cap * per_dollar_all, 1)
+                                             if per_dollar_all else None),
             "assumption": "a desk call's price does not rise with the wait "
                           "before it; corr(step_idx, cost_usd) = -0.039 over "
                           "65 priced calls",
@@ -823,11 +1055,75 @@ def replay_all(report: Dict[str, Any]) -> Dict[str, Any]:
     baseline = next((r for r in rows if r["policy"] == "today"), None)
     fidelity: Dict[str, Any] = {}
     if baseline:
+        base_legs = {x["leg"]: x for x in baseline["legs"]}
         for row in rows:
             base = baseline["projection"]["actions_at_leg_cap"]
             mine = row["projection"]["actions_at_leg_cap"]
             row["projection"]["vs_today"] = (
                 round(mine / base, 3) if (base and mine) else None)
+            base_w = baseline["projection"]["actions_at_leg_cap_whole_leg"]
+            mine_w = row["projection"]["actions_at_leg_cap_whole_leg"]
+            row["projection"]["vs_today_whole_leg"] = (
+                round(mine_w / base_w, 3) if (base_w and mine_w) else None)
+            # **Which leg's outcome would this policy have changed?** Two
+            # answers, and only the first is a fact.
+            #
+            # `refused_a_call_on` is strict: these are legs where the policy
+            # and the record diverge, so from that call on the leg is a
+            # different leg and nothing further about it is known. Every leg
+            # NOT in this list ran exactly as recorded under this policy --
+            # that is the strongest true statement available.
+            #
+            # `newly_clears_level_1` is a projection on top of a projection:
+            # the leg's dollars-to-actions rate under this policy, taken to
+            # the $25 leg cap, crossing the leg's own level-1 baseline where
+            # today's rate does not. It says nothing about whether the arm
+            # would have known what to do with the actions.
+            changed, newly, lost = [], [], []
+            for x in row["legs"]:
+                b = base_legs.get(x["leg"]) or {}
+                if x["adjudications_fired"] != b.get("adjudications_fired"):
+                    changed.append(x["leg"])
+                if x["clears_level_1_on_the_projection"] and not b.get(
+                        "clears_level_1_on_the_projection"):
+                    newly.append(x["leg"])
+                if b.get("clears_level_1_on_the_projection") and not x[
+                        "clears_level_1_on_the_projection"]:
+                    lost.append(x["leg"])
+            # **Does the policy discriminate, or does it merely spend less?**
+            # Every row saves money by refusing calls, and refusing calls at
+            # random would save money too. The question a policy has to answer
+            # is whether the calls it refuses are the ones that bought
+            # nothing. `today` refuses 2 on a leg that predates the gate, so
+            # the comparison is against that, not against zero.
+            extra_inert = (row["inert_calls_refused"]
+                           - baseline["inert_calls_refused"])
+            extra_prod = (row["productive_calls_refused"]
+                          - baseline["productive_calls_refused"])
+            row["beyond_the_control"] = {
+                "inert_refused": extra_inert,
+                "productive_refused": extra_prod,
+                "inert_per_productive": (round(extra_inert / extra_prod, 2)
+                                         if extra_prod else None),
+                "note": "`inert_per_productive` is None when the policy "
+                        "refused no productive call beyond the control -- "
+                        "which is a better outcome than any ratio, not a "
+                        "missing one. Read it with the gain column: a policy "
+                        "that discriminates perfectly and saves nothing has "
+                        "not helped.",
+            }
+            row["per_leg"] = {
+                "legs_that_ran_differently": changed,
+                "legs_that_ran_exactly_as_recorded":
+                    [x["leg"] for x in row["legs"] if x["leg"] not in changed],
+                "newly_clears_level_1_on_the_projection": newly,
+                "stops_clearing_level_1_on_the_projection": lost,
+                "note": "the first two lists are facts about which recorded "
+                        "calls the policy refuses; the last two are "
+                        "projections at the $25 leg cap against each leg's "
+                        "own level-1 baseline (78 g50t, 61 sk48), and a "
+                        "projection is not a leg.",
+            }
         recorded = sum(x["adjudications_recorded"] for x in baseline["legs"])
         fired = baseline["adjudications_fired"]
         fidelity = {
@@ -1041,6 +1337,33 @@ def _print_census(report: Dict[str, Any]) -> None:
           % n["manual_text_unchanged"])
     print("  adjudications that changed no later prediction: %d of %d scored (%s)"
           % (n["inert"], n["scored"], n["fraction_of_scored"]))
+    s = report["at_call_signal"]
+    print()
+    print("  the signal the arm could have had AT the call:")
+    for k, v in sorted(s["verdicts"].items(), key=lambda kv: -kv[1]):
+        print("    %-46s %d" % (k, v))
+    print("    $%.2f went on calls the arm could have called inert at the time"
+          % s["usd_on_calls_the_arm_could_have_called_inert_at_the_time"])
+    b = s["if_the_arm_had_believed_the_signal"]
+    print("    of %d call(s) comparable on both windows:" % s["comparable_calls"])
+    print("      it would have flagged %s, %s of which changed no later "
+          "prediction (precision %s)"
+          % (b["calls_it_would_have_called_inert"],
+             b["of_those_also_inert_downstream"], b["precision"]))
+    print("      it would have missed %s downstream-inert call(s) (recall %s)"
+          % (b["downstream_inert_calls_it_would_have_missed"], b["recall"]))
+    print("      base rate of downstream-inert among them: %s" % b["base_rate"])
+    print("    cross tab (at_call | downstream): %s" % s["cross_tab"])
+    w = s["why_the_two_agree"]
+    print("    prefix window (steps the arm had in hand): min %s median %s "
+          "max %s" % (s["prefix_window_steps"]["min"],
+                      s["prefix_window_steps"]["median"],
+                      s["prefix_window_steps"]["max"]))
+    print("    %d of %d moved-and-changed calls have a tail that diverges at "
+          "its very first step" % (w["of_which_the_tail_diverges_at_its_very_"
+                                     "first_step"], w["moved_and_changed"]))
+    print("    %d call(s) the at-call signal scores and the audit cannot"
+          % s["scored_only_by_the_at_call_signal"])
     print()
     print("  per leg:")
     print("    %-44s %4s %4s %5s %7s %7s" % ("leg", "adj", "inv", "acts",
@@ -1063,23 +1386,91 @@ def _print_replay(out: Dict[str, Any]) -> None:
               % (f["control_would_fire"], f["adjudications_recorded"]))
         print("    %s" % f["verdict"])
         print()
-    print("  %-20s %5s %5s %9s %9s %8s %7s %6s"
-          % ("policy", "fire", "skip", "usd", "acts", "acts/$",
-             "@cap", "vs"))
+    print("  two readings of acts/$: `cover` credits a call with the actions "
+          "between it and the one before (a late refusal drops a leg's "
+          "trailing actions); `whole` divides every recorded action by the "
+          "reduced bill. The truth is between them.")
+    print("  %-28s %5s %5s %8s %7s %7s %7s %7s %6s"
+          % ("policy", "fire", "skip", "usd", "cover", "whole", "@cap",
+             "@capW", "vsW"))
     for row in out["policies"]:
         p = row["projection"]
-        print("  %-20s %5d %5d %9.2f %9d %8s %7s %6s"
+        vs = p.get("vs_today_whole_leg")
+        print("  %-28s %5d %5d %8.2f %7s %7s %7s %7s %6s"
               % (row["policy"], row["adjudications_fired"],
                  row["adjudications_refused"], row["usd_under_policy"],
-                 row["actions_covered"], row["actions_per_dollar"],
-                 p["actions_at_leg_cap"], p.get("vs_today")))
+                 row["actions_per_dollar"],
+                 row["actions_per_dollar_whole_leg"],
+                 p["actions_at_leg_cap"], p["actions_at_leg_cap_whole_leg"],
+                 vs))
     print()
-    print("  what each policy refused (of the calls that were scored):")
-    print("  %-20s %10s %12s" % ("policy", "inert", "productive"))
+    print("  what each policy refused (of the calls that were scored). "
+          "`today` refuses 2 on a leg that predates the gate, so the columns "
+          "beyond it are what the policy adds:")
+    print("  %-28s %7s %11s %9s %9s %9s"
+          % ("policy", "inert", "productive", "unreached", "+inert", "in/prod"))
     for row in out["policies"]:
-        print("  %-20s %10d %12d"
+        b = row.get("beyond_the_control") or {}
+        print("  %-28s %7d %11d %9d %9s %9s"
               % (row["policy"], row["inert_calls_refused"],
-                 row["productive_calls_refused"]))
+                 row["productive_calls_refused"],
+                 row["continuation_rounds_the_kind_clauses_would_refuse_"
+                     "if_asked"],
+                 b.get("inert_refused"), b.get("inert_per_productive")))
+    blind = [row["policy"] for row in out["policies"]
+             if row.get("reads_the_at_call_signal")
+             and not row.get("at_call_verdicts_in_this_census")]
+    if blind:
+        print()
+        print("  WARNING: this census carries no at-call verdicts, so these "
+              "policies fell back to their floors and their rows mean "
+              "nothing: %s" % ", ".join(blind))
+        print("           re-run the census WITHOUT --shallow.")
+    print()
+    print("  which leg ran differently (a fact), and which leg's projection "
+          "crosses its own level-1 boundary (a projection):")
+    for row in out["policies"]:
+        pl = row.get("per_leg") or {}
+        print("  %-20s ran differently on %d of %d leg(s)"
+              % (row["policy"], len(pl.get("legs_that_ran_differently") or []),
+                 len(row["legs"])))
+        for leg in pl.get("legs_that_ran_differently") or []:
+            x = next(v for v in row["legs"] if v["leg"] == leg)
+            print("      %-46s fired %d/%d  $%.2f saved  refused %s"
+                  % (leg[:46], x["adjudications_fired"],
+                     x["adjudications_recorded"], x["usd_saved"],
+                     x["refused_by"]))
+        for leg in pl.get("newly_clears_level_1_on_the_projection") or []:
+            x = next(v for v in row["legs"] if v["leg"] == leg)
+            print("      + %-44s projects %s actions at the $%.0f cap, its "
+                  "level 1 needs %s"
+                  % (leg[:44], x["actions_at_leg_cap"], _leg_cap(),
+                     x["level_1_needs"]))
+        for leg in pl.get("stops_clearing_level_1_on_the_projection") or []:
+            print("      - %-44s no longer clears its level 1" % leg[:44])
+    print()
+    print("  per leg and policy -- actions bought per dollar over the whole "
+          "leg, * = projection clears this leg's own level 1:")
+    names = [row["policy"] for row in out["policies"]]
+    for i, n in enumerate(names):
+        print("    [%2d] %s" % (i, n))
+    print("    a leg with one or two adjudications projects wildly -- `adj` "
+          "is there so those rows are read as the noise they are.")
+    print("    %-42s %5s %4s %s"
+          % ("leg", "needs", "adj", " ".join("%6s" % ("[%d]" % i)
+                                             for i in range(len(names)))))
+    for leg in out["policies"][0]["legs"]:
+        cells = []
+        for row in out["policies"]:
+            x = next(v for v in row["legs"] if v["leg"] == leg["leg"])
+            mark = "*" if x["clears_level_1_on_the_projection"] else ""
+            cells.append("%6s" % ("%s%s" % (
+                "-" if x["actions_per_dollar_whole_leg"] is None
+                else "%.1f" % x["actions_per_dollar_whole_leg"], mark)))
+        print("    %-42s %5s %4d %s"
+              % (leg["leg"][:42],
+                 ("mock" if leg["mock_world"] else leg["level_1_needs"]),
+                 leg["adjudications_recorded"], " ".join(cells)))
     print()
     print("  projection assumption: %s"
           % out["policies"][0]["projection"]["assumption"])
