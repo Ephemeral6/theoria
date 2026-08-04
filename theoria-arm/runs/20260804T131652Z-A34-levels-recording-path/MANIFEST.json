@@ -1,0 +1,230 @@
+{
+ "base_commit": "4846e66dee64940b3bb457b408db13775728915c",
+ "branch": "q/a34-levels",
+ "cell": "A34",
+ "changed": [
+  "theoria-arm/inner/levels.py",
+  "theoria-arm/inner/loop.py",
+  "theoria-arm/armtools/level_evidence.py (new)",
+  "theoria-arm/armtools/round.py",
+  "theoria-arm/tests/test_levels_recording_path.py (new)"
+ ],
+ "classification": {
+  "archive_material": false,
+  "kind": "instrument-repair",
+  "why": "offline: no ARC action, no model call, no network, no ledger. Every leg run here went through proxy/mock over a loopback socket with the mock's own literal fake key."
+ },
+ "files": [
+  {
+   "bytes": 10642,
+   "path": "MEASUREMENT.json",
+   "sha256": "0e355080de2ff27e5782351dc3cd04913b1f1cc2658b6cf41445413c04b1a8d5"
+  },
+  {
+   "bytes": 4890,
+   "path": "README.md",
+   "sha256": "4ee0b45f172795310c0845b3bafd2fe16997de6b7b00cc7bba773eb038f90088"
+  },
+  {
+   "bytes": 4685,
+   "path": "RUN_STATE.md",
+   "sha256": "1c8b7188022bef77682f606ced22948e55467d271a6338636119ce31e9226559"
+  },
+  {
+   "bytes": 11641,
+   "path": "make_manifest.py",
+   "sha256": "7c23635d15683935fe4047a0231913710120fbeccdbc6c4dd49fc62fd0aed270"
+  },
+  {
+   "bytes": 3599,
+   "path": "sweep.json",
+   "sha256": "99d0a46d568ca0d8155d5c763fde2d3d861b9cff8e61386c37db55c03c5c1f37"
+  }
+ ],
+ "lane": "framework-change",
+ "measurement": {
+  "1_the_files_on_disk": {
+   "command": "cd theoria-arm/runs && find . -name levels.jsonl -size 0 | wc -l",
+   "leg_directories_under_runs": 30,
+   "leg_directories_with_no_levels_jsonl_at_all": 8,
+   "levels_jsonl_found": 22,
+   "levels_jsonl_zero_bytes": 22
+  },
+  "2_why_the_live_legs_are_empty": {
+   "evidence": "A34's own arithmetic: g50t level 1 costs a reference solver 78 actions (runs/20260728T015354Z-g50t-first-contact/run.json, [78, 175, 179, 230, 96, 54, 67]); the longest theoria-arm leg walked 33 and spent 28 of them on probes.",
+   "note_on_the_19": "unmeasured is not a defect claim. It covers legs that died before their first successful command, legs written before the field was captured in trace.jsonl, and the two A26b legs that were still in flight when this was measured (their trace.jsonl is written at _save_all, so a running leg reads as unmeasured by construction). No conclusion about A26b is drawn here.",
+   "sweep": {
+    "evidence_missing": 0,
+    "legs": 30,
+    "measured_absent": 11,
+    "observed": 0,
+    "reading": "11 of 30 legs carry a readable completion record and they sum to 0. The other 19 are not zeros: no envelope in them ever carried levels_completed, so nothing looked.",
+    "tool": "python -m armtools.level_evidence runs",
+    "unmeasured": 19
+   },
+   "verdict": "the counter never moved in front of the arm"
+  },
+  "3_why_the_mock_legs_are_empty": {
+   "consequence": "runs/a3-gate-mock/levels.jsonl and runs/audit-smoke/levels.jsonl being zero bytes was never evidence that the recording path was broken -- and never evidence that it worked. It was a fact about the explorer. This is the lead A34 called strongest, and it is the one that dissolves.",
+   "policy": "inner/loop._probe_or_explore, no-manual branch: chosen = min(legal, key=lambda a: (action_counts[a], a)) -- the least-tried legal action, ties to the lowest id. offline=True makes no model call, so there is never a manual, so this is the only branch reachable.",
+   "simulation": {
+    "actions": 200,
+    "distinct_positions_visited": 2,
+    "levels_completed": 0,
+    "sequence": "1,2,3,4,5 repeating",
+    "world": "proxy.mock.arc_mock.Session, driven directly"
+   },
+   "verdict": "the default offline explorer provably cannot reach the mock's goal, at any budget"
+  },
+  "4_the_positive_control_that_was_missing": {
+   "before": "every test of the boundary in tests/test_levels.py drives TheoriaArm._record directly with a hand-built envelope. That proves the unit. The twenty-two empty files were written by the shell.",
+   "built": "tests/test_levels_recording_path.py -- harness.run.play, the real env proxy, the real proxy/mock world, and a scripted walk (derived by BFS over the mock's own Session at test time, never a hand-copied constant) that genuinely reaches the goal.",
+   "result": {
+    "levels_jsonl_bytes": 263,
+    "row": "level_boundary, signal levels_completed, from_level 1 -> to_level 2, step_idx 13, witnessed true",
+    "rows": 1,
+    "run_state_starts": [
+     0,
+     13
+    ],
+    "trace_cross_check": "trace.jsonl[13].levels_completed == 1 and trace.jsonl[12].levels_completed == 0",
+    "turns_json": "one row with beat 'level', detail 'level 1 complete'",
+    "witnessed_wins_json": "1 witness carrying the final grid"
+   },
+   "verdict": "the boundary path works end to end. It had simply never been asked."
+  },
+  "5_the_defect_the_positive_control_found": {
+   "after": {
+    "events": [
+     "level_boundary",
+     "level_boundary",
+     "game_won"
+    ],
+    "levels_jsonl_rows": 3,
+    "levels_level": 3,
+    "problem_json_still_present": true,
+    "starts": [
+     0,
+     1,
+     2
+    ],
+    "witnessed_wins": 3
+   },
+   "before": "on a synthetic 3-level game won in three increments, LevelLog recorded 2 events and levels.jsonl 2 rows, while inner/scoreboard.ScoreWatch recorded 3 level_boundary events and reported verdict 'observed'. witnessed_wins.json held 2 witnesses. The row that was missing was the win.",
+   "scaled_up": "a seven-level g50t win would have written six rows to levels.jsonl and left the seventh -- the win itself, the single most important event this project can observe -- off disk, while the second instrument recorded all seven.",
+   "where": "inner/levels.LevelLog.observe, the final_level branch",
+   "why_it_was_there": "the suppression is correct for the DESTRUCTIVE half of the handling: _on_level_boundary drops problem.json and wipes generated/, which on a winning run deletes exactly the artefacts that say how it was won (test_winning_the_last_level_does_not_open_an_eighth pins this). The argument covered the handling and was silently extended to the record, which it never covered."
+  },
+  "6_do_the_two_instruments_agree": {
+   "found": "they contradicted each other on exactly one input -- the winning increment -- and nothing in either instrument could say so. ScoreWatch.corroborate() compares the envelope counter against a SCORECARD reading; it never compares ScoreWatch's own event list against LevelLog's. On a won game the arm would have reported boundary_observed: true with a levels.jsonl short by one row and no verdict of 'disagree' anywhere.",
+   "now": "every increment ScoreWatch sees has a row in levels.jsonl. summary() keeps the two kinds apart -- boundaries (segmenting, paired with starts) and game_won (not) -- rather than adding them into one number, and the test asserts boundaries + game_won == the free rung's event count.",
+   "question": "A27 landed inner/scoreboard.py with a default-on envelope rung. Two detectors for one event is worse than one if they can disagree silently.",
+   "still_open": "the two instruments are still reconciled only by a test, not by a runtime check. A disagreement introduced later would be caught by tests/test_levels_recording_path.py and by nothing in a live leg."
+  },
+  "7_the_negative_control": {
+   "asked_for_by": "A34's closing section: build a mock leg that DID complete a level, truncate its levels.jsonl to zero bytes, and require every instrument to report 'completion information missing' rather than zero completions.",
+   "before": "armtools/round.py:188 read sum((l.get('levels_completed') or 0) for l in legs). Under that rule a leg that completed a level and lost its record contributed exactly what a leg that completed nothing contributed. A31 proved the `or 0`; this is the case that makes it bite.",
+   "built": "tests/test_levels_recording_path.py::test_a_completed_level_with_a_truncated_record_reads_as_missing_not_zero",
+   "now": "armtools/level_evidence.py returns levels_completed: None for evidence_missing and for unmeasured, and total() sums only the legs whose artefacts support a count while naming the rest. round.json's totals carry a `levels` block instead of an integer.",
+   "the_five_verdicts": {
+    "evidence_missing": "a source says a level was completed and levels.jsonl has no row for it; None, never the number",
+    "measured_absent": "the counter was read and never rose; 0 is honest here and ONLY here",
+    "no_run": "not a finished run directory",
+    "observed": "levels.jsonl carries rows; the count is a number",
+    "unmeasured": "no envelope carried the counter; None"
+   }
+  },
+  "8_is_the_fix_exercised_on_a_real_positive": {
+   "answer": "No. Zero archived legs contain a real boundary.",
+   "consequence": "every positive in this run is synthetic or mock. The fix is unexercised on real positives and that is the honest status. What changed is that the instrument is now known to fire and known to write, so the next 'no boundary' is a measurement instead of an unfalsifiable sentence.",
+   "evidence": "the sweep in section 2: 30 leg directories, 0 observed, 0 evidence_missing. 11 legs looked at the counter across every envelope and it never rose; 19 never looked. The same claim from the other side is pinned by A27's test_no_recorded_leg_contains_a_real_boundary, over 2,700 env_step rows and 47 recoverable scorecards.",
+   "what_would_change_it": "the first live leg that increments levels_completed. A34's own ordering says that is step 2 or 3 (a 78-action bare_cc run, or the A26b long leg re-read against this result), and neither is this item's to spend."
+  },
+  "answer": "Called on every recorded step, never fired, and -- for every case but one -- it writes correctly when it does fire. The exception is the winning increment, which it was coded never to record at all.",
+  "negative_controls": [
+   "a leg that completed a level, with levels.jsonl truncated to zero bytes, reads as evidence_missing with levels_completed None -- not 0, and not 1",
+   "the same leg, aggregated with a genuine zero and a leg that never looked, produces legs_counted 1 of 3 and names the other two rather than summing them",
+   "a leg with 4 envelopes carrying the counter and no increase reads measured_absent with levels_completed 0 -- the one place a zero is honest",
+   "a leg whose only trace row is a failed command reads unmeasured with levels_completed None",
+   "the default offline explorer over 200 mock actions: 2 distinct positions, 0 completions -- absence of a completion is absence of a reachable goal, recorded as such",
+   "the destructive half of the boundary handler is still refused at a win: problem.json survives, generated/ survives, starts is not cut, and levels.level does not become 4 in a 3-level game",
+   "the pre-fix code was re-run under the new tests (git stash of inner/) and test_the_two_instruments_agree_about_the_winning_increment failed with '2 rows reached disk; the missing one is the win'. The test is red without the fix."
+  ],
+  "question": "Twenty-two runs/*/levels.jsonl are zero bytes and inner/levels.py exists in full. Is the detector never called, called and never firing, or firing and never writing?",
+  "residual_gaps": [
+   "unexercised on a real positive -- see section 8",
+   "the win path's `_on_game_won` has never run against a live API. It is exercised only through hand-built envelopes with win_levels set, because proxy/mock never returns win_levels at all, so no mock leg can reach the final_level branch.",
+   "LevelLog and ScoreWatch are reconciled by a test, not at runtime. A future divergence is caught in pytest and nowhere in a leg.",
+   "level_evidence reads trace.jsonl, which is written at _save_all. A leg killed before that reads as unmeasured even if its ledger holds the increment. The ledger is the stronger source and is not consulted here.",
+   "armtools/round.py's totals block changed shape (levels_completed integer -> levels object). No round.json on disk was rewritten; older files keep the old key."
+  ],
+  "spend": {
+   "arc_actions": 0,
+   "model_calls": 0,
+   "network": "none. Every leg below ran offline against proxy/mock over a loopback socket; no credential was read.",
+   "usd": 0.0
+  }
+ },
+ "negative_controls": [
+  "a leg that completed a level, with levels.jsonl truncated to zero bytes, reads as `evidence_missing` with levels_completed None -- not 0 and not 1. This is A34's own closing section, built.",
+  "the same leg aggregated with a genuine zero and a leg that never looked: legs_counted 1 of 3, the other two named rather than summed",
+  "a leg with 4 envelopes carrying the counter and no increase reads `measured_absent` with 0 -- the one verdict under which a zero is honest",
+  "a leg whose only trace row is a failed command reads `unmeasured` with None",
+  "the default offline explorer over 200 mock actions: 2 distinct positions, 0 completions -- absence of a completion recorded as absence of a reachable goal, not as a broken detector",
+  "the destructive half of the boundary handler is still refused at a win: problem.json survives, generated/ survives, starts is not cut, and levels.level does not become 4 in a 3-level game",
+  "the pre-fix tree was re-run under the new tests (git stash of inner/): test_the_two_instruments_agree_about_the_winning_increment failed with '2 row(s) reached disk; the missing one is the win'. The test is red without the fix."
+ ],
+ "not_changed": [
+  "inner/scoreboard.py -- A27's territory and correct as it stands. The disagreement was LevelLog's silence, not ScoreWatch's speech.",
+  "inner/surprise.py -- the set stays closed at seven; a win fires no surprise",
+  "tests/test_levels.py -- every assertion in it, including test_winning_the_last_level_does_not_open_an_eighth, still holds unchanged",
+  "proxy/ and proxy/mock -- another track's",
+  "any runs/ directory whose name contains A26 (a live round is in flight). They were read by the sweep and not written.",
+  "CONTRACTS/, PARTNER_SYNC.md, monitor/"
+ ],
+ "prompt_id": "A34-levels-jsonl-recording-path",
+ "reproduce": [
+  "cd theoria-arm && python -m pytest tests/test_levels_recording_path.py -q",
+  "cd theoria-arm && python -m armtools.level_evidence runs",
+  "cd theoria-arm && python -m pytest -q",
+  "cd theoria-arm && python verify.py",
+  "cd theoria-arm && python -m armtools.verify_provenance",
+  "python runs/20260804T131652Z-A34-levels-recording-path/make_manifest.py --check"
+ ],
+ "residual_gaps": [
+  "unexercised on a real positive; the fix is proven on synthetic and mock boundaries only (GAP A34-1)",
+  "`_on_game_won` has never run against a live API and cannot be run against the mock either: proxy/mock never returns `win_levels`, so `arc.win_levels` stays None and no mock leg can reach the final_level branch. It is exercised through hand-built envelopes only (GAP A34-2)",
+  "LevelLog and ScoreWatch are reconciled by a test, not at runtime. A divergence introduced later is caught in pytest and nowhere in a leg (GAP A34-3)",
+  "level_evidence reads trace.jsonl, which is written at _save_all, so a leg killed before that reads `unmeasured` even if its ledger holds the increment. The ledger is the stronger source and is not consulted (GAP A34-4)",
+  "armtools/round.py's totals changed shape (levels_completed integer -> levels object). No round.json on disk was rewritten (GAP A34-5)"
+ ],
+ "sealed_pile_contact": "none. Development-pile ids only (g50t-5849a774, ar25-0c556536), and the mock world is proxy/mock's own synthetic maze.",
+ "spend": {
+  "arc_actions": 0,
+  "model_calls": 0,
+  "network": "none",
+  "usd": 0.0
+ },
+ "synthetic_positives": [
+  "a scripted mock leg through the real shell writes one `level_boundary` row and one witness with the winning grid",
+  "a synthetic three-level win writes two `level_boundary` rows and one `game_won` row, and three witnesses"
+ ],
+ "territory": "theoria-arm",
+ "the_number_the_ticket_turns_on": {
+  "leg_directories_swept": 30,
+  "levels_jsonl_bytes_on_the_first_leg_that_completed_a_level": 263,
+  "levels_jsonl_files_on_disk": 22,
+  "mock_explorer_distinct_positions_in_200_actions": 2,
+  "of_which_zero_bytes": 22,
+  "rows_after_the_fix_on_a_three_level_win": 3,
+  "rows_before_the_fix_on_a_three_level_win": 2,
+  "verdict_evidence_missing": 0,
+  "verdict_measured_absent": 11,
+  "verdict_observed": 0,
+  "verdict_unmeasured": 19
+ },
+ "the_two_instruments": "A27's ScoreWatch and inner/levels.LevelLog contradicted each other on exactly one input -- the winning increment -- and neither could say so. `ScoreWatch.corroborate()` compares the envelope counter against a SCORECARD reading; it never compares its own event list against LevelLog's. On a won game the arm would have reported boundary_observed: true with a levels.jsonl short by one row and no `disagree` anywhere. They now agree by construction, and the test asserts boundaries + game_won == the free rung's event count. They are still reconciled by a test and not at runtime.",
+ "untested_on_a_real_positive": "No archived leg contains a real boundary: 30 leg directories, 0 `observed`, 0 `evidence_missing`, 11 `measured_absent`, 19 `unmeasured`. The same claim from the other side is pinned by A27's test_no_recorded_leg_contains_a_real_boundary over 2,700 env_step rows and 47 recoverable scorecards. Every positive here is synthetic or mock, and the fix is unexercised on a real one. What changed is that the instrument is now known to fire and known to write, so the next 'no boundary' is a measurement instead of an unfalsifiable sentence.",
+ "utc": "2026-08-04T13:16:52Z",
+ "what": "A34 asked whether the level-boundary detector is never called, called and never firing, or firing and never writing. Answer: called on every recorded step, never fired, and -- for every case but one -- it writes correctly when it does. Two things were established and one defect was found. (1) The mock legs' zero bytes are not evidence about the recording path: the offline explorer is `min(legal, key=(times_tried, id))`, which on the mock's level 1 oscillates between two cells forever, so no mock leg on the default policy can reach the goal at any budget -- 200 actions, 2 distinct positions, 0 completions. (2) The positive control that had never existed: a scripted mock leg through the real `harness.run.play` shell that genuinely reaches the goal writes a 263-byte `levels.jsonl` with the boundary in it, cuts `starts` at the right step, appends a `level` turn and captures the winning frame. Every earlier test of this path drove `TheoriaArm._record` directly with a hand-built envelope, which proves the unit and not the shell -- and the shell is what wrote the twenty-two empty files. (3) The defect: `LevelLog.observe` suppressed the event on the game's final level. The suppression is right for the DESTRUCTIVE half of the handling (the boundary handler drops problem.json and generated/, which on a winning run deletes the artefacts that say how it was won) and was silently extended to the RECORD, which it never covered. Measured on a synthetic 3-level win: `levels.jsonl` 2 rows, `ScoreWatch` 3 events, verdict `observed`, witnessed_wins 2. A seven-level g50t win would have written six rows and left the win itself off disk while the second instrument recorded all seven."
+}

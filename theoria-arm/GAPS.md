@@ -572,3 +572,77 @@ those seven files still carry the vector with nothing next to it saying it is th
 mock's, and any future tool that harvests baselines across `runs/` will pick it
 up. `MEASUREMENT.json` in this run directory names the files; correcting them is
 not this ticket's, and rewriting a ledger would be worse than the confusion.
+
+## GAP A34-1 · The recording path is now known to work, and still has never seen a real level
+
+A34 asked which of three things was true and the answer is the third-least
+interesting one: the detector is called on every recorded step, has never fired,
+and writes correctly when it does. The sweep behind that claim, recomputed on
+this branch rather than quoted (`python -m armtools.level_evidence runs`):
+
+* **30** leg directories under `runs/`. **0** `observed`. **0**
+  `evidence_missing`.
+* **11** `measured_absent` — every envelope carried `levels_completed`, and it
+  never rose. These are legitimate zeros.
+* **19** `unmeasured` — no envelope in the leg ever carried the counter. Legs
+  that died before their first successful command, legs written before the field
+  was captured in `trace.jsonl`, and the two `A26b` legs that were in flight
+  when this was taken (a running leg's `trace.jsonl` does not exist until
+  `_save_all`, so it reads `unmeasured` by construction and nothing here is a
+  claim about them).
+* **22** `levels.jsonl` files on disk, **22** of them zero bytes; eight further
+  leg directories have no such file at all.
+
+So every positive in this ticket is synthetic or mock, and the fix is unexercised
+on a real one. What changed is not that anything won. It is that a zero-byte
+`levels.jsonl` now has three distinguishable causes instead of one indistinct
+one, and the next "no boundary" is a measurement rather than an unfalsifiable
+sentence. A34's own ordering puts the decisive experiment next and it is not
+this ticket's to spend.
+
+## GAP A34-2 · `_on_game_won` cannot be reached through the mock, at all
+
+The win branch runs only when `arc.win_levels` is known, and `proxy/mock` never
+returns `win_levels` on any response — its body carries `game_id, guid, card_id,
+frame, state, score, levels_completed, action_counter, available_actions,
+action_input` and nothing else. So `arc.win_levels` stays `None` through every
+offline leg, `_levels_remain()` reads a WIN as terminal, and no mock leg can
+reach `observe`'s `final_level` branch however many levels it clears.
+
+`_on_game_won` is therefore exercised through hand-built envelopes only, and the
+end-to-end shell test covers the *boundary* path and not the *win* path. Adding
+`win_levels` to the mock would close it and belongs to `proxy/`, which is another
+track's; it is named here rather than reached across for.
+
+## GAP A34-3 · The two instruments agree by test, not at runtime
+
+`LevelLog` and A27's `ScoreWatch` now record the same set of completions, and
+`tests/test_levels_recording_path.py` asserts `boundaries + game_won` equals the
+free rung's event count. Nothing in a live leg checks it. `ScoreWatch.
+corroborate()` compares the envelope counter against a *scorecard* reading —
+which is a different question, and the reason the original divergence went
+unnoticed — so a divergence introduced later is caught in pytest and nowhere
+else. The honest version would be a per-turn cross-check between the two event
+lists, reported like `corroborate` does and resolving nothing; it is not written
+because the shape of a real boundary has still never been observed and the check
+would be written against two synthetic witnesses.
+
+## GAP A34-4 · `level_evidence` reads the trace, and the trace is written last
+
+`trace.jsonl` is produced by `_save_all`, at the end of a leg. A leg killed by a
+wall clock, a spend stop or an interrupt therefore reads `unmeasured` even when
+its own `ledger.jsonl` holds the increment — the ledger is written per command
+and is the stronger source. Two of the 19 `unmeasured` legs above
+(`20260801T043743Z-R2-*`) are exactly that shape: one trace row, a leg that died
+early. Consulting the ledger would move some of them into `measured_absent` and
+could in principle turn one into `evidence_missing`, which is the verdict that
+matters. Not done here because `backfill`/`archive` already own ledger reading
+and a second reader of the same file is how two answers start.
+
+## GAP A34-5 · `round.json`'s totals changed shape and nothing rewrote the old ones
+
+`totals.levels_completed` (an integer) is now `totals.levels` (an object with
+`legs_counted`, `levels_completed`, `legs_not_counted` and `by_verdict`). Every
+`round.json` already on disk keeps the old key with the old meaning, and no
+consumer was migrated because the only consumers are readers. Anything that
+harvests round totals across the archive will meet both shapes.

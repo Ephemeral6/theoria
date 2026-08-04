@@ -440,6 +440,7 @@ class TheoriaArm:
         if isinstance(envelope, dict):
             self.last_envelope = envelope
         added = self.store.add(step)
+        finals_before = len(self.levels.finals)
         event = self.levels.observe(
             levels_completed=step.levels_completed,
             step_idx=step.step_idx, action=action,
@@ -464,6 +465,12 @@ class TheoriaArm:
                 actions_spent=self.budget.actions_ok)
         if event is not None:
             self._on_level_boundary(event)
+        elif len(self.levels.finals) > finals_before:
+            # The game was won. `observe` returns None for it on purpose -- the
+            # segmenting handler must not run -- but the non-destructive half
+            # must, or the arm reaches the end of the only winning run it will
+            # ever have and keeps none of the evidence. See `_on_game_won`.
+            self._on_game_won(self.levels.finals[-1])
         return added
 
     # -- the level boundary ------------------------------------------------
@@ -544,8 +551,52 @@ class TheoriaArm:
                            "actions_spent": self.budget.actions_ok})
         self._write_run_state()
 
+    def _on_game_won(self, event: Dict[str, Any]) -> None:
+        """The counter reached the game's last level. Keep, do not cut.
+
+        `_on_level_boundary` does four things and three of them are destructive:
+        it drops `problem.json`, wipes `generated/`, and cuts `starts` so the
+        beats that replay a trajectory start again. All three are right at a
+        boundary and all three are wrong here -- `inner/levels.py` has said so
+        since it was written, and `test_winning_the_last_level_does_not_open_an
+        _eighth` pins it.
+
+        What that argument never covered is the fourth thing, which is not
+        destructive at all: **writing the event down.** A34 measured the
+        consequence. On a synthetic three-level win the arm recorded two rows in
+        `levels.jsonl` and `ScoreWatch` recorded three events and a verdict of
+        `observed`; the row that was missing was the win. A seven-level g50t win
+        would have written six. The one event this whole territory exists to
+        observe was the one event the file was coded to skip, and the second
+        instrument would have disagreed about it in silence.
+
+        So this is the non-destructive half of the boundary handler, and only
+        that half:
+
+        * the books are snapshotted under the level that was won -- the pair
+          that won the game, frozen at the moment it did;
+        * the winning frame is witnessed (`witnessed_wins.json`);
+        * a turn row names the beat, so the turn series shows the win;
+        * `problem.json` and `generated/` are left exactly where they are.
+        """
+        self.books.snapshot("level%d-won" % event["from_level"])
+        event["pending_surprises_carried"] = len(self.register.pending)
+        self._witness_the_win(event, segmenting=False)
+        self.turns.append({"turn": "%s-gamewon" % self.current_turn,
+                           "beat": "level",
+                           "detail": "level %d complete and the game is won "
+                                     "(%s of %s)"
+                                     % (event["from_level"],
+                                        event.get("levels_completed"),
+                                        event.get("final_level")),
+                           "game_won": event,
+                           "actions_before": self.budget.actions_ok,
+                           "actions_spent": self.budget.actions_ok})
+        self._write_run_state()
+
     # -- the witness -------------------------------------------------------
-    def _witness_the_win(self, event: Dict[str, Any]) -> None:
+    def _witness_the_win(self, event: Dict[str, Any], *,
+                         segmenting: bool = True) -> None:
         """Keep the evidence a boundary makes available, before it is dropped.
 
         `_on_level_boundary` deletes `problem.json` and the whole of
@@ -565,30 +616,41 @@ class TheoriaArm:
         Nothing here calls the desk, changes a beat or costs an action. It is
         the observation half; `scoreboard.witness_rider` is the other half and
         says at its own docstring why it is not wired.
+
+        **`segmenting`** picks which two frames are the level's. At a boundary
+        the step carrying the increment is the first frame of the *next* level,
+        so the cleared level's last frame is the step before it, and `starts`
+        has already grown, so its opening is `starts[-2]`. At a win there is no
+        next level: the step carrying the increment *is* the final frame, and
+        `starts` did not grow, so the opening is `starts[-1]`. Reading a win
+        with the boundary's arithmetic returns the second-to-last frame of a
+        won game and the opening board of the wrong level -- which is worse
+        than no witness, because it looks like one.
         """
         if not self.scoreboard.enabled:
             return
         try:
             boundary_idx = event.get("step_idx")
-            # The step carrying the increment is the FIRST frame of the new
-            # level (`inner/levels.py`), so the last frame of the level that was
-            # cleared is the step before it. Searched backwards for a step that
-            # actually has a grid: a failed command in between carries none.
             final_grid = None
             final_idx = None
             if isinstance(boundary_idx, int):
-                for i in range(boundary_idx - 1, -1, -1):
+                first = boundary_idx - 1 if segmenting else boundary_idx
+                # Searched backwards for a step that actually has a grid: a
+                # failed command in between carries none.
+                for i in range(first, -1, -1):
                     if i >= len(self.store.steps):
                         continue
                     grid = self.store.steps[i].grid
                     if grid is not None:
                         final_grid, final_idx = grid, i
                         break
-            # `starts` already has the new level appended, so the level that
-            # just ended began at the entry before it.
             opening_grid = None
-            if len(self.levels.starts) >= 2:
+            begin = None
+            if segmenting and len(self.levels.starts) >= 2:
                 begin = self.levels.starts[-2]
+            elif not segmenting and self.levels.starts:
+                begin = self.levels.starts[-1]
+            if begin is not None:
                 for i in range(begin, len(self.store.steps)):
                     grid = self.store.steps[i].grid
                     if grid is not None:
@@ -610,6 +672,11 @@ class TheoriaArm:
                     self.levels.completed),
             )
             witness["final_step_idx"] = final_idx
+            # `witness_from_boundary` names every witness `level_cleared`,
+            # which is true of a win too but loses the distinction that matters
+            # most: whether a level follows. Carried explicitly rather than
+            # inferred from a null `to_level`.
+            witness["game_won"] = not segmenting
             self.witnessed_wins.append(witness)
             event["witnessed"] = True
             _dump(os.path.join(self.dir, "witnessed_wins.json"),
@@ -1986,9 +2053,13 @@ class TheoriaArm:
         out = self.dir
         self.store.to_jsonl(os.path.join(out, "trace.jsonl"))
         self.register.to_jsonl(os.path.join(out, "surprises.jsonl"))
+        # `records()`, not `events`: the winning increment is not a segmenting
+        # boundary and is therefore not in `events`, and a `levels.jsonl` built
+        # from `events` alone omits the one completion the file exists for. See
+        # `inner/levels.LevelLog.finals` and `_on_game_won`.
         with open(os.path.join(out, "levels.jsonl"), "w", encoding="utf-8",
                   newline="\n") as fh:
-            for event in self.levels.events:
+            for event in self.levels.records():
                 fh.write(json.dumps(event, sort_keys=True))
                 fh.write("\n")
         _dump(os.path.join(out, "turns.json"), self.turns)
