@@ -1,0 +1,92 @@
+{
+ "api_calls": 0,
+ "base_commit": "4846e66dee64940b3bb457b408db13775728915c",
+ "branch": "q/board-hygiene",
+ "cell": "board-hygiene",
+ "files": [
+  {
+   "path": "monitor/board/items/A29-theoria-arm-suite-red.md",
+   "sha256": "1608ff5c6762d24328ec9e5d390c51b654fd0b7ab451406b53f4b908bb88b8e3"
+  },
+  {
+   "path": "monitor/board/items/A30-the-arm-spends-its-actions-on-probes-not-on-the-level.md",
+   "sha256": "eb26861c48ae2ce9a7b5542445cccd646f5afd7ad25f9e277d847447b4c76639"
+  },
+  {
+   "path": "monitor/board/items/A31-the-win-detector-has-never-fired-and-the-round-total-turns-absence-into-zero.md",
+   "sha256": "6ec8700a84830dc86bac62384c946c2fa5b2d9568f9e8ea09a6a95eac3f8742c"
+  },
+  {
+   "path": "monitor/board/items/A32-the-sk48-leg-pays-more-per-desk-call-and-moves-less.md",
+   "sha256": "22208e2dec0a805be2ee4f0ef15092a2d3fc523906d03f50404d0660938500c5"
+  },
+  {
+   "path": "monitor/board/items/A33-forty-six-baseline-runs-scored-zero-is-wrong-three-times-over.md",
+   "sha256": "381ca6b9987853fcf0e037ba058c2af52b42191b687c536ce1727f356465e50c"
+  },
+  {
+   "path": "monitor/board/items/A35-the-only-record-of-a-win-is-written-once-at-the-end-of-the-leg.md",
+   "sha256": "00475febbed644b257a099465ce7f3824e614ec207c636aaada0dd80e3c7cdaf"
+  },
+  {
+   "path": "monitor/board/items/A36-half-the-desk-bill-buys-nothing-and-the-measurement-that-says-so-has-no-owner.md",
+   "sha256": "ab6a873a4513880dbb42f77b0c5f1840b838977be90bf9ec1831593510736607"
+  },
+  {
+   "path": "monitor/board/items/S51-the-ceiling-moved-to-700-and-the-freeze-manifest-still-publishes-a-negative-balance.md",
+   "sha256": "a2202ffa8ea764324f81dff0313ee7fbaab62399ee3bc71e7ad960da0d6259c9"
+  },
+  {
+   "path": "monitor/board/items/S52-the-inbox-is-a-drop-box-nine-of-ten-addressed-asks-were-never-seen.md",
+   "sha256": "be6a93a0bb8095bcf0bdace93a99226d86b8ce5d8c4ef01de2380b3f2100fa8a"
+  },
+  {
+   "path": "monitor/board/items/V31-class-ii-cannot-be-built-and-the-request-to-build-it-was-never-boarded.md",
+   "sha256": "58d1ef15904b3bde74355d9d66905752c699da4787a6c8db7911f0c0612a0b80"
+  },
+  {
+   "path": "monitor/inbox_recon.py",
+   "sha256": "b95389b055a3b7875c3d4e0204367e735100e7b903d25234905ed72239cb989b"
+  },
+  {
+   "path": "monitor/runs/20260804T1300Z-BOARD-HYGIENE/RUN_STATE.md",
+   "sha256": "2a4c027be2ecd9f960cadbfefdca3d3765024996309446d5097ab81095f2c868"
+  },
+  {
+   "path": "monitor/runs/20260804T1300Z-BOARD-HYGIENE/gate-board-list.txt",
+   "sha256": "f6a3a3fc368af45f4d09660d6f3de58aebb68890a7275191428f337fd35e5a0e"
+  },
+  {
+   "path": "monitor/runs/20260804T1300Z-BOARD-HYGIENE/gate-pytest.txt",
+   "sha256": "1951eb5ab5c02f3aa1807bf8e401691a79535029b282fe08e3aa009e30641a8b"
+  },
+  {
+   "path": "monitor/runs/20260804T1300Z-BOARD-HYGIENE/inbox_recon.json",
+   "sha256": "2ebd97eb10ad9f0f11100a056e220a06d6ffeee2c08465cac743428def163a5f"
+  },
+  {
+   "path": "monitor/runs/20260804T1300Z-BOARD-HYGIENE/inbox_recon.txt",
+   "sha256": "431621ccecf7bfb9f29674aea8de5d2695926ad1feb95ade4d37d5764309e19a"
+  },
+  {
+   "path": "monitor/runs/20260804T1300Z-BOARD-HYGIENE/make_manifest.py",
+   "sha256": "9a36ace609869ca7fd23b53007ca2e6b8c4464c9418490fb4422a20b172c4c7b"
+  },
+  {
+   "path": "monitor/runs/20260804T1300Z-BOARD-HYGIENE/recon_append.py",
+   "sha256": "1d779421ee10cb3d1799335acaa2db1120ff5c5c958d24aff7e807d78c3e1519"
+  },
+  {
+   "path": "monitor/tests/test_inbox_recon.py",
+   "sha256": "889a9a7d984a1c165e08fcd8f9afa46cec685e1ffd090f54005793b49cb54679"
+  }
+ ],
+ "model_calls": 0,
+ "network": false,
+ "prompt_id": "board-hygiene-2026-08-04",
+ "sealed_pile_contact": false,
+ "territory": "monitor",
+ "usd": 0.0,
+ "utc": "2026-08-04T13:00:00Z",
+ "what": "Reconciled the open board against master, filed four items from measurements already on disk, and built the inbox reconciler. Six items narrowed, none closed -- no open item's acceptance clause is met on 4846e66d."
+}

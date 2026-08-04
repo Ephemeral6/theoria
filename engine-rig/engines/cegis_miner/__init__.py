@@ -27,15 +27,32 @@ def transitions_from_segmentation(
     seg: Segmentation,
     track: Optional[Track] = None,
     background: int = 0,
+    while_present: bool = False,
 ) -> List[Transition]:
     """Turn frames + the segmenter's object trajectory into mineable transitions.
 
     The miner never reads pixels to decide *what happened* -- that is the
     segmenter's narration.  It reads pixels only to evaluate guards.
+
+    `while_present` bounds the window to the frames where the object exists.
+    The default `False` is the original scope: the walk starts at frame 0 and a
+    track that is not there yet raises.  That is right for a fixture where every
+    object is born in the prologue and wrong for a trajectory where objects
+    appear -- on the recorded `g50t` r3 leg it discarded 14 of 18 tracks for
+    being absent at a frame that has nothing to do with their evidence.  With
+    `while_present=True` the walk runs over `[first_frame, last_present]`, which
+    is where the track's evidence actually is; an object that vanishes and
+    returns still raises, because a gap is a claim about identity that the
+    miner is not entitled to make.  See DECISIONS.md D-E20-003.
     """
     track = track or seg.tracks[0]
     out: List[Transition] = []
-    for t in range(len(frames) - 1):
+    present = [i for i, a in enumerate(track.anchors) if a is not None]
+    if while_present and not present:
+        return out
+    start = present[0] if while_present else 0
+    stop = present[-1] if while_present else len(frames) - 1
+    for t in range(start, min(stop, len(frames) - 1)):
         action = actions[t]
         if action is None:
             break
@@ -88,8 +105,10 @@ def candidates(result: MiningResult, timestamp: Optional[str] = None) -> List[Di
 
 
 def run(transitions: Sequence[Transition], out_path: Optional[str] = None,
-        timestamp: Optional[str] = None) -> MiningResult:
-    result = mine(transitions)
+        timestamp: Optional[str] = None, on_unseparable: str = "raise",
+        action_alphabet: Optional[Sequence[str]] = None) -> MiningResult:
+    result = mine(transitions, on_unseparable=on_unseparable,
+                  action_alphabet=action_alphabet)
     if out_path:
         emit(out_path, candidates(result, timestamp=timestamp))
     return result

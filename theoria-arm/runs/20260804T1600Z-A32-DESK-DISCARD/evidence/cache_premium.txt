@@ -1,0 +1,52 @@
+{
+ "breakeven_read_write_ratio": {
+  "1h": 1.1111,
+  "5m": 0.2778
+ },
+ "priced": {
+  "as_billed_1h": {
+   "cache_read": 0.343669,
+   "cache_write": 40.58283,
+   "input": 0.001105,
+   "output": 106.040775,
+   "total": 146.96838
+  },
+  "if_5m": {
+   "cache_read": 0.343669,
+   "cache_write": 25.364269,
+   "input": 0.001105,
+   "output": 106.040775,
+   "total": 131.749818
+  },
+  "if_uncached": {
+   "cache_read": 0.0,
+   "cache_write": 0.0,
+   "input": 23.729215,
+   "output": 106.040775,
+   "total": 129.76999
+  }
+ },
+ "read_write_ratio": 0.1694,
+ "reproduction": {
+  "cli_reported_usd": 147.580282,
+  "modelled_usd": 146.96838,
+  "note": "the four rate columns are published list prices, not a fit. They earn the right to price a counterfactual only by rebuilding the CLI's own total across the archive.",
+  "relative_residual": 0.004146,
+  "tolerance": 0.02
+ },
+ "savings_share_of_bill": {
+  "dropping_the_cache": 0.1165,
+  "switching_to_5m": 0.1031
+ },
+ "savings_usd": {
+  "dropping_the_cache": 17.19839,
+  "switching_to_5m": 15.218562
+ },
+ "ttl_split": {
+  "all_at_1h": true,
+  "ephemeral_1h": 4058283,
+  "ephemeral_5m": 0
+ }
+}
+
+Over 103 archived desk calls the arm wrote 4058283 cached tokens and read 687339 back, a read/write ratio of 0.169. Every written token went in at the ONE-HOUR TTL (2x input); none at five minutes. Caching pays only above a ratio of 1.11 at 1h and 0.28 at 5m, so on this archive it is a net loss at both: $15.22 over five-minute writes and $17.20 over not caching at all, 11.7% of the $147.58 bill. And the reads are not reuse -- 19 of the 20 calls that read any cache are calls where the reply was split across messages, so the read is the second message of the same call. The lever the arm actually holds is the token count, not the TTL.

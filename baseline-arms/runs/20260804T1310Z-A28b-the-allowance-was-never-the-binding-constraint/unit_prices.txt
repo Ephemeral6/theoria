@@ -1,0 +1,37 @@
+=== BUDGET_REPORT section 2.1, re-derived per transport ===
+
+  scope: games measured on BOTH transports -- g50t-5849a774, sk48-d8078629, tn36-ef4dde99
+    jar-off  ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99
+    jar-on   g50t-5849a774, sk48-d8078629, tn36-ef4dde99
+  transport split corroborated by probe logs: MIXED in probe_log.transport-ab.jsonl -- the split is not trustworthy
+
+model                          transport  cells   $/action   $/act-wk      $/call http/act  wall s/a  success
+  -----------------------------------------------------------------------------------------------------------
+claude-haiku-4-5-20251001      jar-off       5     0.0461     0.0461      0.0298     8.06      67.4    0.645
+claude-haiku-4-5-20251001      jar-on       10     0.0437     0.0437      0.0398     1.86      43.4    0.916
+claude-opus-5                  jar-off       3     0.1359     0.1091      0.0761    10.29      53.3    0.560
+                                          1 cell(s) bought no action at all, $0.7509 of the numerator
+claude-opus-5                  jar-on        3     0.1460     0.1258      0.1168     3.11      19.8    0.800
+                                          1 cell(s) bought no action at all, $1.1307 of the numerator
+claude-sonnet-5                jar-off       1     0.1258     0.1258      0.0682     8.08      77.2    0.650
+claude-sonnet-5                jar-on        3     0.1793     0.1793      0.1143     4.46      55.3    0.722
+
+  deltas where both transports have a row:
+    claude-haiku-4-5-20251001
+      usd_per_action             0.0461 -> 0.0437      -5%
+      usd_per_model_call         0.0298 -> 0.0398      +34%
+      http_per_action              8.06 -> 1.86        -77%
+      wall_s_per_action            67.4 -> 43.4        -36%
+      action_success_rate         0.645 -> 0.916       +42%
+    claude-opus-5
+      usd_per_action             0.1359 -> 0.1460      +7%
+      usd_per_model_call         0.0761 -> 0.1168      +53%
+      http_per_action             10.29 -> 3.11        -70%
+      wall_s_per_action            53.3 -> 19.8        -63%
+      action_success_rate         0.560 -> 0.800       +43%
+    claude-sonnet-5
+      usd_per_action             0.1258 -> 0.1793      +43%
+      usd_per_model_call         0.0682 -> 0.1143      +68%
+      http_per_action              8.08 -> 4.46        -45%
+      wall_s_per_action            77.2 -> 55.3        -28%
+      action_success_rate         0.650 -> 0.722       +11%

@@ -27,7 +27,7 @@ choosing CEGIS/version spaces over a statistical learner.
 
 | Atom | Meaning | Cost |
 |---|---|---|
-| `act==D` | the action taken was D | 6 bits |
+| `act==A` | the action taken was A | 6 bits |
 | `free(strip(D))` | target strip is in-bounds **and** all background | 6 bits |
 | `in_bounds(strip(D))` | target strip is inside the grid | 6 bits |
 | `clear(strip(D))` | the in-bounds part of the strip is background (vacuous off-board) | 6 bits |
@@ -38,7 +38,38 @@ purpose: minimising literal *count* alone would let `at(r,c)` — true of exactl
 one transition — win every synthesis that has a single positive example.
 
 Among guards of equal cost the **logically strongest** wins (`free ⇒ in_bounds`,
-`act==D ⇒ !act==D'`): a stronger guard fires on fewer states, so it claims less.
+`act==A ⇒ !act==A'`): a stronger guard fires on fewer states, so it claims less.
+
+`D` in the strip predicates is a *geometric* direction and is always one of
+UP/DOWN/LEFT/RIGHT. `A` in `act==` is an **action**, and the actions come from
+the evidence: `mine` reads the alphabet off the transitions it is given. They
+were the same list until E20, which is why a world whose actions are
+`ACTION1..ACTION5` produced a vocabulary in which every `act==` literal was
+identically false — 36 atoms, 4 of them discriminating — and the miner reported,
+correctly, that no literal separated two transitions differing only by action.
+Pass `action_alphabet=` to override; `build_vocabulary(states)` with no actions
+still assumes the compass. See DECISIONS.md D-E20-001.
+
+## When a class has no guard
+
+`mine` groups transitions by (action, effect) and synthesises per group. If no
+literal in the vocabulary separates a group, `synthesize` raises
+`NoSeparatingGuard` — a true report, and the default `on_unseparable="raise"`
+lets it out, as it always has.
+
+`on_unseparable="record"` keeps the frontier for every class that has one and
+files the rest on `MiningResult.unseparable`:
+
+```json
+{"action": "ACTION2", "effect": {"type": "none"}, "support": [2],
+ "reason": "no literal separates transition 2 from the positives"}
+```
+
+`explains_every_transition()` then returns **false**, because those transitions
+are not covered and a gap must not read as coverage. `MiningResult.vocabulary`
+carries the alphabet and the atom census (`n_discriminating_atoms`,
+`act_atoms_are_all_constant`) so a blind vocabulary is visible in the output
+rather than only in a failure. See DECISIONS.md D-E20-002.
 
 ## Result on Fixture A (49 transitions)
 

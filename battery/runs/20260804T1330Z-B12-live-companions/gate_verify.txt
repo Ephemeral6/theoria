@@ -1,0 +1,37 @@
+[1/9] the freeze record
+   ok    the tree matches BATTERY_V1.md
+[2/9] suite
+   ok    491 passed in 35.12s
+[3/9] one real run -- the whole spectrum recomputed from the ledgers, offline
+   ok    wrote 7 file(s)
+[4/9] artefact self-check
+   ok    7 artefacts, 38 cards x 108 runs, 1697 measured cells, 128 insufficient-data, 2279 not-applicable, 1697 ok
+   note  this recompute saw 108 run(s); battery/artifacts/ was built from 95. Untracked inputs (baseline-arms/out/shards, schema traces) are absent from a clean checkout by design
+[5/9] the separation claim in the committed documents
+   ok    0 separating of 38 judged; 4 paired game(s) against the 6 the sign test needs; both documents agree
+[6/9] the live-tier companion artefact
+   note  frozen-vs-live tier divergence, 9 metric(s) (reported, not gated -- PREREG_V9 ¡ì5 keeps the frozen baseline in place and this file in the open):
+         E2   frozen=main      live=reference
+         E3   frozen=main      live=reference
+         K11  frozen=main      live=reference
+         K12  frozen=main      live=reference
+         K7   frozen=main      live=reference
+         M3   frozen=main      live=reference
+         M6   frozen=main      live=reference
+         P3   frozen=main      live=reference
+         P4   frozen=main      live=reference
+   ok    companion matches the recompute; baseline pin holds; 9 divergence(s) disclosed in STATUS.md
+[7/9] the live-arm readings companion
+   ok    14 live leg(s) on g50t-5849a774, sk48-d8078629; 289 measured cell(s); epistemic 11, economy 7 metric(s) with live readings
+[8/9] the live-arm economy companion
+   note  three-way money disagreement on 1 leg(s) (reported, not gated -- theoria-arm owns these producers):
+         20260731T231654Z-R1-sk48-b: curves.json accounts for 0 billed call(s) over 2 turn row(s); the proxy ledger bills 3
+         20260731T231654Z-R1-sk48-b: curves.json totals 0.000000 USD over its turn rows; the proxy ledger totals 7.608528 USD (difference 7.608528)
+   ok    14 live leg(s); exact axis on 9, refused on 5; E2/E3 measured on 1 leg(s); 50 absence(s) with reasons
+[9/9] the live-archive census
+   note  14 live-arm ledger(s) are invisible to rungs 7 and 8 (reported, not gated -- theoria-arm owns the campaign label):
+         14 on the live upstream, 8 with env steps; 682 step(s), 42 billed call(s), 23.855414 USD
+         dropped by theoria_live.discover's 'theoria-arm:A3-campaign' test before load_leg, so neither companion refuses them and neither recompute can turn red over them
+   ok    79 dir(s), 37 ledger(s): scored 14, excluded 9, invisible 14, foreign 0, unreadable 0; 1 of 14 scored leg(s) clear the 8-turn bill-shape floor
+
+battery: green -- freeze, suite, one real run, artefact fields, separation claim, live tiers, live-arm readings, live-arm economy, live-archive census

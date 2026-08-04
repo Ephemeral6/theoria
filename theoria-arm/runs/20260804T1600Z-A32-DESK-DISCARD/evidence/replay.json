@@ -1,0 +1,189 @@
+{
+ "caveat": "`recovered_share_of_discarded` is the share of discarded spend whose reply carried something the repaired beat keeps -- adjudications and a playbook. It is NOT a claim that the manual was recovered: no manual was. The transport repair is not exercised here at all.",
+ "complaints_still_the_old_constant": 0,
+ "complaints_that_now_name_the_truncation": 17,
+ "discarded_usd": 52.02449,
+ "identical_reask_usd_not_spent": 9.199279,
+ "kept": {
+  "log_entries": 299,
+  "playbooks": 10,
+  "usd_touched": 38.370056
+ },
+ "recovered_share_of_discarded": 0.7375,
+ "rows": [
+  {
+   "call": 3,
+   "complaint_is_the_old_constant": false,
+   "complaint_names_truncation": true,
+   "cost_usd": 2.86115,
+   "leg": "20260731T1310Z-A3-level2-carried-r2",
+   "salvaged_log_entries": 28,
+   "salvaged_playbook": true,
+   "verdict": "blocks_discarded"
+  },
+  {
+   "call": 2,
+   "complaint_is_the_old_constant": false,
+   "complaint_names_truncation": true,
+   "cost_usd": 2.7157635,
+   "leg": "20260731T231654Z-R1-g50t-a",
+   "salvaged_log_entries": 0,
+   "salvaged_playbook": false,
+   "verdict": "transport_total_loss"
+  },
+  {
+   "call": 1,
+   "complaint_is_the_old_constant": false,
+   "complaint_names_truncation": true,
+   "cost_usd": 2.961837,
+   "leg": "20260731T231654Z-R1-sk48-b",
+   "salvaged_log_entries": 25,
+   "salvaged_playbook": true,
+   "verdict": "blocks_discarded"
+  },
+  {
+   "call": 2,
+   "complaint_is_the_old_constant": false,
+   "complaint_names_truncation": true,
+   "cost_usd": 2.8166415000000002,
+   "leg": "20260731T231654Z-R1-sk48-b",
+   "salvaged_log_entries": 26,
+   "salvaged_playbook": true,
+   "verdict": "blocks_discarded"
+  },
+  {
+   "call": 2,
+   "complaint_is_the_old_constant": false,
+   "complaint_names_truncation": true,
+   "cost_usd": 2.6960810000000004,
+   "leg": "20260801T001851Z-R1b-g50t-a",
+   "salvaged_log_entries": 0,
+   "salvaged_playbook": false,
+   "verdict": "transport_total_loss"
+  },
+  {
+   "call": 9,
+   "complaint_is_the_old_constant": false,
+   "complaint_names_truncation": true,
+   "cost_usd": 2.9711305,
+   "leg": "20260801T001851Z-R1b-g50t-a",
+   "salvaged_log_entries": 28,
+   "salvaged_playbook": true,
+   "verdict": "blocks_discarded"
+  },
+  {
+   "call": 2,
+   "complaint_is_the_old_constant": false,
+   "complaint_names_truncation": true,
+   "cost_usd": 2.7911395,
+   "leg": "20260801T001851Z-R1b-sk48-b",
+   "salvaged_log_entries": 20,
+   "salvaged_playbook": true,
+   "verdict": "truncated_theory_fragment"
+  },
+  {
+   "call": 3,
+   "complaint_is_the_old_constant": false,
+   "complaint_names_truncation": true,
+   "cost_usd": 2.89813,
+   "leg": "20260801T001851Z-R1b-sk48-b",
+   "salvaged_log_entries": 23,
+   "salvaged_playbook": true,
+   "verdict": "blocks_discarded"
+  },
+  {
+   "call": 4,
+   "complaint_is_the_old_constant": false,
+   "complaint_names_truncation": true,
+   "cost_usd": 2.684454,
+   "leg": "20260801T001851Z-R1b-sk48-b",
+   "salvaged_log_entries": 0,
+   "salvaged_playbook": false,
+   "verdict": "transport_total_loss"
+  },
+  {
+   "call": 5,
+   "complaint_is_the_old_constant": false,
+   "complaint_names_truncation": true,
+   "cost_usd": 2.694148,
+   "leg": "20260801T001851Z-R1b-sk48-b",
+   "salvaged_log_entries": 0,
+   "salvaged_playbook": false,
+   "verdict": "transport_total_loss"
+  },
+  {
+   "call": 6,
+   "complaint_is_the_old_constant": false,
+   "complaint_names_truncation": true,
+   "cost_usd": 2.960839,
+   "leg": "20260801T001851Z-R1b-sk48-b",
+   "salvaged_log_entries": 28,
+   "salvaged_playbook": true,
+   "verdict": "blocks_discarded"
+  },
+  {
+   "call": 5,
+   "complaint_is_the_old_constant": false,
+   "complaint_names_truncation": true,
+   "cost_usd": 2.863988,
+   "leg": "20260801T044640Z-R2b-g50t-a",
+   "salvaged_log_entries": 0,
+   "salvaged_playbook": false,
+   "verdict": "transport_total_loss"
+  },
+  {
+   "call": 9,
+   "complaint_is_the_old_constant": false,
+   "complaint_names_truncation": true,
+   "cost_usd": 3.1826165,
+   "leg": "20260801T044640Z-R2b-g50t-a",
+   "salvaged_log_entries": 31,
+   "salvaged_playbook": true,
+   "verdict": "blocks_discarded"
+  },
+  {
+   "call": 3,
+   "complaint_is_the_old_constant": false,
+   "complaint_names_truncation": true,
+   "cost_usd": 2.7899645,
+   "leg": "20260801T044640Z-R2b-sk48-b",
+   "salvaged_log_entries": 19,
+   "salvaged_playbook": true,
+   "verdict": "blocks_discarded"
+  },
+  {
+   "call": 4,
+   "complaint_is_the_old_constant": false,
+   "complaint_names_truncation": true,
+   "cost_usd": 2.8265505,
+   "leg": "20260801T044640Z-R2b-sk48-b",
+   "salvaged_log_entries": 22,
+   "salvaged_playbook": true,
+   "verdict": "blocks_discarded"
+  },
+  {
+   "call": 5,
+   "complaint_is_the_old_constant": false,
+   "complaint_names_truncation": true,
+   "cost_usd": 4.684776,
+   "leg": "20260801T044640Z-R2b-sk48-b",
+   "salvaged_log_entries": 29,
+   "salvaged_playbook": false,
+   "verdict": "blocks_discarded"
+  },
+  {
+   "call": 6,
+   "complaint_is_the_old_constant": false,
+   "complaint_names_truncation": true,
+   "cost_usd": 4.625281,
+   "leg": "20260801T044640Z-R2b-sk48-b",
+   "salvaged_log_entries": 20,
+   "salvaged_playbook": false,
+   "verdict": "blocks_discarded"
+  }
+ ],
+ "unrecoverable_by_replay": {
+  "calls": 5,
+  "usd": 13.654435
+ }
+}

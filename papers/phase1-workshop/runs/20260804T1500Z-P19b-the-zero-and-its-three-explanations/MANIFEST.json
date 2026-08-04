@@ -1,0 +1,126 @@
+{
+ "base_commit": "4846e66dee64940b3bb457b408db13775728915c",
+ "branch": "q/p19",
+ "changed": [
+  "papers/phase1-workshop/sections/00_abstract.md",
+  "papers/phase1-workshop/sections/01_intro.md",
+  "papers/phase1-workshop/sections/07_battery.md",
+  "papers/phase1-workshop/sections/11_limitations.md",
+  "papers/phase1-workshop/sections/12_related.md",
+  "papers/phase1-workshop/PAPER.md",
+  "papers/phase1-workshop/PROVENANCE.md",
+  "papers/phase1-workshop/OPEN_ITEMS.md",
+  "papers/phase1-workshop/CITECHECK-2026-08-01.md",
+  "papers/phase1-workshop/REVIEW-2026-08-01.md",
+  "papers/phase1-workshop/CITECHECK-2026-08-04.md",
+  "papers/phase1-workshop/REVIEW-2026-08-04.md",
+  "papers/phase1-workshop/test_zero_census.py",
+  "papers/phase1-workshop/runs/20260804T1500Z-P19b-the-zero-and-its-three-explanations/ (this directory: census.py, census.json, RUN_STATE.md, stamp_manifest.py, MANIFEST.json)"
+ ],
+ "files": [
+  {
+   "path": "RUN_STATE.md",
+   "sha256": "b145eb23617f97b7131725f5c982672bb934838479fc5fba60d3527cb5beedff"
+  },
+  {
+   "path": "census.json",
+   "sha256": "b45ede182c6905448f516c61aae4dd4cce8955e938a66f6d1c48b82598d7c73c"
+  },
+  {
+   "path": "census.py",
+   "sha256": "1e4dae0e8ffbf6ee30b120be6ccc71dc6c9d20ddea593c833067bc5c58ed4285"
+  }
+ ],
+ "files_note": "Filled by `python stamp_manifest.py`, which hashes the bytes git publishes (the index), not the working copy. Re-check with `--check`. A hand-written hash list is what that script exists to refuse, so this field is null until the script runs.",
+ "gates": {
+  "after": {
+   "pytest": "2 failed, 281 passed, 1 xfailed",
+   "verify_paper": "FAIL (3/7) -- C FIGDATA: 1 stale payload; E UNCITED: 452 blocks, 1 uncited, 9 ruled; F BARE: 95 citations, 24 ambiguous, 4 ruled; B PATHS and G AUDITSTAMP pass"
+  },
+  "before": {
+   "pytest": "2 failed, 272 passed, 1 xfailed",
+   "verify_paper": "FAIL (3/7) -- C FIGDATA: 1 stale payload; E UNCITED: 435 blocks, 1 uncited, 9 ruled; F BARE: 95 citations, 24 ambiguous, 4 ruled; B PATHS passes, G AUDITSTAMP passes"
+  },
+  "deliberate_red": "C FIGDATA. `runs/20260728T173000Z-P12-paper-multi-review/REVISION.md` records why the fig1 payload is left as committed. It did not move here.",
+  "finding_counts_unchanged": true,
+  "note": "The same three checks are red before and after with the same finding counts. During the work F went 24 -> 27 -> 24 and E went 1 -> 10 -> 1; every new finding was closed by writing the real citation into the prose. No ADJUDICATED_* entry was added and verify_paper.py was not edited. G AUDITSTAMP went red when PAPER.md moved and was returned to green by flipping the 2026-08-01 pair to `stale` with `superseded_by` and writing the two binding successors -- that is the mechanism working, not a regression. The 9 extra passes are test_zero_census.py.",
+  "pytest_failures_are_pre_existing": [
+   "phase1-workshop/test_anchor_range.py::test_the_live_paper_is_green_and_its_anchors_are_in_range -- asserts check F is green; F carries 24 pre-existing ambiguous bare filenames",
+   "test_verify_delegator.py::test_the_live_papers_tree_classifies_cleanly -- case-studies/ and related-work/ are unclassified under papers/"
+  ]
+ },
+ "lane": "paper-correction",
+ "measurement": {
+  "baseline_ledger_rows": 656,
+  "baseline_ledger_rows_carrying_levels_completed": 214,
+  "baseline_level_1_reference_actions": {
+   "ar25-0c556536": 32,
+   "g50t-5849a774": 78,
+   "sk48-d8078629": 61,
+   "tn36-ef4dde99": 32
+  },
+  "baseline_run_directories": 43,
+  "baseline_runs_at_or_over_the_level_1_reference": {
+   "ar25-0c556536": 4,
+   "g50t-5849a774": 0,
+   "sk48-d8078629": 0,
+   "tn36-ef4dde99": 2
+  },
+  "baseline_scorecard_named_run_ids": 57,
+  "baseline_successful_actions": 1562,
+  "baseline_summaries_carrying_a_score_key": 0,
+  "comparisons": "27 quantities, 27 AGREES, 0 DIFFERS",
+  "games_where_the_zero_is_a_budget_artefact": [
+   "g50t-5849a774",
+   "sk48-d8078629"
+  ],
+  "games_where_the_zero_is_capability_evidence": [
+   "ar25-0c556536",
+   "tn36-ef4dde99"
+  ],
+  "levels_completed_anywhere": 0,
+  "r2b_containment_live": "21 of 27 completed probes (77.8%); g50t leg 20 of 24 (83.3%); sk48 leg 1 of 3, reported as a count",
+  "r2b_containment_predicted_offline": "43 of 52 (82.7%), registered before the round was authorised",
+  "r2b_containment_prior": "5 of 52 (9.6%) for the ablation frontier",
+  "theoria_level_logs": "22 files, 22 of them zero bytes -- never_written, not 0 rows",
+  "theoria_live_legs": 16,
+  "theoria_max_non_probe_actions_on_one_leg": 11,
+  "unmeasurable_here": [
+   "per-tier baseline action totals -- the tier lives in the scorecard `tags`, which this census does not join to the run id; read from A28 and labelled as read, never recomputed",
+   "anchor drift behind the 47 off-frontier probes of 2026-07-31 -- needs the gitignored per-leg frame trace",
+   "whether any leg would complete a level at adequate budget -- no run of any arm has ever been given the reference number of actions on g50t or sk48. Absence of the experiment, not a zero result"
+  ]
+ },
+ "not_changed": [
+  "every territory other than papers/ -- theoria-arm, baseline-arms, battery, freeze, monitor and the arms were read only",
+  "papers/phase1-workshop/verify_paper.py and papers/verify.py -- the gate was not touched by a change that had to pass it, and no ADJUDICATED_* ruling was added",
+  "papers/phase1-workshop/figures/ -- no figure data moved; C FIGDATA is red for the same reason it was red before",
+  "any directory whose name contains A26b -- a long-leg experiment owns those and was writing them; the census skips them by name and a test asserts the skip",
+  "sections/02..06, 08..10 -- untouched, so the stale audits' coverage of them carries forward unchanged"
+ ],
+ "prompt_id": "P19b-papers-the-zero-and-its-three-explanations",
+ "reproduce": [
+  "cd papers/phase1-workshop/runs/20260804T1500Z-P19b-the-zero-and-its-three-explanations",
+  "python census.py --check              # 27 AGREES, 0 DIFFERS",
+  "python census.py --negative-control   # four mutations, PASS",
+  "python stamp_manifest.py --check      # MANIFEST matches",
+  "cd ../.. && python assemble.py && python verify_paper.py",
+  "cd .. && python -m pytest -q"
+ ],
+ "residual_gaps": [
+  "The $0 experiment -- make the level-boundary detector fire once offline -- is not done and belongs to theoria-arm. Until it lands, every zero-completion record in the repository is worth less than it reads.",
+  "The per-tier baseline split is read from A28, not recomputed here.",
+  "Leg 20260801T001851Z-R1b-sk48-b records probe_actions 0 in its summary and one completed probe in probes.jsonl; the census prints both rather than reconciling them.",
+  "Sections 3-6 and 8-10 have had no equivalent recount. Four of the numbers checked in the two swept sections were wrong in the flattering direction; OPEN_ITEMS.md A6 records the unswept remainder.",
+  "The paper grew by roughly 2,400 words against OPEN_ITEMS.md E1."
+ ],
+ "sealed_pile_contact": "none. Only the four development-pile game ids appear (ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99). No ARC call, no model call, no network request, no spend.",
+ "spend": {
+  "arc_actions": 0,
+  "model_usd": 0,
+  "network_requests": 0
+ },
+ "territory": "papers",
+ "utc": "20260804T1500Z",
+ "what": "The zero-completion fact is stated as the paper's central negative result with its three competing explanations printed beside it, four overstated numbers are corrected, and the R2b live containment result plus its prior offline prediction are carried in."
+}

@@ -32,6 +32,8 @@ import sys
 import time
 from typing import Any, Dict, List, Optional
 
+from . import level_evidence
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 ARM = os.path.dirname(HERE)
 REPO = os.path.dirname(ARM)
@@ -95,6 +97,12 @@ def read_leg(slug: str) -> Dict[str, Any]:
     surprises = d.get("surprises") or {}
     levels = d.get("levels") or {}
     by_kind = dict(surprises.get("by_kind") or {})
+    # The counter as the leg's own summary reports it, and -- separately -- what
+    # the leg's *artefacts* support. A34: the two are not the same claim. A leg
+    # that crossed a boundary and lost `levels.jsonl` reports the same
+    # `levels.levels_completed` as a leg that crossed nothing, and the round
+    # total below used to add both to the same number.
+    evidence = level_evidence.read_leg(os.path.join(ARM, "runs", slug))
     return {
         "slug": slug,
         "game_id": d.get("game_id"),
@@ -102,6 +110,9 @@ def read_leg(slug: str) -> Dict[str, Any]:
         "stopped_because": (d.get("stopped_because") or "")[:200] or None,
         "actions_ok": budget.get("actions_ok"),
         "levels_completed": levels.get("levels_completed"),
+        "levels_evidence": {"verdict": evidence["verdict"],
+                            "levels_completed": evidence["levels_completed"],
+                            "detail": evidence["detail"]},
         "level": levels.get("level"),
         "desk_calls": desk.get("calls"),
         "usd": desk.get("cli_cost_usd"),
@@ -185,7 +196,16 @@ def main(argv=None) -> int:
             "usd": round(sum((l.get("usd") or 0) for l in legs), 6),
             "actions_ok": sum((l.get("actions_ok") or 0) for l in legs),
             "desk_calls": sum((l.get("desk_calls") or 0) for l in legs),
-            "levels_completed": sum((l.get("levels_completed") or 0) for l in legs),
+            # A34's negative control lives on this line. It used to read
+            # `sum((l.get("levels_completed") or 0) for l in legs)`, which
+            # turns three different facts -- "completed none", "never looked",
+            # "completed one and lost the record" -- into the same integer.
+            # `level_evidence.total` sums only the legs whose artefacts support
+            # a count and reports the rest as not counted, by name.
+            "levels": level_evidence.total(
+                [dict(l.get("levels_evidence") or
+                      {"verdict": "no_run", "levels_completed": None},
+                      slug=l.get("slug")) for l in legs]),
             "surprises": {k: sum((l["surprises"].get(k) or 0) for l in legs
                                  if isinstance(l.get("surprises"), dict))
                           for k in SURPRISE_KINDS},

@@ -426,3 +426,43 @@ incomplete search that gave up returns. `backends.proves_unsolvable` therefore
 decides on FD's own log line plus the completeness of the configuration we
 chose, and refuses the claim on the satisficing rung even when the log says the
 space was exhausted (D-024).
+
+## E20 — cegis_miner refused on every live track (2026-08-04, branch `q/e20`)
+
+The arm's frontier was built by ablation because `cegis_miner` refused on every
+live track. The recorded verdict said the world does not narrate as one mover.
+Replaying the r3 leg offline from its own ledger (34 frames,
+`engine-rig/runs/20260804T000000Z-E20-cegis-refused-on-every-live-track/`)
+reproduces that leg's final dispatch exactly — 18 tracks, 16 refusals, the same
+three refusal strings — and shows the verdict welded three causes together:
+
+* **13 of the 16** refusals were `object absent at frame 0`, the miner's walk
+  starting before the track was born. Not about the world's narration at all.
+* **3** were `recolor`/`vanish` from `connected_components(4)` merging the
+  24-cell mover into a 1006-cell floor blob. Real, and the item's premise.
+* **2 tracks never refused.** They died inside `mine()` on `NoSeparatingGuard`,
+  whose reason the arm's report discards. `n_tracks: 18, n_refusals: 16` was in
+  the record from the start.
+
+The mover is not missing: `split_by_color=True` gives it as a clean 24-cell,
+26-move track that the precondition accepts. MDL never picks that operator —
+13,332 bits vs 158,012, because splitting forces the floor to be re-declared
+each time the ring's hole crosses it.
+
+**The real blocker was the guard vocabulary.** `build_vocabulary` hardcoded the
+`act` atoms to UP/DOWN/LEFT/RIGHT; the world's alphabet is `RESET, ACTION1..5`.
+Every `act==` literal had mask 0 — 36 atoms, 4 discriminating, all of them
+`at()`. Fixed in D-E20-001/002/003 (alphabet from the evidence; unseparable
+classes recorded rather than fatal; late-born tracks keep their evidence). On the
+same recorded evidence the mover's track goes from refused to **4 rules at
+frontier width 1 plus 4 named gaps** (`ACTION2` and `ACTION5`, which have hidden
+state). Whole-leg: 0 rules → 12 under the operator the leg ran, 38 under the
+other.
+
+Negative control: **common-fate clustering would not have fixed this.** 18
+co-variation classes over the leg, largest 48 cells — the union of the ring's two
+berths, which change in perfect anti-phase. The operator returns a phantom here.
+
+Still open: `_POS_BITS` is calibrated for a 12×12 board; the operator choice is
+`theoria-arm`'s to make and is filed to `monitor/inbox/`; common-fate remains
+absent from the operator space `Theoria.md:90` specifies.

@@ -1499,3 +1499,102 @@ as the second would turn "we did not look" into "we looked and there was
 nothing". `tests/test_scoreboard.py` is mostly about that distinction, and
 `test_no_recorded_leg_contains_a_real_boundary` states the caveat as a test so
 that it fails on the day it stops being true.
+
+## D-A34-001 · The win was the one completion `levels.jsonl` was coded never to record
+
+`inner/levels.LevelLog.observe` returns `None` when the counter reaches the
+game's last level, and the reason it gives is sound: the caller's boundary
+handling drops `problem.json` and wipes `generated/`, so firing it on a winning
+run would delete exactly the artefacts that say how it was won, and `starts`
+would be cut into a level that does not exist. `test_winning_the_last_level_
+does_not_open_an_eighth` has pinned that since A3 and it still does.
+
+What that argument covered is the **handling**. What it was silently extended to
+is the **record**, which it never covered — and the record was the whole point
+of the file. Measured on a synthetic three-level win (A34,
+`runs/20260804T131652Z-A34-levels-recording-path/MEASUREMENT.json`):
+`levels.jsonl` two rows, `inner/scoreboard.ScoreWatch` three `level_boundary`
+events and a verdict of `observed`, `witnessed_wins.json` two witnesses. The row
+that was missing was the win. Scaled to g50t, a seven-level win writes six rows
+and leaves the seventh off disk while the second instrument records all seven.
+
+Two instruments, one event, silently different answers, on the single run this
+project exists to produce. A27's `corroborate()` cannot catch it: it compares the
+envelope counter against a *scorecard* reading and never compares its own event
+list against `LevelLog`'s.
+
+So the two halves are separated rather than the suppression removed.
+`LevelLog.finals` holds the winning increment as a `game_won` event and
+`records()` — not `events` — is what `levels.jsonl` is written from;
+`observe` still returns `None`, which is still what tells `_record` to keep its
+hands off the trajectory. `loop._on_game_won` is the non-destructive half of the
+boundary handler and nothing else: snapshot the books that won, witness the
+winning frame, append a turn row. `problem.json` and `generated/` stay.
+
+`finals` is a second list and not an entry in `events` because `events` and
+`starts` are one structure written down twice — `starts[i+1]` is where the
+trajectory after `events[i]` begins, and every reader that segments a run relies
+on the pairing. A win appends to neither. Putting it in `events` would break
+every one of those readers at once, on the one run where getting the record right
+matters most.
+
+`_witness_the_win` gains `segmenting` for the same reason the event is separate.
+At a boundary the step carrying the increment is the *first* frame of the next
+level, so the cleared level's last frame is the step before it and its opening is
+`starts[-2]`. At a win there is no next level: that step **is** the final frame,
+and the opening is `starts[-1]`. Reading a win with the boundary's arithmetic
+returns the second-to-last frame of a won game and the opening board of the wrong
+level — worse than no witness, because it looks like one.
+
+## D-A34-002 · A lost completion record is not a completion of zero, and `or 0` said it was
+
+`armtools/round.py` totalled a round with `sum((l.get("levels_completed") or 0)
+for l in legs)`. That one character makes three different facts the same integer:
+*completed none*, *never looked*, and *completed one and lost the record*. A34's
+negative control is the third, built deliberately — a mock leg that genuinely
+crosses a boundary, with its `levels.jsonl` truncated to zero bytes, which is the
+exact byte state of all twenty-two archived files. Under the old rule it
+contributed what a leg that completed nothing contributed, and while that holds,
+"nothing has ever completed a level" is a sentence no measurement can refute.
+
+`armtools/level_evidence.py` is the readback, and its whole design is that
+`levels_completed` is `None` in three of its five verdicts. `observed` carries a
+number; `measured_absent` — the counter was read on every envelope and never rose
+— is the **only** verdict under which a zero is honest; `unmeasured`,
+`evidence_missing` and `no_run` carry `None`. `total()` sums the legs that
+reported and names the ones that did not, rather than adding their absences to
+the numerator's denominator.
+
+Note what `evidence_missing` does **not** do: it does not fall back on the
+counter in `RUN_STATE.json` and publish that number instead. A completion whose
+event record is not on disk cannot be audited, and a figure no artefact supports
+is worse than a gap that is named.
+
+## D-A34-003 · A campaign counted a won game as zero levels, and only the fix upstream could show it
+
+`harness/campaign.py` asked "how many levels did this leg finish" twice, both
+times as `(summary.get("levels") or {}).get("boundaries", 0)` — once for the
+campaign's `levels_completed` and once inside `_progress`, the predicate behind
+`ZERO_PROGRESS_LIMIT`. `boundaries` is the count of *segmenting* boundaries: the
+ones with a level after them. The increment that finishes a game is not one of
+those, deliberately (D-A34-001).
+
+So a leg that **won its game** counted zero completions at both sites. It would
+have contributed nothing to the campaign total, and `_progress` would have
+called the winning leg unproductive — which means three such legs in a row could
+have stopped the campaign on `zero_progress_streak` immediately after the only
+win in this project's history.
+
+This was already true before D-A34-001: `boundaries` excluded the win then too,
+and there was no other number to add, so the expression could not have been
+written correctly. Nothing had ever won, so nothing had ever been wrong. That is
+not the same as being right, and it is the second time in this ticket that a
+code path was correct only because the event it mishandles has never happened.
+
+`_completions()` is the one reading, used at both sites: `boundaries +
+game_won`, and `0` for a summary with no `levels` block — with
+`legs_with_no_level_record` counted separately in the campaign summary so that
+absence is a number of its own rather than part of the numerator. `campaign_
+series` marks the boundary turns from `events + finals` for the same reason: the
+turn a game was won on is the one turn figure 2 most needs marked, and reading
+`events` alone leaves exactly that turn unmarked.

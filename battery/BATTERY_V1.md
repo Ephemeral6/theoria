@@ -226,6 +226,7 @@ sha256:08e39aaa524bf6c617ba8f1fe4dfd6c7e9de8fbe833f4ed393adea65d111111e  battery
 sha256:f73af86bfb49496b053dce065f73a9688b88a2ed2a3faf8b01f8f6b7fc472a83  battery/audit/frontload.py
 sha256:0ade8fbb241ff8f6971d73cb3566f0362ef0d960dd80b719999b4acdcbb4e6ad  battery/audit/gaming.py
 sha256:eac82aaf1e237c617a87888330d1471f400f0c76068ba0c3f68f84858bf0cbe8  battery/audit/live_arm.py
+sha256:bd8a4de68f28a16cea22ca55ae837fbaa2fbe7665e72ac37f08fb4dc924bb72f  battery/audit/live_census.py
 sha256:284903121b6c9f5aaec919ee9235413017827f9f6b63e9e96be8e08c0083a3f0  battery/audit/live_economy.py
 sha256:740eb1601196a37d7a1b439e01faffbe4b538b6cc410be9303637ad16b0d0492  battery/audit/live_tiers.py
 sha256:35b43770c4d72b7da6ec72220c0a73cdddd05ad4e101e9da9a642f72e39cd6fd  battery/audit/redundancy.py
@@ -326,6 +327,7 @@ sha256:051709eb517f44fe3b89a9836fa4cee2885cf4d1b27a1bc381e5f453ec6200cf  battery
 sha256:e7e4799ef6dbeb96271b46fa819cc7ebb5efd7fe6089d8e49fda1eaa6f2d7d3a  battery/tests/test_exploits_mechanism_epistemic.py
 sha256:5b17a09cba2ffb176698dcbffad3a58b7c31c2b31562be22350d6dc8e2d8c793  battery/tests/test_freeze.py
 sha256:9c9d32c97323d05e714477bc733886f688cf41db115b448f16c0ae32c6b24215  battery/tests/test_guard.py
+sha256:6966274e901a3bfb8626f8fb6be6590b4cd6c1eadd7afc44fd2e452a78e60fd9  battery/tests/test_live_census.py
 sha256:4c2d99c7b111afe6aa669bc44596c8cce59c33d7c8f2a4abb006f8d93090515a  battery/tests/test_live_economy.py
 sha256:74b8b440da5947f2b128d6746d08527ee9449176df27402ec3eeb8885c6e6831  battery/tests/test_live_tiers.py
 sha256:a4d1324c3ec79877b5dd7c1ba8d125880ba2d7cbcdd9c23a1f24daceb30d7085  battery/tests/test_metrics.py
@@ -350,8 +352,8 @@ sha256:790102a0380ef449bfaf273fa6fa3b74f61d4c1045f286999c0a143df7beb7f5  battery
 ### 2.5 freeze —— 冻结机制自身（2 个文件）
 
 ```freeze:freeze
-sha256:8844d38021a59acc74f32c9e4fa71c2a38d947da2ffd554f1d54632905049efc  battery/freeze.py
-sha256:02c1b68e5496f45004b87b115f9232cd621b922c246aad6fa1bb8d30cae7336b  battery/verify.py
+sha256:6071a34b8778065d9e974c7d7f9103165384174c923de56d8bf75027dfb4fdce  battery/freeze.py
+sha256:fa22c04b9d9e42e1588d1cbfa28944ce3bd08cf0e6bfcf7afd2d6cf58063d656  battery/verify.py
 ```
 
 收录它们，是为了让「悄悄把检查放松」这件事和「改一条指标」一样在 diff 里显形。
@@ -370,6 +372,7 @@ sha256:06313f87c8d6ebbee8dff2398ef48a625f378234f4aa71c19da1e79138822c38  battery
 sha256:6deadace384a00848a945f226958f6db85ae8197ef1fb7cd1c2a1836d0b1406f  battery/artifacts_live/frontload_e2l.json
 sha256:9ff3c5e78b7bd67cd6db8fb2dce5ae0fe852ce38e52ca9a2509f95fc1e0738c5  battery/artifacts_live/gaming_audit.live.json
 sha256:a6d2602714f630b6a36ab7fed249c61637baac7f8d36979a0907707b304b5d3b  battery/artifacts_live/live_arm_readings.json
+sha256:fa84f4260a8088ca13fc80810fa17ff52a2e7ba945bd1e95bf08a467f517ef79  battery/artifacts_live/live_census.json
 sha256:fa23ad802df8b883e3e81184d274b0013ad1d0e4e2482d921140c59ac38055dc  battery/artifacts_live/live_economy.json
 sha256:3182b32b5a033137db3022ec34bac236dfec31922179ede3d9a3e26e0df7ae94  battery/artifacts_live/threat_model.json
 ```
@@ -930,3 +933,62 @@ the archive — rung 7 exists to make exactly this visible, and it did.
 **冻结基线与既有七份冻结读数一个字节未动**（`gaming_audit.json` 仍是
 `191c0ee8cf2c…`，切堆摘要仍是 `3feca53e…`）。E2L **未进
 `battery.metrics.REGISTRY`**：它没过工序 1，不进回算、不进包络、不进主表。
+
+
+## 附：2026-08-04 增补（三）—— 活归档普查（live archive census）
+
+本增补不新增任何读数，只把**已有两份活伴生产物看不见的那一部分归档**数出来。
+
+`live_arm_readings.json` 与 `live_economy.json` 都经由
+`theoria_live.collect` 读活臂，而 `collect` 背后的 `discover`
+先按**战役标签**筛一遍：账本的 `run_start` 必须声明
+`arm: "theoria"` 且 `spend_gate.campaign` 以 `theoria-arm:A3-campaign`
+开头。过不了这一关的 leg 归档**不是被拒绝，是从未被看见**：
+它不在任何伴生产物的 `runs` 里，也不在任何伴生产物的 `excluded`
+里。第 7、8 级的陈旧闸门是“已提交产物 vs 进程内重算”，而两次行走都
+没看过它 —— 所以两边一致，闸门永远绿。
+
+**本树上的实测（2026-08-04，master `4846e66d`）**：`theoria-arm/runs/`
+下 79 个目录、37 份 `ledger.jsonl`；伴生产物评分 14 份、具名拒绝 9
+份，**另外 14 份既不在评分也不在拒绝名单里**。这 14 份全部声明
+`arm: "theoria"`、全部跑在真上游 `https://three.arcprize.org`，其中 8 份
+有 env step；合计 682 步、6 份有计费调用共 42 次、**23.855414 USD 真金白银**。
+它们是 A3 战役的花费闸门存在**之前**的 leg，所以压根没有战役标签。
+
+* 新增 `battery/audit/live_census.py`（入 `code` 桶）：不带任何过滤地走一遍
+  归档，给每一份 `ledger.jsonl` 一个**具名的处置**：`scored` /
+  `excluded`（适配器自己的理由原样带出）/ `invisible` / `foreign` /
+  `unreadable`。产物 `battery/artifacts_live/live_census.json`（入 `readings`
+  桶）无时间戳、无绝对路径，对固定的树逐字节可复现，并钉住它读过的
+  每一份账本的 sha256；写进 `battery/artifacts/` 的目的地直接拒绝（复用
+  `live_tiers.refuse_frozen_destination`，一个定义）。
+* **堆闸门本来在战役过滤器的下游**。`load_leg` 会调
+  `piles.assert_playable`（默认拒绝），但能不能走到 `load_leg` 是
+  `discover` 说了算；没战役标签的 leg 从未与闸门照面。普查对**整个**
+  归档跑同一道闸门。本树上那 14 份全部名开发堆的局 —— 这是关于**这批材料**
+  的事实，不是代码的性质，所以它得有一个每次都重算的闸门而不是一句话。
+* `battery/verify.py` 增第 9 级（原八级重编号为 `/9`）：普查与进程内重算
+  不一致 → 红；committed 行里出现非开发堆的局 → 红；普查的 scored 数与第 7
+  级读数产物的 `n_runs` 不一致 → 红；走过的账本数与分类数不对 → 红。
+  **invisible 本身只报不闸**：战役标签是 `theoria-arm` 的东西，一个为别人的
+  标签决策而永远红的闸门是本领地清不了的闸门（同第 8 级对三方对账分歧的处理）。
+* `battery/tests/test_live_census.py`（入 `suite` 桶）：21 条，正反两向。负控
+  包括：无标签 leg 必须出现在 `invisible` 而适配器对它两个名单都沉默；无标签
+  leg 抬一个封存堆 id 时普查必须抛错（封存 id **不写入测试文件**，运行时从
+  `piles.json` 读）；篗改的普查、非开发堆的行、两份产物对“读了多少”分歧、
+  缺失/坏 JSON 的普查、写入冻结目录。
+
+**产物的第二半：账单形状的地板（`shape_floor`）**。E2（前载指数）与 E3
+（收敛点）都在 `MIN_TURNS_FOR_SHAPE = 8` 之下拒答。普查逐 leg 记下归档
+精确轴上的决策回合数：**14 份评分 leg 里只有 1 份（r3，8 回合）过地板**，
+其余为 1、2、2、3、4、6、7 回合与三份无账单的 leg。地板是**逐 leg** 的：只有
+更长的 leg 能过，更多的 leg 永远不能。所以 R1/R1b/R2/R2b 四轮进档之后，
+经济族能说的话与四份 leg 时一字不差 —— 这是如实报告，不是缺陷。
+
+因此 `freeze:code` 由 53 → 54 个文件、`freeze:suite` 26 → 27、
+`freeze:readings` 12 → 13，`freeze:*` 块按 `python -m battery.freeze` 逐块重渲，
+`freeze.py` 与 `verify.py` 自身的摘要随之更新。**冻结基线与七份冻结读数
+一个字节未动**（`gaming_audit.json` 仍是 `191c0ee8cf2c…`，切堆摘要仍是
+`3feca53e…`），`freeze.check()` 仍为空。普查**不把任何 invisible leg 载入为
+`Run`、不在它上面算任何指标、不移动任何 tier、不结算任何预测**：那批 leg
+该不该进读数，是 `theoria-arm` 的战役标签问题，不是测量领地能单方面定的。

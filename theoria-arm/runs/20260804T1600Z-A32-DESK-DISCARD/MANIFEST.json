@@ -1,0 +1,79 @@
+{
+ "base_commit": "4846e66dee64940b3bb457b408db13775728915c",
+ "branch": "q/a32-desk-discard",
+ "built_by": [
+  "armtools/desk_discard.py (new) -- the discard census and the replay",
+  "armtools/cache_premium.py (new) -- the TTL and break-even arithmetic",
+  "harness/replywholeness.py (new) -- the transport-loss detector",
+  "armtools/replyloss.py -- the start-of-reply classifier, used as given"
+ ],
+ "changed_outside_this_run": [
+  "inner/theorize.py -- tolerant marker read as a fragment, block salvage, truthful truncation complaint, identical-prompt guard",
+  "harness/modelcall.py -- records messages_dropped per call and exposes last_messages_dropped",
+  "tests/test_desk_discard.py (new) -- 31 checks, each with its negative control in the same block"
+ ],
+ "files": [
+  {
+   "bytes": 8903,
+   "path": "RUN_STATE.md",
+   "sha256": "7c2b7e0e11d78ef6e05e095346c1be8873737aee9ddc77d1f24f1c1f2042ee4e"
+  },
+  {
+   "bytes": 3225,
+   "path": "evidence/cache_premium.json",
+   "sha256": "b6eda37f9d5445db55dcb8fb5796ee88b6054511417730fcf8c5590441c4d1b3"
+  },
+  {
+   "bytes": 1773,
+   "path": "evidence/cache_premium.txt",
+   "sha256": "78ca749b21e8f9c57db82eb96513a03eaa302a87066aab7f81bada11cdf55015"
+  },
+  {
+   "bytes": 92728,
+   "path": "evidence/discard_census.json",
+   "sha256": "4c9cee7f64c71f37762e12092f74bb62c5b5f25c052d4c8e116b2767355b57d5"
+  },
+  {
+   "bytes": 3348,
+   "path": "evidence/discard_census.txt",
+   "sha256": "df9326af47359d3c59f560d9b4ccce92a699148a712935fa2c25374831235aa4"
+  },
+  {
+   "bytes": 5213,
+   "path": "evidence/replay.json",
+   "sha256": "85c909e8f573cee1495756fd51f41cca0c62d694477cb9e2699edea5187845ae"
+  },
+  {
+   "bytes": 2709,
+   "path": "evidence/replay.txt",
+   "sha256": "8e89befffc1acb0850169e26a2067ff2c515346d20320bd9ee9799866d6ca7d5"
+  },
+  {
+   "bytes": 5747,
+   "path": "make_manifest.py",
+   "sha256": "88d6c03d1066475dd56ee2ce0c21fc6fe2d17eeca143c86f5789b5e71ffaea37"
+  }
+ ],
+ "inputs": [
+  "runs/*/desk/*.md -- 104 archived desk transcripts",
+  "runs/*/desk_log.json -- 103 priced calls with usage blocks",
+  "runs/*/ledger.jsonl -- the CLI envelopes, read only for maxOutputTokens",
+  "runs/*/theorize.json -- the beat's own round records, read for corroboration"
+ ],
+ "lane": "campaign",
+ "leg": "offline forensics and repair -- no model call, no API call, no spend",
+ "not_done": [
+  "the transport repair itself (--output-format stream-json). It cannot be verified offline against a live CLI and harness/modelcall.py is on the path of the A26b round running now. $13.6544 of total loss stays open and is named as open."
+ ],
+ "prompt_id": "A32-desk-discard-classes-and-cache-premium",
+ "sealed_pile_contact": "none -- every leg read is a development-pile game, and nothing under environment_files/ was opened",
+ "seed": null,
+ "spend": {
+  "model_calls": 0,
+  "note": "reads archived records only; the repaired paths are replayed against transcripts already on disk",
+  "usd": 0.0
+ },
+ "territory": "theoria-arm",
+ "utc": "2026-08-04T16:00:00Z",
+ "what": "The 74% was five defects wearing one sentence. Over 104 archived desk transcripts and $147.5803 of spend, $52.0245 (35.3%) bought a reply the arm did not use -- but the largest slice is the beat, not the transport: $35.5789 across 11 calls arrived carrying a complete PLAYBOOK and 19-31 adjudications each and was discarded whole for want of a THEORY block. The transport-loss discriminator is arithmetic the arm already had: output_tokens minus iterations[-1].output_tokens is zero or an exact multiple of the model's own 64000-token ceiling on all 103 calls, no remainder, 19 calls affected. The repair loop paid for a byte-identical prompt 11 times ($9.1993 billed), every one labelled round3, because the missing-THEORY complaint was a constant string. Replayed offline, the repaired paths recover 299 adjudications and 10 playbooks from $38.3701 of the $52.0245 (73.8%) and no manual at all -- a truncated manual is deliberately refused rather than written. Separately: every one of the 4,058,283 cached tokens the arm has ever written went in at the ONE-HOUR TTL, cache_read is non-zero on 20 of 103 calls and 19 of those are within-call continuations, and at a read/write ratio of 0.169 against break-evens of 1.11 (1h) and 0.28 (5m) prompt caching is a net loss at either TTL -- $17.1984, 11.7% of the bill. Three of the four cache levers belong to the CLI; the one the arm holds is the token count, and deskdiet's two knobs that shrink it defaulted OFF on every leg in this archive."
+}

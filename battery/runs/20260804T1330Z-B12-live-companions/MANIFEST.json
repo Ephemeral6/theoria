@@ -1,0 +1,118 @@
+{
+  "api_spend_usd": 0.0,
+  "base_commit": "4846e66d",
+  "branch": "q/b12",
+  "deviations": [
+    "The ticket asked what moved in the live readings. Nothing moved; the answer is reported as a digest table rather than a metric list, and the work went to the gap that made the question unanswerable by the rungs."
+  ],
+  "evidence": [
+    {
+      "bytes": 12101,
+      "path": "RUN_STATE.md",
+      "sha256": "95d76b180ccecf016b645424345a49556228775d3c5e6abae4883a868e2fc123"
+    },
+    {
+      "bytes": 589,
+      "path": "gate_pytest.txt",
+      "sha256": "67f85b1229aa19c5236999f74086520ec53e1e71ffb69a12b331a4a86416025f"
+    },
+    {
+      "bytes": 2865,
+      "path": "gate_verify.txt",
+      "sha256": "5610a4b80c5ee1f913d6c7d1457b1e5b9858772abe0174d4b7cdf8285a8340c2"
+    },
+    {
+      "bytes": 6272,
+      "path": "make_manifest.py",
+      "sha256": "9b3e0b6bfdd06247dd2cd4ab39fe74e8d805afca6b5c2d971dfb4d40612a399f"
+    },
+    {
+      "bytes": 3133,
+      "path": "probe_refresh.py",
+      "sha256": "b8f9242df38de664325a02ddf6a64d1d45d682054be5d6347f9bb1f0f14c1de5"
+    },
+    {
+      "bytes": 4609,
+      "path": "probe_shape_floor.py",
+      "sha256": "a5119d8f7565ebc6b992dcc31cc3adf9ce869aa4da44bb6e6c04b983ac8f30c8"
+    },
+    {
+      "bytes": 2125,
+      "path": "refresh.json",
+      "sha256": "2d9589bff39bfbd4c31ef501e257a91f4012a83eedcf44701ab7e133a3d790e6"
+    },
+    {
+      "bytes": 4044,
+      "path": "shape_floor.json",
+      "sha256": "16c851a994bc13d6c7703cb41c6624c1f16e0803ec2e2a643c7a1d0849cd44f9"
+    }
+  ],
+  "files": [
+    {
+      "bytes": 66860,
+      "path": "battery/BATTERY_V1.md",
+      "sha256": "237f1233a64baa63a2ea8980ebc7f0ab037d6b0c1d3c909e798c3e9d3f1e9fbc"
+    },
+    {
+      "bytes": 29926,
+      "path": "battery/artifacts_live/live_census.json",
+      "sha256": "fa84f4260a8088ca13fc80810fa17ff52a2e7ba945bd1e95bf08a467f517ef79"
+    },
+    {
+      "bytes": 17301,
+      "path": "battery/audit/live_census.py",
+      "sha256": "bd8a4de68f28a16cea22ca55ae837fbaa2fbe7665e72ac37f08fb4dc924bb72f"
+    },
+    {
+      "bytes": 22790,
+      "path": "battery/freeze.py",
+      "sha256": "6071a34b8778065d9e974c7d7f9103165384174c923de56d8bf75027dfb4fdce"
+    },
+    {
+      "bytes": 11578,
+      "path": "battery/tests/test_live_census.py",
+      "sha256": "6966274e901a3bfb8626f8fb6be6590b4cd6c1eadd7afc44fd2e452a78e60fd9"
+    },
+    {
+      "bytes": 50540,
+      "path": "battery/verify.py",
+      "sha256": "fa22c04b9d9e42e1588d1cbfa28944ce3bd08cf0e6bfcf7afd2d6cf58063d656"
+    }
+  ],
+  "gaps": [
+    "The census does not close the gap it found: 14 live legs, 682 env steps and 23.86 USD remain outside every reading. The campaign label is theoria-arm's; raised via monitor/inbox/.",
+    "Only this territory's adapter was audited. baseline-arms and ablation-arm have their own discovery paths and were not checked -- out of territory, stated rather than assumed clean.",
+    "The A26b legs in flight were deliberately not read. When they land, rungs 7, 8 and 9 all go red until the companions are regenerated, which is the designed behaviour.",
+    "n_dirs counts directories; 42 of 79 carry no ledger and are counted but not classified. A leg archive shipping its ledger under a different name would be missed the way discover misses an unlabelled one.",
+    "Rung 9 cross-checks the census against rung 7's companion only; live_economy.json is covered transitively by rung 8."
+  ],
+  "head_commit": "4846e66dee64940b3bb457b408db13775728915c",
+  "network": "none -- every number here is recomputed offline",
+  "prompt": "no board item exists: monitor/board/items/ carries no B* item at 4846e66d, and none appears in done/, claimed/, board.log or git history. The dispatch prompt was the whole brief.",
+  "prompt_id": "B12-live-readings-predate-several-legs",
+  "results": {
+    "archive_dirs": 79,
+    "archive_ledgers": 37,
+    "companions_moved": 0,
+    "companions_recomputed": 6,
+    "cumulative_live_usd_over_scored_legs": 124.639439,
+    "excluded_with_reason": 9,
+    "freeze_check": "empty",
+    "frozen_artifacts_touched": 0,
+    "invisible_billed_calls": 42,
+    "invisible_billed_usd": 23.855414,
+    "invisible_env_steps": 682,
+    "invisible_to_every_rung": 14,
+    "legs_clearing_shape_floor": 1,
+    "metrics_changed": 0,
+    "min_turns_for_shape": 8,
+    "readings_drift": "empty",
+    "scored": 14,
+    "suite": "491 passed",
+    "verify_py": "green on all 9 rungs"
+  },
+  "sealed_pile_contact": "none; dev-pile g50t-5849a774 / sk48-d8078629 legs read only. The pile guard now runs over the whole archive, and the one test that needs a sealed id reads it from arc-recon/data/piles.json at run time rather than writing it down.",
+  "territory": "battery",
+  "utc": "2026-08-04T13:30:00Z",
+  "what": "The brief's premise was tested first and is false: all five existing artifacts_live/ companions recompute byte-identically (refresh.json, 0 of 6 moved), because S46 already brought the R1/R1b/R2/R2b legs in on 2026-08-02. The real defect is one level down: theoria_live.discover filters by campaign label BEFORE load_leg, so 14 live-arm leg archives are in neither the runs map nor the excluded list of either companion, and no rung can turn red over them. battery/audit/live_census.py walks the archive unfiltered, gives every ledger a named disposition, runs the pile guard over all of it, and verify.py rung 9 gates it."
+}

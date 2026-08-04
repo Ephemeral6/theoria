@@ -1,0 +1,186 @@
+A25 counterfactual -- the same recorded money, a different cadence
+  the number to beat is 78: 78 is the number to beat: g50t level 1's own `level_baseline_actions`, recorded in runs/20260728T012311Z-g50t-first-contact-salvage2/ledger.jsonl. The best recorded leg reached 33.
+
+  control fidelity: 71/73 recorded adjudications reproduced
+    the control refuses 2 recorded adjudication(s). Every one of them is on a leg that ran BEFORE the gate existed: MIN_NEW_FRAMES_BETWEEN_THEORIZE landed in 6717a7e0 at 2026-07-28T02:01Z, and 20260728T015354Z-g50t-first-contact started at 01:53Z -- eight minutes earlier. It is the leg whose one-action-per-adjudication behaviour the constant was written to stop, so a control that refuses its calls is the control working, not the control drifting.
+
+  two readings of acts/$: `cover` credits a call with the actions between it and the one before (a late refusal drops a leg's trailing actions); `whole` divides every recorded action by the reduced bill. The truth is between them.
+  policy                        fire  skip      usd   cover   whole    @cap   @capW    vsW
+  actions-unit                    70     3   140.54  1.4658  1.6081    36.6    40.2  1.041
+  adaptive                        64     9   140.54  1.3804  1.6081    34.5    40.2  1.041
+  defer-explained                 71     2   146.20  1.4091  1.5459    35.2    38.6    1.0
+  defer-explained-every-round     58    15   134.53  1.5015  1.6799    37.5    42.0  1.088
+  floor-12                        24    49    31.07  5.0857  7.2744   127.1   181.9  4.712
+  floor-8                         38    35    79.03  2.3914  2.8596    59.8    71.5  1.852
+  inert-guard                     54    19   125.31  1.4843  1.8035    37.1    45.1  1.168
+  inert-guard-one-round           43    30   102.50  1.8926  2.2048    47.3    55.1  1.427
+  measure-inertia                 71     2   146.20  1.4091  1.5459    35.2    38.6    1.0
+  min-info-2                      56    17   105.26  1.8716  2.1471    46.8    53.7  1.391
+  one-round                       49    24   110.65  1.8617  2.0424    46.5    51.1  1.324
+  one-round-floor-8               26    47    63.09  2.9958  3.5823    74.9    89.6  2.321
+  today                           71     2   146.20  1.4091  1.5459    35.2    38.6    1.0
+
+  what each policy refused (of the calls that were scored). `today` refuses 2 on a leg that predates the gate, so the columns beyond it are what the policy adds:
+  policy                         inert  productive unreached    +inert   in/prod
+  actions-unit                       1           1         0         0      None
+  adaptive                           7           1         0         6      None
+  defer-explained                    1           1         8         0      None
+  defer-explained-every-round       11           3         0        10       5.0
+  floor-12                          16          21         0        15      0.75
+  floor-8                           13          13         0        12       1.0
+  inert-guard                       13           5         0        12       3.0
+  inert-guard-one-round             18          10         0        17      1.89
+  measure-inertia                    1           1         0         0      None
+  min-info-2                         5           5        15         4       1.0
+  one-round                         15           7         0        14      2.33
+  one-round-floor-8                 20          17         0        19      1.19
+  today                              1           1         0         0      None
+
+  which leg ran differently (a fact), and which leg's projection crosses its own level-1 boundary (a projection):
+  actions-unit         ran differently on 1 of 15 leg(s)
+      20260801T001851Z-R1b-sk48-b                    fired 2/3  $5.65 saved  refused {'floor': 1}
+  adaptive             ran differently on 2 of 15 leg(s)
+      20260728T083400Z-E3-sk48-carried-v2            fired 8/14  $0.00 saved  refused {'floor': 6}
+      20260801T001851Z-R1b-sk48-b                    fired 2/3  $5.65 saved  refused {'floor': 1}
+  defer-explained      ran differently on 0 of 15 leg(s)
+  defer-explained-every-round ran differently on 4 of 15 leg(s)
+      20260728T083400Z-E3-sk48-carried-v2            fired 4/14  $4.01 saved  refused {'continuation:defer_after_inert': 2, 'defer_after_inert': 8}
+      20260731T1310Z-A3-level2-carried-r2            fired 3/4  $1.66 saved  refused {'continuation:defer_after_inert': 1}
+      20260731T1500Z-A3-sk48-carried-l1              fired 7/8  $1.37 saved  refused {'continuation:defer_after_inert': 1}
+      20260801T044640Z-R2b-sk48-b                    fired 3/4  $4.63 saved  refused {'continuation:defer_after_inert': 1}
+  floor-12             ran differently on 11 of 15 leg(s)
+      20260728T025503Z-g50t-e08-fixed                fired 2/4  $4.18 saved  refused {'floor': 2}
+      20260728T083400Z-E3-sk48-carried-v2            fired 6/14  $5.43 saved  refused {'floor': 8}
+      20260731T1310Z-A3-level2-carried-r2            fired 1/4  $7.93 saved  refused {'floor': 3}
+      20260731T1430Z-A3-level2-carried-r3            fired 2/8  $9.96 saved  refused {'floor': 6}
+      20260731T1500Z-A3-sk48-carried-l1              fired 2/8  $8.50 saved  refused {'floor': 6}
+      20260731T231654Z-R1-g50t-a                     fired 0/3  $7.60 saved  refused {'floor': 3}
+      20260731T231654Z-R1-sk48-b                     fired 0/1  $7.61 saved  refused {'floor': 1}
+      20260801T001851Z-R1b-g50t-a                    fired 2/8  $12.82 saved  refused {'floor': 6}
+      20260801T001851Z-R1b-sk48-b                    fired 0/3  $17.39 saved  refused {'floor': 3}
+      20260801T044640Z-R2b-g50t-a                    fired 2/7  $13.41 saved  refused {'floor': 5}
+      20260801T044640Z-R2b-sk48-b                    fired 0/4  $20.30 saved  refused {'floor': 4}
+      + 20260728T025503Z-g50t-e08-fixed              projects 42.9 actions at the $25 cap, its level 1 needs 78
+      + 20260731T1310Z-A3-level2-carried-r2          projects 199.3 actions at the $25 cap, its level 1 needs 78
+      + 20260731T1430Z-A3-level2-carried-r3          projects 179.8 actions at the $25 cap, its level 1 needs 78
+      + 20260731T1500Z-A3-sk48-carried-l1            projects 86.5 actions at the $25 cap, its level 1 needs 61
+      + 20260801T001851Z-R1b-g50t-a                  projects 126.7 actions at the $25 cap, its level 1 needs 78
+      + 20260801T044640Z-R2b-g50t-a                  projects 117.4 actions at the $25 cap, its level 1 needs 78
+  floor-8              ran differently on 11 of 15 leg(s)
+      20260728T025503Z-g50t-e08-fixed                fired 2/4  $4.18 saved  refused {'floor': 2}
+      20260728T083400Z-E3-sk48-carried-v2            fired 8/14  $2.46 saved  refused {'floor': 6}
+      20260731T1310Z-A3-level2-carried-r2            fired 1/4  $4.78 saved  refused {'floor': 3}
+      20260731T1430Z-A3-level2-carried-r3            fired 4/8  $6.31 saved  refused {'floor': 4}
+      20260731T1500Z-A3-sk48-carried-l1              fired 4/8  $6.33 saved  refused {'floor': 4}
+      20260731T231654Z-R1-g50t-a                     fired 2/3  $1.65 saved  refused {'floor': 1}
+      20260731T231654Z-R1-sk48-b                     fired 0/1  $7.61 saved  refused {'floor': 1}
+      20260801T001851Z-R1b-g50t-a                    fired 4/8  $6.59 saved  refused {'floor': 4}
+      20260801T001851Z-R1b-sk48-b                    fired 1/3  $11.74 saved  refused {'floor': 2}
+      20260801T044640Z-R2b-g50t-a                    fired 3/7  $10.15 saved  refused {'floor': 4}
+      20260801T044640Z-R2b-sk48-b                    fired 2/4  $5.38 saved  refused {'floor': 2}
+      + 20260728T025503Z-g50t-e08-fixed              projects 42.9 actions at the $25 cap, its level 1 needs 78
+      + 20260731T1430Z-A3-level2-carried-r3          projects 115.7 actions at the $25 cap, its level 1 needs 78
+      + 20260731T1500Z-A3-sk48-carried-l1            projects 71.7 actions at the $25 cap, its level 1 needs 61
+      + 20260801T044640Z-R2b-g50t-a                  projects 72.8 actions at the $25 cap, its level 1 needs 78
+  inert-guard          ran differently on 4 of 15 leg(s)
+      20260728T083400Z-E3-sk48-carried-v2            fired 6/14  $2.46 saved  refused {'floor': 8}
+      20260731T1500Z-A3-sk48-carried-l1              fired 2/8  $9.68 saved  refused {'floor': 6}
+      20260801T001851Z-R1b-g50t-a                    fired 6/8  $3.09 saved  refused {'floor': 2}
+      20260801T001851Z-R1b-sk48-b                    fired 2/3  $5.65 saved  refused {'floor': 1}
+      + 20260731T1500Z-A3-sk48-carried-l1            projects 48.6 actions at the $25 cap, its level 1 needs 61
+  inert-guard-one-round ran differently on 10 of 15 leg(s)
+      20260728T015354Z-g50t-first-contact            fired 1/4  $4.12 saved  refused {'floor': 2, 'max_rounds_per_turn': 1}
+      20260728T025503Z-g50t-e08-fixed                fired 2/4  $2.98 saved  refused {'max_rounds_per_turn': 2}
+      20260728T083400Z-E3-sk48-carried-v2            fired 3/14  $5.50 saved  refused {'floor': 8, 'max_rounds_per_turn': 3}
+      20260729T0035Z-a3-desk-live-proof2             fired 2/3  $0.15 saved  refused {'max_rounds_per_turn': 1}
+      20260731T1310Z-A3-level2-carried-r2            fired 2/4  $6.44 saved  refused {'floor': 1, 'max_rounds_per_turn': 1}
+      20260731T1500Z-A3-sk48-carried-l1              fired 3/8  $7.87 saved  refused {'floor': 2, 'max_rounds_per_turn': 3}
+      20260731T231654Z-R1-g50t-a                     fired 2/3  $1.51 saved  refused {'max_rounds_per_turn': 1}
+      20260801T001851Z-R1b-g50t-a                    fired 6/8  $2.98 saved  refused {'max_rounds_per_turn': 2}
+      20260801T001851Z-R1b-sk48-b                    fired 2/3  $8.37 saved  refused {'max_rounds_per_turn': 1}
+      20260801T044640Z-R2b-sk48-b                    fired 2/4  $6.46 saved  refused {'max_rounds_per_turn': 2}
+      + 20260728T015354Z-g50t-first-contact          projects 56.8 actions at the $25 cap, its level 1 needs 78
+      + 20260728T025503Z-g50t-e08-fixed              projects 54.7 actions at the $25 cap, its level 1 needs 78
+      + 20260731T1310Z-A3-level2-carried-r2          projects 104.2 actions at the $25 cap, its level 1 needs 78
+      + 20260731T1500Z-A3-sk48-carried-l1            projects 97.1 actions at the $25 cap, its level 1 needs 61
+  measure-inertia      ran differently on 0 of 15 leg(s)
+  min-info-2           ran differently on 10 of 15 leg(s)
+      20260728T025503Z-g50t-e08-fixed                fired 2/4  $4.18 saved  refused {'min_surprises': 2}
+      20260731T1310Z-A3-level2-carried-r2            fired 2/4  $3.15 saved  refused {'min_surprises': 2}
+      20260731T1430Z-A3-level2-carried-r3            fired 7/8  $1.55 saved  refused {'min_surprises': 1}
+      20260731T1500Z-A3-sk48-carried-l1              fired 6/8  $2.57 saved  refused {'min_surprises': 2}
+      20260731T231654Z-R1-g50t-a                     fired 2/3  $1.65 saved  refused {'min_surprises': 1}
+      20260731T231654Z-R1-sk48-b                     fired 0/1  $7.61 saved  refused {'min_surprises': 1}
+      20260801T001851Z-R1b-g50t-a                    fired 7/8  $1.54 saved  refused {'min_surprises': 1}
+      20260801T001851Z-R1b-sk48-b                    fired 1/3  $11.74 saved  refused {'min_surprises': 2}
+      20260801T044640Z-R2b-g50t-a                    fired 6/7  $1.57 saved  refused {'min_surprises': 1}
+      20260801T044640Z-R2b-sk48-b                    fired 2/4  $5.38 saved  refused {'min_surprises': 2}
+      + 20260728T025503Z-g50t-e08-fixed              projects 42.9 actions at the $25 cap, its level 1 needs 78
+  one-round            ran differently on 10 of 15 leg(s)
+      20260728T015354Z-g50t-first-contact            fired 1/4  $4.12 saved  refused {'floor': 2, 'max_rounds_per_turn': 1}
+      20260728T025503Z-g50t-e08-fixed                fired 2/4  $2.98 saved  refused {'max_rounds_per_turn': 2}
+      20260728T083400Z-E3-sk48-carried-v2            fired 7/14  $3.75 saved  refused {'max_rounds_per_turn': 7}
+      20260729T0035Z-a3-desk-live-proof2             fired 2/3  $0.15 saved  refused {'max_rounds_per_turn': 1}
+      20260731T1310Z-A3-level2-carried-r2            fired 3/4  $1.66 saved  refused {'max_rounds_per_turn': 1}
+      20260731T1500Z-A3-sk48-carried-l1              fired 4/8  $6.24 saved  refused {'max_rounds_per_turn': 4}
+      20260731T231654Z-R1-g50t-a                     fired 2/3  $1.51 saved  refused {'max_rounds_per_turn': 1}
+      20260801T001851Z-R1b-g50t-a                    fired 6/8  $2.98 saved  refused {'max_rounds_per_turn': 2}
+      20260801T001851Z-R1b-sk48-b                    fired 2/3  $8.37 saved  refused {'max_rounds_per_turn': 1}
+      20260801T044640Z-R2b-sk48-b                    fired 2/4  $6.46 saved  refused {'max_rounds_per_turn': 2}
+      + 20260728T015354Z-g50t-first-contact          projects 56.8 actions at the $25 cap, its level 1 needs 78
+      + 20260728T025503Z-g50t-e08-fixed              projects 54.7 actions at the $25 cap, its level 1 needs 78
+      + 20260731T1500Z-A3-sk48-carried-l1            projects 70.7 actions at the $25 cap, its level 1 needs 61
+  one-round-floor-8    ran differently on 13 of 15 leg(s)
+      20260728T015354Z-g50t-first-contact            fired 1/4  $4.12 saved  refused {'floor': 2, 'max_rounds_per_turn': 1}
+      20260728T025503Z-g50t-e08-fixed                fired 1/4  $5.43 saved  refused {'floor': 2, 'max_rounds_per_turn': 1}
+      20260728T083400Z-E3-sk48-carried-v2            fired 4/14  $5.17 saved  refused {'floor': 6, 'max_rounds_per_turn': 4}
+      20260729T0035Z-a3-desk-live-proof2             fired 2/3  $0.15 saved  refused {'max_rounds_per_turn': 1}
+      20260731T1310Z-A3-level2-carried-r2            fired 1/4  $4.78 saved  refused {'floor': 3}
+      20260731T1430Z-A3-level2-carried-r3            fired 4/8  $6.31 saved  refused {'floor': 4}
+      20260731T1500Z-A3-sk48-carried-l1              fired 2/8  $8.98 saved  refused {'floor': 4, 'max_rounds_per_turn': 2}
+      20260731T231654Z-R1-g50t-a                     fired 1/3  $3.17 saved  refused {'floor': 1, 'max_rounds_per_turn': 1}
+      20260731T231654Z-R1-sk48-b                     fired 0/1  $7.61 saved  refused {'floor': 1}
+      20260801T001851Z-R1b-g50t-a                    fired 3/8  $8.20 saved  refused {'floor': 4, 'max_rounds_per_turn': 1}
+      20260801T001851Z-R1b-sk48-b                    fired 1/3  $11.74 saved  refused {'floor': 2}
+      20260801T044640Z-R2b-g50t-a                    fired 3/7  $10.15 saved  refused {'floor': 4}
+      20260801T044640Z-R2b-sk48-b                    fired 1/4  $10.00 saved  refused {'floor': 2, 'max_rounds_per_turn': 1}
+      + 20260728T015354Z-g50t-first-contact          projects 56.8 actions at the $25 cap, its level 1 needs 78
+      + 20260728T025503Z-g50t-e08-fixed              projects 75.3 actions at the $25 cap, its level 1 needs 78
+      + 20260731T1430Z-A3-level2-carried-r3          projects 115.7 actions at the $25 cap, its level 1 needs 78
+      + 20260731T1500Z-A3-sk48-carried-l1            projects 130.1 actions at the $25 cap, its level 1 needs 61
+      + 20260801T044640Z-R2b-g50t-a                  projects 72.8 actions at the $25 cap, its level 1 needs 78
+  today                ran differently on 0 of 15 leg(s)
+
+  per leg and policy -- actions bought per dollar over the whole leg, * = projection clears this leg's own level 1:
+    [ 0] actions-unit
+    [ 1] adaptive
+    [ 2] defer-explained
+    [ 3] defer-explained-every-round
+    [ 4] floor-12
+    [ 5] floor-8
+    [ 6] inert-guard
+    [ 7] inert-guard-one-round
+    [ 8] measure-inertia
+    [ 9] min-info-2
+    [10] one-round
+    [11] one-round-floor-8
+    [12] today
+    a leg with one or two adjudications projects wildly -- `adj` is there so those rows are read as the noise they are.
+    leg                                        needs  adj    [0]    [1]    [2]    [3]    [4]    [5]    [6]    [7]    [8]    [9]   [10]   [11]   [12]
+    20260728T012311Z-g50t-first-contact-aborte    78    1   3.8*   3.8*   3.8*   3.8*   3.8*   3.8*   3.8*   3.8*   3.8*   3.8*   3.8*   3.8*   3.8*
+    20260728T014402Z-g50t-first-contact-aborte    78    1   8.2*   8.2*   8.2*   8.2*   8.2*   8.2*   8.2*   8.2*   8.2*   8.2*   8.2*   8.2*   8.2*
+    20260728T015354Z-g50t-first-contact           78    4    1.9    1.9    1.9    1.9    1.9    1.9    1.9   3.2*    1.9    1.9   3.2*   3.2*    1.9
+    20260728T025503Z-g50t-e08-fixed               78    4    1.8    1.8    1.8    1.8   4.5*   4.5*    1.8   3.2*    1.8   4.5*   3.2*   7.8*    1.8
+    20260728T083400Z-E3-sk48-carried-v2           61   14   3.6*   3.6*   3.6*   6.8*  10.1*   5.0*   5.0*  10.3*   3.6*   3.6*   6.4*   9.3*   3.6*
+    20260729T0035Z-a3-desk-live-proof2          mock    3   30.5   30.5   30.5   30.5   30.5   30.5   30.5   48.6   30.5   30.5   48.6   48.6   30.5
+    20260731T1310Z-A3-level2-carried-r2           78    4    1.4    1.4    1.4    1.6   8.0*    2.7    1.4   4.2*    1.4    2.0    1.6    2.7    1.4
+    20260731T1430Z-A3-level2-carried-r3           78    8    2.5    2.5    2.5    2.5   9.5*   4.6*    2.5    2.5    2.5    2.8    2.5   4.6*    2.5
+    20260731T1500Z-A3-sk48-carried-l1             61    8    1.7    1.7    1.7    1.9   5.6*   3.5*   8.2*   4.8*    1.7    2.2   3.5*   6.4*    1.7
+    20260731T231654Z-R1-g50t-a                    78    3    1.7    1.7    1.7    1.7      -    2.2    1.7    2.1    1.7    2.2    2.1    2.9    1.7
+    20260731T231654Z-R1-sk48-b                    61    1    0.7    0.7    0.7    0.7      -      -    0.7    0.7    0.7      -    0.7      -    0.7
+    20260801T001851Z-R1b-g50t-a                   78    8    1.4    1.4    1.4    1.4   5.1*    2.2    1.7    1.7    1.4    1.5    1.7    2.6    1.4
+    20260801T001851Z-R1b-sk48-b                   61    3    0.4    0.4    0.3    0.3      -    0.9    0.4    0.6    0.3    0.9    0.6    0.9    0.3
+    20260801T044640Z-R2b-g50t-a                   78    7    1.5    1.5    1.5    1.5   5.4*   3.4*    1.5    1.5    1.5    1.7    1.5   3.4*    1.5
+    20260801T044640Z-R2b-sk48-b                   61    4    0.4    0.4    0.4    0.6      -    0.6    0.4    0.7    0.4    0.6    0.7    0.9    0.4
+
+  projection assumption: a desk call's price does not rise with the wait before it; corr(step_idx, cost_usd) = -0.039 over 65 priced calls

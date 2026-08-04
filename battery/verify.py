@@ -34,7 +34,14 @@ reading is not a pass, per this module's own doctrine.  The economy rung
 (printed last) does the same for `live_economy.json`, and adds the one check
 the others cannot make: a cell whose status is not `ok` must not carry a
 number, because zero in a cost curve reads as "cheap" rather than as "did not
-happen".
+happen".  The census rung (added 2026-08-04, B12) is the one that watches the
+other two: both live companions read the archive through a campaign filter
+that drops unlabelled leg archives *before* the refusal machinery runs, so a
+leg outside the filter is absent from every `excluded` list and no recompute
+can go red over it.  The census walks the archive with no filter at all, gives
+every `ledger.jsonl` a named disposition, and runs the pile guard over the
+whole of it rather than over the adapter's view of it -- the invisible legs
+reported, the staleness and the sealed-pile line gated.
 
 Rung 3 is the one that is usually missing.  A green suite says the metrics do
 what their author thought; it does not say the recompute ran, and it does not
@@ -161,7 +168,7 @@ def fail(problems, message):
 
 
 def rung_freeze(problems):
-    """[1/8] the freeze record: BATTERY_V1.md still describes this tree.
+    """[1/9] the freeze record: BATTERY_V1.md still describes this tree.
 
     The suite runs this same check (`test_freeze.py`), but the gate does not
     trust the suite to have been collected: one `addopts` line in `pytest.ini`
@@ -170,7 +177,7 @@ def rung_freeze(problems):
     hold on two independent paths -- V5's adversarial pass demonstrated the
     single-path version being disarmed six different ways.
     """
-    print("[1/8] the freeze record")
+    print("[1/9] the freeze record")
     if REPO not in sys.path:
         sys.path.insert(0, REPO)
     from battery import freeze
@@ -194,7 +201,7 @@ MIN_TESTS_PASSED = 300
 
 
 def rung_tests(problems):
-    print("[2/8] suite")
+    print("[2/9] suite")
     r = sh([sys.executable, "-m", "pytest", "battery/tests", "-q"])
     if r.returncode == 5:
         # pytest found nothing to run.  Read as green this would be one more
@@ -228,7 +235,7 @@ def rung_tests(problems):
 
 
 def rung_real_run(problems, out_dir):
-    print("[3/8] one real run -- the whole spectrum recomputed from the "
+    print("[3/9] one real run -- the whole spectrum recomputed from the "
           "ledgers, offline")
     r = sh([sys.executable, "-m", "battery.run_battery", "--out", out_dir])
     if r.returncode != 0:
@@ -257,7 +264,7 @@ def _load(problems, out_dir, name):
 
 
 def rung_artifact_fields(problems, out_dir):
-    print("[4/8] artefact self-check")
+    print("[4/9] artefact self-check")
     loaded = {}
     for name in ARTEFACTS:
         doc = _load(problems, out_dir, name)
@@ -361,7 +368,7 @@ def rung_artifact_fields(problems, out_dir):
 
 
 def rung_separation_claim(problems):
-    """[5/8] the documents state the true separation count, and cannot go stale.
+    """[5/9] the documents state the true separation count, and cannot go stale.
 
     Added by V22.  Process 1's headline number is **zero** -- no metric
     separates the specified gradient -- and the way that number went wrong was
@@ -387,7 +394,7 @@ def rung_separation_claim(problems):
     somebody rewrites it.  A gate that could only catch the claim going too
     high would let it rot in the other direction.
     """
-    print("[5/8] the separation claim in the committed documents")
+    print("[5/9] the separation claim in the committed documents")
     path = os.path.join(SHIPPED, "discrimination_arms.json")
     if not os.path.exists(path):
         fail(problems, "battery/artifacts/discrimination_arms.json is absent; "
@@ -476,7 +483,7 @@ def rung_separation_claim(problems):
 
 def rung_live_tiers(problems, live_path=None, frozen_path=None,
                     status_path=None):
-    """[6/8] the live-tier companion tracks the code, and the freeze holds.
+    """[6/9] the live-tier companion tracks the code, and the freeze holds.
 
     The frozen `battery/artifacts/gaming_audit.json` names nine main-table
     metrics; the live `tier_of()` demotes all of them (B17, then V9).
@@ -499,7 +506,7 @@ def rung_live_tiers(problems, live_path=None, frozen_path=None,
       the way rung 5 pins STATUS_CLAIM, so the sentence must track the
       artefact rather than merely having once been written.
     """
-    print("[6/8] the live-tier companion artefact")
+    print("[6/9] the live-tier companion artefact")
     if REPO not in sys.path:
         sys.path.insert(0, REPO)
     from battery.audit import live_tiers
@@ -582,7 +589,7 @@ def rung_live_tiers(problems, live_path=None, frozen_path=None,
 
 
 def rung_live_arm(problems, live_path=None, runs_root=None):
-    """[7/8] the live-arm readings companion is current, dev-pile, and non-empty.
+    """[7/9] the live-arm readings companion is current, dev-pile, and non-empty.
 
     `battery/artifacts_live/live_arm_readings.json` is the frozen instrument
     pointed at the live Theoria arm's committed leg archives — measurement-only
@@ -600,7 +607,7 @@ def rung_live_arm(problems, live_path=None, runs_root=None):
       reading is not a pass (module docstring), and those two families are
       what the live material exists to feed.
     """
-    print("[7/8] the live-arm readings companion")
+    print("[7/9] the live-arm readings companion")
     if REPO not in sys.path:
         sys.path.insert(0, REPO)
     from battery.audit import live_arm
@@ -664,7 +671,7 @@ def rung_live_arm(problems, live_path=None, runs_root=None):
 
 
 def rung_live_economy(problems, live_path=None, runs_root=None):
-    """[8/8] the economy companion: current, axis-labelled, absence-not-zero.
+    """[8/9] the economy companion: current, axis-labelled, absence-not-zero.
 
     `battery/artifacts_live/live_economy.json` is the economy family read on
     the live arm's legs over two turn axes — the adapter's reading of record
@@ -689,7 +696,7 @@ def rung_live_economy(problems, live_path=None, runs_root=None):
     producer's artefacts, they live in another territory, and a rung that is
     red for someone else's file is a rung this territory cannot clear.
     """
-    print("[8/8] the live-arm economy companion")
+    print("[8/9] the live-arm economy companion")
     if REPO not in sys.path:
         sys.path.insert(0, REPO)
     from battery.audit import live_economy
@@ -775,6 +782,147 @@ def rung_live_economy(problems, live_path=None, runs_root=None):
               % (fresh.get("n_legs", 0), len(axes.get("exact") or []),
                  sum(len(v) for k, v in axes.items() if k != "exact"),
                  len(measured.get("E2") or []), len(fresh.get("absences") or [])))
+
+
+def rung_live_census(problems, census_path=None, runs_root=None):
+    """[9/9] the census: everything rungs 7 and 8 cannot see, counted.
+
+    Rungs 7 and 8 gate two companions against an in-process recompute, and
+    both companions read the live arm through
+    `theoria_live.collect`.  `collect` returns the legs it loaded and the legs
+    it refused *with reasons* -- but `discover` filters by campaign label
+    before `load_leg` ever runs, so a leg archive that declares no
+    `theoria-arm:A3-campaign` spend gate is not refused, it is never seen.
+    It appears in no `runs` map, in no `excluded` list, and in no rung's
+    count, and no recompute can turn red over it because both walks agree
+    about a thing neither one looked at.
+
+    That is a blind spot in the rungs, not in the archive, and this rung is
+    the instrument that ends it.  Four ways it goes RED:
+
+    * the committed census differs from an in-process recompute -- the
+      archive moved (a leg landed, a ledger grew, a campaign label changed)
+      and the census did not follow;
+    * a directory the committed census names carries a game id outside the
+      development pile -- re-read from the committed rows rather than trusted
+      to the generator, as rungs 7 and 8 do it.  The census is the only reader
+      that runs the pile guard over the *whole* archive, so this is the one
+      place a sealed id in an unlabelled leg can surface;
+    * the census's scored count disagrees with rung 7's readings companion --
+      two files claiming to describe the same archive must agree about how
+      much of it was read;
+    * the census sees fewer ledgers than the companions scored, which would
+      mean the walk itself lost rows.
+
+    The invisible legs themselves are REPORTED, not gated.  They are
+    `theoria-arm`'s material and the question they raise -- whether the
+    pre-campaign legs belong in a reading `BATTERY_V1.md` describes as the A3
+    campaign's -- is that territory's to answer.  A rung that went red for
+    another territory's labelling decision is a rung this territory cannot
+    clear, which is the same reasoning rung 8 applies to the three-way money
+    disagreement.
+    """
+    print("[9/9] the live-archive census")
+    if REPO not in sys.path:
+        sys.path.insert(0, REPO)
+    from battery.audit import live_census
+    from battery.guard import load_piles
+
+    census_path = census_path or live_census.DEFAULT_OUT
+    before = len(problems)
+
+    if not os.path.exists(census_path):
+        fail(problems, "%s is absent; the archive census has no committed "
+                       "form to check. Generate it: python -m "
+                       "battery.audit.live_census" % census_path)
+        return
+    with open(census_path, encoding="utf-8") as fh:
+        try:
+            committed = json.load(fh)
+        except json.JSONDecodeError as exc:
+            fail(problems, "committed live_census.json is not JSON: %s" % exc)
+            return
+
+    # (i) staleness against an in-process recompute.
+    fresh = live_census.build(runs_root)
+    if committed != fresh:
+        changed = sorted(set(k for k in set(committed) | set(fresh)
+                             if committed.get(k) != fresh.get(k)))
+        fail(problems, "committed live_census.json differs from an in-process "
+                       "recompute (top-level keys that moved: %s). The "
+                       "archive moved without the census -- regenerate and "
+                       "commit: python -m battery.audit.live_census"
+             % (", ".join(changed) or "byte-level only"))
+
+    # (ii) the pile, re-read from the committed rows over the WHOLE archive.
+    piles = load_piles()
+    for slug in sorted(committed.get("dispositions") or {}):
+        row = committed["dispositions"][slug]
+        if row.get("disposition") in ("unreadable", "foreign"):
+            continue
+        game = row.get("game_id")
+        if row.get("pile") != "dev" or piles.classify(game or "") != "dev":
+            fail(problems, "census row %r reads game %r with pile %r -- every "
+                           "live-arm ledger under the archive must name a "
+                           "development-pile game, and this one does not"
+                 % (slug, game, row.get("pile")))
+
+    # (iii) the two files must agree about how much of the archive was read.
+    from battery.audit import live_arm
+    readings_path = live_arm.DEFAULT_OUT
+    if os.path.exists(readings_path):
+        with open(readings_path, encoding="utf-8") as fh:
+            try:
+                readings = json.load(fh)
+            except json.JSONDecodeError:
+                readings = None
+        if readings is not None:
+            scored = (fresh.get("counts") or {}).get("scored")
+            if scored != readings.get("n_runs"):
+                fail(problems, "the census counts %r scored leg(s) and the "
+                               "readings companion carries %r run(s). Two "
+                               "files describing one archive disagree about "
+                               "how much of it was read."
+                     % (scored, readings.get("n_runs")))
+
+    # (iv) the walk itself.
+    counts = fresh.get("counts") or {}
+    seen = sum(counts.values())
+    if seen != fresh.get("n_with_ledger"):
+        fail(problems, "the census walked %r ledger(s) but classified %r -- "
+                       "a disposition went missing, which is the exact "
+                       "failure this file exists to prevent"
+             % (fresh.get("n_with_ledger"), seen))
+
+    inv = fresh.get("invisible") or {}
+    if inv.get("slugs"):
+        usd = inv.get("billed_usd")
+        print("   note  %d live-arm ledger(s) are invisible to rungs 7 and 8 "
+              "(reported, not gated -- theoria-arm owns the campaign label):"
+              % len(inv["slugs"]))
+        print("         %d on the live upstream, %d with env steps; %d step(s), "
+              "%d billed call(s), %s"
+              % (len(inv.get("on_live_upstream") or []),
+                 len(inv.get("with_env_steps") or []),
+                 inv.get("env_steps", 0), inv.get("model_calls", 0),
+                 ("%.6f USD" % usd) if usd is not None
+                 else "no priced call (absence, not zero)"))
+        print("         dropped by theoria_live.discover's %r test before "
+              "load_leg, so neither companion refuses them and neither "
+              "recompute can turn red over them"
+              % fresh.get("campaign_prefix"))
+
+    if len(problems) == before:
+        floor = fresh.get("shape_floor") or {}
+        print("   ok    %d dir(s), %d ledger(s): scored %d, excluded %d, "
+              "invisible %d, foreign %d, unreadable %d; %d of %d scored leg(s) "
+              "clear the %d-turn bill-shape floor"
+              % (fresh.get("n_dirs", 0), fresh.get("n_with_ledger", 0),
+                 counts.get("scored", 0), counts.get("excluded", 0),
+                 counts.get("invisible", 0), counts.get("foreign", 0),
+                 counts.get("unreadable", 0),
+                 floor.get("n_clearing", 0), floor.get("n_scored", 0),
+                 floor.get("min_turns_for_shape", 0)))
 
 
 def _non_tied(entry):
@@ -866,6 +1014,7 @@ def main():
     rung_live_tiers(problems)
     rung_live_arm(problems)
     rung_live_economy(problems)
+    rung_live_census(problems)
 
     print()
     if problems:
@@ -873,7 +1022,7 @@ def main():
         return 1
     print("battery: green -- freeze, suite, one real run, artefact "
           "fields, separation claim, live tiers, live-arm readings, "
-          "live-arm economy")
+          "live-arm economy, live-archive census")
     return 0
 
 

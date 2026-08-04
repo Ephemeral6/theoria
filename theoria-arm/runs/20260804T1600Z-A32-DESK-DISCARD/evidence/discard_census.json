@@ -1,0 +1,2955 @@
+{
+ "calls": 104,
+ "counts": {
+  "blocks_discarded": 11,
+  "empty": 1,
+  "provider_refusal": 24,
+  "transport_total_loss": 5,
+  "truncated_theory_fragment": 1,
+  "used": 62
+ },
+ "identical_reask": {
+  "calls": 11,
+  "usd": 9.199279
+ },
+ "legs": [
+  {
+   "calls": [
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 1,
+     "cap": 64000,
+     "cap_source": "fallback",
+     "chars": 16288,
+     "identical_reask": false,
+     "label": null,
+     "log_entries": 26,
+     "marker_qualifiers": {},
+     "messages_dropped": null,
+     "owner": null,
+     "transcript": "call-001-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "usage carries no per-message `iterations`, so this call is neither known to be whole nor known to be truncated"
+    }
+   ],
+   "counts": {
+    "blocks_discarded": 0,
+    "empty": 0,
+    "provider_refusal": 0,
+    "transport_total_loss": 0,
+    "truncated_theory_fragment": 0,
+    "used": 1
+   },
+   "has_transcripts": true,
+   "identical_reask_usd": 0,
+   "leg": "20260728T012311Z-g50t-first-contact-aborted",
+   "usd": {
+    "blocks_discarded": 0,
+    "empty": 0,
+    "provider_refusal": 0,
+    "transport_total_loss": 0,
+    "truncated_theory_fragment": 0,
+    "used": 0.0
+   },
+   "usd_total": 0.0
+  },
+  {
+   "calls": [
+    {
+     "blocks_strict": [],
+     "blocks_tolerant": [],
+     "call": 1,
+     "cap": 64000,
+     "cap_source": "fallback",
+     "chars": 1,
+     "cost_usd": 0.7304849999999998,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": null,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-001-theorize-round1.md",
+     "verdict": "empty",
+     "why": "the CLI returned nothing. There is no reply to have discarded -- this is a failed call, not a wasted one.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    }
+   ],
+   "counts": {
+    "blocks_discarded": 0,
+    "empty": 1,
+    "provider_refusal": 0,
+    "transport_total_loss": 0,
+    "truncated_theory_fragment": 0,
+    "used": 0
+   },
+   "has_transcripts": true,
+   "identical_reask_usd": 0,
+   "leg": "20260728T014402Z-g50t-first-contact-aborted",
+   "usd": {
+    "blocks_discarded": 0,
+    "empty": 0.730485,
+    "provider_refusal": 0,
+    "transport_total_loss": 0,
+    "truncated_theory_fragment": 0,
+    "used": 0
+   },
+   "usd_total": 0.730485
+  },
+  {
+   "calls": [
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 1,
+     "cap": 64000,
+     "cap_source": "fallback",
+     "chars": 16573,
+     "cost_usd": 1.3329529999999998,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 25,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-001-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 2,
+     "cap": 64000,
+     "cap_source": "fallback",
+     "chars": 21803,
+     "cost_usd": 0.868224,
+     "identical_reask": false,
+     "label": "round2",
+     "log_entries": 20,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-002-theorize-round2.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 3,
+     "cap": 64000,
+     "cap_source": "fallback",
+     "chars": 23270,
+     "cost_usd": 1.425431,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 18,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-003-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 4,
+     "cap": 64000,
+     "cap_source": "fallback",
+     "chars": 31111,
+     "cost_usd": 1.489011,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 25,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-004-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 5,
+     "cap": 64000,
+     "cap_source": "fallback",
+     "chars": 33454,
+     "cost_usd": 1.202039,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 24,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-005-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    }
+   ],
+   "counts": {
+    "blocks_discarded": 0,
+    "empty": 0,
+    "provider_refusal": 0,
+    "transport_total_loss": 0,
+    "truncated_theory_fragment": 0,
+    "used": 5
+   },
+   "has_transcripts": true,
+   "identical_reask_usd": 0,
+   "leg": "20260728T015354Z-g50t-first-contact",
+   "usd": {
+    "blocks_discarded": 0,
+    "empty": 0,
+    "provider_refusal": 0,
+    "transport_total_loss": 0,
+    "truncated_theory_fragment": 0,
+    "used": 6.317658
+   },
+   "usd_total": 6.317658
+  },
+  {
+   "calls": [
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 1,
+     "cap": 64000,
+     "cap_source": "fallback",
+     "chars": 18176,
+     "cost_usd": 1.6599960000000002,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 23,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-001-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 2,
+     "cap": 64000,
+     "cap_source": "fallback",
+     "chars": 23857,
+     "cost_usd": 1.25345,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 25,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-002-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 3,
+     "cap": 64000,
+     "cap_source": "fallback",
+     "chars": 25205,
+     "cost_usd": 1.461651,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 25,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-003-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 4,
+     "cap": 64000,
+     "cap_source": "fallback",
+     "chars": 30293,
+     "cost_usd": 0.993743,
+     "identical_reask": false,
+     "label": "round2",
+     "log_entries": 22,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-004-theorize-round2.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 5,
+     "cap": 64000,
+     "cap_source": "fallback",
+     "chars": 35641,
+     "cost_usd": 1.7258360000000001,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 23,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-005-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    }
+   ],
+   "counts": {
+    "blocks_discarded": 0,
+    "empty": 0,
+    "provider_refusal": 0,
+    "transport_total_loss": 0,
+    "truncated_theory_fragment": 0,
+    "used": 5
+   },
+   "has_transcripts": true,
+   "identical_reask_usd": 0,
+   "leg": "20260728T025503Z-g50t-e08-fixed",
+   "usd": {
+    "blocks_discarded": 0,
+    "empty": 0,
+    "provider_refusal": 0,
+    "transport_total_loss": 0,
+    "truncated_theory_fragment": 0,
+    "used": 7.094676
+   },
+   "usd_total": 7.094676
+  },
+  {
+   "calls": [
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 1,
+     "cap": 64000,
+     "cap_source": "fallback",
+     "chars": 28284,
+     "cost_usd": 1.493268,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 25,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-001-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 2,
+     "cap": 64000,
+     "cap_source": "fallback",
+     "chars": 32109,
+     "cost_usd": 1.4834100000000003,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 19,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-002-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 3,
+     "cap": 64000,
+     "cap_source": "fallback",
+     "chars": 37741,
+     "cost_usd": 1.416019,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 20,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-003-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 4,
+     "cap": 64000,
+     "cap_source": "fallback",
+     "chars": 40415,
+     "cost_usd": 1.0474379999999999,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 23,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-004-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 5,
+     "cap": 64000,
+     "cap_source": "fallback",
+     "chars": 43167,
+     "cost_usd": 1.742637,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 30,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-005-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 6,
+     "cap": 64000,
+     "cap_source": "fallback",
+     "chars": 49989,
+     "cost_usd": 1.222096,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 24,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-006-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [],
+     "blocks_tolerant": [],
+     "call": 7,
+     "cap": 64000,
+     "cap_source": "fallback",
+     "chars": 62,
+     "cost_usd": 0.0,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": null,
+     "marker_qualifiers": {},
+     "messages_dropped": null,
+     "owner": null,
+     "transcript": "call-007-theorize-round1.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text. The desk never ran, so nothing was thrown away and (on this archive) nothing was billed.",
+     "why_messages_dropped": "usage carries no per-message `iterations`, so this call is neither known to be whole nor known to be truncated"
+    },
+    {
+     "blocks_strict": [],
+     "blocks_tolerant": [],
+     "call": 8,
+     "cap": 64000,
+     "cap_source": "fallback",
+     "chars": 62,
+     "cost_usd": 0.0,
+     "identical_reask": false,
+     "label": "round2",
+     "log_entries": null,
+     "marker_qualifiers": {},
+     "messages_dropped": null,
+     "owner": null,
+     "transcript": "call-008-theorize-round2.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text. The desk never ran, so nothing was thrown away and (on this archive) nothing was billed.",
+     "why_messages_dropped": "usage carries no per-message `iterations`, so this call is neither known to be whole nor known to be truncated"
+    },
+    {
+     "blocks_strict": [],
+     "blocks_tolerant": [],
+     "call": 9,
+     "cap": 64000,
+     "cap_source": "fallback",
+     "chars": 62,
+     "cost_usd": 0.0,
+     "identical_reask": true,
+     "label": "round3",
+     "log_entries": null,
+     "marker_qualifiers": {},
+     "messages_dropped": null,
+     "owner": null,
+     "transcript": "call-009-theorize-round3.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text. The desk never ran, so nothing was thrown away and (on this archive) nothing was billed.",
+     "why_identical_reask": "the prompt is byte-identical to call 8's. The previous attempt failed, and the arm paid again to ask exactly the same question -- so whatever caused the failure, this call could not have addressed it.",
+     "why_messages_dropped": "usage carries no per-message `iterations`, so this call is neither known to be whole nor known to be truncated"
+    },
+    {
+     "blocks_strict": [],
+     "blocks_tolerant": [],
+     "call": 10,
+     "cap": 64000,
+     "cap_source": "fallback",
+     "chars": 62,
+     "cost_usd": 0.0,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": null,
+     "marker_qualifiers": {},
+     "messages_dropped": null,
+     "owner": null,
+     "transcript": "call-010-theorize-round1.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text. The desk never ran, so nothing was thrown away and (on this archive) nothing was billed.",
+     "why_messages_dropped": "usage carries no per-message `iterations`, so this call is neither known to be whole nor known to be truncated"
+    },
+    {
+     "blocks_strict": [],
+     "blocks_tolerant": [],
+     "call": 11,
+     "cap": 64000,
+     "cap_source": "fallback",
+     "chars": 62,
+     "cost_usd": 0.0,
+     "identical_reask": false,
+     "label": "round2",
+     "log_entries": null,
+     "marker_qualifiers": {},
+     "messages_dropped": null,
+     "owner": null,
+     "transcript": "call-011-theorize-round2.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text. The desk never ran, so nothing was thrown away and (on this archive) nothing was billed.",
+     "why_messages_dropped": "usage carries no per-message `iterations`, so this call is neither known to be whole nor known to be truncated"
+    },
+    {
+     "blocks_strict": [],
+     "blocks_tolerant": [],
+     "call": 12,
+     "cap": 64000,
+     "cap_source": "fallback",
+     "chars": 62,
+     "cost_usd": 0.0,
+     "identical_reask": true,
+     "label": "round3",
+     "log_entries": null,
+     "marker_qualifiers": {},
+     "messages_dropped": null,
+     "owner": null,
+     "transcript": "call-012-theorize-round3.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text. The desk never ran, so nothing was thrown away and (on this archive) nothing was billed.",
+     "why_identical_reask": "the prompt is byte-identical to call 11's. The previous attempt failed, and the arm paid again to ask exactly the same question -- so whatever caused the failure, this call could not have addressed it.",
+     "why_messages_dropped": "usage carries no per-message `iterations`, so this call is neither known to be whole nor known to be truncated"
+    },
+    {
+     "blocks_strict": [],
+     "blocks_tolerant": [],
+     "call": 13,
+     "cap": 64000,
+     "cap_source": "fallback",
+     "chars": 62,
+     "cost_usd": 0.0,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": null,
+     "marker_qualifiers": {},
+     "messages_dropped": null,
+     "owner": null,
+     "transcript": "call-013-theorize-round1.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text. The desk never ran, so nothing was thrown away and (on this archive) nothing was billed.",
+     "why_messages_dropped": "usage carries no per-message `iterations`, so this call is neither known to be whole nor known to be truncated"
+    },
+    {
+     "blocks_strict": [],
+     "blocks_tolerant": [],
+     "call": 14,
+     "cap": 64000,
+     "cap_source": "fallback",
+     "chars": 62,
+     "cost_usd": 0.0,
+     "identical_reask": false,
+     "label": "round2",
+     "log_entries": null,
+     "marker_qualifiers": {},
+     "messages_dropped": null,
+     "owner": null,
+     "transcript": "call-014-theorize-round2.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text. The desk never ran, so nothing was thrown away and (on this archive) nothing was billed.",
+     "why_messages_dropped": "usage carries no per-message `iterations`, so this call is neither known to be whole nor known to be truncated"
+    },
+    {
+     "blocks_strict": [],
+     "blocks_tolerant": [],
+     "call": 15,
+     "cap": 64000,
+     "cap_source": "fallback",
+     "chars": 62,
+     "cost_usd": 0.0,
+     "identical_reask": true,
+     "label": "round3",
+     "log_entries": null,
+     "marker_qualifiers": {},
+     "messages_dropped": null,
+     "owner": null,
+     "transcript": "call-015-theorize-round3.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text. The desk never ran, so nothing was thrown away and (on this archive) nothing was billed.",
+     "why_identical_reask": "the prompt is byte-identical to call 14's. The previous attempt failed, and the arm paid again to ask exactly the same question -- so whatever caused the failure, this call could not have addressed it.",
+     "why_messages_dropped": "usage carries no per-message `iterations`, so this call is neither known to be whole nor known to be truncated"
+    },
+    {
+     "blocks_strict": [],
+     "blocks_tolerant": [],
+     "call": 16,
+     "cap": 64000,
+     "cap_source": "fallback",
+     "chars": 62,
+     "cost_usd": 0.0,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": null,
+     "marker_qualifiers": {},
+     "messages_dropped": null,
+     "owner": null,
+     "transcript": "call-016-theorize-round1.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text. The desk never ran, so nothing was thrown away and (on this archive) nothing was billed.",
+     "why_messages_dropped": "usage carries no per-message `iterations`, so this call is neither known to be whole nor known to be truncated"
+    },
+    {
+     "blocks_strict": [],
+     "blocks_tolerant": [],
+     "call": 17,
+     "cap": 64000,
+     "cap_source": "fallback",
+     "chars": 62,
+     "cost_usd": 0.0,
+     "identical_reask": false,
+     "label": "round2",
+     "log_entries": null,
+     "marker_qualifiers": {},
+     "messages_dropped": null,
+     "owner": null,
+     "transcript": "call-017-theorize-round2.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text. The desk never ran, so nothing was thrown away and (on this archive) nothing was billed.",
+     "why_messages_dropped": "usage carries no per-message `iterations`, so this call is neither known to be whole nor known to be truncated"
+    },
+    {
+     "blocks_strict": [],
+     "blocks_tolerant": [],
+     "call": 18,
+     "cap": 64000,
+     "cap_source": "fallback",
+     "chars": 62,
+     "cost_usd": 0.0,
+     "identical_reask": true,
+     "label": "round3",
+     "log_entries": null,
+     "marker_qualifiers": {},
+     "messages_dropped": null,
+     "owner": null,
+     "transcript": "call-018-theorize-round3.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text. The desk never ran, so nothing was thrown away and (on this archive) nothing was billed.",
+     "why_identical_reask": "the prompt is byte-identical to call 17's. The previous attempt failed, and the arm paid again to ask exactly the same question -- so whatever caused the failure, this call could not have addressed it.",
+     "why_messages_dropped": "usage carries no per-message `iterations`, so this call is neither known to be whole nor known to be truncated"
+    },
+    {
+     "blocks_strict": [],
+     "blocks_tolerant": [],
+     "call": 19,
+     "cap": 64000,
+     "cap_source": "fallback",
+     "chars": 62,
+     "cost_usd": 0.0,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": null,
+     "marker_qualifiers": {},
+     "messages_dropped": null,
+     "owner": null,
+     "transcript": "call-019-theorize-round1.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text. The desk never ran, so nothing was thrown away and (on this archive) nothing was billed.",
+     "why_messages_dropped": "usage carries no per-message `iterations`, so this call is neither known to be whole nor known to be truncated"
+    },
+    {
+     "blocks_strict": [],
+     "blocks_tolerant": [],
+     "call": 20,
+     "cap": 64000,
+     "cap_source": "fallback",
+     "chars": 62,
+     "cost_usd": 0.0,
+     "identical_reask": false,
+     "label": "round2",
+     "log_entries": null,
+     "marker_qualifiers": {},
+     "messages_dropped": null,
+     "owner": null,
+     "transcript": "call-020-theorize-round2.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text. The desk never ran, so nothing was thrown away and (on this archive) nothing was billed.",
+     "why_messages_dropped": "usage carries no per-message `iterations`, so this call is neither known to be whole nor known to be truncated"
+    },
+    {
+     "blocks_strict": [],
+     "blocks_tolerant": [],
+     "call": 21,
+     "cap": 64000,
+     "cap_source": "fallback",
+     "chars": 62,
+     "cost_usd": 0.0,
+     "identical_reask": true,
+     "label": "round3",
+     "log_entries": null,
+     "marker_qualifiers": {},
+     "messages_dropped": null,
+     "owner": null,
+     "transcript": "call-021-theorize-round3.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text. The desk never ran, so nothing was thrown away and (on this archive) nothing was billed.",
+     "why_identical_reask": "the prompt is byte-identical to call 20's. The previous attempt failed, and the arm paid again to ask exactly the same question -- so whatever caused the failure, this call could not have addressed it.",
+     "why_messages_dropped": "usage carries no per-message `iterations`, so this call is neither known to be whole nor known to be truncated"
+    },
+    {
+     "blocks_strict": [],
+     "blocks_tolerant": [],
+     "call": 22,
+     "cap": 64000,
+     "cap_source": "fallback",
+     "chars": 62,
+     "cost_usd": 0.0,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": null,
+     "marker_qualifiers": {},
+     "messages_dropped": null,
+     "owner": null,
+     "transcript": "call-022-theorize-round1.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text. The desk never ran, so nothing was thrown away and (on this archive) nothing was billed.",
+     "why_messages_dropped": "usage carries no per-message `iterations`, so this call is neither known to be whole nor known to be truncated"
+    },
+    {
+     "blocks_strict": [],
+     "blocks_tolerant": [],
+     "call": 23,
+     "cap": 64000,
+     "cap_source": "fallback",
+     "chars": 62,
+     "cost_usd": 0.0,
+     "identical_reask": false,
+     "label": "round2",
+     "log_entries": null,
+     "marker_qualifiers": {},
+     "messages_dropped": null,
+     "owner": null,
+     "transcript": "call-023-theorize-round2.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text. The desk never ran, so nothing was thrown away and (on this archive) nothing was billed.",
+     "why_messages_dropped": "usage carries no per-message `iterations`, so this call is neither known to be whole nor known to be truncated"
+    },
+    {
+     "blocks_strict": [],
+     "blocks_tolerant": [],
+     "call": 24,
+     "cap": 64000,
+     "cap_source": "fallback",
+     "chars": 62,
+     "cost_usd": 0.0,
+     "identical_reask": true,
+     "label": "round3",
+     "log_entries": null,
+     "marker_qualifiers": {},
+     "messages_dropped": null,
+     "owner": null,
+     "transcript": "call-024-theorize-round3.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text. The desk never ran, so nothing was thrown away and (on this archive) nothing was billed.",
+     "why_identical_reask": "the prompt is byte-identical to call 23's. The previous attempt failed, and the arm paid again to ask exactly the same question -- so whatever caused the failure, this call could not have addressed it.",
+     "why_messages_dropped": "usage carries no per-message `iterations`, so this call is neither known to be whole nor known to be truncated"
+    },
+    {
+     "blocks_strict": [],
+     "blocks_tolerant": [],
+     "call": 25,
+     "cap": 64000,
+     "cap_source": "fallback",
+     "chars": 62,
+     "cost_usd": 0.0,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": null,
+     "marker_qualifiers": {},
+     "messages_dropped": null,
+     "owner": null,
+     "transcript": "call-025-theorize-round1.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text. The desk never ran, so nothing was thrown away and (on this archive) nothing was billed.",
+     "why_messages_dropped": "usage carries no per-message `iterations`, so this call is neither known to be whole nor known to be truncated"
+    },
+    {
+     "blocks_strict": [],
+     "blocks_tolerant": [],
+     "call": 26,
+     "cap": 64000,
+     "cap_source": "fallback",
+     "chars": 62,
+     "cost_usd": 0.0,
+     "identical_reask": false,
+     "label": "round2",
+     "log_entries": null,
+     "marker_qualifiers": {},
+     "messages_dropped": null,
+     "owner": null,
+     "transcript": "call-026-theorize-round2.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text. The desk never ran, so nothing was thrown away and (on this archive) nothing was billed.",
+     "why_messages_dropped": "usage carries no per-message `iterations`, so this call is neither known to be whole nor known to be truncated"
+    },
+    {
+     "blocks_strict": [],
+     "blocks_tolerant": [],
+     "call": 27,
+     "cap": 64000,
+     "cap_source": "fallback",
+     "chars": 62,
+     "cost_usd": 0.0,
+     "identical_reask": true,
+     "label": "round3",
+     "log_entries": null,
+     "marker_qualifiers": {},
+     "messages_dropped": null,
+     "owner": null,
+     "transcript": "call-027-theorize-round3.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text. The desk never ran, so nothing was thrown away and (on this archive) nothing was billed.",
+     "why_identical_reask": "the prompt is byte-identical to call 26's. The previous attempt failed, and the arm paid again to ask exactly the same question -- so whatever caused the failure, this call could not have addressed it.",
+     "why_messages_dropped": "usage carries no per-message `iterations`, so this call is neither known to be whole nor known to be truncated"
+    },
+    {
+     "blocks_strict": [],
+     "blocks_tolerant": [],
+     "call": 28,
+     "cap": 64000,
+     "cap_source": "fallback",
+     "chars": 62,
+     "cost_usd": 0.0,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": null,
+     "marker_qualifiers": {},
+     "messages_dropped": null,
+     "owner": null,
+     "transcript": "call-028-theorize-round1.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text. The desk never ran, so nothing was thrown away and (on this archive) nothing was billed.",
+     "why_messages_dropped": "usage carries no per-message `iterations`, so this call is neither known to be whole nor known to be truncated"
+    },
+    {
+     "blocks_strict": [],
+     "blocks_tolerant": [],
+     "call": 29,
+     "cap": 64000,
+     "cap_source": "fallback",
+     "chars": 62,
+     "cost_usd": 0.0,
+     "identical_reask": false,
+     "label": "round2",
+     "log_entries": null,
+     "marker_qualifiers": {},
+     "messages_dropped": null,
+     "owner": null,
+     "transcript": "call-029-theorize-round2.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text. The desk never ran, so nothing was thrown away and (on this archive) nothing was billed.",
+     "why_messages_dropped": "usage carries no per-message `iterations`, so this call is neither known to be whole nor known to be truncated"
+    },
+    {
+     "blocks_strict": [],
+     "blocks_tolerant": [],
+     "call": 30,
+     "cap": 64000,
+     "cap_source": "fallback",
+     "chars": 62,
+     "cost_usd": 0.0,
+     "identical_reask": true,
+     "label": "round3",
+     "log_entries": null,
+     "marker_qualifiers": {},
+     "messages_dropped": null,
+     "owner": null,
+     "transcript": "call-030-theorize-round3.md",
+     "verdict": "provider_refusal",
+     "why": "the reply is the provider's own refusal text. The desk never ran, so nothing was thrown away and (on this archive) nothing was billed.",
+     "why_identical_reask": "the prompt is byte-identical to call 29's. The previous attempt failed, and the arm paid again to ask exactly the same question -- so whatever caused the failure, this call could not have addressed it.",
+     "why_messages_dropped": "usage carries no per-message `iterations`, so this call is neither known to be whole nor known to be truncated"
+    }
+   ],
+   "counts": {
+    "blocks_discarded": 0,
+    "empty": 0,
+    "provider_refusal": 24,
+    "transport_total_loss": 0,
+    "truncated_theory_fragment": 0,
+    "used": 6
+   },
+   "has_transcripts": true,
+   "identical_reask_usd": 0.0,
+   "leg": "20260728T083400Z-E3-sk48-carried-v2",
+   "usd": {
+    "blocks_discarded": 0,
+    "empty": 0,
+    "provider_refusal": 0.0,
+    "transport_total_loss": 0,
+    "truncated_theory_fragment": 0,
+    "used": 8.404868
+   },
+   "usd_total": 8.404868
+  },
+  {
+   "calls": [
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 1,
+     "cap": 32000,
+     "cap_source": "ledger",
+     "chars": 2640,
+     "cost_usd": 0.11425599999999998,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 6,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-001-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 2,
+     "cap": 32000,
+     "cap_source": "ledger",
+     "chars": 3602,
+     "cost_usd": 0.14629199999999998,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 8,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-002-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 3,
+     "cap": 32000,
+     "cap_source": "ledger",
+     "chars": 3964,
+     "cost_usd": 0.132608,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 7,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-003-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    }
+   ],
+   "counts": {
+    "blocks_discarded": 0,
+    "empty": 0,
+    "provider_refusal": 0,
+    "transport_total_loss": 0,
+    "truncated_theory_fragment": 0,
+    "used": 3
+   },
+   "has_transcripts": true,
+   "identical_reask_usd": 0,
+   "leg": "20260729T0035Z-a3-desk-live-proof2",
+   "usd": {
+    "blocks_discarded": 0,
+    "empty": 0,
+    "provider_refusal": 0,
+    "transport_total_loss": 0,
+    "truncated_theory_fragment": 0,
+    "used": 0.393156
+   },
+   "usd_total": 0.393156
+  },
+  {
+   "calls": [
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 1,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 40066,
+     "cost_usd": 1.487855,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 22,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-001-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 2,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 48850,
+     "cost_usd": 1.662984,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 24,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-002-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK"
+     ],
+     "call": 3,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 22220,
+     "cost_usd": 2.86115,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 28,
+     "marker_qualifiers": {},
+     "messages_dropped": 1,
+     "owner": "inner/theorize.py (beat)",
+     "transcript": "call-003-theorize-round1.md",
+     "verdict": "blocks_discarded",
+     "why": "the reply carries LOG and PLAYBOOK and 28 adjudication(s), all of which the beat discarded because the THEORY block was absent. The contract asks for three blocks and the beat treats them as one.",
+     "why_messages_dropped": "64000 output tokens were generated before the message the arm received -- exactly 1 x the model's own 64000-token output ceiling, so 1 assistant message(s) were billed and never delivered"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 4,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 44681,
+     "cost_usd": 1.9143780000000001,
+     "identical_reask": false,
+     "label": "round2",
+     "log_entries": 24,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-004-theorize-round2.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 5,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 45372,
+     "cost_usd": 1.630485,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 20,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-005-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    }
+   ],
+   "counts": {
+    "blocks_discarded": 1,
+    "empty": 0,
+    "provider_refusal": 0,
+    "transport_total_loss": 0,
+    "truncated_theory_fragment": 0,
+    "used": 4
+   },
+   "has_transcripts": true,
+   "identical_reask_usd": 0,
+   "leg": "20260731T1310Z-A3-level2-carried-r2",
+   "usd": {
+    "blocks_discarded": 2.86115,
+    "empty": 0,
+    "provider_refusal": 0,
+    "transport_total_loss": 0,
+    "truncated_theory_fragment": 0,
+    "used": 6.695702
+   },
+   "usd_total": 9.556852
+  },
+  {
+   "calls": [
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 1,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 47060,
+     "cost_usd": 1.554791,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 21,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-001-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 2,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 49385,
+     "cost_usd": 1.8813019999999998,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 24,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-002-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 3,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 56171,
+     "cost_usd": 1.569824,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 28,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-003-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 4,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 60280,
+     "cost_usd": 1.6656859999999998,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 21,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-004-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 5,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 60241,
+     "cost_usd": 1.68914,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 18,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-005-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 6,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 67520,
+     "cost_usd": 1.9071440000000002,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 24,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-006-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 7,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 71228,
+     "cost_usd": 1.4931659999999998,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 29,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-007-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 8,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 62924,
+     "cost_usd": 1.6788090000000002,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 22,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-008-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    }
+   ],
+   "counts": {
+    "blocks_discarded": 0,
+    "empty": 0,
+    "provider_refusal": 0,
+    "transport_total_loss": 0,
+    "truncated_theory_fragment": 0,
+    "used": 8
+   },
+   "has_transcripts": true,
+   "identical_reask_usd": 0,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "usd": {
+    "blocks_discarded": 0,
+    "empty": 0,
+    "provider_refusal": 0,
+    "transport_total_loss": 0,
+    "truncated_theory_fragment": 0,
+    "used": 13.439862
+   },
+   "usd_total": 13.439862
+  },
+  {
+   "calls": [
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 1,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 48275,
+     "cost_usd": 1.20151,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 26,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-001-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 2,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 50759,
+     "cost_usd": 1.368456,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 30,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-002-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 3,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 47652,
+     "cost_usd": 1.630981,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 19,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-003-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 4,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 55573,
+     "cost_usd": 1.2194720000000001,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 24,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-004-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 5,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 51648,
+     "cost_usd": 1.5395870000000003,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 24,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-005-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 6,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 56461,
+     "cost_usd": 1.227827,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 16,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-006-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 7,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 56340,
+     "cost_usd": 0.9877729999999999,
+     "identical_reask": false,
+     "label": "round2",
+     "log_entries": 14,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-007-theorize-round2.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 8,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 59580,
+     "cost_usd": 1.6367500000000001,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 23,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-008-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 9,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 61189,
+     "cost_usd": 1.439363,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 23,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-009-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    }
+   ],
+   "counts": {
+    "blocks_discarded": 0,
+    "empty": 0,
+    "provider_refusal": 0,
+    "transport_total_loss": 0,
+    "truncated_theory_fragment": 0,
+    "used": 9
+   },
+   "has_transcripts": true,
+   "identical_reask_usd": 0,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "usd": {
+    "blocks_discarded": 0,
+    "empty": 0,
+    "provider_refusal": 0,
+    "transport_total_loss": 0,
+    "truncated_theory_fragment": 0,
+    "used": 12.251719
+   },
+   "usd_total": 12.251719
+  },
+  {
+   "calls": [
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 1,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 54786,
+     "cost_usd": 1.651009,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 22,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-001-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [],
+     "blocks_tolerant": [],
+     "call": 2,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 5457,
+     "cost_usd": 2.7157635,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": null,
+     "marker_qualifiers": {},
+     "messages_dropped": 1,
+     "owner": "harness/modelcall.py (transport)",
+     "transcript": "call-002-theorize-round1.md",
+     "verdict": "transport_total_loss",
+     "why": "no contract block survived. Whatever the desk wrote, the arm received a fragment with no usable structure.",
+     "why_messages_dropped": "64000 output tokens were generated before the message the arm received -- exactly 1 x the model's own 64000-token output ceiling, so 1 assistant message(s) were billed and never delivered"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 3,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 63381,
+     "cost_usd": 1.7225759999999999,
+     "identical_reask": false,
+     "label": "round2",
+     "log_entries": 26,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-003-theorize-round2.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 4,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 64003,
+     "cost_usd": 1.514071,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 24,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-004-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    }
+   ],
+   "counts": {
+    "blocks_discarded": 0,
+    "empty": 0,
+    "provider_refusal": 0,
+    "transport_total_loss": 1,
+    "truncated_theory_fragment": 0,
+    "used": 3
+   },
+   "has_transcripts": true,
+   "identical_reask_usd": 0,
+   "leg": "20260731T231654Z-R1-g50t-a",
+   "usd": {
+    "blocks_discarded": 0,
+    "empty": 0,
+    "provider_refusal": 0,
+    "transport_total_loss": 2.715763,
+    "truncated_theory_fragment": 0,
+    "used": 4.887656
+   },
+   "usd_total": 7.603419
+  },
+  {
+   "calls": [
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK"
+     ],
+     "call": 1,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 27395,
+     "cost_usd": 2.961837,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 25,
+     "marker_qualifiers": {},
+     "messages_dropped": 1,
+     "owner": "inner/theorize.py (beat)",
+     "transcript": "call-001-theorize-round1.md",
+     "verdict": "blocks_discarded",
+     "why": "the reply carries LOG and PLAYBOOK and 25 adjudication(s), all of which the beat discarded because the THEORY block was absent. The contract asks for three blocks and the beat treats them as one.",
+     "why_messages_dropped": "64000 output tokens were generated before the message the arm received -- exactly 1 x the model's own 64000-token output ceiling, so 1 assistant message(s) were billed and never delivered"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK"
+     ],
+     "call": 2,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 12520,
+     "cost_usd": 2.8166415000000002,
+     "identical_reask": false,
+     "label": "round2",
+     "log_entries": 26,
+     "marker_qualifiers": {},
+     "messages_dropped": 1,
+     "owner": "inner/theorize.py (beat)",
+     "transcript": "call-002-theorize-round2.md",
+     "verdict": "blocks_discarded",
+     "why": "the reply carries LOG and PLAYBOOK and 26 adjudication(s), all of which the beat discarded because the THEORY block was absent. The contract asks for three blocks and the beat treats them as one.",
+     "why_messages_dropped": "64000 output tokens were generated before the message the arm received -- exactly 1 x the model's own 64000-token output ceiling, so 1 assistant message(s) were billed and never delivered"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 3,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 34142,
+     "cost_usd": 1.830049,
+     "identical_reask": true,
+     "label": "round3",
+     "log_entries": 30,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-003-theorize-round3.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_identical_reask": "the prompt is byte-identical to call 2's. The previous attempt failed, and the arm paid again to ask exactly the same question -- so whatever caused the failure, this call could not have addressed it.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    }
+   ],
+   "counts": {
+    "blocks_discarded": 2,
+    "empty": 0,
+    "provider_refusal": 0,
+    "transport_total_loss": 0,
+    "truncated_theory_fragment": 0,
+    "used": 1
+   },
+   "has_transcripts": true,
+   "identical_reask_usd": 1.830049,
+   "leg": "20260731T231654Z-R1-sk48-b",
+   "usd": {
+    "blocks_discarded": 5.778479,
+    "empty": 0,
+    "provider_refusal": 0,
+    "transport_total_loss": 0,
+    "truncated_theory_fragment": 0,
+    "used": 1.830049
+   },
+   "usd_total": 7.608528
+  },
+  {
+   "calls": [
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 1,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 54649,
+     "cost_usd": 1.536699,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 27,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-001-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [],
+     "blocks_tolerant": [],
+     "call": 2,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 3831,
+     "cost_usd": 2.6960810000000004,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": null,
+     "marker_qualifiers": {},
+     "messages_dropped": 1,
+     "owner": "harness/modelcall.py (transport)",
+     "transcript": "call-002-theorize-round1.md",
+     "verdict": "transport_total_loss",
+     "why": "no contract block survived. Whatever the desk wrote, the arm received a fragment with no usable structure.",
+     "why_messages_dropped": "64000 output tokens were generated before the message the arm received -- exactly 1 x the model's own 64000-token output ceiling, so 1 assistant message(s) were billed and never delivered"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 3,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 52525,
+     "cost_usd": 1.919613,
+     "identical_reask": false,
+     "label": "round2",
+     "log_entries": 26,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-003-theorize-round2.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 4,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 58224,
+     "cost_usd": 1.961036,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 20,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-004-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 5,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 68384,
+     "cost_usd": 1.961056,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 28,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-005-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 6,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 65069,
+     "cost_usd": 1.6152959999999998,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 22,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-006-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 7,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 68858,
+     "cost_usd": 1.7192910000000001,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 28,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-007-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 8,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 67152,
+     "cost_usd": 1.368904,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 24,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-008-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK"
+     ],
+     "call": 9,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 22090,
+     "cost_usd": 2.9711305,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 28,
+     "marker_qualifiers": {},
+     "messages_dropped": 1,
+     "owner": "inner/theorize.py (beat)",
+     "transcript": "call-009-theorize-round1.md",
+     "verdict": "blocks_discarded",
+     "why": "the reply carries LOG and PLAYBOOK and 28 adjudication(s), all of which the beat discarded because the THEORY block was absent. The contract asks for three blocks and the beat treats them as one.",
+     "why_messages_dropped": "64000 output tokens were generated before the message the arm received -- exactly 1 x the model's own 64000-token output ceiling, so 1 assistant message(s) were billed and never delivered"
+    }
+   ],
+   "counts": {
+    "blocks_discarded": 1,
+    "empty": 0,
+    "provider_refusal": 0,
+    "transport_total_loss": 1,
+    "truncated_theory_fragment": 0,
+    "used": 7
+   },
+   "has_transcripts": true,
+   "identical_reask_usd": 0,
+   "leg": "20260801T001851Z-R1b-g50t-a",
+   "usd": {
+    "blocks_discarded": 2.971131,
+    "empty": 0,
+    "provider_refusal": 0,
+    "transport_total_loss": 2.696081,
+    "truncated_theory_fragment": 0,
+    "used": 12.081895
+   },
+   "usd_total": 17.749106
+  },
+  {
+   "calls": [
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 1,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 39496,
+     "cost_usd": 3.3620105000000002,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 24,
+     "marker_qualifiers": {},
+     "messages_dropped": 1,
+     "owner": null,
+     "transcript": "call-001-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply. It still dropped 1 earlier message(s): the tail happened to resume at the marker, which is luck, not correctness.",
+     "why_messages_dropped": "64000 output tokens were generated before the message the arm received -- exactly 1 x the model's own 64000-token output ceiling, so 1 assistant message(s) were billed and never delivered"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 2,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 17990,
+     "cost_usd": 2.7911395,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 20,
+     "marker_qualifiers": {
+      "THEORY": "(continued \u2014 the remainder of theory.dsl, appended to the block above)"
+     },
+     "messages_dropped": 1,
+     "owner": "inner/theorize.py (parser + beat)",
+     "transcript": "call-002-theorize-round1.md",
+     "verdict": "truncated_theory_fragment",
+     "why": "the reply carries a THEORY block whose marker is qualified ('(continued \u2014 the remainder of theory.dsl, appended to the block above)'), which the beat's `BLOCK` regex refuses. The fragment is real but it is NOT the whole manual, so the honest repair is to name the truncation, not to write the fragment into theory.dsl.",
+     "why_messages_dropped": "64000 output tokens were generated before the message the arm received -- exactly 1 x the model's own 64000-token output ceiling, so 1 assistant message(s) were billed and never delivered"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK"
+     ],
+     "call": 3,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 28901,
+     "cost_usd": 2.89813,
+     "identical_reask": false,
+     "label": "round2",
+     "log_entries": 23,
+     "marker_qualifiers": {},
+     "messages_dropped": 1,
+     "owner": "inner/theorize.py (beat)",
+     "transcript": "call-003-theorize-round2.md",
+     "verdict": "blocks_discarded",
+     "why": "the reply carries LOG and PLAYBOOK and 23 adjudication(s), all of which the beat discarded because the THEORY block was absent. The contract asks for three blocks and the beat treats them as one.",
+     "why_messages_dropped": "64000 output tokens were generated before the message the arm received -- exactly 1 x the model's own 64000-token output ceiling, so 1 assistant message(s) were billed and never delivered"
+    },
+    {
+     "blocks_strict": [],
+     "blocks_tolerant": [],
+     "call": 4,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 7849,
+     "cost_usd": 2.684454,
+     "identical_reask": true,
+     "label": "round3",
+     "log_entries": null,
+     "marker_qualifiers": {},
+     "messages_dropped": 1,
+     "owner": "harness/modelcall.py (transport)",
+     "transcript": "call-004-theorize-round3.md",
+     "verdict": "transport_total_loss",
+     "why": "no contract block survived. Whatever the desk wrote, the arm received a fragment with no usable structure.",
+     "why_identical_reask": "the prompt is byte-identical to call 3's. The previous attempt failed, and the arm paid again to ask exactly the same question -- so whatever caused the failure, this call could not have addressed it.",
+     "why_messages_dropped": "64000 output tokens were generated before the message the arm received -- exactly 1 x the model's own 64000-token output ceiling, so 1 assistant message(s) were billed and never delivered"
+    },
+    {
+     "blocks_strict": [],
+     "blocks_tolerant": [],
+     "call": 5,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 7872,
+     "cost_usd": 2.694148,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": null,
+     "marker_qualifiers": {},
+     "messages_dropped": 1,
+     "owner": "harness/modelcall.py (transport)",
+     "transcript": "call-005-theorize-round1.md",
+     "verdict": "transport_total_loss",
+     "why": "no contract block survived. Whatever the desk wrote, the arm received a fragment with no usable structure.",
+     "why_messages_dropped": "64000 output tokens were generated before the message the arm received -- exactly 1 x the model's own 64000-token output ceiling, so 1 assistant message(s) were billed and never delivered"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK"
+     ],
+     "call": 6,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 34191,
+     "cost_usd": 2.960839,
+     "identical_reask": false,
+     "label": "round2",
+     "log_entries": 28,
+     "marker_qualifiers": {},
+     "messages_dropped": 1,
+     "owner": "inner/theorize.py (beat)",
+     "transcript": "call-006-theorize-round2.md",
+     "verdict": "blocks_discarded",
+     "why": "the reply carries LOG and PLAYBOOK and 28 adjudication(s), all of which the beat discarded because the THEORY block was absent. The contract asks for three blocks and the beat treats them as one.",
+     "why_messages_dropped": "64000 output tokens were generated before the message the arm received -- exactly 1 x the model's own 64000-token output ceiling, so 1 assistant message(s) were billed and never delivered"
+    }
+   ],
+   "counts": {
+    "blocks_discarded": 2,
+    "empty": 0,
+    "provider_refusal": 0,
+    "transport_total_loss": 2,
+    "truncated_theory_fragment": 1,
+    "used": 1
+   },
+   "has_transcripts": true,
+   "identical_reask_usd": 2.684454,
+   "leg": "20260801T001851Z-R1b-sk48-b",
+   "usd": {
+    "blocks_discarded": 5.858969,
+    "empty": 0,
+    "provider_refusal": 0,
+    "transport_total_loss": 5.378602,
+    "truncated_theory_fragment": 2.791139,
+    "used": 3.362011
+   },
+   "usd_total": 17.390721
+  },
+  {
+   "calls": [
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 1,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 56360,
+     "cost_usd": 1.5730589999999998,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 30,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-001-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 2,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 66114,
+     "cost_usd": 1.689508,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 26,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-002-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 3,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 74608,
+     "cost_usd": 1.8941430000000001,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 26,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-003-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 4,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 73811,
+     "cost_usd": 1.410259,
+     "identical_reask": false,
+     "label": "round2",
+     "log_entries": 17,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-004-theorize-round2.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [],
+     "blocks_tolerant": [],
+     "call": 5,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 9579,
+     "cost_usd": 2.863988,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": null,
+     "marker_qualifiers": {},
+     "messages_dropped": 1,
+     "owner": "harness/modelcall.py (transport)",
+     "transcript": "call-005-theorize-round1.md",
+     "verdict": "transport_total_loss",
+     "why": "no contract block survived. Whatever the desk wrote, the arm received a fragment with no usable structure.",
+     "why_messages_dropped": "64000 output tokens were generated before the message the arm received -- exactly 1 x the model's own 64000-token output ceiling, so 1 assistant message(s) were billed and never delivered"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 6,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 90365,
+     "cost_usd": 2.012925,
+     "identical_reask": false,
+     "label": "round2",
+     "log_entries": 35,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-006-theorize-round2.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 7,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 95889,
+     "cost_usd": 2.089105,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 28,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-007-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 8,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 98852,
+     "cost_usd": 2.020405,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 23,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-008-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK"
+     ],
+     "call": 9,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 28469,
+     "cost_usd": 3.1826165,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 31,
+     "marker_qualifiers": {},
+     "messages_dropped": 1,
+     "owner": "inner/theorize.py (beat)",
+     "transcript": "call-009-theorize-round1.md",
+     "verdict": "blocks_discarded",
+     "why": "the reply carries LOG and PLAYBOOK and 31 adjudication(s), all of which the beat discarded because the THEORY block was absent. The contract asks for three blocks and the beat treats them as one.",
+     "why_messages_dropped": "64000 output tokens were generated before the message the arm received -- exactly 1 x the model's own 64000-token output ceiling, so 1 assistant message(s) were billed and never delivered"
+    }
+   ],
+   "counts": {
+    "blocks_discarded": 1,
+    "empty": 0,
+    "provider_refusal": 0,
+    "transport_total_loss": 1,
+    "truncated_theory_fragment": 0,
+    "used": 7
+   },
+   "has_transcripts": true,
+   "identical_reask_usd": 0,
+   "leg": "20260801T044640Z-R2b-g50t-a",
+   "usd": {
+    "blocks_discarded": 3.182616,
+    "empty": 0,
+    "provider_refusal": 0,
+    "transport_total_loss": 2.863988,
+    "truncated_theory_fragment": 0,
+    "used": 12.689404
+   },
+   "usd_total": 18.736009
+  },
+  {
+   "calls": [
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 1,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 40406,
+     "cost_usd": 3.5398435,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 24,
+     "marker_qualifiers": {},
+     "messages_dropped": 1,
+     "owner": null,
+     "transcript": "call-001-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply. It still dropped 1 earlier message(s): the tail happened to resume at the marker, which is luck, not correctness.",
+     "why_messages_dropped": "64000 output tokens were generated before the message the arm received -- exactly 1 x the model's own 64000-token output ceiling, so 1 assistant message(s) were billed and never delivered"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK",
+      "THEORY"
+     ],
+     "call": 2,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 46085,
+     "cost_usd": 1.8368079999999998,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 22,
+     "marker_qualifiers": {},
+     "messages_dropped": 0,
+     "owner": null,
+     "transcript": "call-002-theorize-round1.md",
+     "verdict": "used",
+     "why": "a bare `=== THEORY ===` block reached the arm, so the beat wrote the books from this reply.",
+     "why_messages_dropped": "`output_tokens` equals the last message's own: the CLI emitted one message and the arm received all of it"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK"
+     ],
+     "call": 3,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 14684,
+     "cost_usd": 2.7899645,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 19,
+     "marker_qualifiers": {},
+     "messages_dropped": 1,
+     "owner": "inner/theorize.py (beat)",
+     "transcript": "call-003-theorize-round1.md",
+     "verdict": "blocks_discarded",
+     "why": "the reply carries LOG and PLAYBOOK and 19 adjudication(s), all of which the beat discarded because the THEORY block was absent. The contract asks for three blocks and the beat treats them as one.",
+     "why_messages_dropped": "64000 output tokens were generated before the message the arm received -- exactly 1 x the model's own 64000-token output ceiling, so 1 assistant message(s) were billed and never delivered"
+    },
+    {
+     "blocks_strict": [
+      "LOG",
+      "PLAYBOOK"
+     ],
+     "blocks_tolerant": [
+      "LOG",
+      "PLAYBOOK"
+     ],
+     "call": 4,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 16024,
+     "cost_usd": 2.8265505,
+     "identical_reask": false,
+     "label": "round2",
+     "log_entries": 22,
+     "marker_qualifiers": {},
+     "messages_dropped": 1,
+     "owner": "inner/theorize.py (beat)",
+     "transcript": "call-004-theorize-round2.md",
+     "verdict": "blocks_discarded",
+     "why": "the reply carries LOG and PLAYBOOK and 22 adjudication(s), all of which the beat discarded because the THEORY block was absent. The contract asks for three blocks and the beat treats them as one.",
+     "why_messages_dropped": "64000 output tokens were generated before the message the arm received -- exactly 1 x the model's own 64000-token output ceiling, so 1 assistant message(s) were billed and never delivered"
+    },
+    {
+     "blocks_strict": [
+      "LOG"
+     ],
+     "blocks_tolerant": [
+      "LOG"
+     ],
+     "call": 5,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 10333,
+     "cost_usd": 4.684776,
+     "identical_reask": true,
+     "label": "round3",
+     "log_entries": 29,
+     "marker_qualifiers": {},
+     "messages_dropped": 2,
+     "owner": "inner/theorize.py (beat)",
+     "transcript": "call-005-theorize-round3.md",
+     "verdict": "blocks_discarded",
+     "why": "the reply carries LOG and 29 adjudication(s), all of which the beat discarded because the THEORY block was absent. The contract asks for three blocks and the beat treats them as one.",
+     "why_identical_reask": "the prompt is byte-identical to call 4's. The previous attempt failed, and the arm paid again to ask exactly the same question -- so whatever caused the failure, this call could not have addressed it.",
+     "why_messages_dropped": "128000 output tokens were generated before the message the arm received -- exactly 2 x the model's own 64000-token output ceiling, so 2 assistant message(s) were billed and never delivered"
+    },
+    {
+     "blocks_strict": [
+      "LOG"
+     ],
+     "blocks_tolerant": [
+      "LOG"
+     ],
+     "call": 6,
+     "cap": 64000,
+     "cap_source": "ledger",
+     "chars": 7202,
+     "cost_usd": 4.625281,
+     "identical_reask": false,
+     "label": "round1",
+     "log_entries": 20,
+     "marker_qualifiers": {},
+     "messages_dropped": 2,
+     "owner": "inner/theorize.py (beat)",
+     "transcript": "call-006-theorize-round1.md",
+     "verdict": "blocks_discarded",
+     "why": "the reply carries LOG and 20 adjudication(s), all of which the beat discarded because the THEORY block was absent. The contract asks for three blocks and the beat treats them as one.",
+     "why_messages_dropped": "128000 output tokens were generated before the message the arm received -- exactly 2 x the model's own 64000-token output ceiling, so 2 assistant message(s) were billed and never delivered"
+    }
+   ],
+   "counts": {
+    "blocks_discarded": 4,
+    "empty": 0,
+    "provider_refusal": 0,
+    "transport_total_loss": 0,
+    "truncated_theory_fragment": 0,
+    "used": 2
+   },
+   "has_transcripts": true,
+   "identical_reask_usd": 4.684776,
+   "leg": "20260801T044640Z-R2b-sk48-b",
+   "usd": {
+    "blocks_discarded": 14.926572,
+    "empty": 0,
+    "provider_refusal": 0,
+    "transport_total_loss": 0,
+    "truncated_theory_fragment": 0,
+    "used": 5.376651
+   },
+   "usd_total": 20.303224
+  }
+ ],
+ "legs_with_transcripts": 15,
+ "owners": {
+  "blocks_discarded": "inner/theorize.py (beat)",
+  "empty": null,
+  "provider_refusal": null,
+  "transport_total_loss": "harness/modelcall.py (transport)",
+  "truncated_theory_fragment": "inner/theorize.py (parser + beat)",
+  "used": null
+ },
+ "reading": "$52.0245 of a $147.5803 desk bill bought a reply the arm did not use, 35.3% of the whole. It is not one defect: $35.5789 is a reply whose PLAYBOOK and LOG survived and were discarded for want of a THEORY block (a beat defect, 11 calls), $2.7911 is a THEORY block the parser refused for its marker (a parser defect, 1 calls), and $13.6544 reached the arm with no usable structure at all (a transport defect, 5 calls). The 24 provider refusals are not in that total and were not billed.",
+ "transport": {
+  "calls_that_dropped_a_message": 19,
+  "calls_with_unknown_wholeness": 25,
+  "note": "`calls_with_unknown_wholeness` counts calls whose usage carries no per-message `iterations`. They are not counted as whole and not counted as truncated.",
+  "usd": 58.926344
+ },
+ "usd": {
+  "blocks_discarded": 35.578917,
+  "empty": 0.730485,
+  "provider_refusal": 0.0,
+  "transport_total_loss": 13.654434,
+  "truncated_theory_fragment": 2.791139,
+  "used": 94.825307
+ },
+ "usd_total": 147.580283
+}

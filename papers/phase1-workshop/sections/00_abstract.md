@@ -64,8 +64,25 @@ the manual, so it could not contain a mechanism the manual lacked — two
 predictions wide on every one of 52 completed probes, 47 of the 52 observations
 outside it, 0.000 bits realised on all 56 designed, and the rule miner that the
 design assigns to supply that frontier refused all 48 dispatches it ever
-received. A repair exists, is default-off, and has offline replay evidence only.
-§11.3a is that account, and no live leg has completed a level.
+received. A repair exists and is default-off; an offline replay predicted it
+would contain the answer on 83 % of the recorded probes, and a live round with
+the switch on then measured 83 % on the one leg with a readable sample —
+containment 9.6 % → 77.8 % pooled — which is a correctly-sized prediction
+registered before the spend, and is reported as a result about the instrument
+rather than about the beat. §11.3a is that account.
+
+**And underneath it, the result this paper is least able to explain.** No arm of
+any kind — two Theoria configurations, one bare-model baseline, three model
+tiers — has completed a level or scored a point on the development pile: 0
+levels in 1,562 successful actions across 57 named baseline runs, and 0 across
+16 live Theoria legs. Three explanations fit that zero equally well today — the
+budget was below the reference cost of level one on two of the four games, the
+budget that existed went to probes rather than to the level on every leg
+measured, and the level-completion record has never been written at all, so a
+completion might not have been recorded. §11.3b states the fact, the three
+explanations and the ordered experiment that would separate them, and states
+that until the third is closed the zero is a measurement and not a finding about
+capability.
 **The one thing this paper
 claims is that we built that instrument, ran it end to end on small deterministic
 worlds we constructed ourselves, and then held our own measurements to the same

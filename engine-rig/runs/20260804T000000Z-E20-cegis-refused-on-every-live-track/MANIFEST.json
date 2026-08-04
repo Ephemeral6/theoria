@@ -1,0 +1,79 @@
+{
+  "prompt_id": "E20-cegis-miner-refused-on-every-live-track",
+  "branch": "q/e20",
+  "base_commit": "4846e66dee64940b3bb457b408db13775728915c",
+  "master_at_write_time": "18e7d81b72a16f223a064d9b5cd09b3e7e9a965e",
+  "utc": "2026-08-04T00:00:00Z",
+  "territory": "engine-rig",
+  "lane": "generic",
+  "method": "replay both mdl_segmenter operators and cegis_miner over the recorded frames of theoria-arm/runs/20260731T1430Z-A3-level2-carried-r3 (g50t-5849a774, development pile), reproduce the recorded refusal exactly, and separate its three causes; regression-test the fix on a synthetic fixture of the same world class",
+  "api_calls": 0,
+  "network": false,
+  "model_calls": 0,
+  "cost_usd": 0.0,
+  "sealed_pile_contact": "none",
+  "inputs": {
+    "recorded_ledger": "theoria-arm/runs/20260731T1430Z-A3-level2-carried-r3/ledger.jsonl",
+    "read_only": true,
+    "games": [
+      "g50t-5849a774"
+    ],
+    "pile": "development",
+    "frames_with_pixels": 34,
+    "note": "read for its frames; no pixel data is written into engine-rig. verify_e20.py refuses any game outside the development pile."
+  },
+  "gates": {
+    "pytest": "engine-rig: python -m pytest",
+    "recheck": "engine-rig: python -m recheck.verify_all"
+  },
+  "seed": null,
+  "determinism": "no RNG; build_vocabulary sorts the alphabet, enumerate_frontier sorts its atoms, so output does not depend on input order",
+  "status": "delivered",
+  "files": [
+    {
+      "path": "engine-rig/engines/cegis_miner/atoms.py",
+      "sha256": "sha256:33b32910bc69a0985d7f8bf82da81545d2547b8a21aacf01240a01fc40f1b5e4",
+      "bytes": 8172
+    },
+    {
+      "path": "engine-rig/engines/cegis_miner/miner.py",
+      "sha256": "sha256:431f471aa37e63086472d4fc9be04e79b44423ad2542269eb2072cd921855a4c",
+      "bytes": 16575
+    },
+    {
+      "path": "engine-rig/engines/cegis_miner/__init__.py",
+      "sha256": "sha256:695d39ca2ec8c0c4e316d8698c8beb815fa14aaf7a53e77ba038ab086645c5e6",
+      "bytes": 4281
+    },
+    {
+      "path": "engine-rig/engines/cegis_miner/README.md",
+      "sha256": "sha256:43726aa82bda98a2b88c43ca3592903f27fedc300ec111d63efcffcff71c6109",
+      "bytes": 6939
+    },
+    {
+      "path": "engine-rig/fixtures/ring_world.py",
+      "sha256": "sha256:4c09d2dacc8b22c2c31c7b6843048b592595107421595554a2a587bba0bbd90e",
+      "bytes": 5160
+    },
+    {
+      "path": "engine-rig/tests/test_cegis_ring_world.py",
+      "sha256": "sha256:29984d55dba2ae73c27fb54c7b6a78716481c4bef15c232f21941b810354bffd",
+      "bytes": 15177
+    },
+    {
+      "path": "engine-rig/runs/20260804T000000Z-E20-cegis-refused-on-every-live-track/verify_e20.py",
+      "sha256": "sha256:6abce5c67503c10025670bb9766a3688a9e014eba4090eebb2c88f91e54117d1",
+      "bytes": 5943
+    },
+    {
+      "path": "engine-rig/runs/20260804T000000Z-E20-cegis-refused-on-every-live-track/findings.json",
+      "sha256": "sha256:0b165c9d9a43f82cbdb9e43597c7d561d20c7aa7c3d6834ec1f5a62d33cb4c42",
+      "bytes": 11386
+    },
+    {
+      "path": "engine-rig/runs/20260804T000000Z-E20-cegis-refused-on-every-live-track/RUN_STATE.md",
+      "sha256": "sha256:bd6ee8b3eaa891e4496b11d964bb392d41029a15076b6f3f5849357cb771df64",
+      "bytes": 8809
+    }
+  ]
+}

@@ -1,0 +1,763 @@
+{
+ "baseline_archive": {
+  "configured_budget_histogram": {
+   "20": 14,
+   "30": 22,
+   "absent": 7
+  },
+  "dead_runs": 14,
+  "ledger_levels_completed_histogram": {
+   "0": 214,
+   "absent": 442
+  },
+  "ledger_rows": 656,
+  "ledger_rows_carrying_levels_completed": 214,
+  "levels_completed_histogram": {
+   "0": 36,
+   "absent": 7
+  },
+  "manifest_by_kind": {
+   "excluded": 1,
+   "fetch": 1,
+   "migration": 1,
+   "run": 43
+  },
+  "manifest_total_entries": 46,
+  "max_actions_ok_in_the_archive": 30,
+  "outcomes": {
+   "api_unusable": 8,
+   "budget_exhausted": 20,
+   "gave_up": 2,
+   "model_error": 5,
+   "no_reset_window": 1,
+   "no_summary": 7
+  },
+  "run_directories": 43,
+  "sum_actions_ok_in_the_archive": 573,
+  "summaries_carrying_a_score_key": 0,
+  "with_a_summary": 36
+ },
+ "baseline_scorecards": {
+  "archived_scorecard_body_rows": 63,
+  "distinct_named_run_ids": 57,
+  "distinct_scorecard_runs": 58,
+  "games_where_the_zero_is_a_budget_artefact": [
+   "g50t-5849a774",
+   "sk48-d8078629"
+  ],
+  "games_where_the_zero_is_capability_evidence": [
+   "ar25-0c556536",
+   "tn36-ef4dde99"
+  ],
+  "per_game": {
+   "ar25-0c556536": {
+    "best_actions_observed": 67,
+    "level_1_reference_actions": 32,
+    "level_baseline_actions": [
+     32,
+     50,
+     75,
+     37,
+     89,
+     159,
+     233,
+     73
+    ],
+    "runs_at_or_over_the_level_1_reference": 4,
+    "scorecard_runs": 13,
+    "terminal_states": [
+     "GAME_OVER",
+     "NOT_FINISHED"
+    ],
+    "verdict": "capability evidence -- a run reached the reference cost and scored nothing"
+   },
+   "g50t-5849a774": {
+    "best_actions_observed": 73,
+    "level_1_reference_actions": 78,
+    "level_baseline_actions": [
+     78,
+     175,
+     179,
+     230,
+     96,
+     54,
+     67
+    ],
+    "runs_at_or_over_the_level_1_reference": 0,
+    "scorecard_runs": 17,
+    "terminal_states": [
+     "NOT_FINISHED"
+    ],
+    "verdict": "budget artefact -- no run ever reached the reference cost"
+   },
+   "sk48-d8078629": {
+    "best_actions_observed": 38,
+    "level_1_reference_actions": 61,
+    "level_baseline_actions": [
+     61,
+     177,
+     101,
+     103,
+     230,
+     181,
+     125,
+     92
+    ],
+    "runs_at_or_over_the_level_1_reference": 0,
+    "scorecard_runs": 15,
+    "terminal_states": [
+     "NOT_FINISHED"
+    ],
+    "verdict": "budget artefact -- no run ever reached the reference cost"
+   },
+   "tn36-ef4dde99": {
+    "best_actions_observed": 32,
+    "level_1_reference_actions": 32,
+    "level_baseline_actions": [
+     32,
+     72,
+     26,
+     40,
+     30,
+     55,
+     62
+    ],
+    "runs_at_or_over_the_level_1_reference": 2,
+    "scorecard_runs": 13,
+    "terminal_states": [
+     "NOT_FINISHED"
+    ],
+    "verdict": "capability evidence -- a run reached the reference cost and scored nothing"
+   }
+  },
+  "runs_with_a_nonzero_score": 0,
+  "runs_with_levels_completed_over_zero": 0,
+  "scorecard_runs_carrying_no_run_id": 1,
+  "successful_actions_total": 1562
+ },
+ "comparisons": [
+  {
+   "claim": "baseline run directories",
+   "published": 43,
+   "recomputed": 43,
+   "source": "baseline-arms/runs/MANIFEST.json counts.by_kind.run",
+   "verdict": "AGREES"
+  },
+  {
+   "claim": "baseline runs with a summary",
+   "published": 36,
+   "recomputed": 36,
+   "source": "36 of 43; the other 7 have no levels_completed at all",
+   "verdict": "AGREES"
+  },
+  {
+   "claim": "baseline ledger rows",
+   "published": 656,
+   "recomputed": 656,
+   "source": "the paper said 560 and said the field is 0 throughout",
+   "verdict": "AGREES"
+  },
+  {
+   "claim": "baseline ledger rows carrying levels_completed",
+   "published": 214,
+   "recomputed": 214,
+   "source": "the other 442 do not carry the field -- absence, not zero",
+   "verdict": "AGREES"
+  },
+  {
+   "claim": "baseline summaries carrying a score key",
+   "published": 0,
+   "recomputed": 0,
+   "source": "audit_zero.json question_1.run_dirs_persisting_a_score_field",
+   "verdict": "AGREES"
+  },
+  {
+   "claim": "baseline archived scorecard body rows",
+   "published": 63,
+   "recomputed": 63,
+   "source": "audit_zero.json question_2.authoritative_observations",
+   "verdict": "AGREES"
+  },
+  {
+   "claim": "baseline named run_ids with a scorecard",
+   "published": 57,
+   "recomputed": 57,
+   "source": "audit_zero.json question_2.distinct_run_ids",
+   "verdict": "AGREES"
+  },
+  {
+   "claim": "baseline successful actions, deduplicated",
+   "published": 1562,
+   "recomputed": 1562,
+   "source": "A28 RUN_STATE.md §4",
+   "verdict": "AGREES"
+  },
+  {
+   "claim": "baseline runs with a nonzero score",
+   "published": 0,
+   "recomputed": 0,
+   "source": "audit_zero.json question_2",
+   "verdict": "AGREES"
+  },
+  {
+   "claim": "games where the zero is a budget artefact",
+   "published": 2,
+   "recomputed": 2,
+   "source": "A28 RUN_STATE.md §3",
+   "verdict": "AGREES"
+  },
+  {
+   "claim": "games where the zero is capability evidence",
+   "published": 2,
+   "recomputed": 2,
+   "source": "A28 RUN_STATE.md §3",
+   "verdict": "AGREES"
+  },
+  {
+   "claim": "g50t level-1 reference actions",
+   "published": 78,
+   "recomputed": 78,
+   "source": "A27, A28, A34",
+   "verdict": "AGREES"
+  },
+  {
+   "claim": "sk48 level-1 reference actions",
+   "published": 61,
+   "recomputed": 61,
+   "source": "A28",
+   "verdict": "AGREES"
+  },
+  {
+   "claim": "best baseline actions on g50t",
+   "published": 73,
+   "recomputed": 73,
+   "source": "A28 §3",
+   "verdict": "AGREES"
+  },
+  {
+   "claim": "Theoria live legs",
+   "published": 16,
+   "recomputed": 16,
+   "source": "15 carry the upstream field; first-contact's run.json predates it",
+   "verdict": "AGREES"
+  },
+  {
+   "claim": "Theoria legs whose summary records a score",
+   "published": 0,
+   "recomputed": 0,
+   "source": "score is null on every leg",
+   "verdict": "AGREES"
+  },
+  {
+   "claim": "Theoria max actions on one leg",
+   "published": 33,
+   "recomputed": 33,
+   "source": "A27 MEASUREMENT.json max_sum_level_actions_on_one_run_row",
+   "verdict": "AGREES"
+  },
+  {
+   "claim": "Theoria scorecard scores seen",
+   "published": [
+    0.0
+   ],
+   "recomputed": [
+    0.0
+   ],
+   "source": "A27 MEASUREMENT.json max_score_on_any_scorecard",
+   "verdict": "AGREES"
+  },
+  {
+   "claim": "levels.jsonl files",
+   "published": 22,
+   "recomputed": 22,
+   "source": "A31, A34",
+   "verdict": "AGREES"
+  },
+  {
+   "claim": "levels.jsonl zero-byte files",
+   "published": 22,
+   "recomputed": 22,
+   "source": "A31, A34",
+   "verdict": "AGREES"
+  },
+  {
+   "claim": "R2b probes completed",
+   "published": 27,
+   "recomputed": 27,
+   "source": "R2b-VERDICT.md",
+   "verdict": "AGREES"
+  },
+  {
+   "claim": "R2b contained",
+   "published": 21,
+   "recomputed": 21,
+   "source": "R2b-VERDICT.md",
+   "verdict": "AGREES"
+  },
+  {
+   "claim": "R2b containment %",
+   "published": 77.8,
+   "recomputed": 77.8,
+   "source": "R2b-VERDICT.md rounds it to 78%",
+   "verdict": "AGREES"
+  },
+  {
+   "claim": "ablation containment %",
+   "published": 9.6,
+   "recomputed": 9.6,
+   "source": "R2b-VERDICT.md",
+   "verdict": "AGREES"
+  },
+  {
+   "claim": "replay-predicted containment %",
+   "published": 82.7,
+   "recomputed": 82.7,
+   "source": "R2b-VERDICT.md rounds it to 83%",
+   "verdict": "AGREES"
+  },
+  {
+   "claim": "R2b g50t leg containment %",
+   "published": 83.3,
+   "recomputed": 83.3,
+   "source": "R2b-VERDICT.md per-leg table, 83%",
+   "verdict": "AGREES"
+  },
+  {
+   "claim": "levels completed in R2b",
+   "published": 0,
+   "recomputed": 0,
+   "source": "round.json",
+   "verdict": "AGREES"
+  }
+ ],
+ "r2b": {
+  "after__live_round_R2b": {
+   "contained": 21,
+   "containment_pct": 77.8,
+   "per_leg": {
+    "20260801T044640Z-R2b-g50t-a": {
+     "completed": 24,
+     "contained": 20,
+     "containment_pct": 83.3,
+     "designed": 24,
+     "realised_positive_bits": 20
+    },
+    "20260801T044640Z-R2b-sk48-b": {
+     "completed": 3,
+     "contained": 1,
+     "containment_pct": 33.3,
+     "designed": 4,
+     "realised_positive_bits": 1
+    }
+   },
+   "probes_completed": 27,
+   "realised_positive_bits": 21,
+   "width_values": [
+    6,
+    8,
+    9,
+    10
+   ]
+  },
+  "before__ablation_frontier": {
+   "contained": 5,
+   "containment_pct": 9.6,
+   "probes_replayed": 52,
+   "realised_positive_bits": 0,
+   "width_values": [
+    2
+   ]
+  },
+  "levels_completed_in_R2b": 0,
+  "predicted__offline_replay_of_the_generated_frontier": {
+   "contained": 43,
+   "containment_pct": 82.7,
+   "probes_replayed": 52,
+   "still_missed": 9,
+   "width_values": [
+    5,
+    6,
+    8,
+    10
+   ]
+  },
+  "round_usd": 39.039232
+ },
+ "theoria_legs": {
+  "desk_cost_usd_total": 139.361965,
+  "legs": [
+   {
+    "actions_ok": 7,
+    "carries_a_live_upstream_field": false,
+    "desk_cost_usd": 6.317658,
+    "game": "g50t-5849a774",
+    "levels_completed": 0,
+    "outcome": "stopped_for_archive",
+    "probe_actions": 0,
+    "scorecard_score": 0.0,
+    "scorecard_total_levels_completed": 0,
+    "slug": "20260728T015354Z-g50t-first-contact",
+    "summary_score": "absent"
+   },
+   {
+    "actions_ok": 30,
+    "carries_a_live_upstream_field": true,
+    "desk_cost_usd": 8.404868,
+    "game": "sk48-d8078629",
+    "levels_completed": 0,
+    "outcome": "budget_exhausted",
+    "probe_actions": 25,
+    "scorecard_score": 0.0,
+    "scorecard_total_levels_completed": 0,
+    "slug": "20260728T083400Z-E3-sk48-carried-v2",
+    "summary_score": "absent"
+   },
+   {
+    "actions_ok": 9,
+    "carries_a_live_upstream_field": true,
+    "desk_cost_usd": 0.0,
+    "game": "g50t-5849a774",
+    "levels_completed": "absent",
+    "outcome": "budget_exhausted",
+    "probe_actions": 0,
+    "scorecard_score": "absent",
+    "scorecard_total_levels_completed": "absent",
+    "slug": "20260729T004020Z-leg01",
+    "summary_score": "absent"
+   },
+   {
+    "actions_ok": 5,
+    "carries_a_live_upstream_field": true,
+    "desk_cost_usd": 0.0,
+    "game": "g50t-5849a774",
+    "levels_completed": 0,
+    "outcome": "spend_gate_tripped",
+    "probe_actions": 0,
+    "scorecard_score": 0.0,
+    "scorecard_total_levels_completed": 0,
+    "slug": "20260729T105729Z-leg01",
+    "summary_score": "absent"
+   },
+   {
+    "actions_ok": 5,
+    "carries_a_live_upstream_field": true,
+    "desk_cost_usd": 0.0,
+    "game": "g50t-5849a774",
+    "levels_completed": 0,
+    "outcome": "spend_gate_tripped",
+    "probe_actions": 0,
+    "scorecard_score": 0.0,
+    "scorecard_total_levels_completed": 0,
+    "slug": "20260731T1240Z-A3-level2-carried",
+    "summary_score": "absent"
+   },
+   {
+    "actions_ok": 13,
+    "carries_a_live_upstream_field": true,
+    "desk_cost_usd": 9.556852,
+    "game": "g50t-5849a774",
+    "levels_completed": 0,
+    "outcome": "spend_gate_tripped",
+    "probe_actions": 8,
+    "scorecard_score": 0.0,
+    "scorecard_total_levels_completed": 0,
+    "slug": "20260731T1310Z-A3-level2-carried-r2",
+    "summary_score": "absent"
+   },
+   {
+    "actions_ok": 33,
+    "carries_a_live_upstream_field": true,
+    "desk_cost_usd": 13.439862,
+    "game": "g50t-5849a774",
+    "levels_completed": 0,
+    "outcome": "spend_gate_tripped",
+    "probe_actions": 28,
+    "scorecard_score": 0.0,
+    "scorecard_total_levels_completed": 0,
+    "slug": "20260731T1430Z-A3-level2-carried-r3",
+    "summary_score": "absent"
+   },
+   {
+    "actions_ok": 21,
+    "carries_a_live_upstream_field": true,
+    "desk_cost_usd": 12.251719,
+    "game": "sk48-d8078629",
+    "levels_completed": 0,
+    "outcome": "spend_gate_tripped",
+    "probe_actions": 16,
+    "scorecard_score": 0.0,
+    "scorecard_total_levels_completed": 0,
+    "slug": "20260731T1500Z-A3-sk48-carried-l1",
+    "summary_score": "absent"
+   },
+   {
+    "actions_ok": 13,
+    "carries_a_live_upstream_field": true,
+    "desk_cost_usd": 7.603419,
+    "game": "g50t-5849a774",
+    "levels_completed": 0,
+    "outcome": "spend_gate_tripped",
+    "probe_actions": 5,
+    "scorecard_score": 0.0,
+    "scorecard_total_levels_completed": 0,
+    "slug": "20260731T231654Z-R1-g50t-a",
+    "summary_score": "absent"
+   },
+   {
+    "actions_ok": 5,
+    "carries_a_live_upstream_field": true,
+    "desk_cost_usd": 7.608528,
+    "game": "sk48-d8078629",
+    "levels_completed": 0,
+    "outcome": "spend_gate_tripped",
+    "probe_actions": 0,
+    "scorecard_score": 0.0,
+    "scorecard_total_levels_completed": 0,
+    "slug": "20260731T231654Z-R1-sk48-b",
+    "summary_score": "absent"
+   },
+   {
+    "actions_ok": 25,
+    "carries_a_live_upstream_field": true,
+    "desk_cost_usd": 17.749106,
+    "game": "g50t-5849a774",
+    "levels_completed": 0,
+    "outcome": "spend_gate_tripped",
+    "probe_actions": 14,
+    "scorecard_score": 0.0,
+    "scorecard_total_levels_completed": 0,
+    "slug": "20260801T001851Z-R1b-g50t-a",
+    "summary_score": "absent"
+   },
+   {
+    "actions_ok": 5,
+    "carries_a_live_upstream_field": true,
+    "desk_cost_usd": 17.390721,
+    "game": "sk48-d8078629",
+    "levels_completed": "absent",
+    "outcome": "spend_gate_tripped",
+    "probe_actions": 0,
+    "scorecard_score": "absent",
+    "scorecard_total_levels_completed": "absent",
+    "slug": "20260801T001851Z-R1b-sk48-b",
+    "summary_score": "absent"
+   },
+   {
+    "actions_ok": 0,
+    "carries_a_live_upstream_field": true,
+    "desk_cost_usd": 0.0,
+    "game": "g50t-5849a774",
+    "levels_completed": "absent",
+    "outcome": "reset_failed",
+    "probe_actions": 0,
+    "scorecard_score": "absent",
+    "scorecard_total_levels_completed": "absent",
+    "slug": "20260801T043743Z-R2-g50t-a",
+    "summary_score": "absent"
+   },
+   {
+    "actions_ok": 0,
+    "carries_a_live_upstream_field": true,
+    "desk_cost_usd": 0.0,
+    "game": "sk48-d8078629",
+    "levels_completed": "absent",
+    "outcome": "reset_failed",
+    "probe_actions": 0,
+    "scorecard_score": "absent",
+    "scorecard_total_levels_completed": "absent",
+    "slug": "20260801T043743Z-R2-sk48-b",
+    "summary_score": "absent"
+   },
+   {
+    "actions_ok": 29,
+    "carries_a_live_upstream_field": true,
+    "desk_cost_usd": 18.736008,
+    "game": "g50t-5849a774",
+    "levels_completed": 0,
+    "outcome": "spend_gate_tripped",
+    "probe_actions": 24,
+    "scorecard_score": 0.0,
+    "scorecard_total_levels_completed": 0,
+    "slug": "20260801T044640Z-R2b-g50t-a",
+    "summary_score": "absent"
+   },
+   {
+    "actions_ok": 9,
+    "carries_a_live_upstream_field": true,
+    "desk_cost_usd": 20.303224,
+    "game": "sk48-d8078629",
+    "levels_completed": 0,
+    "outcome": "spend_gate_tripped",
+    "probe_actions": 3,
+    "scorecard_score": "absent",
+    "scorecard_total_levels_completed": "absent",
+    "slug": "20260801T044640Z-R2b-sk48-b",
+    "summary_score": "absent"
+   }
+  ],
+  "legs_carrying_a_scorecard": 11,
+  "legs_carrying_the_upstream_field": 15,
+  "legs_whose_summary_records_a_score": 0,
+  "legs_with_no_desk_cost_recorded": 0,
+  "levels_completed_histogram": {
+   "0": 12,
+   "absent": 4
+  },
+  "live_legs": 16,
+  "max_actions_ok_on_one_leg": 33,
+  "preflights_excluded": 2,
+  "scorecard_scores_seen": [
+   0.0
+  ],
+  "scorecard_total_levels_completed_seen": [
+   0
+  ],
+  "sum_actions_ok": 209
+ },
+ "theoria_level_log": {
+  "level_boundary_rows": "never_written",
+  "levels_jsonl_files": 22,
+  "size_histogram": {
+   "0": 22
+  },
+  "zero_byte_files": 22
+ },
+ "theoria_probe_share": {
+  "legs_with_a_countable_action_budget": 16,
+  "non_probe_actions_max": 11,
+  "non_probe_actions_sorted": [
+   0,
+   0,
+   4,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   6,
+   7,
+   8,
+   9,
+   11
+  ],
+  "note": "`non_probe_actions` is `actions_ok` minus the completed probes in the leg's own probes.jsonl. It is the number of actions that could have been advancing the level. The two legs listed in `two_instruments_disagree_on` are reported rather than reconciled: the summary's `probe_actions` and the probe log disagree there, and picking one would invent a verdict.",
+  "per_leg": {
+   "20260728T015354Z-g50t-first-contact": {
+    "actions_ok": 7,
+    "completed_probes_in_probes_jsonl": 0,
+    "non_probe_actions": 7,
+    "probe_actions_per_summary": 0
+   },
+   "20260728T083400Z-E3-sk48-carried-v2": {
+    "actions_ok": 30,
+    "completed_probes_in_probes_jsonl": 25,
+    "non_probe_actions": 5,
+    "probe_actions_per_summary": 25
+   },
+   "20260729T004020Z-leg01": {
+    "actions_ok": 9,
+    "completed_probes_in_probes_jsonl": "absent",
+    "non_probe_actions": 9,
+    "probe_actions_per_summary": 0
+   },
+   "20260729T105729Z-leg01": {
+    "actions_ok": 5,
+    "completed_probes_in_probes_jsonl": "absent",
+    "non_probe_actions": 5,
+    "probe_actions_per_summary": 0
+   },
+   "20260731T1240Z-A3-level2-carried": {
+    "actions_ok": 5,
+    "completed_probes_in_probes_jsonl": 0,
+    "non_probe_actions": 5,
+    "probe_actions_per_summary": 0
+   },
+   "20260731T1310Z-A3-level2-carried-r2": {
+    "actions_ok": 13,
+    "completed_probes_in_probes_jsonl": 8,
+    "non_probe_actions": 5,
+    "probe_actions_per_summary": 8
+   },
+   "20260731T1430Z-A3-level2-carried-r3": {
+    "actions_ok": 33,
+    "completed_probes_in_probes_jsonl": 28,
+    "non_probe_actions": 5,
+    "probe_actions_per_summary": 28
+   },
+   "20260731T1500Z-A3-sk48-carried-l1": {
+    "actions_ok": 21,
+    "completed_probes_in_probes_jsonl": 16,
+    "non_probe_actions": 5,
+    "probe_actions_per_summary": 16
+   },
+   "20260731T231654Z-R1-g50t-a": {
+    "actions_ok": 13,
+    "completed_probes_in_probes_jsonl": 5,
+    "non_probe_actions": 8,
+    "probe_actions_per_summary": 5
+   },
+   "20260731T231654Z-R1-sk48-b": {
+    "actions_ok": 5,
+    "completed_probes_in_probes_jsonl": 0,
+    "non_probe_actions": 5,
+    "probe_actions_per_summary": 0
+   },
+   "20260801T001851Z-R1b-g50t-a": {
+    "actions_ok": 25,
+    "completed_probes_in_probes_jsonl": 14,
+    "non_probe_actions": 11,
+    "probe_actions_per_summary": 14
+   },
+   "20260801T001851Z-R1b-sk48-b": {
+    "actions_ok": 5,
+    "completed_probes_in_probes_jsonl": 1,
+    "non_probe_actions": 4,
+    "probe_actions_per_summary": 0
+   },
+   "20260801T043743Z-R2-g50t-a": {
+    "actions_ok": 0,
+    "completed_probes_in_probes_jsonl": "absent",
+    "non_probe_actions": 0,
+    "probe_actions_per_summary": 0
+   },
+   "20260801T043743Z-R2-sk48-b": {
+    "actions_ok": 0,
+    "completed_probes_in_probes_jsonl": "absent",
+    "non_probe_actions": 0,
+    "probe_actions_per_summary": 0
+   },
+   "20260801T044640Z-R2b-g50t-a": {
+    "actions_ok": 29,
+    "completed_probes_in_probes_jsonl": 24,
+    "non_probe_actions": 5,
+    "probe_actions_per_summary": 24
+   },
+   "20260801T044640Z-R2b-sk48-b": {
+    "actions_ok": 9,
+    "completed_probes_in_probes_jsonl": 3,
+    "non_probe_actions": 6,
+    "probe_actions_per_summary": 3
+   }
+  },
+  "two_instruments_disagree_on": [
+   "20260801T001851Z-R1b-sk48-b"
+  ]
+ },
+ "unmeasurable_here": [
+  {
+   "quantity": "per-tier baseline action totals (opus 70, sonnet 65, haiku 1427)",
+   "why": "the tier lives in the scorecard body's `tags`, which this census does not join to the run_id; A28's audit_zero.py does. Read from A28, not recomputed here."
+  },
+  {
+   "quantity": "anchor drift behind the 47 off-frontier probes of 2026-07-31",
+   "why": "needs the gitignored per-leg frame trace. Carried from the arm's manifest, never recomputed, and never reported as zero."
+  },
+  {
+   "quantity": "whether any leg would have completed a level at adequate budget",
+   "why": "no run of any arm has ever been given the reference number of actions on g50t or sk48. Absence of the experiment, not a zero result."
+  }
+ ]
+}
