@@ -47,6 +47,25 @@ because a changed artefact is a changed run whether or not the behaviour moved.
 Every lever below is off until a round turns it on, and each is set where the
 measurement leaves it rather than where it would look busy.
 
+**A25b: the audit became a signal.** The fourth bullet above is an audit -- it
+needs the transitions that arrived *after* the call, so it can explain a leg
+that is over and change nothing about one that is running. `inner/inertia.py`
+asks the same question over the frames the arm already has, at the moment the
+call returns. On this archive the two never disagreed: 54 calls could be scored
+both ways, 23 inert and 31 productive, and the at-call verdict matched the
+after-the-fact one every time -- mechanically rather than luckily, because
+`step` is a fold and two revisions that have parted company stay parted. It
+also scores 3 calls the audit cannot, being the last call of their leg, and two
+of those cost $18.67 between them.
+
+Three levers read it, all off by default: `adapt=by_prediction_delta` (widen
+the floor after a call that predicted nothing new), `defer_after_inert` (do not
+pay twice for a question the desk has already answered with nothing), and
+`gate_every_round` (ask the kind-based clauses before a continuation round too,
+because **all 8 archived calls the second lever would refuse are second rounds
+of a turn**, which the historic gate never sees). `min_surprises` is the fourth
+and reads no signal at all.
+
 **What is deliberately not a knob.** `REPAIR_ROUNDS` stays in
 `inner/theorize.py`. It is not a cadence lever -- it does not decide *when* the
 desk is called, it decides how many invocations one call is allowed. Measuring
@@ -90,9 +109,48 @@ UNITS = (UNIT_FRAMES, UNIT_ACTIONS)
 #: later prediction. A manual that did not move is the cheapest available
 #: signal that the desk had nothing to work with, and it is available *at the
 #: call*, unlike the downstream verdict which needs the future.
+#: `by_prediction_delta` is the same idea driven by a strictly better signal:
+#: not whether the manual's *text* moved but whether the manual's *predictions*
+#: moved, replayed over every frame the leg has recorded, by `inner/inertia.py`
+#: at the moment the call returns. The text proxy is weak and the archive says
+#: so: 10 adjudications came back byte-identical, but 23 changed no later
+#: prediction -- the text signal misses more than half of what it is a proxy
+#: for. Available only when `inertia` is on, and `__post_init__` refuses the
+#: combination that would act on a signal nobody computed.
 ADAPT_OFF = "off"
 ADAPT_BY_MANUAL_DELTA = "by_manual_delta"
-ADAPTS = (ADAPT_OFF, ADAPT_BY_MANUAL_DELTA)
+ADAPT_BY_PREDICTION_DELTA = "by_prediction_delta"
+ADAPTS = (ADAPT_OFF, ADAPT_BY_MANUAL_DELTA, ADAPT_BY_PREDICTION_DELTA)
+
+#: Whether the arm computes the at-call inertia signal at all.
+#:
+#: `off` is historic and costs nothing: `inner/inertia.py` is never imported
+#: and no snapshot is recompiled. `measure` recompiles the two revisions the
+#: adjudication was snapshotted between and replays both over the frames in
+#: hand, which is two compiles and two replays of already-recorded steps --
+#: seconds, no network, no desk, no spend -- and writes the verdict into
+#: `action_economy.json`.
+#:
+#: `measure` **changes no decision**. It is separated from the levers that act
+#: on it so a round can buy the measurement without buying the intervention;
+#: the `measure-inertia` policy is exactly that round, and its replay row must
+#: equal `today`'s to the dollar or the separation is not real.
+INERTIA_OFF = "off"
+INERTIA_MEASURE = "measure"
+INERTIAS = (INERTIA_OFF, INERTIA_MEASURE)
+
+
+def _flag(value: str) -> bool:
+    """A boolean out of the environment, on the same whitelist as the master
+    switch. Anything unrecognised raises, so `from_env` drops the field rather
+    than reading `"false"` as true -- which is what `bool("false")` does.
+    """
+    raw = str(value).strip().lower()
+    if raw in ("1", "true", "yes", "on"):
+        return True
+    if raw in ("0", "false", "no", "off"):
+        return False
+    raise ValueError("not a boolean: %r" % (value,))
 
 
 @dataclass(frozen=True)
@@ -145,12 +203,72 @@ class ActionEconomyConfig:
     #: world. So this ships empty and typed, not empty and forgotten.
     defer_kinds: Tuple[str, ...] = ()
 
+    #: Whether the at-call inertia signal is computed. See `INERTIA_OFF`.
+    inertia: str = INERTIA_OFF
+
+    #: How many pending surprises it takes to be worth a call.
+    #:
+    #: 1 is historic -- one surprise opens the gate -- and the clause is
+    #: skipped entirely at 1 so that turning some *other* knob on cannot
+    #: quietly add a refusal path. This is the "minimum new-information
+    #: threshold" the board item names, in the only unit the record actually
+    #: carries per call: how many surprises the register was holding.
+    min_surprises: int = 1
+
+    #: Do not pay again for a question the desk has already answered with
+    #: nothing.
+    #:
+    #: When the at-call signal says the last adjudication predicted exactly
+    #: what the previous manual predicted, the kinds that triggered it are
+    #: remembered; a later call whose pending kinds are all in that set is
+    #: refused until a kind arrives that is not, or until a call comes back
+    #: having moved a prediction. This is the board item's "defer while
+    #: surprises are of a kind the manual already explains", with *explains*
+    #: given an operational meaning the record can check rather than a
+    #: hand-picked list of kinds.
+    defer_after_inert: bool = False
+
+    #: Ask the kind-based clauses again before each *continuation* round.
+    #:
+    #: The historic gate is checked once per turn, above the `while` loop, so
+    #: the second adjudication of a turn never meets it -- that is why 24 of 73
+    #: recorded calls had a gap of zero. It is also why `defer_after_inert`
+    #: refuses nothing on this archive: **all 8 of the calls whose pending
+    #: kinds were a subset of a preceding inert call's are second rounds.** The
+    #: lever is aimed precisely at the calls the gate cannot see.
+    #:
+    #: Only the *evidence-independent* clauses are re-asked -- `defer_kinds`,
+    #: `defer_after_inert`, `min_surprises`. The floor is not, deliberately: a
+    #: continuation round has zero new frames by construction, so applying the
+    #: floor to it is exactly `max_rounds_per_turn=1` wearing a second name,
+    #: and two levers that are secretly one lever cannot be told apart in a
+    #: replay.
+    gate_every_round: bool = False
+
     def __post_init__(self) -> None:
         if self.unit not in UNITS:
             raise ValueError("unit must be one of %r, not %r" % (UNITS, self.unit))
         if self.adapt not in ADAPTS:
             raise ValueError("adapt must be one of %r, not %r"
                              % (ADAPTS, self.adapt))
+        if self.inertia not in INERTIAS:
+            raise ValueError("inertia must be one of %r, not %r"
+                             % (INERTIAS, self.inertia))
+        if self.min_surprises < 1:
+            raise ValueError("min_surprises must be at least 1: a gate that "
+                             "opens on no surprise at all is not a threshold")
+        # A policy that acts on a signal it never computes is a policy that
+        # silently does nothing -- which in a round reads as a null result for
+        # the intervention rather than as a misconfiguration.
+        if self.inertia == INERTIA_OFF:
+            if self.adapt == ADAPT_BY_PREDICTION_DELTA:
+                raise ValueError("adapt=%r needs inertia=%r: the prediction "
+                                 "delta is not computed with inertia off"
+                                 % (ADAPT_BY_PREDICTION_DELTA, INERTIA_MEASURE))
+            if self.defer_after_inert:
+                raise ValueError("defer_after_inert needs inertia=%r: there is "
+                                 "no inert verdict to defer on with inertia "
+                                 "off" % (INERTIA_MEASURE,))
         if self.min_new < 0:
             raise ValueError("min_new must not be negative")
         if self.max_rounds_per_turn < 1:
@@ -181,6 +299,12 @@ class ActionEconomyConfig:
                 ("THEORIA_ECONOMY_ADAPT_FACTOR", "adapt_factor", int),
                 ("THEORIA_ECONOMY_ADAPT_MAX", "adapt_max", int),
                 ("THEORIA_ECONOMY_ROUNDS_PER_TURN", "max_rounds_per_turn", int),
+                ("THEORIA_ECONOMY_INERTIA", "inertia", str),
+                ("THEORIA_ECONOMY_MIN_SURPRISES", "min_surprises", int),
+                ("THEORIA_ECONOMY_DEFER_AFTER_INERT", "defer_after_inert",
+                 _flag),
+                ("THEORIA_ECONOMY_GATE_EVERY_ROUND", "gate_every_round",
+                 _flag),
         ):
             value = env.get(var)
             if value in (None, ""):
@@ -204,7 +328,21 @@ class ActionEconomyConfig:
                 "adapt_factor": self.adapt_factor,
                 "adapt_max": self.adapt_max,
                 "max_rounds_per_turn": self.max_rounds_per_turn,
-                "defer_kinds": list(self.defer_kinds)}
+                "defer_kinds": list(self.defer_kinds),
+                "inertia": self.inertia,
+                "min_surprises": self.min_surprises,
+                "defer_after_inert": self.defer_after_inert,
+                "gate_every_round": self.gate_every_round}
+
+    @property
+    def measures_inertia(self) -> bool:
+        """Should the loop pay the two compiles after an adjudication?
+
+        `enabled` is part of the question: a config with `inertia=measure` and
+        the master switch off is not a live policy, and the default path must
+        not import `inner/inertia.py` at all.
+        """
+        return self.enabled and self.inertia != INERTIA_OFF
 
 
 @dataclass(frozen=True)
@@ -217,6 +355,11 @@ class GateDecision:
     #: on -- an adaptive floor that is not written down is a run whose cadence
     #: cannot be reconstructed from its artefacts.
     floor: Optional[int] = None
+    #: Which clause refused, for the artefacts. A refusal reported only as
+    #: "the gate said no" cannot be attributed to the lever a round is
+    #: measuring, and A25b's first replay attributed every one of them to the
+    #: floor -- including ten the kind guard had refused.
+    clause: Optional[str] = None
 
 
 class ActionEconomy:
@@ -230,6 +373,13 @@ class ActionEconomy:
     def __init__(self, config: Optional[ActionEconomyConfig] = None) -> None:
         self.config = config or ActionEconomyConfig()
         self._floor = self.config.min_new
+        #: The trigger kinds of the last adjudication the at-call signal
+        #: judged inert, or `None` if the last judged call moved a prediction.
+        #: Read only by `defer_after_inert`.
+        self._inert_kinds: Optional[frozenset] = None
+        #: One row per at-call inertia verdict, in order. Empty on the default
+        #: rung because the signal is never computed there.
+        self.inertia_log: list = []
         #: One row per decision, for the run's own artefacts. Written whether
         #: or not the economy is on: a default leg's rows are what a switched-on
         #: leg is compared against, and a comparison with only one side
@@ -244,23 +394,53 @@ class ActionEconomy:
             return self.config.min_new
         return self._floor
 
-    def note_adjudication(self, *, manual_moved: Optional[bool]) -> None:
+    def note_adjudication(self, *, manual_moved: Optional[bool],
+                          bought_nothing: Optional[bool] = None,
+                          pending_kinds: Tuple[str, ...] = ()) -> None:
         """Told after every adjudication that returned, with what it changed.
 
-        `manual_moved=None` means the caller could not tell -- a desk failure,
-        or a snapshot that did not survive. An unknown is not an unmoved
-        manual: the floor is left exactly where it was rather than widened on
-        a fact nobody established.
+        Two signals, and both are three-valued. `manual_moved` is the cheap
+        one: did the manual's text move. `bought_nothing` is the at-call
+        inertia verdict from `inner/inertia.py` -- did the new manual predict
+        exactly what the old one predicted about every frame in hand -- and it
+        arrives only when a policy asked for it.
+
+        `None` in either means the caller could not tell: a desk failure, a
+        snapshot that did not survive, a leg with no transition to replay. **An
+        unknown is not an unmoved manual.** The floor is left exactly where it
+        was and the defer set is left exactly as it was, rather than widened on
+        a fact nobody established -- otherwise a file that failed to copy
+        becomes an argument for thinking less.
         """
-        if self.config.adapt != ADAPT_BY_MANUAL_DELTA:
+        cfg = self.config
+        if cfg.defer_after_inert and bought_nothing is not None:
+            # Set by an inert verdict, cleared by a productive one. An unknown
+            # leaves an existing guard standing: the last *established* fact
+            # about this evidence is still that the desk had nothing to add.
+            self._inert_kinds = (frozenset(pending_kinds) if bought_nothing
+                                 else None)
+
+        if cfg.adapt == ADAPT_BY_MANUAL_DELTA:
+            moved = manual_moved
+        elif cfg.adapt == ADAPT_BY_PREDICTION_DELTA:
+            moved = None if bought_nothing is None else (not bought_nothing)
+        else:
             return
-        if manual_moved is None:
+        if moved is None:
             return
-        if manual_moved:
+        if moved:
             self._floor = self.config.min_new
         else:
             self._floor = min(self._floor * self.config.adapt_factor,
                               self.config.adapt_max)
+
+    def note_inertia(self, verdict: Dict[str, Any], *, step_idx: int,
+                     pending_kinds: Tuple[str, ...] = ()) -> None:
+        """Record one at-call verdict. Reporting only; decides nothing."""
+        row = dict(verdict)
+        row["step_idx"] = step_idx
+        row["pending_kinds"] = sorted(set(pending_kinds))
+        self.inertia_log.append(row)
 
     # -- the gate ----------------------------------------------------------
     def gate(self, *, has_manual: bool, pending: int, new_frames: int,
@@ -288,7 +468,7 @@ class ActionEconomy:
                     "skipped: %d surprise(s) pending but only %d new "
                     "transition(s) since the last call (want %d). Going to "
                     "get more." % (pending, new_frames, floor),
-                    floor)
+                    floor, "floor")
             return GateDecision(True, None, floor)
 
         floor = self.floor
@@ -299,7 +479,7 @@ class ActionEconomy:
                 "skipped: %d surprise(s) pending but only %d new %s since the "
                 "last call (want %d). Going to get more."
                 % (pending, seen, cfg.unit, floor),
-                floor)
+                floor, "floor")
         if (has_manual and cfg.defer_kinds and pending_kinds
                 and all(k in cfg.defer_kinds for k in pending_kinds)):
             return GateDecision(
@@ -307,7 +487,89 @@ class ActionEconomy:
                 "skipped: %d surprise(s) pending but every one of them is of a "
                 "kind this policy defers (%s). Going to get evidence of some "
                 "other kind." % (pending, ", ".join(sorted(set(pending_kinds)))),
-                floor)
+                floor, "defer_kinds")
+        # The threshold clause is skipped entirely at the historic 1 rather
+        # than evaluated and found true: `pending == 0` reaches this gate on
+        # every turn that has no surprise at all, and today's arm allows it
+        # through to the `while` loop, which writes "skipped: no surprise
+        # pending". Turning a different knob on must not silently rewrite that
+        # line.
+        if (cfg.min_surprises > 1 and has_manual
+                and pending < cfg.min_surprises and actions_left > floor):
+            return GateDecision(
+                False,
+                "skipped: %d surprise(s) pending, below this policy's "
+                "threshold of %d. Going to get more."
+                % (pending, cfg.min_surprises),
+                floor, "min_surprises")
+        # **The guard lapses.** Without the `seen < adapt_max` bound this
+        # clause is a trap: nothing clears `_inert_kinds` except a call that
+        # fires, and if the guard refuses every call, no call ever fires. On
+        # `20260728T083400Z-E3-sk48-carried-v2` the unbounded version parks the
+        # desk for ten consecutive adjudications and the leg never theorises
+        # again. The bound says what the clause actually means: do not pay
+        # twice for the same question **on substantially the same evidence**.
+        # `adapt_max` is reused rather than given a name of its own because it
+        # is already the answer to the same question -- the widest gap any
+        # recorded leg would have needed -- and a second constant with the same
+        # justification is a second constant nobody chose.
+        if (cfg.defer_after_inert and has_manual and pending_kinds
+                and self._inert_kinds is not None
+                and set(pending_kinds) <= self._inert_kinds
+                and seen < cfg.adapt_max
+                and actions_left > floor):
+            return GateDecision(
+                False,
+                "skipped: %d surprise(s) pending, all of kinds (%s) the last "
+                "call already answered with a manual that predicted exactly "
+                "what the old one predicted, and only %d new %s since. Going "
+                "to get evidence of some other kind."
+                % (pending, ", ".join(sorted(set(pending_kinds))), seen,
+                   cfg.unit),
+                floor, "defer_after_inert")
+        return GateDecision(True, None, floor)
+
+    def gate_continuation(self, *, has_manual: bool, pending: int,
+                          pending_kinds: Tuple[str, ...] = ()) -> GateDecision:
+        """Should this turn adjudicate *again*, having just adjudicated?
+
+        Always allow on the historic rung and whenever `gate_every_round` is
+        off, which is what keeps the control reproducing the record: the
+        second round of a turn has never met a gate.
+
+        Only the clauses that do not depend on new evidence are asked. A
+        continuation round has no new evidence by construction -- that is what
+        makes it a continuation -- so an evidence floor here would refuse every
+        one of them and be indistinguishable from `max_rounds_per_turn=1`.
+        """
+        cfg = self.config
+        if not cfg.enabled or not cfg.gate_every_round:
+            return GateDecision(True, None, self.floor)
+        floor = self.floor
+        if (has_manual and cfg.defer_kinds and pending_kinds
+                and all(k in cfg.defer_kinds for k in pending_kinds)):
+            return GateDecision(
+                False,
+                "stopped repairing: every remaining surprise is of a kind this "
+                "policy defers (%s)."
+                % ", ".join(sorted(set(pending_kinds))), floor,
+                "continuation:defer_kinds")
+        if cfg.min_surprises > 1 and has_manual and pending < cfg.min_surprises:
+            return GateDecision(
+                False,
+                "stopped repairing: %d surprise(s) left, below this policy's "
+                "threshold of %d." % (pending, cfg.min_surprises), floor,
+                "continuation:min_surprises")
+        if (cfg.defer_after_inert and has_manual and pending_kinds
+                and self._inert_kinds is not None
+                and set(pending_kinds) <= self._inert_kinds):
+            return GateDecision(
+                False,
+                "stopped repairing: the %d surprise(s) left are all of kinds "
+                "(%s) the call this turn already answered with a manual that "
+                "predicted exactly what the old one predicted."
+                % (pending, ", ".join(sorted(set(pending_kinds)))), floor,
+                "continuation:defer_after_inert")
         return GateDecision(True, None, floor)
 
     def rounds_allowed(self) -> int:
@@ -334,6 +596,7 @@ class ActionEconomy:
     def as_json(self) -> Dict[str, Any]:
         return {"config": self.config.as_json(),
                 "floor_now": self.floor,
+                "inertia": self.inertia_log,
                 "decisions": self.log}
 
 
@@ -379,6 +642,56 @@ POLICIES: Dict[str, Dict[str, Any]] = {
         "config": ActionEconomyConfig(enabled=True, min_new=8,
                                       max_rounds_per_turn=1),
         "why": "both of the two levers the measurement actually supports.",
+    },
+    "measure-inertia": {
+        "config": ActionEconomyConfig(enabled=True, inertia=INERTIA_MEASURE),
+        "why": "the instrument with none of the intervention: compute the "
+               "at-call inertia verdict after every adjudication, write it "
+               "down, change nothing. Its replay row must equal `today`'s to "
+               "the dollar -- that equality is the negative control for every "
+               "row below it.",
+    },
+    "inert-guard": {
+        "config": ActionEconomyConfig(enabled=True, inertia=INERTIA_MEASURE,
+                                      adapt=ADAPT_BY_PREDICTION_DELTA),
+        "why": "widen the floor after a call whose new manual predicted "
+               "exactly what the old one predicted about the frames in hand. "
+               "The same shape as `adaptive`, driven by the prediction signal "
+               "instead of the text one -- 10 archived calls came back "
+               "byte-identical against 23 that changed no later prediction, "
+               "so the text proxy misses more than half of what it proxies.",
+    },
+    "defer-explained": {
+        "config": ActionEconomyConfig(enabled=True, inertia=INERTIA_MEASURE,
+                                      defer_after_inert=True),
+        "why": "do not pay twice for the same question: after an inert call, "
+               "refuse the next one whose pending kinds are all kinds that "
+               "call already covered. This is `defer_kinds` with the list "
+               "earned from the run instead of guessed in advance.",
+    },
+    "defer-explained-every-round": {
+        "config": ActionEconomyConfig(enabled=True, inertia=INERTIA_MEASURE,
+                                      defer_after_inert=True,
+                                      gate_every_round=True),
+        "why": "the same lever, asked where the calls actually are. All 8 "
+               "archived calls whose kinds were a subset of a preceding inert "
+               "call's are SECOND rounds of a turn, which the historic gate is "
+               "never asked about -- so `defer-explained` refuses nothing and "
+               "this refuses those 8.",
+    },
+    "min-info-2": {
+        "config": ActionEconomyConfig(enabled=True, min_surprises=2),
+        "why": "a minimum new-information threshold: one surprise is not "
+               "worth a $2 call. Two is the smallest threshold that is not "
+               "the historic behaviour, and the archive is what says whether "
+               "it costs anything.",
+    },
+    "inert-guard-one-round": {
+        "config": ActionEconomyConfig(enabled=True, inertia=INERTIA_MEASURE,
+                                      adapt=ADAPT_BY_PREDICTION_DELTA,
+                                      max_rounds_per_turn=1),
+        "why": "the prediction-driven floor plus the one lever the A25 "
+               "measurement already supported on its own.",
     },
 }
 
