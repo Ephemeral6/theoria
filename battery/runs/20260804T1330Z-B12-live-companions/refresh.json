@@ -1,0 +1,43 @@
+{
+  "companions": {
+    "frontload_e2l.json": {
+      "committed_sha256": "6deadace384a00848a945f226958f6db85ae8197ef1fb7cd1c2a1836d0b1406f",
+      "moved": false,
+      "present_on_disk": true,
+      "recomputed_sha256": "6deadace384a00848a945f226958f6db85ae8197ef1fb7cd1c2a1836d0b1406f"
+    },
+    "gaming_audit.live.json": {
+      "committed_sha256": "9ff3c5e78b7bd67cd6db8fb2dce5ae0fe852ce38e52ca9a2509f95fc1e0738c5",
+      "moved": false,
+      "present_on_disk": true,
+      "recomputed_sha256": "9ff3c5e78b7bd67cd6db8fb2dce5ae0fe852ce38e52ca9a2509f95fc1e0738c5"
+    },
+    "live_arm_readings.json": {
+      "committed_sha256": "a6d2602714f630b6a36ab7fed249c61637baac7f8d36979a0907707b304b5d3b",
+      "moved": false,
+      "present_on_disk": true,
+      "recomputed_sha256": "a6d2602714f630b6a36ab7fed249c61637baac7f8d36979a0907707b304b5d3b"
+    },
+    "live_census.json": {
+      "committed_sha256": "fa84f4260a8088ca13fc80810fa17ff52a2e7ba945bd1e95bf08a467f517ef79",
+      "moved": false,
+      "present_on_disk": true,
+      "recomputed_sha256": "fa84f4260a8088ca13fc80810fa17ff52a2e7ba945bd1e95bf08a467f517ef79"
+    },
+    "live_economy.json": {
+      "committed_sha256": "fa23ad802df8b883e3e81184d274b0013ad1d0e4e2482d921140c59ac38055dc",
+      "moved": false,
+      "present_on_disk": true,
+      "recomputed_sha256": "fa23ad802df8b883e3e81184d274b0013ad1d0e4e2482d921140c59ac38055dc"
+    },
+    "threat_model.json": {
+      "committed_sha256": "3182b32b5a033137db3022ec34bac236dfec31922179ede3d9a3e26e0df7ae94",
+      "moved": false,
+      "present_on_disk": true,
+      "recomputed_sha256": "3182b32b5a033137db3022ec34bac236dfec31922179ede3d9a3e26e0df7ae94"
+    }
+  },
+  "n_moved": 0,
+  "note": "gaming is imported but not probed: its live companion is written by live_tiers, which is probed. A companion absent from disk reports present_on_disk false and moved true -- absence, not agreement.",
+  "what": "every battery/artifacts_live/ companion rebuilt in-process from the tree and compared with the committed file by canonical-bytes digest. `moved: false` means not one metric in that companion changed."
+}
