@@ -85,6 +85,7 @@ import tempfile
 import time
 from typing import Any, Dict, List, Optional, Sequence
 
+from harness import replywholeness
 from harness.spend import NoSpendBinding, SpendBinding      # noqa: F401
 
 from proxy.guard import SealedPileGuard
@@ -351,6 +352,13 @@ class ModelDesk:
         self.calls = 0
         self.cli_cost_usd = 0.0
         self.unpriced_calls = 0
+        #: How many assistant messages the last call was billed for and did not
+        #: deliver (`harness/replywholeness.py`). `None` means no call has been
+        #: made yet, or the CLI reported no per-message usage -- both of which
+        #: are "not known", never "none lost". `inner/theorize.py` reads it to
+        #: tell a desk that answered badly from a transport that lost the front
+        #: of a good answer.
+        self.last_messages_dropped: Optional[int] = None
         self.usage_total: Dict[str, int] = {}
         self.log: List[Dict[str, Any]] = []
         #: Ledger writes that were refused after the provider had been paid.
@@ -650,13 +658,26 @@ class ModelDesk:
         # away because the ledger raised between the payment and the append:
         # `desk.calls` said 1, `desk_log.json` was `[]`, and no transcript
         # existed. Order is the fix; see DECISIONS D-E3-010.
+        # `text` is `envelope["result"]`, which is the CLI's LAST assistant
+        # message. When the answer ran past the model's per-message output
+        # ceiling, the earlier messages were billed and thrown away, and until
+        # A32 nothing in the arm said so -- `inner/theorize.py` recorded the
+        # tail as "no THEORY block in the reply" and bought the same answer
+        # again. The arithmetic is in `harness/replywholeness.py` and it runs on
+        # every call, because a transport defect that is only visible to a
+        # forensic sweep is a defect that gets paid for first and found later.
+        dropped, why_dropped = replywholeness.messages_dropped(
+            usage, replywholeness.ceiling_from_envelope(envelope, model))
+        self.last_messages_dropped = dropped
         entry = {"call": self.calls, "beat": beat, "label": label,
                  "model": model, "elapsed_ms": elapsed_ms,
                  "cli_cost_usd": cli_cost, "usage": usage,
                  "gate_charged_usd": round(charged, 6),
                  "gate_unpriced": priced is None,
                  "step_idx": step_idx, "chars_in": len(prompt),
-                 "chars_out": len(text)}
+                 "chars_out": len(text),
+                 "messages_dropped": dropped,
+                 "why_messages_dropped": why_dropped}
         if self.context is not None:
             try:
                 entry.update(self.context() or {})
