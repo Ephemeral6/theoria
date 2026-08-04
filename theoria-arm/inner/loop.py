@@ -45,8 +45,8 @@ from world.adapt import run_engines as adapt_run_engines
 from world.frames import FrameStore, Step, grid_hash
 
 from . import (anchor as anchor_beat, certify, commit, deskdiet,
-               goal as goal_beat, plan as plan_beat, probe as probe_beat,
-               theorize, transfer)
+               economy as economy_beat, goal as goal_beat, plan as plan_beat,
+               probe as probe_beat, theorize, transfer)
 from .books import Books
 from .goal import GoalState
 from .levels import LevelLog
@@ -216,6 +216,7 @@ class TheoriaArm:
                  probe_economy: "Optional[probe_beat.ProbeEconomyConfig]" = None,
                  frontier: "Optional[probe_beat.FrontierConfig]" = None,
                  anchor: "Optional[anchor_beat.AnchorConfig]" = None,
+                 action_economy: "Optional[economy_beat.ActionEconomyConfig]" = None,
                  desk_diet: Optional[str] = None):
         self.game_id = game_id
         self.offline = offline
@@ -338,6 +339,20 @@ class TheoriaArm:
         #: How many commands had been recorded when the desk was last called.
         #: The evidence gate in `_theorize_and_certify` turns on it.
         self._frames_at_last_theorize = -1
+        #: The same reading in the unit the bill uses. Kept alongside rather
+        #: than instead of: the two differ by the resets, and a leg that
+        #: switched units mid-flight would have a gate whose history cannot be
+        #: read back. `-1` matches the frames counter so a cold arm's first
+        #: turn is above any floor on either unit.
+        self._actions_at_last_theorize = -1
+
+        #: When the arm stops playing to pay for thought, and how often. The
+        #: default config is the historic gate decision for decision and string
+        #: for string; `inner/economy.py` carries the measurement that says
+        #: what it costs. Constructed here so a bad policy name fails before a
+        #: socket exists, not four hours into a leg.
+        self.economy = economy_beat.ActionEconomy(
+            action_economy or economy_beat.ActionEconomyConfig())
 
         #: The turn being played, so a level boundary observed inside a commit
         #: script can say which turn it happened on.
@@ -489,6 +504,7 @@ class TheoriaArm:
             pass
         event["pending_surprises_carried"] = len(self.register.pending)
         self._frames_at_last_theorize = -1
+        self._actions_at_last_theorize = -1
         self._certify_reports_at_level_start = len(self.certify_reports)
         self.turns.append({"turn": "%s-boundary" % self.current_turn,
                            "beat": "level",
@@ -961,20 +977,28 @@ class TheoriaArm:
         self._notice_unusable_manual()
 
         new_frames = self._frames_this_level() - self._frames_at_last_theorize
-        if (self.books.theory.strip()
-                and new_frames < MIN_NEW_FRAMES_BETWEEN_THEORIZE
-                and self.budget.actions_left > MIN_NEW_FRAMES_BETWEEN_THEORIZE):
-            record["theorize"] = (
-                "skipped: %d surprise(s) pending but only %d new transition(s) "
-                "since the last call (want %d). Going to get more."
-                % (len(self.register.pending), new_frames,
-                   MIN_NEW_FRAMES_BETWEEN_THEORIZE))
+        new_actions = self.budget.actions_ok - self._actions_at_last_theorize
+        decision = self.economy.gate(
+            has_manual=bool(self.books.theory.strip()),
+            pending=len(self.register.pending),
+            new_frames=new_frames,
+            new_actions=new_actions,
+            actions_left=self.budget.actions_left,
+            pending_kinds=tuple(getattr(s, "kind", None) or "unknown"
+                                for s in self.register.pending))
+        self.economy.note_decision(decision, step_idx=len(self.store.steps),
+                                   new_frames=new_frames,
+                                   new_actions=new_actions,
+                                   pending=len(self.register.pending))
+        if not decision.allow:
+            record["theorize"] = decision.reason
             if not self._certified_this_level():
                 record["certify"] = _certify_line(self._certify())
             return
 
+        rounds_allowed = self.economy.rounds_allowed()
         rounds = 0
-        while rounds < MAX_THEORIZE_PER_TURN:
+        while rounds < rounds_allowed:
             need = (not self.books.theory.strip()) or bool(self.register.pending)
             if not need:
                 record.setdefault("theorize", "skipped: no surprise pending")
@@ -1043,10 +1067,17 @@ class TheoriaArm:
                     {"step_idx": len(self.store.steps),
                      "error": "%s: %s" % (type(exc).__name__, exc)})
                 self._frames_at_last_theorize = self._frames_this_level()
+                self._actions_at_last_theorize = self.budget.actions_ok
+                # A failed call establishes nothing about the manual, so the
+                # adaptive floor is told `None` rather than "unmoved": the desk
+                # not answering is not evidence that it had nothing to say.
+                self.economy.note_adjudication(manual_moved=None)
                 self._write_run_state()
                 break
             self.register.handled("theorize")
             self.theorize_reports.append(report)
+            self.economy.note_adjudication(
+                manual_moved=_manual_moved(report))
             rounds += 1
             # The manual has been adjudicated, so the ablation frontier is a
             # different set now and the probe caps start again. Reset here
@@ -1076,10 +1107,11 @@ class TheoriaArm:
                 break
         else:
             record["theorize"] = ("stopped repairing after %d rounds; going "
-                                  "back for evidence" % MAX_THEORIZE_PER_TURN)
+                                  "back for evidence" % rounds_allowed)
 
         if rounds:
             self._frames_at_last_theorize = self._frames_this_level()
+            self._actions_at_last_theorize = self.budget.actions_ok
         if not self._certified_this_level() and self.books.theory.strip():
             record["certify"] = _certify_line(self._certify())
 
@@ -1788,6 +1820,12 @@ class TheoriaArm:
         # drift of the manual's rolled-forward state away from the world's
         # frame, plus the anchor this leg designed its probes from.
         _dump(os.path.join(out, "anchor.json"), self.drift_summary())
+        # Same rule again, and the same reason it costs no existing artefact a
+        # byte: `action_economy.json` is new. It carries every gate decision
+        # the leg took, allowed and refused, with the floor in force at the
+        # time -- which is the only way an adaptive floor's history can be read
+        # back off a finished run.
+        _dump(os.path.join(out, "action_economy.json"), self.economy.as_json())
         with open(os.path.join(out, "anchor.jsonl"), "w", encoding="utf-8",
                   newline="\n") as fh:
             for row in self.drift_log:
@@ -1821,6 +1859,39 @@ def _roll_forward(namespace, store):
         except Exception:                              # noqa: BLE001
             break
     return state
+
+
+def _manual_moved(report: Dict[str, Any]) -> Optional[bool]:
+    """Did this adjudication's reply change the manual's text?
+
+    Read off the two snapshots `inner/theorize.run` takes around the call, so
+    it is a fact about the files rather than about what the desk said it did.
+    `None` when the pair is not on disk -- an unknown, which the adaptive floor
+    treats as an unknown rather than as "unmoved".
+
+    Cheap on purpose: this runs inside a live turn, so it compares bytes, not
+    predictions. The expensive question -- whether the edit changed anything
+    the arm *predicts* -- needs the transitions that have not happened yet, and
+    is answered offline by `armtools/action_economy.py`.
+    """
+    def _theory(snapshot: Any) -> Optional[str]:
+        directory = (snapshot or {}).get("dir")
+        if not directory:
+            return None
+        path = os.path.join(directory, "theory.dsl")
+        if not os.path.exists(path):
+            return None
+        try:
+            with open(path, encoding="utf-8") as fh:
+                return fh.read()
+        except OSError:
+            return None
+
+    before = _theory(report.get("snapshot_before"))
+    after = _theory(report.get("snapshot_after"))
+    if before is None or after is None:
+        return None
+    return before != after
 
 
 def _certify_line(report: Dict[str, Any]) -> Dict[str, Any]:

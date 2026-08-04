@@ -1,0 +1,32 @@
+constants that gate how often the arm stops to think
+name                                   where                           ratio  value
+MIN_NEW_FRAMES_BETWEEN_THEORIZE        inner/loop.py                     2.0  4
+      gates: a floor: no desk call until this many new transitions have arrived on this level
+      note : the floor is 4 frames, but MAX_THEORIZE_PER_TURN lets one turn spend 2 calls on them, so the floor alone permits 2.0 actions per call, not 4.
+MAX_THEORIZE_PER_TURN                  inner/loop.py                     2.0  2
+      gates: a ceiling on adjudication rounds inside one turn; the second round is a repair against the SAME frames
+      note : the repair round is charged full price and sees no new evidence, so it is the cheapest place to look for a call that bought nothing.
+MAX_PROBES_BETWEEN_THEORIZE            inner/loop.py                       -  4
+      gates: a ceiling on probes between adjudications -- but it does not stop the arm acting, it downgrades the action to exploration
+      note : an exploration still produces a frame, so this cap cannot slow the cadence; it changes what the action buys, not how soon the desk is called.
+MAX_VACUOUS_PROBES_IN_A_ROW            inner/loop.py                       -  3
+      gates: same shape as above: probe -> exploration, never a slower desk
+the budget escape in the gate          inner/loop.py `_theorize_a        1.0  budget.actions_left > MIN_NEW_FRAMES_BETWEEN_THEORIZE
+      gates: the floor stops applying once the remaining action budget drops to the floor's own size
+      note : at the end of a leg the arm may call the desk on every turn. It is deliberate -- a run must not end holding unspent evidence -- but it is a ratio of 1, and no constant names it.
+the empty-manual escape                inner/loop.py `_theorize_a          -  books.theory.strip() falsy
+      gates: a run with no manual yet skips the floor entirely
+level re-arming                        inner/loop.py `_on_level_b          -  _frames_at_last_theorize = -1
+      gates: a level boundary re-opens the gate immediately
+      note : never observed: no leg in this repo has completed a level, so this path has no measurement behind it.
+REPAIR_ROUNDS                          inner/theorize.py                   -  2
+      gates: compile-repair attempts INSIDE one theorize call
+      note : these are extra model invocations without extra actions, so they cut the actions-per-invocation ratio further than the desk-call count shows.
+MIN_NEW_STATES_FOR_PROPOSAL            inner/goal.py                       -  4
+      gates: how much new world before a goal ask may ride along
+      note : rides on a call a surprise already paid for, so it adds no calls on the `propose` rung and none at all on the default `off`.
+MAX_PROPOSALS_PER_LEG                  inner/goal.py                       -  3
+      gates: a ceiling on goal riders per leg
+LEG_USD_CAP                            harness/campaign.py                 -  25.0
+      gates: the real ceiling: a leg ends when the money ends, so the cadence sets the action count
+      note : not a cadence knob, but it is the multiplier: at $25 a leg and one desk call per gap, the cadence IS the action count. Listed so the list is not a list of only the constants that look like cadence.

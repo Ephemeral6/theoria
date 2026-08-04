@@ -1,0 +1,174 @@
+{
+ "base_commit": "b45400263428600a246408b2be6985ee84be63a9",
+ "branch": "w/a25-action-economy",
+ "changed": [
+  "theoria-arm/inner/economy.py (new)",
+  "theoria-arm/inner/loop.py",
+  "theoria-arm/harness/run.py",
+  "theoria-arm/armtools/action_economy.py (new)",
+  "theoria-arm/tests/test_action_economy.py (new)",
+  "theoria-arm/runs/20260802T131013Z-A25-action-economy/ (new)"
+ ],
+ "defect_found_not_fixed": [
+  "The evidence gate counts failed commands. `_frames_this_level` is `len(store.steps) - levels.start`, and `loop._record` appends a Step for every arm-level command whatever the HTTP status came back. On the sk48 legs, which ran through the refusal wave, the floor was met by attempts rather than transitions -- 16 adjudications, 34 such commands. The skip message says `new transition(s)`, which is false in exactly those cases. NOT FIXED: changing what the counter counts would change default behaviour, which this ticket is not allowed to do. The `actions-unit` policy is the switchable version of the fix and it is off.",
+  "`inner/certify.py` and `world/frames.py` disagree in writing about this: FrameStore's docstring says `Failed commands are not states`, and `store.steps` contains them. `store.grids` filters them out, so the docstring is true of `grids` and false of `steps`. NOT FIXED: another territory's docstring is not this ticket's to rewrite, and the sentence is load-bearing for readers of `grids`."
+ ],
+ "files": [
+  {
+   "path": "census.txt",
+   "sha256": "15ec48dd0472ffef82db4863fbda81f657dbd66165e413aab5ca8368ccc5f72a",
+   "what": "the cadence census over every leg that ever reached a desk, human-readable"
+  },
+  {
+   "path": "census.json",
+   "sha256": "85b4c0d0b18a49dd65afea2a6f7d641b56b03ba9a0573fa2d5c304b91c934a03",
+   "what": "the same, machine-readable: every adjudication with its gap, its trigger kinds, its cost, whether the manual moved, and the recompile-and-replay verdict on whether it changed a later prediction"
+  },
+  {
+   "path": "replay.txt",
+   "sha256": "ea3e888fe4bcc18dd92e8e44c7c9eccc1a5e0b7506336f58df06cceacd6df918",
+   "what": "the offline counterfactual: seven policies re-decided over the recorded stream, human-readable"
+  },
+  {
+   "path": "replay.json",
+   "sha256": "46be920196e981fb2be0f7cc00a81c25617edb539dae06538484610d67be30d9",
+   "what": "the same, per policy and per leg, with the control's fidelity against the record"
+  },
+  {
+   "path": "constants.txt",
+   "sha256": "ba086fd3ca4a92d261e54b5fa9af2dd8433fc0befd399372440e8b8c2c12f041",
+   "what": "every constant in the loop that gates how often the arm stops to think, with the effective ratio each imposes"
+  },
+  {
+   "path": "RUN_STATE.md",
+   "sha256": "e46217ad972468979c7530f20163a964bbd40254b169c41f4bb2fe337d4794d6",
+   "what": "the narrative: what was measured, what was built, what is still unknown"
+  }
+ ],
+ "implemented": {
+  "armtools/action_economy.py": "census / replay / constants.",
+  "harness/run.py": "--action-economy, choices built from POLICIES, on the same single plumbing path as the other four knobs. The flag wins over THEORIA_ACTION_ECONOMY.",
+  "inner/economy.py": "ActionEconomyConfig / ActionEconomy / GateDecision plus seven named POLICIES. enabled=False is the historic gate, decision for decision and string for string.",
+  "inner/loop.py": "the gate decision and the per-turn round cap now come from self.economy; `_actions_at_last_theorize` tracks the bill's unit alongside the frame counter; `_manual_moved` reads the two snapshots so the adaptive floor has a signal available AT the call; action_economy.json is written every run.",
+  "tests/test_action_economy.py": "35 tests. The default is pinned three ways: the refusal string character for character against the pre-A25 literal, the decision exhaustively over 264 input combinations against a re-implementation of the old predicate, and the round cap against MAX_THEORIZE_PER_TURN."
+ },
+ "lane": "framework-change",
+ "leg": "offline only -- no ARC action, no live model call, no credential read, no sealed-pile contact, no spend. The live A26 round in flight was skipped by name and the skip is recorded in the census's `skipped` field.",
+ "measurement_first": {
+  "did_the_call_buy_anything": {
+   "changed_a_later_prediction": 31,
+   "changed_no_later_prediction": 23,
+   "gained_a_predictor_where_there_was_none": 4,
+   "manual_text_did_not_move_at_all": 10,
+   "method": "both revisions recompiled offline and replayed over the post-call transitions",
+   "scored": 58,
+   "the_concentration": "15 of the 22 scored zero-gap adjudications were inert (68%), against 8 of 33 (24%) for adjudications with at least one new action behind them. Thinking twice about the same frames is nearly three times as likely to buy nothing as thinking once about new ones.",
+   "unscorable_no_later_transition": 5,
+   "unscorable_no_snapshot_pair": 10,
+   "usd_on_the_23_that_changed_nothing": 20.15
+  },
+  "instrument": "armtools/action_economy.py",
+  "legs_read": 15,
+  "legs_skipped": "any run directory whose name contains A26 (live round in flight). Zero matched at the time of this run -- the worktree is at master b4540026, which predates them -- and the skip list is empty rather than absent.",
+  "legs_with_no_desk_call": 22,
+  "method": "every leg's ledger.jsonl is read as one seq-ordered stream. `model_call` rows are grouped into adjudications at each `round1` label, because `theorize.REPAIR_ROUNDS` bills two extra invocations per call that the loop's gate never sees. The gap between adjudications is counted twice: in billed actions (env_step 200, RESET excluded, matching harness/budget.py) and in the gate's own unit (the difference between two calls' step_idx, which IS len(store.steps)). The downstream question is answered by recompiling BOTH revisions of the manual from the books snapshots taken around each call and replaying them over the transitions that arrived after it; if the two predictors draw the same frame at every subsequent step, the call changed no later prediction.",
+  "the_fact_the_projection_rests_on": {
+   "claim": "a desk call's price does not rise with the wait before it",
+   "corr_step_idx_cost_usd": -0.039,
+   "mean_usd_by_gap": {
+    "0": 1.77,
+    "4": 2.31,
+    "5": 2.07
+   },
+   "n_priced_calls": 65,
+   "why_it_matters": "nine of the fifteen legs ended on spend_gate_tripped, so money is the binding constraint and the cadence IS the action count. A wider floor buys actions rather than merely deferring them only if this holds."
+  },
+  "the_headline": {
+   "MIN_NEW_FRAMES_BETWEEN_THEORIZE": 4,
+   "actions_per_adjudication_measured": 3.096,
+   "actions_per_paid_call_measured": 2.173,
+   "adjudications": 73,
+   "billed_actions": 226,
+   "paid_invocations": 104,
+   "repair_invocations": 31,
+   "usd": 148.89,
+   "usd_per_action": 0.6588
+  },
+  "why_the_constant_is_not_the_ratio": [
+   "MAX_THEORIZE_PER_TURN = 2 lets one turn adjudicate twice. The gate is checked ONCE per turn, before the while loop, so the second round never meets it: 24 of 73 adjudications had a gap of zero billed actions. They cost $42.40, 28% of every dollar this arm has ever paid a desk.",
+   "theorize.REPAIR_ROUNDS = 2 bills up to two more invocations per adjudication to fix a manual that will not compile. 31 of 104 paid calls are these, $32.53, 22% of desk spend, and by construction they see no new evidence.",
+   "The gate's unit is not the bill's unit. `_frames_this_level` counts `len(store.steps)` and `loop._record` appends a Step for every arm-level command including the ones that came back 400. 16 adjudications were released by 34 commands that bought no transition; the worst leg is 20260801T001851Z-R1b-sk48-b, where 6 of them were failures during the refusal wave."
+  ]
+ },
+ "negative_controls": [
+  "The `today` policy is the control and it is required to reproduce the record; where it does not, the reason is named and dated against a commit rather than tuned away.",
+  "test_the_default_decision_matches_the_historic_predicate_everywhere checks 264 input combinations against a transcription of the old source, not against a shared helper -- a helper both sides called would make the test tautological.",
+  "test_the_default_ignores_defer_kinds_and_the_adaptive_floor builds a config with every lever set AND enabled=False, and asserts none of them is read. A half-configured environment must not move a control leg.",
+  "test_an_out_of_range_environment_falls_all_the_way_back: an unparseable THEORIA_ECONOMY_* value returns the historic config entirely, not a partially-applied one. Half a policy is not a policy.",
+  "test_a_live_round_in_flight_is_skipped_and_named: a synthetic A26 run directory is skipped AND listed, so absence is recorded as absence.",
+  "The census is byte-reproducible: two runs of `census --out` over the same archive produce the same sha256."
+ ],
+ "not_changed": [
+  "MIN_NEW_FRAMES_BETWEEN_THEORIZE, MAX_THEORIZE_PER_TURN, MAX_PROBES_BETWEEN_THEORIZE, MAX_VACUOUS_PROBES_IN_A_ROW and REPAIR_ROUNDS all still hold their historic values.",
+  "No file outside theoria-arm/.",
+  "No existing artefact gains or loses a byte on a default run: action_economy.json is a new file."
+ ],
+ "offline_before_after": {
+  "control_fidelity": "71 of 73 recorded adjudications reproduced. The 2 refused are both on 20260728T015354Z-g50t-first-contact, which started at 01:53Z on 2026-07-28 -- eight minutes BEFORE the gate landed in 6717a7e0 at 02:01Z. It is the leg whose one-action-per-adjudication behaviour the constant was written to stop, so a control that refuses its calls is the control working.",
+  "policies": {
+   "actions-unit": {
+    "actions_at_25usd": 36.6,
+    "vs_today": 1.04
+   },
+   "adaptive": {
+    "actions_at_25usd": 34.5,
+    "vs_today": 0.98
+   },
+   "floor-12": {
+    "actions_at_25usd": 127.1,
+    "vs_today": 3.611
+   },
+   "floor-8": {
+    "actions_at_25usd": 59.8,
+    "vs_today": 1.699
+   },
+   "one-round": {
+    "actions_at_25usd": 46.5,
+    "vs_today": 1.321
+   },
+   "one-round-floor-8": {
+    "actions_at_25usd": 74.9,
+    "vs_today": 2.128
+   },
+   "today": {
+    "actions_at_25usd": 35.2,
+    "vs_today": 1.0
+   }
+  },
+  "reading": "g50t level 1 needs 78 actions (level_baseline_actions, recorded in 20260728T012311Z-g50t-first-contact-salvage2). Today's cadence projects 35 at a $25 leg. Only floor-12 clears 78 on this projection, and it clears it by refusing 21 adjudications that the replay scores as having changed a later prediction. That is the trade, stated rather than hidden: this measurement does not show that a wider floor is free.",
+  "the_number_to_beat": 78,
+  "unit": "billed actions the same money buys, projected at harness/campaign.LEG_USD_CAP = $25"
+ },
+ "prompt_id": "A25-the-arm-spends-its-budget-on-theorising-instead-of-playing",
+ "reproduce": [
+  "cd theoria-arm",
+  "python -m armtools.action_economy census --out census.json",
+  "python -m armtools.action_economy replay --census census.json",
+  "python -m armtools.action_economy constants",
+  "python -m pytest tests/test_action_economy.py -q"
+ ],
+ "residual_gaps": [
+  "The counterfactual is a replay, not a simulation. Skipping a call changes what the arm does next, and the record cannot say what frames a different arm would have seen. The strict half counts only recorded dollars and recorded actions; the $25 figure is labelled a projection and its one assumption is measured and quoted.",
+  "`productive_calls_refused` overstates the loss. `Register.handled` closes ALL pending surprises in one call, so a deferred adjudication's work is largely absorbed by the next one -- the surprise stays pending, it does not evaporate. The replay has no way to model that, so it charges the full downstream verdict of every refused call against the policy that refused it. Every non-today row is therefore pessimistic by an unknown amount.",
+  "10 adjudications could not be scored at all: 2 on legs with no snapshots (the aborted first-contact legs, which predate the snapshotting) and 8 whose before or after snapshot is not on disk -- `Books.snapshot` copies only files that exist, so a cold start's first `before` is an empty directory and git does not track those.",
+  "The `defer_kinds` lever is typed and empty. The measurement did not support putting anything in it: the 8 adjudications triggered by probe_refutation alone were productive 6 times, and the kind that co-occurs with the inert calls is replay_mismatch -- which is certify saying the manual contradicts the recorded world, and must never be deferred.",
+  "No level boundary has ever been observed in this repo, so the gate's re-arming path (`_frames_at_last_theorize = -1` at a boundary) has no measurement behind it on either rung.",
+  "`REPAIR_ROUNDS` is measured ($32.53, 22% of desk spend) and NOT made switchable. It decides how many invocations one adjudication may spend, not when the desk is called; moving it here would be two changes wearing one switch.",
+  "The adaptive policy is the weakest of the seven on this archive (0.98x today). It is shipped because the signal it uses is available at the call while the downstream verdict is not -- but the archive does not presently recommend it, and this line is the reason not to read its presence as an endorsement."
+ ],
+ "sealed_pile_contact": "none. The census reads only theoria-arm/runs/, whose legs are all on the four development-pile games. No game id was sent anywhere; no environment_files/ path was opened.",
+ "spend": "$0.00. No model call, no ARC command, no scorecard opened.",
+ "territory": "theoria-arm",
+ "utc": "2026-08-02T13:10:13Z",
+ "what": "Board item A25. Measure the actions-per-desk-call ratio off the archive, name every constant that gates it, then make it a switchable policy whose default is today's behaviour byte for byte."
+}

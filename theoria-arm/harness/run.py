@@ -107,6 +107,7 @@ from proxy.paths import LEDGER_PATH, UPSTREAM_ARC
 from harness import freeze_gate
 from harness import spend as spend_mod
 from inner import anchor as anchor_mod
+from inner import economy as economy_mod
 from inner import goal as goal_mod
 from inner import probe as probe_mod
 from harness.proxy_process import EnvProxyProcess
@@ -664,6 +665,20 @@ def main(argv=None) -> int:
                          "edit to the manual instead of the whole manual; "
                          "`diet` is both. See inner/deskdiet.py for the "
                          "measurement that chose them.")
+    ap.add_argument("--action-economy", default=None,
+                    choices=tuple(sorted(economy_mod.POLICIES)),
+                    help="how often the arm stops playing to pay for thought. "
+                         "Unset (the default) is 2026-07-28's gate, decision "
+                         "for decision and string for string: a floor of 4 new "
+                         "transitions, two adjudications per turn. The named "
+                         "policies and the measurement behind each are in "
+                         "inner/economy.py POLICIES; the measurement itself is "
+                         "`python -m armtools.action_economy census`, which "
+                         "found 3.10 actions per adjudication rather than 4, "
+                         "24 of 73 adjudications with no new action behind "
+                         "them at all, and 23 of 58 scored calls that changed "
+                         "no later prediction. Also settable with "
+                         "THEORIA_ACTION_ECONOMY=1 plus THEORIA_ECONOMY_*.")
     ap.add_argument("--prompt-id", default="P-8",
                     help="written into the scorecard's opaque block and into "
                          "every manifest, so a run can be traced to the item "
@@ -714,7 +729,16 @@ def main(argv=None) -> int:
                           anchor=anchor_mod.AnchorConfig(
                               mode=args.anchor,
                               measure=(args.anchor_measure
-                                       or args.anchor == "observed")))
+                                       or args.anchor == "observed")),
+                          # Unset means "whatever the environment says", which
+                          # for an unset environment is the historic gate. The
+                          # flag wins over the environment when both speak, so
+                          # a dispatch prompt cannot be silently overridden by
+                          # a shell that was exported four hours earlier.
+                          action_economy=(
+                              economy_mod.policy(args.action_economy)
+                              if args.action_economy
+                              else economy_mod.ActionEconomyConfig.from_env()))
 
     expect_pool = ({"pool": gate.policy.pool,
                     "ledger_abspath": os.path.abspath(gate.ledger_path)}
