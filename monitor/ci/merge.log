@@ -2469,3 +2469,41 @@
 2026-07-31T02:41:00Z SWEEP-FLAGS retired 1 stale flag(s): origin/master
 2026-07-31T02:41:00Z BLOCKED: another merge holds the lock; merged nothing
 2026-07-31T02:47:46Z FLAG origin/agent/v5-battery-freeze: merge conflict  [NEEDS-HUMAN: 29 attempts since 2026-07-29T04:33:05Z]
+2026-08-02T10:22:46Z CLEARED flag for origin/agent/a3-campaign-devpile (merged)
+2026-08-02T10:22:46Z CLEARED flag for origin/agent/c13-certificate-bridge-two-halves (merged)
+2026-08-02T10:22:46Z CLEARED flag for origin/agent/c14-four-forms-is-three-and-a-half (merged)
+2026-08-02T10:22:46Z CLEARED flag for origin/agent/e8-ic3-scale (merged)
+2026-08-02T10:22:46Z CLEARED flag for origin/agent/p18-audits-cover-half-the-paper (merged)
+2026-08-02T10:22:46Z CLEARED flag for origin/agent/r3-release-classifier-defaults (merged)
+2026-08-02T10:22:46Z CLEARED flag for origin/agent/r4-ruling-path (merged)
+2026-08-02T10:22:46Z CLEARED flag for origin/agent/s38-append-only-probe-branch-blind (merged)
+2026-08-02T10:22:46Z CLEARED flag for origin/agent/s39-writes-into-the-live-master-tree (merged)
+2026-08-02T10:22:47Z CLEARED flag for origin/agent/s4-e23-tiers (merged)
+2026-08-02T10:22:47Z CLEARED flag for origin/agent/s4-freeze (merged)
+2026-08-02T10:22:47Z CLEARED flag for origin/agent/s40-fleetkit-fork-has-drifted (merged)
+2026-08-02T10:22:47Z CLEARED flag for origin/agent/s41-prior-work-scans-one-of-two (merged)
+2026-08-02T10:22:47Z CLEARED flag for origin/agent/s42-fleetkit-three-lies (merged)
+2026-08-02T10:22:47Z CLEARED flag for origin/agent/v5-battery-freeze (merged)
+2026-08-02T10:22:47Z CLEARED flag for origin/agent/v6-v23-large-space-verdict-gap (merged)
+2026-08-02T10:22:47Z SWEEP-FLAGS retired 16 stale flag(s): origin/agent/a3-campaign-devpile, origin/agent/c13-certificate-bridge-two-halves, origin/agent/c14-four-forms-is-three-and-a-half, origin/agent/e8-ic3-scale, origin/agent/p18-audits-cover-half-the-paper, origin/agent/r3-release-classifier-defaults, origin/agent/r4-ruling-path, origin/agent/s38-append-only-probe-branch-blind, origin/agent/s39-writes-into-the-live-master-tree, origin/agent/s4-e23-tiers, origin/agent/s4-freeze, origin/agent/s40-fleetkit-fork-has-drifted, origin/agent/s41-prior-work-scans-one-of-two, origin/agent/s42-fleetkit-three-lies, origin/agent/v5-battery-freeze, origin/agent/v6-v23-large-space-verdict-gap
+2026-08-02T10:29:26Z MERGED origin/agent/c15-the-unnameable-cell-has-no-home-in-the-dsl (dirs: CONTRACTS,PARTNER_SYNC.md,monitor,theory-compiler; gates: verify:CONTRACTS(verify.py),verify:monitor(verify.sh),verify:theory-compiler(verify.py))
+2026-08-02T10:29:54Z FLAG origin/agent/r2-1-roll-forward-drift: merge conflict
+2026-08-02T10:30:16Z FLAG origin/agent/p18-audits-cover-half-onmaster: merge conflict  [NEEDS-HUMAN: 12 attempts since 2026-07-30T05:00:19Z]
+2026-08-02T11:14:52Z FLAG origin/master: BASE RED in freeze (verify.sh): origin/master fails this gate on its own
+2026-08-02T11:14:52Z FLAG origin/master: BASE RED in freeze -- origin/agent/s45-launch-blockers-915-916-and-the-reason-floor adds no new failure and is NOT at fault; every branch touching freeze is blocked by master
+2026-08-02T11:15:35Z FLAG origin/agent/p18-audits-cover-half-onmaster: merge conflict  [NEEDS-HUMAN: 13 attempts since 2026-07-30T05:00:19Z]
+2026-08-02T11:15:55Z FLAG origin/agent/r2-1-roll-forward-drift: merge conflict
+2026-08-02T11:19:55Z CLEARED flag for origin/master (merged)
+2026-08-02T11:19:55Z SWEEP-FLAGS retired 1 stale flag(s): origin/master
+2026-08-02T11:22:14Z FLAG origin/master: BASE RED in freeze (verify.sh): origin/master fails this gate on its own
+2026-08-02T11:22:14Z FLAG origin/master: BASE RED in freeze -- origin/agent/s45-launch-blockers-915-916-and-the-reason-floor adds no new failure and is NOT at fault; every branch touching freeze is blocked by master
+2026-08-02T11:40:29Z FLAG origin/agent/v28-exam-four-tests-must-flip: verify gate red in exam (verify.py)
+2026-08-02T11:40:33Z HELD 2 unchanged since last verdict: p18-audits-cover-half-onmaster (merge conflict, 13x); r2-1-roll-forward-drift (merge conflict, 2x)
+2026-08-04T12:23:53Z CLEARED flag for origin/master (merged)
+2026-08-04T12:23:53Z SWEEP-FLAGS retired 1 stale flag(s): origin/master
+2026-08-04T12:34:58Z FLAG origin/agent/a23-anchor-drift-on-the-default-leg: merge conflict
+2026-08-04T12:35:49Z MERGED origin/agent/c15b-run-artefacts-record-a-machine (dirs: theory-compiler; gates: verify:theory-compiler(verify.py))
+2026-08-04T12:36:03Z FLAG origin/agent/m-1-money-single-truth: merge conflict
+2026-08-04T12:39:01Z FLAG origin/master: BASE RED in freeze (verify.sh): origin/master fails this gate on its own
+2026-08-04T12:39:01Z FLAG origin/master: BASE RED in freeze -- origin/agent/s45-launch-blockers-915-916-and-the-reason-floor adds no new failure and is NOT at fault; every branch touching freeze is blocked by master
+2026-08-04T12:43:41Z MERGED origin/agent/s46-turn-costs-mixes-two-axes (dirs: PARTNER_SYNC.md,battery,monitor; gates: verify:battery(verify.py),verify:monitor(verify.sh))
