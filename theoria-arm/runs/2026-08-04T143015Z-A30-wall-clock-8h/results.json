@@ -1,0 +1,48 @@
+{
+  "change": {
+    "clamp": "silent min() replaced by a named ValueError",
+    "constant_now_in": "theoria-arm/harness/spend.py",
+    "copies_collapsed": 4,
+    "importers": [
+      "inner/loop.py",
+      "harness/run.py",
+      "armtools/spend_check.py"
+    ],
+    "lease_at_new_default": {
+      "outlives": true,
+      "ttl_seconds": 29700,
+      "wall_clock": 28800
+    },
+    "tests_added": 4,
+    "ttl_max_s": {
+      "from": 28800,
+      "to": 43200,
+      "why": "at wall_clock == TTL_MAX_S the old min() clamp ate the whole 900s TTL_MARGIN_S and returned a lease expiring at the same instant the run stops"
+    },
+    "wall_clock": {
+      "from": 10800,
+      "to": 28800,
+      "unit": "seconds"
+    }
+  },
+  "guards": {
+    "boundary": "RED then green: 1 stray file wall_clock_s at worktree root, created by a backtick command-substitution redirect while writing an archive note; removed, now 1/1",
+    "sealed": "2/2 green -- 21 sealed / 4 dev, no sealed id in 6 changed files",
+    "secret": "5/5 green -- no secret value in 13218 tracked files"
+  },
+  "suite": {
+    "all_four_pre_existing_on_master": true,
+    "baseline": "813 passed / 4 failed = 817 total at base 18e7d81b",
+    "command": "python -m pytest tests -q (theoria-arm)",
+    "delta": "+4 tests, same 4 failures, no new ones",
+    "failed": 4,
+    "failed_names": [
+      "tests/test_arm.py::test_the_archive_stays_accountable",
+      "tests/test_desk_gate.py::test_a_scratch_pool_may_not_be_pointed_at_a_run_ledger",
+      "tests/test_desk_gate.py::test_the_ceiling_table_still_covers_the_archive",
+      "tests/test_reply_loss.py::test_the_archive_still_holds_the_thirteen_lost_replies"
+    ],
+    "passed": 817,
+    "total": 821
+  }
+}

@@ -594,6 +594,62 @@ def test_planning_refuses_when_the_pool_has_no_actions_left(tmp_path):
 
 # ------------------------------------------------------------------- the lease
 
+def test_the_lease_outlives_the_DEFAULT_wall_clock():
+    """The guard the test below could not be: it binds to the default.
+
+    `test_the_lease_outlives_the_declared_wall_clock` passes `3 * 3600` as a
+    literal, so it stays green no matter what the default becomes -- and on
+    2026-08-04, when the default was raised 3 h -> 8 h, `TTL_MAX_S` was also
+    `8 * 3600`. The old `min(TTL_MAX_S, wall_clock + TTL_MARGIN_S)` would have
+    returned a lease expiring at the same instant the run is told to stop,
+    silently, with the whole margin eaten by the clamp -- and the suite would
+    not have said a word.
+    """
+    caps = spend_mod.plan_caps(actions=12, commands=2000, cost_ceiling_usd=1.0,
+                               require_headroom=False)
+    assert caps.ttl_seconds > spend_mod.DEFAULT_WALL_CLOCK_S, (
+        "the lease must outlive the run it is sized for; default wall clock "
+        "%.0fs, lease %.0fs" % (spend_mod.DEFAULT_WALL_CLOCK_S,
+                                caps.ttl_seconds))
+    assert caps.ttl_seconds == spend_mod.DEFAULT_WALL_CLOCK_S \
+        + spend_mod.TTL_MARGIN_S, "the margin must survive intact, not be clamped"
+    assert spend_mod.TTL_MAX_S >= (spend_mod.DEFAULT_WALL_CLOCK_S
+                                   + spend_mod.TTL_MARGIN_S), (
+        "TTL_MAX_S must leave room for the default plus its margin")
+
+
+def test_a_wall_clock_beyond_TTL_MAX_is_refused_rather_than_clamped():
+    """Refusing is the point. A silent clamp is how the invariant above was
+    lost: it kept returning a number, and the number was wrong."""
+    too_long = spend_mod.TTL_MAX_S - spend_mod.TTL_MARGIN_S + 1.0
+    with pytest.raises(ValueError) as exc:
+        spend_mod.plan_caps(actions=12, commands=2000, cost_ceiling_usd=1.0,
+                            wall_clock_s=too_long, require_headroom=False)
+    assert "expires before the run does" in str(exc.value)
+
+
+def test_a_wall_clock_that_fits_is_still_honoured():
+    """The twin. A refusal that fires on everything is not a check."""
+    fits = spend_mod.TTL_MAX_S - spend_mod.TTL_MARGIN_S
+    caps = spend_mod.plan_caps(actions=12, commands=2000, cost_ceiling_usd=1.0,
+                               wall_clock_s=fits, require_headroom=False)
+    assert caps.ttl_seconds == spend_mod.TTL_MAX_S
+
+
+def test_the_wall_clock_has_exactly_one_definition():
+    """Four modules used to carry their own `3 * 3600`. They now agree because
+    they read one constant, and this asserts the agreement rather than the
+    value -- so raising the default stays a one-line change."""
+    from inner import loop as loop_mod                 # noqa: PLC0415
+    import harness.run as run_mod                      # noqa: PLC0415
+
+    assert loop_mod.DEFAULT_WALL_CLOCK_S is spend_mod.DEFAULT_WALL_CLOCK_S
+    parser = run_mod.build_parser() if hasattr(run_mod, "build_parser") else None
+    if parser is not None:
+        got = {a.dest: a.default for a in parser._actions}.get("wall_clock")
+        assert got == spend_mod.DEFAULT_WALL_CLOCK_S
+
+
 def test_the_lease_outlives_the_declared_wall_clock():
     """An expired lease cannot be renewed, only re-reserved -- and re-reserving
     can fail because somebody took the headroom while this run was thinking. So

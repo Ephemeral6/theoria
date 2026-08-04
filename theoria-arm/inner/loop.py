@@ -41,6 +41,7 @@ from harness.arc import ArcThroughProxy, SpendGateStopped, frames_of
 from harness.budget import Budget, BudgetExhausted
 from harness.modelcall import (AnonymityBreach, CostCeilingReached,
                                CredentialBreach, ModelDesk)
+from harness.spend import DEFAULT_WALL_CLOCK_S
 from world.adapt import run_engines as adapt_run_engines
 from world.frames import FrameStore, Step, grid_hash
 
@@ -64,9 +65,11 @@ OPENING_SWEEP = True
 #: frames forever is how a loop spends a budget on itself.
 MAX_THEORIZE_PER_TURN = 2
 
-#: Wall-clock ceiling. ARC's retry waves make a run's duration only loosely
-#: related to its action count, and an unattended run needs an end.
-DEFAULT_WALL_CLOCK_S = 3 * 3600
+#: Wall-clock ceiling. Defined in `harness/spend.py` (imported above) and only
+#: re-exported here, because it has an invariant with `TTL_MAX_S` -- the lease
+#: must outlive the run -- and the two numbers have to sit in one file for the
+#: next person raising either to see the other. This module used to keep its
+#: own `3 * 3600`, one of four copies.
 
 #: How much new world must arrive before the desk is worth calling again.
 #:

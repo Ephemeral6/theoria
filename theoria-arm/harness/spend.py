@@ -649,12 +649,33 @@ FIXED_OUTBOUND = 36
 #: that stops being 1.0 and the one to re-derive first.
 ENV_OUTBOUND_PER_ARM_COMMAND = 1.0031
 
+#: Wall-clock ceiling for an unattended run. ARC's retry waves make a run's
+#: duration only loosely related to its action count, and an unattended run
+#: needs an end.
+#:
+#: **8 h since 2026-08-04 (was 3 h).** A26 asks "given enough money, can the arm
+#: win once", and g50t level 1 wants 78 actions. At the measured 11.2-20.7
+#: actions/hour a 3 h ceiling tops out at 34-62, so the experiment could not
+#: reach its own question: money went up 4.8x and the clock did not move, which
+#: would have recorded "time ran out" as "money could not win either".
+#:
+#: It lives here, beside `TTL_MAX_S`, because those two numbers have an
+#: invariant between them (below) and keeping them in one file is the only way
+#: the next person to raise one sees the other. `inner/loop.py`,
+#: `harness/run.py` and `armtools/spend_check.py` all import it; before this
+#: change each of them carried its own `3 * 3600`, which is how four copies of
+#: one number drift apart.
+DEFAULT_WALL_CLOCK_S = 8 * 3600.0
+
 #: Slack over the declared wall clock when sizing the lease, and the hard stop.
 #: An expired lease cannot be renewed, so the lease is sized to outlive the run
 #: rather than to be rescued mid-flight; `heartbeat()` is the second line.
 TTL_MARGIN_S = 900.0
 TTL_MIN_S = 3600.0
-TTL_MAX_S = 8 * 3600.0
+#: Must stay above `DEFAULT_WALL_CLOCK_S + TTL_MARGIN_S`, and `plan_caps`
+#: refuses rather than clamps when a caller asks for more -- see there for why
+#: the old silent `min()` was a defect the moment the wall clock reached it.
+TTL_MAX_S = 12 * 3600.0
 
 #: How close to expiry `heartbeat()` starts renewing.
 HEARTBEAT_WINDOW_S = 900.0
@@ -681,7 +702,7 @@ class Caps:
 
 def plan_caps(*, actions: int, commands: int,
               cost_ceiling_usd: Optional[float],
-              wall_clock_s: float = 3 * 3600.0,
+              wall_clock_s: float = DEFAULT_WALL_CLOCK_S,
               env_max_attempts: int = DEFAULT_ENV_MAX_ATTEMPTS,
               model_call_ceiling_usd: float = MODEL_CALL_CEILING_USD,
               gate: Optional[SpendGate] = None,
@@ -795,7 +816,25 @@ def plan_caps(*, actions: int, commands: int,
     ceiling = 0.0 if cost_ceiling_usd is None else float(cost_ceiling_usd)
     usd_cap = ceiling + float(model_call_ceiling_usd)
 
-    ttl = max(TTL_MIN_S, min(TTL_MAX_S, float(wall_clock_s) + TTL_MARGIN_S))
+    # The lease must outlive the run. `min(TTL_MAX_S, ...)` used to enforce the
+    # ceiling **silently**, which is fine while the wall clock is far below it
+    # and a defect the moment it reaches it: at wall_clock == TTL_MAX_S the
+    # clamp eats `TTL_MARGIN_S` whole and hands back a lease that expires at the
+    # same instant the run is told to stop -- while `inner/loop.py`'s stop check
+    # is `elapsed > wall_clock_s`, so the last desk call can still be in flight.
+    # An expired lease cannot be renewed, only re-reserved, and re-reserving can
+    # fail because somebody took the headroom meanwhile. That is the failure the
+    # comment above `TTL_MARGIN_S` exists to prevent, so a request that cannot
+    # be honoured is refused by name rather than quietly downgraded.
+    wanted = float(wall_clock_s) + TTL_MARGIN_S
+    if wanted > TTL_MAX_S:
+        raise ValueError(
+            "wall_clock_s=%.0fs needs a %.0fs lease (+%.0fs margin) but "
+            "TTL_MAX_S is %.0fs. Clamping here would return a lease that "
+            "expires before the run does. Raise TTL_MAX_S deliberately, or "
+            "ask for a shorter wall clock."
+            % (float(wall_clock_s), wanted, TTL_MARGIN_S, TTL_MAX_S))
+    ttl = max(TTL_MIN_S, wanted)
 
     arithmetic = {
         "unit": "one action = one outbound ARC HTTP request (spend_policy.json)",

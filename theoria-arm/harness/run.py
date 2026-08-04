@@ -564,7 +564,8 @@ def main(argv=None) -> int:
     ap.add_argument("--commands", type=int, default=2000)
     ap.add_argument("--model", default="claude-opus-5")
     ap.add_argument("--cost-ceiling", type=float, default=20.0)
-    ap.add_argument("--wall-clock", type=float, default=3 * 3600)
+    ap.add_argument("--wall-clock", type=float,
+                    default=spend_mod.DEFAULT_WALL_CLOCK_S)
     ap.add_argument("--runs-root", default=None, metavar="DIR",
                     help="write the run here instead of into `runs/`. `runs/` "
                          "is the ARCHIVE and is tracked, so a smoke or a gate "

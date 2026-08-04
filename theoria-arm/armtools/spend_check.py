@@ -248,7 +248,11 @@ def main(argv=None) -> int:
     ap.add_argument("--game", required=True)
     ap.add_argument("--actions", type=int, default=120)
     ap.add_argument("--ceiling", type=float, default=18.0)
-    ap.add_argument("--wall-clock", type=float, default=3 * 3600)
+    # Follows the arm's own default rather than keeping a fourth copy: this
+    # tool projects whether a configuration fits, so a default that disagrees
+    # with the one the arm actually runs projects a configuration nobody runs.
+    from harness.spend import DEFAULT_WALL_CLOCK_S    # noqa: PLC0415
+    ap.add_argument("--wall-clock", type=float, default=DEFAULT_WALL_CLOCK_S)
     ap.add_argument("--legal-actions", type=int, default=4)
     ap.add_argument("--carried-from", default=None)
     args = ap.parse_args(argv)
