@@ -561,16 +561,29 @@ books and model calls.
 The gap row above is the one this section had been assuming away, so it is worth
 stating with its evidence rather than as an aside in §11.
 
-**No arm in this repository has completed a level.** `baseline-arms/ledger.jsonl`
-carries 560 rows and records `levels_completed` 0 throughout, and so does every
-other record in the tree that carries the field. The live run's scorecard says it
-four ways in one payload
+**No arm in this repository has completed a level.** The live run's scorecard
+says it four ways in one payload
 (`theoria-arm/runs/20260728T015354Z-g50t-first-contact/run.json`):
 `total_levels_completed` 0, `total_environments_completed` 0, the environment's
 `completed` flag false, and a per-level action histogram reading
 `[7, 0, 0, 0, 0, 0, 0]` — every action of the run spent on level one. Those are
 four fields of one object, not four independent instruments, and the distinction
 is worth keeping because the temptation is to count them as corroboration.
+
+**Two earlier drafts of this paragraph counted the same way they warned against,
+and both errors ran in the flattering direction.** It read
+「`baseline-arms/ledger.jsonl` carries 560 rows and records `levels_completed`
+0 throughout」. Recounted on 2026-08-04 the file carries **656** rows, of which
+**214** carry the field — all of them 0 — and **442** do not carry it at all
+(`papers/phase1-workshop/runs/20260804T1500Z-P19b-the-zero-and-its-three-explanations/census.py`,
+`baseline_archive`). *Throughout* was never true of any version of that file:
+it silently promoted 442 absences to zeros, which is the exact move §7.10a
+exists to refuse. The corrected form is that **214 ledger rows record zero
+completions and 442 record nothing about completions**, and on the archive side
+**36 of 43 `bare_cc` run directories carry a summary whose `levels_completed`
+is 0, while 7 carry no summary and therefore no completion figure at all**
+(`baseline-arms/runs/MANIFEST.json`, `counts`). The register's *46* is the
+manifest's total of all entries; three of those never played a game.
 
 Three non-zero values exist in the tree, and all three are the ablation arm's
 self-built offline worlds rather than ARC games —
@@ -595,6 +608,53 @@ is in `theoria-arm/runs/20260728T210000Z-a3-level-boundary/`: the first level of
 (`theoria-arm/runs/20260728T210000Z-a3-level-boundary/FINDINGS.md`; the a7 envelope's per-cell figure is 30). **Neither budget buys the
 first level**, so the column is not a measurement that came back
 empty — it is a measurement that was never affordable.
+
+**That is right on two of the four development-pile games and wrong on the other
+two, and this paper reported it as though it were uniform.** The API returns a
+`level_baseline_actions` roster on every scorecard body — a reference solver's
+action count for each level of that game — and an audit on 2026-08-02 read it
+for all four games and joined it to every archived body
+(`baseline-arms/runs/20260802T2040Z-A28-baseline-zero-examined/audit_zero.json`;
+recomputed independently for this section by the census named above,
+`baseline_scorecards`, 27 of 27 quantities AGREES):
+
+| game | level-1 reference | best `bare_cc` run reached | runs at or over it | what the zero is |
+|---|---:|---:|---:|---|
+| `g50t-5849a774` | 78 | 73 | **0** | budget artefact |
+| `sk48-d8078629` | 61 | 38 | **0** | budget artefact |
+| `ar25-0c556536` | 32 | **67** | 4 | capability evidence |
+| `tn36-ef4dde99` | 32 | **32** | 2 | capability evidence |
+
+So the honest split is this. On `g50t` and `sk48` no run of any arm has ever
+been permitted to spend as many actions as level one costs, and reporting their
+zero as a capability result would be reporting the budget as a finding — a
+control that cannot fail, which this repository already has a name and a
+precedent for
+(`monitor/audit/DRIFT-20260730T0428Z-two-published-certifications-that-cannot-fail.md`).
+On `ar25` and `tn36` six runs did reach or exceed the reference cost and still
+completed nothing; the strongest single datum is 67 successful actions — 2.09×
+the `ar25` reference of 32 — ending in terminal state `GAME_OVER` with an
+all-zero `level_scores` vector. That run was not cut short. It played twice the
+reference budget and lost, and it is the only capability evidence on the
+development pile that this paper is entitled to cite.
+
+Two qualifications travel with it, and neither is decoration. **All six of those
+runs are `haiku-4.5`.** No `opus-5` or `sonnet-5` run has ever reached a
+level-1 reference on any game — their maximum is 30 actions against a minimum
+reference of 32 — so the tier the paper's comparisons are actually about has
+**zero** capability-tested runs. And the denominator has three legitimate values
+that must never be quoted without their names: **43** archived run directories,
+**36** of those carrying a configured budget, and **57** named run ids with an
+archived scorecard body (63 body rows, 58 distinct scorecard runs, one carrying
+no run id). Every configured budget was 20 or 30 actions; the smallest level-1
+reference on the pile is 32; **36 of 36 configured runs were below the reference
+of their own game**. The whole-corpus figure, with its denominator attached, is
+**0 levels completed and 0.0 scored in 1,562 successful actions across 57 named
+runs**
+(`baseline-arms/runs/20260802T2040Z-A28-baseline-zero-examined/RUN_STATE.md` §4
+for the tier split, which this section reads rather than recomputes;
+`papers/phase1-workshop/runs/20260804T1500Z-P19b-the-zero-and-its-three-explanations/census.json`,
+`baseline_scorecards`, for everything else).
 
 One thing this section deliberately does **not** do with that fact, because the
 temptation is obvious and the evidence refuses it: it does not pair the empty

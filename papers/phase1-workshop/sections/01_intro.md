@@ -327,7 +327,23 @@ and it contained the world's answer on 5 of 52 completed probes while realising
 The A2 ledger this contribution cites is unaffected — it is an offline loop on a
 self-built world, and its beats are the artefacts they say they are — but the
 general claim that the probe beat closes the gap is withdrawn until a live leg
-shows it. §11.3a is the account.
+shows it. §11.3a is the account. A repaired frontier has since raised live
+containment to 21 of 27, matching an offline prediction made before the round
+was paid for (`theoria-arm/runs/_rounds/R2b-VERDICT.md`); that restores the
+probe's ability to *split* a frontier and does not restore the withdrawn claim,
+because the round completed no level either.
+
+A second correction belongs on this list and is larger than any item on it.
+Contributions 5 and the two live sections are all reported against a corpus in
+which **nothing has ever completed a level or scored a point** — 0 in 1,562
+successful actions across 57 named baseline runs and 0 across 16 live Theoria
+legs
+(`papers/phase1-workshop/runs/20260804T1500Z-P19b-the-zero-and-its-three-explanations/census.json`)
+— and the three candidate explanations for that zero cannot be separated by
+anything now on disk. §11.3b states it as the project's first open question. No
+contribution in this list depends on a completed level; the reason it is flagged
+here rather than only in §11 is that a reader is entitled to know the capability
+column is empty before reading five contributions measured beside it.
 
 ### 1.6 What this paper does not claim
 

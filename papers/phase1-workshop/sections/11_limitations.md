@@ -96,7 +96,12 @@ models) plus 2 reruns, 109 successful actions, followed by a variance-envelope
 campaign adding 44 more on one game — and all four are recorded at
 `trajectories_reviewed`, because a model read the frames pixel-by-pixel and chose
 actions from them (`baseline-arms/TOUCHED_GAMES.md`; `baseline-arms/ledger.jsonl`,
-560 rows). No game was ever completed: `levels_completed` is 0 throughout, and
+**656** rows as recounted on 2026-08-04, of which **214** carry `levels_completed`
+and 442 do not carry it at all
+(`papers/phase1-workshop/runs/20260804T1500Z-P19b-the-zero-and-its-three-explanations/census.json`,
+`baseline_archive`); this paragraph said 560 and said the field was 0
+*throughout*, which promoted 442 absences to zeros). No game was ever completed:
+every row that carries the field records 0, and
 nothing reached level 2. This is the legitimate use of a development pile, and
 recording it is the point of having one; it is corrected here because a paper
 that repeated `CLAUDE.md`'s sentence would be repeating something false.
@@ -331,24 +336,168 @@ it contains the world's answer **43 of 52** where ablation contains it 5
 (`theoria-arm/runs/20260801T0900Z-R2-frontier-by-generation/MANIFEST.json`, the
 `replay` block). That is a counterfactual about containment on recorded states,
 not a forecast for a leg: a real leg diverges after the first probe whose answer
-differs, **no live leg has ever run with the switch on**, and 9 of the 47 are
-missed even on the replay — six opening probes with too little history for an
-edge chain, and three correctly-anchored mid-leg probes where the extrapolated
-edge lands on a different board cell than the world burned. The drift is
-diagnosed and *not* repaired; re-seating the manual's state on the world's frame
-would make the replay layer trivially green and destroy the only instrument that
-currently detects a wrong manual.
+differs, **no live leg had run with the switch on** when this was written, and 9
+of the 47 are missed even on the replay — six opening probes with too little
+history for an edge chain, and three correctly-anchored mid-leg probes where the
+extrapolated edge lands on a different board cell than the world burned. The
+drift is diagnosed and *not* repaired; re-seating the manual's state on the
+world's frame would make the replay layer trivially green and destroy the only
+instrument that currently detects a wrong manual.
 
-**Underneath all of it: no level has been completed.** Every live leg of the
-Theoria arm carries a tracked level record, and across all ten of them — the six
-the battery reads and the four added by the two rounds since — the total number
-of level-completion rows is **zero**, and the two rounds that publish the figure
-directly report `levels_completed: 0` on every leg, each stopped by the spend
-gate rather than by understanding
-(`papers/phase1-workshop/runs/20260801T1200Z-P23-probe-frontier-contradicts-the-design/census.json`,
-keys `levels` and `rounds`; `battery/STATUS.md` §B18 for the six-leg reading).
-No claim in this paper rests on a completed level, and none should be read as
-implying one.
+**Then a live round ran with the switch on, thirty-nine minutes after the
+sentence above was committed, and the prediction held.** The paragraph was
+written at 04:07 UTC on 2026-08-01; round R2b started at 04:46 UTC the same day
+and its verdict landed three hours later
+(`theoria-arm/runs/_rounds/R2b-VERDICT.md`). Two legs, one knob
+(`--frontier=generated`), 27 completed probes: the frontier contained the
+world's answer on **21 of 27**, against **5 of 52** for the ablation frontier it
+replaced — containment **9.6 % → 77.8 %** — and realised positive information on
+**21 of 27** where the four legs before it realised 0.000 bits on all 56.
+Frontier width, two on every one of the earlier 52, took the values 6, 8, 9 and
+10. Every figure in this paragraph was recounted for this paper from the two
+legs' own probe logs
+(`theoria-arm/runs/20260801T044640Z-R2b-g50t-a/probes.jsonl`,
+`theoria-arm/runs/20260801T044640Z-R2b-sk48-b/probes.jsonl`) by
+`papers/phase1-workshop/runs/20260804T1500Z-P19b-the-zero-and-its-three-explanations/census.py`
+(`--check`; 27 of 27 quantities AGREES with the arm's own).
+
+**The methodological result is the part that generalises, and it is worth more
+than the knob.** The offline replay predicted **43 of 52 ≈ 82.7 %** *before* the
+round was authorised, from recorded probes on recorded states. The live `g50t`
+leg — the only one of the two with a readable sample, n = 24 — measured
+**83.3 %**. That is a counterfactual instrument sizing a change correctly before
+the change was paid for, which is the thing this project has otherwise had no
+way to do: every knob until now was priced by running it. The agreement is
+reported at the leg and not at the round, because the two legs disagree and the
+disagreement is not noise: `sk48` fired three probes to `g50t`'s twenty-four and
+contained one of them, and **n = 3 is a count, not a rate**. The round-level
+77.8 % is the pooled figure and is lower than the prediction for that reason
+alone. What is being claimed is narrow — one offline harness predicted one
+aggregate rate on one game within a point — and it is stated here because a
+correct prediction registered in advance is the only kind of evidence this
+paper's §7.3 accepts about its own instruments
+(`theoria-arm/runs/_rounds/R2b-VERDICT.md`, the three pre-registered predictions
+and their refutation condition;
+`theoria-arm/runs/20260801T0900Z-R2-frontier-by-generation/MANIFEST.json`, the
+`replay` block that was written first).
+
+**Underneath all of it: no level has been completed, and a better frontier did
+not change that.** R2b's own verdict says so in its own words — 「A better
+frontier buys better probes, and better probes are not a plan」 — and both its
+legs stopped on the spend gate with `levels_completed: 0`
+(`theoria-arm/runs/_rounds/20260801T044640Z-R2b/round.json`). No claim in this
+paper rests on a completed level, and none should be read as implying one.
+
+An earlier draft of this paragraph supported that with a sentence that does not
+survive being checked: 「every live leg of the Theoria arm carries a tracked
+level record, and across all ten of them the total number of level-completion
+rows is zero」. The level records exist as files and **all twenty-two of them
+are zero bytes** — the record has never been written, not once, in any leg
+including the mocks. A row count of zero taken from a file that was never
+written is not evidence of no completion; it is the absence of the instrument,
+recounted for this paper as `never_written` rather than as `0`
+(`papers/phase1-workshop/runs/20260804T1500Z-P19b-the-zero-and-its-three-explanations/census.py`,
+`theoria_level_log`). That correction is not a detail. It is the third of the
+three explanations §11.3b now has to keep apart, and stating it as a zero was
+the paper quietly closing the question it is about to open.
+
+### 11.3b The paper's central negative result, and the confound that has to be printed beside it
+
+Everything in §11.3a is downstream of one fact, and the fact is large enough
+that it should be stated on its own rather than as the last line of a subsection
+about probes.
+
+**No arm of any kind has completed a level or scored a point on the development
+pile.** Two Theoria configurations, one bare-model baseline, three model tiers,
+five rounds of iteration. On the baseline side: **0 levels completed and 0.0
+scored in 1,562 successful actions across 57 named runs**, from 63 archived
+scorecard bodies whose `score`, environment `score`, run `score` and
+`level_scores` are zero without exception. On the Theoria side: **16 live legs**
+— 15 carrying the upstream field in their own run record, the sixteenth
+`theoria-arm/runs/20260728T015354Z-g50t-first-contact/run.json`, rebuilt from
+its ledger after the process was stopped from outside — with `levels_completed` 0 on
+twelve and *absent* on four, `summary.score` `null` on all sixteen, and every
+one of the eleven archived scorecard bodies reporting `score: 0.0` and
+`total_levels_completed: 0`. Every figure here is recomputed from tracked files
+by
+`papers/phase1-workshop/runs/20260804T1500Z-P19b-the-zero-and-its-three-explanations/census.py`,
+which prints an AGREES/DIFFERS against each arm's own published figure and
+reports what it cannot see as `unmeasurable-here` rather than as zero. That is
+an honest negative result and it is publishable as one. It is only honest with
+the confound printed beside it, because **three different explanations produce
+that same zero and today's evidence cannot tell them apart**.
+
+**One — it was never affordable.** On `g50t` level one costs 78 successful
+actions and on `sk48` 61; no run of any arm on either game has ever been
+permitted to spend that many. §7.10a gives the four-game table and the split:
+on the other two games six runs did reach the reference cost and lost, so this
+explanation is decisive on exactly half the pile and refuted on the other half
+(`baseline-arms/runs/20260802T2040Z-A28-baseline-zero-examined/audit_zero.json`,
+`question_3_budget.per_game`).
+
+**Two — the budget that existed went somewhere other than the level.** Counting
+each leg's completed probes against its successful actions, the Theoria arm's
+**largest number of non-probe actions on any leg in its entire history is 11**,
+and eight of the sixteen legs sit at exactly 5. The longest leg ever run spent 33
+actions, 28 of them probes. Multiplying the budget without changing that ratio
+buys probes, not progress: at the best observed mix, reaching 78 advancing
+actions on `g50t` implies a leg of several hundred actions. This explanation is
+about allocation and it is orthogonal to the first — a leg can be both too poor
+and badly spent, and both are true of every leg on record
+(`papers/phase1-workshop/runs/20260804T1500Z-P19b-the-zero-and-its-three-explanations/census.json`,
+`theoria_probe_share`, which prints the per-leg split and names the one leg whose
+two instruments disagree rather than reconciling them).
+
+**Three — a completion might not have been recorded.** The arm's level-boundary
+detector is wired: `theoria-arm/inner/loop.py` passes `levels_completed` off
+every gameplay envelope into `LevelLog.observe` and an increase fires the
+boundary handler on that same call, mid-leg
+(`theoria-arm/runs/20260802T2100Z-A27-level-boundary-detector/README.md`). What
+has never happened is the write: **all twenty-two per-leg level logs under
+`theoria-arm/runs/` are zero bytes**, so the recording path has not executed
+once, and the detector has **never been exercised on a real positive** — every
+positive in its test suite is synthetic, and its own scan of 2,700
+environment-step rows across three arms finds `state` `NOT_FINISHED` on all 547
+that carry it and never `WIN`
+(`theoria-arm/runs/20260802T2100Z-A27-level-boundary-detector/MEASUREMENT.json`,
+`verdict`).
+
+**The third explanation is the one that contaminates the other two,** which is
+why it is worth the paragraph. An instrument that has never fired is silent on
+the day it should fire, and its silence is byte-identical to the world's. So a
+zero read off `levels_completed` is evidence about capability *only if* the
+recording path works, and the only thing that would establish that is a run in
+which something is completed — which is the observation the zero says has never
+occurred. The paper cannot cite its own negative result as evidence that the
+negative result is real
+(`papers/phase1-workshop/runs/20260804T1500Z-P19b-the-zero-and-its-three-explanations/census.py`,
+`theoria_level_log`, and its negative control 2, which is a mock leg that won
+and whose level log was truncated).
+
+**What would separate them, cheapest first.** Each step can falsify the premise
+of the next, and the order is not the order in which the project has been
+spending. *Zero cost:* make the detector fire once in an offline world and write
+a non-empty level record; if it cannot, every zero-completion record in this
+repository loses its evidential value immediately and the two paid steps are
+premature. *About \$9:* one bare-model run on `g50t` with a 78-action budget, at
+the measured `bare_cc` rate of \$0.1147 per action
+(`baseline-arms/runs/bare_cc-g50t-claude-opus-5-6a39afc2/run.json`). It answers
+whether these games are winnable at reference budget by a model with no theory
+at all, and it is the cheapest decisive experiment this project has available.
+*About \$120:* a long Theoria leg. It was authorised and is running as this is
+written, which means it is the third step taken first; **its result will have to
+be re-read after the first step lands**, because a "did not win" recorded by an
+instrument never shown to work is not the same observation as a "did not win"
+recorded by one that has.
+
+Until at least the first of those exists, this paper states the zero as a
+measurement and refuses to state it as a finding about capability, except on
+`ar25` and `tn36` where §7.10a establishes that the budget was adequate and the
+runs lost anyway
+(`baseline-arms/runs/20260802T2040Z-A28-baseline-zero-examined/RUN_STATE.md` §3).
+Registered as the project's first open question rather than buried in a
+limitations list, because every Phase 3 iteration and every Phase 4 endpoint
+hangs on which of the three it is.
 
 ### 11.4a Three defects found in the instruments that read the live legs
 
@@ -493,7 +642,10 @@ metrics (`battery/runs/20260801T0300Z-E2L-frontload-step-axis/RUN_STATE.md` §1)
 And nothing in the itemisation is a claim about the probe beat working on a live
 game; the frontier it split there was closed downward under clause deletion and
 contained the world's answer 5 times in 52
-(`theoria-arm/runs/20260801T0900Z-R2-frontier-by-generation/MANIFEST.json`).
+(`theoria-arm/runs/20260801T0900Z-R2-frontier-by-generation/MANIFEST.json`). A
+later frontier raised that to 21 of 27 on a live round (§11.3a), which is a
+claim about probe *containment* and not about the beat closing the title's gap:
+that round completed no level either, and §11.3b is why the difference matters.
 
 Everything else in `Theoria.md` — the ordering claim, the bill shape, transfer,
 the exam, the cost magnitude — is unevidenced here and is not claimed.
