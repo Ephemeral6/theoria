@@ -20,3 +20,27 @@ deps: none
 把 spend.py 天花板表对齐登记 #13 的裁决并引它（不许静默改数——表里注明
 出处）。各配一个负样本防复发。验收：theoria-arm 全套件回到 0 failed。
 零花费。红着的每一天，这个领地的任何 verify-gate 都过不了 tests 行。
+
+---
+
+## 对账 2026-08-04（监控·board hygiene）· 仍红，且两个数都往坏的方向动了
+
+在 master `4846e66d` 的干净 worktree 里逐条复跑本件点名的两个测试：
+
+```
+FAILED tests/test_arm.py::test_the_archive_stays_accountable
+FAILED tests/test_desk_gate.py::test_the_ceiling_table_still_covers_the_archive
+E   AssertionError: claude-opus-5: ceiling $15.00 is below $18.7391, which is
+E   what this table's own stated rule -- max(timeout x rate, 4x worst call) --
+E   produces from the archive.
+```
+
+**本件正文里的那对数已经过期。** 写下时是「天花板 $12.00 低于归档隐含
+$13.4480」；今天是 **$15.00 对 $18.7391**。两端都动了：天花板被抬过一次
+（`harness/spend.py` 的注释记着 $5→$6→$7 的历史，现为 $15），而归档隐含值
+被 R2b 的 g50t 腿（$18.736008，见 A30/A32 的表）推高。**记账追赶落地事实的
+速度，慢于落地事实本身。** 这不改本件的判断，只把它加重：本件挂 p1 至今未被
+认领，期间这个领地的任何 verify-gate 都过不了 tests 行，且缺口从 $1.45 扩到
+$3.74。修的时候请按今天的数写，不要按正文那对。
+
+（本节由 board hygiene 复算，零花费，未改臂的任何文件。）

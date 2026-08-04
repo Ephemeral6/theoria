@@ -1,0 +1,17 @@
+open asks          : 235
+archived (swept)   : 37
+addressed by name  : 10
+no addressee       : 225
+cited elsewhere    : 225
+uncited            : 10   (upper bound on asks that went nowhere)
+seen by addressee  : 1
+NOT seen by it     : 9
+no addressee named : 225   (absent, not zero -- nobody could sweep)
+
+addressee          open  cited  uncited   seen  unseen
+battery               1      0        1      0       1
+exam                  3      3        0      0       3
+freeze                1      1        0      1       0
+proxy                 1      1        0      0       1
+theoria-arm           4      3        1      0       4
+unaddressed         225    217        8      0       0
