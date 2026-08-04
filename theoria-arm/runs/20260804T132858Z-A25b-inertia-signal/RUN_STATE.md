@@ -6,8 +6,17 @@ scored calls changed no later prediction. That work is on master. This asks
 what a running arm can do about it.
 
 Offline throughout. No ARC command, no model call, no credential read, no
-sealed-pile contact, $0.00. The A26b legs in flight were skipped by name and
-the skip is named in `census.json`'s `skipped` field.
+sealed-pile contact, $0.00.
+
+**The A26b legs in flight were never read, and `census.json`'s `skipped` list
+is empty — which is not the same statement.** This work was done in a worktree
+cut from master, and the two A26b run directories are *untracked* in the main
+tree, so a fresh checkout does not contain them: there was nothing under
+`runs/` for the `A26` skip marker to refuse. The guard is still the reason a
+run in the main tree would be safe, and it is still in `SKIP_MARKERS`; on this
+census it never fired because the legs were absent, not because it caught them.
+Recorded here because an empty `skipped` list would otherwise read as "the
+guard worked".
 
 ---
 

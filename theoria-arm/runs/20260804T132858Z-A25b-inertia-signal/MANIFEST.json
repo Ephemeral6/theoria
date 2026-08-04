@@ -19,7 +19,7 @@
  "files": [
   {
    "path": "RUN_STATE.md",
-   "sha256": "1cb0e8bd5219dfba399ae03f179bdca76de4ec977c8e66c15e7822ca7c7e68b8",
+   "sha256": "3e08b0abf5723b2dc50d465e5c27d0f7e1dbb3a209db24837ea9887b31fa20ad",
    "what": "the narrative: what was measured, what was built, what is still unknown"
   },
   {
@@ -56,7 +56,7 @@
   "tests/test_action_economy_inertia.py": "37 tests, including two archived snapshot pairs as fixtures for the detector."
  },
  "lane": "framework-change",
- "leg": "offline only -- no ARC action, no live model call, no credential read, no sealed-pile contact, no spend. The A26b legs in flight were skipped by name (SKIP_MARKERS) and the skip is recorded in census.json's `skipped` field.",
+ "leg": "offline only -- no ARC action, no live model call, no credential read, no sealed-pile contact, no spend.",
  "measurement_first": {
   "actions_per_dollar_whole_leg": {
    "defer-explained-every-round": 1.6799,
@@ -140,6 +140,7 @@
   "usd": 0.0
  },
  "territory": "theoria-arm",
+ "the_live_round_in_flight": "census.json's `skipped` list is EMPTY, and that is not the same as the guard having caught something. This ran in a worktree cut from master; the two A26b run directories are untracked in the main tree, so the checkout does not contain them and the `A26` skip marker had nothing to refuse. They were never read. Absence is recorded as absence.",
  "utc": "2026-08-04T13:28:58Z",
  "what": "A25's after-the-fact audit of inert desk calls made available AT the call, wired to four switchable levers whose default is today's behaviour, and replayed over every archived leg with actions-bought-per-dollar reported per leg and pooled."
 }
