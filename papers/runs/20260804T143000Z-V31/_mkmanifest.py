@@ -66,7 +66,13 @@ def main():
         "worker": "W-9208",
         "territory": "papers",
         "branch": git("rev-parse", "--abbrev-ref", "HEAD"),
-        "base_commit": git("rev-parse", "origin/master"),
+        # The branch point, not `origin/master` -- which moves under a long
+        # ticket. The first version of this file read `rev-parse origin/master`
+        # and quietly started recording a commit this work had never seen, three
+        # merges after the one it was actually built on. A provenance field that
+        # tracks the remote is not provenance.
+        "base_commit": git("merge-base", "origin/master", "HEAD"),
+        "merged_master_at": git("rev-parse", "origin/master"),
         "utc": f"{UTC[:4]}-{UTC[4:6]}-{UTC[6:8]}T{UTC[9:11]}:{UTC[11:13]}:{UTC[13:15]}Z",
         "seed": None,
         "spend": {"api_calls": 0, "usd": 0.0,

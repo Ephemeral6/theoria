@@ -302,6 +302,54 @@ def test_the_live_papers_tree_classifies_cleanly():
     assert strays == [], "unclassified directory under papers/: %s" % strays
 
 
+def test_every_not_papers_registration_still_names_a_directory():
+    """A registration is a ruling, and rulings rot.
+
+    `NOT_PAPERS` gained two judgement-call entries under V31, and the precedent
+    they were modelled on had already decayed: `monitor/gates.py:59` registers
+    `scratchpad` with a dated reason and `scratchpad/` is not in the repository.
+    Nothing said so. This is the positive control for the guard that stops the
+    same thing happening here -- `main()` fails on a registration whose directory
+    is gone, but only for the live tree, so this is where the live tree is
+    checked.
+    """
+    for name in sorted(V.NOT_PAPERS - V.NOT_PAPERS_MAY_BE_ABSENT):
+        assert os.path.isdir(os.path.join(HERE, name)), (
+            "%s is registered in NOT_PAPERS and does not exist; drop the entry "
+            "rather than leave it to excuse whatever lands under that name" % name)
+
+
+def test_a_registration_for_a_directory_that_is_gone_is_refused(
+        tmp_path, capsys, monkeypatch):
+    """...and the guard itself, driven red.
+
+    Note it must fire only on the live tree: `--root` is how every test above
+    drives `main()` over a synthetic one, and a guard that demanded
+    `case-studies/` inside each of them would be untestable rather than
+    unrottable.
+    """
+    (tmp_path / "a-paper").mkdir()
+    (tmp_path / "a-paper" / "PAPER.md").write_text("x", encoding="utf-8")
+    (tmp_path / "a-paper" / "verify.py").write_text(
+        "print('ok')\n", encoding="utf-8")
+    # Synthetic root: `case-studies/` is absent here too, and is ignored. (This
+    # tree still goes RED on stage 3, which collects no tests -- that is a
+    # different check and the reason the assertion is on the output rather than
+    # on the exit code.)
+    V.main(["--root", str(tmp_path)])
+    assert "NOT_PAPERS, and there is no such directory" not in capsys.readouterr().out
+
+    # ...and on the live tree it does fire, for a name that is not there.
+    # `INNER` so stage 3 does not spawn a second full run of this very suite:
+    # the guard under test is in stage 1, and paying 35 seconds to re-run 300
+    # tests in order to read one line of stage 1 is a test nobody will keep.
+    monkeypatch.setenv(V.INNER, "1")
+    monkeypatch.setattr(V, "NOT_PAPERS", V.NOT_PAPERS | {"no-such-corpus"})
+    assert V.main([]) == 1
+    out = capsys.readouterr().out
+    assert "no-such-corpus: named in NOT_PAPERS" in out, out
+
+
 def test_this_gate_declares_a_negative_sample_that_exists():
     """`monitor/gates.py` reads the declaration out of the gate's source. A
     declaration pointing at a file that never landed is worse than none."""

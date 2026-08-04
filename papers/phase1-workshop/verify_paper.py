@@ -172,6 +172,15 @@ HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent.parent
 SECTIONS = HERE / "sections"
 
+#: `SECTIONS` as it is before anything monkeypatches it.
+#:
+#: The negative controls repoint `SECTIONS` (and sometimes `HERE`) at scratch
+#: trees, which is the only way to watch these checks go red. Two guards below
+#: need to tell "this run is about the paper" from "this run is a control", and
+#: comparing against a constant nothing patches is the only honest way to do it:
+#: an escape hatch that cannot distinguish them ends up open on the live tree.
+_LIVE_SECTIONS = SECTIONS
+
 # A backticked token counts as a path claim if it has a directory separator and
 # a plausible extension, or ends in a separator. This deliberately misses bare
 # filenames (`PAPER.md`) -- those are the 31 non-repo-relative citations
@@ -642,13 +651,26 @@ def check_figdata() -> tuple[bool, list[str]]:
                 continue
             for payload in (data_dir / f"{script.stem}.json",
                             fig_dir / f"{script.stem}.txt"):
-                if payload.suffix == ".txt" and payload not in before:
+                if (payload.suffix == ".txt" and payload not in before
+                        and not payload.exists()):
                     # An extractor is required to produce its JSON payload; a
                     # rendering beside it is a convention `common.emit()` follows
                     # and nothing enforces. So a committed `.txt` that stops being
                     # regenerated is a finding -- it is in `before` and falls
-                    # through to the checks below -- while an extractor that never
-                    # shipped one is not accused of losing it.
+                    # through -- while an extractor that never shipped one is not
+                    # accused of losing it.
+                    #
+                    # `and not payload.exists()` is the whole of an adversarial
+                    # finding. Without it one `continue` swallowed two different
+                    # cases, and the second was a *new* rendering: an extractor
+                    # that started emitting a `.txt` nobody had committed passed
+                    # green and left the file on disk, because `finally` restores
+                    # only what was in `before`. That is the drift this change was
+                    # written to kill, reproduced one column to the right -- and
+                    # it falsified the docstring's own "on the same footing",
+                    # in a file whose subject is checks that overstate what they
+                    # check. The `.json` arm always reported it (`is new`); now
+                    # both do.
                     continue
                 if not payload.exists():
                     drifted.append(f"{payload.name} was not regenerated -- the "
@@ -664,6 +686,16 @@ def check_figdata() -> tuple[bool, list[str]]:
             if not path.exists() or path.read_bytes() != blob:
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_bytes(blob)
+        # And take back anything the run *created*. Restoring the snapshot puts
+        # every file that was here back as it was; it says nothing about a file
+        # that was not. Both `is new` arms above are red, so this deletes only
+        # something the check is already refusing -- and the property being
+        # defended is that running the gate leaves `git status` exactly as it
+        # found it, which a leftover untracked payload breaks just as surely as
+        # a modified tracked one.
+        for path in expected:
+            if path not in before and path.exists():
+                path.unlink()
 
     if drifted:
         notes.extend(fail(f"  {d}") for d in drifted)
@@ -2117,6 +2149,10 @@ MIN_ANCHOR = 24
 #: every live entry is applicable, and a test is weaker than a gate; it is the
 #: strongest instrument available without making the check unable to be driven red.
 MAX_DEFERRED = 1
+
+#: The check deferrals belong to. Named here rather than beside `CHECKS`, which
+#: is `main()`'s table and a merge surface other branches are editing.
+UNCITED_TAG = "E UNCITED"
 DEFERRED_UNCITED: dict[tuple[str, str], tuple[str, str, str, str]] = {
     ("08_exam.md", "**n = 1 per handover tier**, on a saturated"): (
         "2026-08-04", "RES-2",
@@ -2170,6 +2206,7 @@ def check_uncited() -> tuple[bool, list[str]]:
                 f"An anchor under {MIN_ANCHOR} matches prose rather than a claim, "
                 f"and silences blocks nobody ruled on."))
             stale.append(key)
+    unbalanced: list[str] = []
     for section in sorted(SECTIONS.glob("*.md")):
         # Count fences with the block splitter's own predicate. `count("\n```")`
         # misses a fence on line 1 -- which inverted the verdict exactly: a
@@ -2183,7 +2220,14 @@ def check_uncited() -> tuple[bool, list[str]]:
                 f"  FENCE     {section.name} has an odd number of ``` lines. "
                 f"Everything after the unclosed one is skipped as code, so a "
                 f"claim can hide behind it."))
-            stale.append((section.name, "unbalanced fence"))
+            # Not `stale.append(...)`. A fence is not a ruling, and `stale` is
+            # `ADJUDICATED_UNCITED`'s list: a sentinel here reported one fewer
+            # *ruling* and one more *stale ruling* on the summary line below.
+            # Pre-existing, and found by the same adversarial pass that caught
+            # V31 committing the identical mistake with deferrals seventy lines
+            # down -- a comment declaring the pattern dead, sitting above a live
+            # instance of it.
+            unbalanced.append(section.name)
     # `len(glob) - len(EXEMPT_SECTIONS)` printed `-1 body sections` on an empty
     # tree, and printed it on a PASS line. Counting what was actually walked
     # cannot go negative, and cannot disagree with the loop above it.
@@ -2200,17 +2244,36 @@ def check_uncited() -> tuple[bool, list[str]]:
         (deferred_hits[key] if key else still_open).append(row)
 
     deferrals_broken: list[str] = []
+    # Keys, not messages. One malformed entry emits up to four notes, and an
+    # earlier draft counted the notes -- so a table holding one entry, capped at
+    # one, printed "3 broken deferral(s)" and a reader who checked the numbers
+    # concluded TOOMANY should have fired and had not. Same class as the sentinel
+    # in `stale` below: a true count of the wrong thing, on the summary line.
+    broken_keys: set = set()
+    skipped_deferrals: list = []
     for key, (opened, owner, record, _reason) in sorted(DEFERRED_UNCITED.items()):
-        if not (SECTIONS / key[0]).is_file():
+        if not (SECTIONS / key[0]).is_file() and SECTIONS != _LIVE_SECTIONS:
             # The section this deferral is about is not in the tree being
-            # scanned, so nothing here can be said about it. That is the negative
-            # controls' case, not the paper's: they point `SECTIONS` at a scratch
+            # scanned, and the tree being scanned is not the paper. That is the
+            # negative controls' case: they point `SECTIONS` at a scratch
             # directory to watch the check go red, and a live deferral firing
             # STALE against a synthetic tree would report on a section the run
-            # never looked at. On the live tree the section is present and the
-            # STALE branch below is what holds the entry honest;
-            # `test_deferred_uncited.py` pins that it is applicable there, so
-            # this escape cannot become the way an entry stops being checked.
+            # never looked at.
+            #
+            # `and SECTIONS != _LIVE_SECTIONS` is the whole of an adversarial
+            # finding, and the comment it replaces was wrong twice over. It said
+            # the escape needed a section to vanish from `sections/`, "which
+            # trips `A GENERATED` and the `MIN_SECTIONS` floor before it gets
+            # here". Neither is true: `check_generated` compares `PAPER.md`
+            # against `assemble(whatever is in sections/)` and has no opinion
+            # about *which* sections, so deleting one and re-running assemble --
+            # which the repair this defers explicitly requires -- leaves it
+            # PASS; and `MIN_SECTIONS` is 2 against twelve sections, eleven
+            # deletions away. Demonstrated: delete `08_exam.md`, re-assemble,
+            # drop the ruling stranded in the same section, and the whole gate
+            # went green with this deferral never evaluated and never named.
+            # The guard is now structural rather than an appeal to other checks.
+            skipped_deferrals.append(key)
             continue
         n = len(deferred_hits[key])
         if len(key[1]) < MIN_ANCHOR:
@@ -2218,27 +2281,47 @@ def check_uncited() -> tuple[bool, list[str]]:
                 f"  ANCHOR    deferral {key[0]} → {key[1]!r} is {len(key[1])} "
                 f"characters. An anchor under {MIN_ANCHOR} matches prose rather "
                 f"than a claim, and would defer blocks nobody looked at."))
-        if key in ADJUDICATED_UNCITED:
+            broken_keys.add(key)
+        # Overlap, not equality. Keyed on equality this was defeated by a single
+        # character: a ruling anchored `"n = 1 per handover..."` and a deferral
+        # anchored `"**n = 1 per handover..."` are different tuples, DOUBLE never
+        # fired, and the outcome was still red -- but as STALE, whose message
+        # says "the claim was cited or rewritten, delete the entry". False advice
+        # pointing at the wrong table is worse than the silence it replaced.
+        overlapping = [k for k in ADJUDICATED_UNCITED
+                       if k[0] == key[0] and (k[1] in key[1] or key[1] in k[1])]
+        if overlapping:
             deferrals_broken.append(fail(
-                f"  DOUBLE    {key[0]} → {key[1]!r} is both ruled and deferred. "
+                f"  DOUBLE    {key[0]} → {key[1]!r} overlaps the ruling "
+                f"{overlapping[0][1]!r}: the block is both ruled and deferred. "
                 f"A ruling clears the block, so it would hide the finding this "
                 f"deferral exists to keep visible. Pick one."))
+            broken_keys.add(key)
         if n == 0:
             deferrals_broken.append(fail(
                 f"  STALE     deferral {key[0]} → {key[1]!r} matches no uncited "
                 f"block. The claim was cited or rewritten, so the deferral is "
                 f"over: delete the entry. Owner was {owner}, opened {opened}."))
+            broken_keys.add(key)
         elif n > 1:
             deferrals_broken.append(fail(
                 f"  BROAD     deferral {key[0]} → {key[1]!r} matches {n} blocks. "
                 f"A deferral is opened against one finding; matching several "
                 f"defers findings nobody adjudicated."))
-        if not (ROOT / record).is_file():
+            broken_keys.add(key)
+        # Existence was the first draft and it was nearly free to satisfy: a
+        # zero-byte file passed, and so did a path anywhere on the machine. A
+        # record that is not in this territory is not provenance the next reader
+        # can find, and an empty one is not an argument.
+        rec = ROOT / record
+        if not (rec.is_file() and record.startswith("papers/")
+                and rec.stat().st_size > 0):
             deferrals_broken.append(fail(
                 f"  NORECORD  deferral {key[0]} → {key[1]!r} cites `{record}`, "
-                f"which does not exist. A deferral is only as good as the written "
-                f"argument behind it; with the record gone there is nothing to "
-                f"audit and nothing to hand {owner}."))
+                f"which is not a non-empty file under `papers/`. A deferral is "
+                f"only as good as the written argument behind it; without one "
+                f"there is nothing to audit and nothing to hand {owner}."))
+            broken_keys.add(key)
     # A ceiling, because the docstring's argument against an expiry date is not
     # an argument against there being twenty of these next month. One deferral is
     # a disclosure; a table of them is the lowered bar this ticket was told not
@@ -2250,6 +2333,14 @@ def check_uncited() -> tuple[bool, list[str]]:
             f"{MAX_DEFERRED}. A deferral discloses one finding its owner could "
             f"not fix; a table of them is a check that has been switched off "
             f"one row at a time. Fix one, or raise the ceiling deliberately."))
+        broken_keys.update(DEFERRED_UNCITED)
+    for key in skipped_deferrals:
+        # Announced, not silent. The skip is a testing affordance and it is now
+        # structurally unreachable on the live tree, but a corpus narrowing that
+        # nothing announces is the same silence a ruling nobody re-read is.
+        notes.append(f"  skipped   deferral {key[0]} → {key[1]!r}: that section "
+                     f"is not in the tree being scanned (SECTIONS is not the "
+                     f"paper's, so this is a control run, not the paper)")
     notes.extend(deferrals_broken)
 
     # Counted apart from `stale`, which is about `ADJUDICATED_UNCITED`. An
@@ -2263,7 +2354,7 @@ def check_uncited() -> tuple[bool, list[str]]:
         f"body sections: {len(still_open)} uncited, "
         f"{sum(len(v) for v in deferred_hits.values())} uncited-and-deferred, "
         f"{len(ADJUDICATED_UNCITED) - len(stale)} ruled, {len(stale)} stale "
-        f"rulings, {len(deferrals_broken)} broken deferral(s)"
+        f"rulings, {len(broken_keys)} broken deferral(s)"
     )
     for name, lineno, flat, nums, words in still_open:
         tokens = ", ".join(nums[:6] + words[:3]) or "?"
@@ -2298,7 +2389,7 @@ def check_uncited() -> tuple[bool, list[str]]:
                 f"leave it to excuse the next one."))
         else:
             notes.append(f"  ruled     {key[0]} ({hits[key]}×) -- {reason}")
-    return not (still_open or stale or deferrals_broken), notes
+    return not (still_open or stale or deferrals_broken or unbalanced), notes
 
 
 #: Bare filenames that name a *kind* of file rather than one artefact, each with
@@ -2554,7 +2645,16 @@ def main() -> int:
             print(f"       ^ about sections/, NOT about PAPER.md: {GENERATED_TAG} "
                   f"failed, so the two disagree and this verdict describes the "
                   f"one a reader is not handed.")
-        if not args.quiet or not passed:
+        # `--quiet` is "verdict lines only", and its rule is that a check which
+        # passed has nothing a reader needs. A deferral breaks that rule: the
+        # check passes *while holding a finding it still reports*, so quiet mode
+        # printed `[PASS] E UNCITED` and dropped the line number, the quantities,
+        # the block text and the owner -- every word the red gate had printed.
+        # In that one mode a deferral was exactly the ruling it claims not to be,
+        # and the verdict line's "see check E" pointed at nothing. Found by an
+        # adversarial pass, against the criterion this mechanism set for itself.
+        holds_deferral = tag == UNCITED_TAG and bool(DEFERRED_UNCITED)
+        if not args.quiet or not passed or holds_deferral:
             for n in notes:
                 print(n)
         if not passed:
@@ -2586,15 +2686,29 @@ def main() -> int:
         for n, cites, name, lineno in worst:
             print(f"    {n:>3} quantities / {cites} citation(s)   {name}:{lineno}")
 
-    # Callers that read one line read this one -- `papers/verify.py` stage 2
-    # prints a sub-gate's last stdout line and nothing else. A deferral that is
-    # visible only in the body of check E's output is invisible to the delegator,
-    # to `monitor/ci/merge.log`, and to everyone who reads either. So it rides on
-    # the verdict line itself, on the FAIL path as well as the PASS one.
+    # Callers that read one line read this one: `papers/verify.py:375` prints a
+    # sub-gate's last stdout line and nothing else, so without this rider a human
+    # running the territory gate sees `PASS (7/7)` and no hint that a finding is
+    # open. That is the rider's whole audience, and an earlier version of this
+    # comment claimed a second one it had not checked -- `monitor/ci/merge.log`.
+    # That was false in both directions. On the green path `ci_merge.py:678`
+    # records `gates.describe(...)` and discards the gate's stdout entirely, so
+    # `verify_paper:` appears nowhere in 2500+ lines of merge.log and the rider
+    # changes nothing there; on the red path `ci_merge.py:657` already keeps the
+    # tail of the full output, so check E's body was reaching the log without
+    # any rider at all. **CI records nothing about a deferral on a green gate.**
+    # Written out because this file's own worst finding is a ruling whose stated
+    # evidence was false, and this was one, one screen below the sentence saying
+    # so.
+    #
+    # Built from what check E actually evaluated, not from `len(DEFERRED_UNCITED)`:
+    # a suffix advertising a finding the check skipped is the gate over-claiming
+    # its own disclosure.
     deferred = ""
-    if DEFERRED_UNCITED:
-        where = ", ".join(sorted(k[0] for k in DEFERRED_UNCITED))
-        deferred = (f" [{len(DEFERRED_UNCITED)} DEFERRED finding(s) held open, "
+    live = sorted(k for k in DEFERRED_UNCITED if (SECTIONS / k[0]).is_file())
+    if live:
+        where = ", ".join(sorted({k[0] for k in live}))
+        deferred = (f" [{len(live)} DEFERRED finding(s) held open, "
                     f"not fixed: {where} -- see check E]")
 
     print()

@@ -207,8 +207,78 @@ the survival.
   be individually well-formed and green, and the check would end up switched off
   one row at a time. Raising the ceiling now has to be its own commit.
 
-The suite grew from 26 to 33 controls over the two new mechanisms; the territory
-suite is 307 passed / 1 xfailed.
+A second pass was told to refute the `NOT_PAPERS` registration and the FIGDATA
+work. Both survived; two more things did not.
+
+* **`check_figdata` had a third case, and it was the one the change existed to
+  prevent.** The `.txt` arm's guard fired before the existence check, so one
+  `continue` swallowed two situations: *never shipped a rendering* (correctly
+  silent) and *just started emitting one nobody committed* — which passed green
+  **and left the file on disk**, because `finally` restores only what was in the
+  snapshot. That is the V30 drift reproduced one column to the right, and it
+  falsified the docstring's own "on the same footing". The `.json` arm always
+  reported it (`is new`); both do now, and `finally` also removes anything the
+  run created.
+* **`NOT_PAPERS` had no staleness detection, and the precedent it was modelled
+  on had already rotted.** `monitor/gates.py:59` registers `scratchpad` with a
+  dated 2026-07-29 reason and `scratchpad/` is not in the repository; nothing
+  says so. Copying the form without the guard would have reproduced, inside a
+  file written to refuse exactly this, the failure it refuses. `main()` now fails
+  on a registration whose directory is gone — for the live tree only, since
+  `--root` is how the delegator's own tests drive it over synthetic ones — with
+  `runs/` exempted, because a territory that has produced no run legitimately has
+  none. It also caught the `case-studies` comment quoting past `README.md:1`
+  ("the Phase 3 结 deliverable") and `:8` ("the prose half of that unit"), the two
+  lines that most contradict the registration; they are quoted and answered now
+  rather than omitted.
+
+A third pass was aimed at the deferral itself, and it **refuted the mechanism on
+its own stated criterion** — *"if any information the red gate printed is now
+missing or softened, that is a refutation"*. It was right four times.
+
+* **`--quiet` dropped the entire finding.** `main()` printed a check's notes only
+  when it failed, and the deferral is what makes check E pass — so
+  `verify_paper.py --quiet` printed `[PASS] E UNCITED` and lost the line number,
+  the quantities, the block text and the owner. In that one documented mode a
+  deferral *was* the ruling it claims not to be, and the verdict line's "see
+  check E" pointed at nothing. A check holding a deferral now always prints, and
+  the test asserts the excerpt and the quantity list survive both modes — the two
+  things the first version of the test never checked.
+* **The merge.log justification was false in both directions.** On the green path
+  `ci_merge.py:678` records `gates.describe(...)` and discards the gate's stdout,
+  so `verify_paper:` appears nowhere in 2500+ lines of `monitor/ci/merge.log` and
+  the rider changes nothing there; on the red path `ci_merge.py:657` already keeps
+  the output tail. CI records nothing about a deferral on a green gate. The rider
+  stays — a human running `papers/verify.py` sees only `tail[-1]`, which is its
+  real and only audience — and the comment now says so.
+* **The absent-section escape's stated guards did not exist.** The comment
+  claimed a vanished section trips `A GENERATED` and `MIN_SECTIONS` first.
+  Neither: `check_generated` compares `PAPER.md` to `assemble(whatever is in
+  sections/)` and has no opinion about which sections, and `MIN_SECTIONS` is 2
+  against twelve. Demonstrated — delete `08_exam.md`, re-assemble, drop the
+  ruling stranded in the same section, and the whole gate went green with the
+  deferral never evaluated and never named, while the verdict line went on
+  advertising it. The escape is now structural (`SECTIONS != _LIVE_SECTIONS`, a
+  constant no test patches), it is announced rather than silent, and the verdict
+  line is built from what check E evaluated instead of from the table's length.
+* **`broken deferral(s)` counted messages, not entries** — one malformed entry
+  emits up to four notes, so a table of one, capped at one, printed `3 broken
+  deferral(s)`. Exactly the class of bug the comment three lines above it
+  celebrated killing. It also found the **original** of that bug still alive and
+  untouched seventy lines up: the unbalanced-fence check appended a sentinel to
+  `stale`, corrupting the *ruled* and *stale rulings* counts. Pre-existing; fixed
+  here, since leaving it under a comment declaring the pattern dead is worse than
+  either.
+
+Three guards were tightened with it: NORECORD was existence-only (a zero-byte
+file anywhere on the machine passed) and now requires a non-empty file under
+`papers/`; DOUBLE compared keys for equality and was defeated by one character of
+anchor, reporting STALE with advice pointing at the wrong table, and now compares
+overlap; `MAX_DEFERRED` was enforced by nothing outside the file it lives in, and
+is now pinned by a test, so raising it costs two hunks in two files.
+
+The suite grew from 26 to 38 controls over the new mechanisms; the territory
+suite is 314 passed / 1 xfailed, and passes identically module-alone.
 
 ## Gaps, stated rather than worked around
 
@@ -228,13 +298,30 @@ suite is 307 passed / 1 xfailed.
   territory this worker may write. It is still a second copy of the repo inside the
   repo, and the Phase 4 release manifest publishes every tracked file. Raised with
   the monitor in the inbox message above; not this territory's call.
-* **A deferral naming a section absent from the tree being scanned is skipped in
-  silence.** That is what lets the negative controls point `SECTIONS` at a scratch
-  directory, so it cannot simply be removed. On the live tree the escape needs a
-  section to vanish from `sections/`, which trips `A GENERATED` and the
-  `MIN_SECTIONS` floor first; `test_deferred_uncited.py` pins that the live entry
-  is applicable. A test is weaker than a gate, and this is the strongest
-  instrument that leaves the check drivable red.
+* **A deferral defers a *block*, not the quantity its record argues about.** The
+  entry clears §8.4's whole six-bullet list, and unlike a withdrawn ruling — whose
+  blast radius is frozen at withdrawal — a deferral's grows with the block: four
+  of those bullets could be rewritten to carry any number of new uncited
+  quantities and the gate would not ask again while the `n = 1` bullet is
+  untouched. This is the withdrawal note's second limb, one level up, and it is
+  disclosed (the DEFERRED line prints the live quantity list) but not guarded.
+  The structural answer is splitting `_blocks()` so a list item is its own block,
+  which re-partitions all 435 blocks and is its own ticket with its own
+  adversarial pass — filed, not attempted here.
+* **One unreproduced red.** Running `papers/verify.py` twice in a row while the
+  working tree was still being edited, the first run failed stage 3 at test 82 of
+  310 and the second passed. It has not recurred in twelve consecutive runs on a
+  quiesced tree (five of `papers/verify.py`, four emulating stage 2 + stage 3, and
+  the suite whole and module-alone). No mechanism was identified, so it is
+  recorded rather than explained away. One real order-dependency was found while
+  looking and is fixed: three tests patched `_WALK_SKIP_PREFIXES` without
+  resetting the module-level `_BASENAMES` cache, which would have made the result
+  depend on collection order in either direction.
+* **`MAX_DEFERRED` lives in the territory it constrains.** A test pins the value,
+  so raising it costs two hunks in two files, but nothing outside `papers/` has to
+  countersign. The stronger form — the ceiling in `monitor/`, or each record
+  required to be an open board item — is cross-territory and not this worker's
+  to build.
 * **`figures/SOURCES.sha256:34` pins `cold-start-a0/THEORIZE_LOG.md` at
   `4d517c78…` and the file now hashes `d756d4b4…`**, so the repo-root figure
   pipeline is registered against a pre-E-10 input. Different territory, different

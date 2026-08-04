@@ -54,7 +54,23 @@ on 2026-07-30 with the note *"A false green is worse than a red gate."*
 
 Suggest this becomes a board item in RES-2's lane rather than living only in the
 gate. If it does, please point the `DEFERRED_UNCITED` entry's `record` field at it
-as well — the gate checks that file exists.
+as well — the gate checks that file is a non-empty file under `papers/`.
+
+**One residual worth the monitor knowing, because it argues for doing this sooner
+rather than later.** A deferral defers a *block*, and §8.4 is six bullets merged
+into one. A withdrawn ruling's blast radius is frozen at withdrawal; a deferral's
+**grows with the block**. So while this entry is live, four of §8.4's bullets could
+be rewritten to carry any number of new uncited quantities and check E would not
+ask again, as long as the `n = 1` bullet is untouched. The DEFERRED line does print
+the live quantity list, so it is disclosed rather than hidden — but it is not
+guarded, and `MAX_DEFERRED = 1` is what stops it becoming a pattern.
+
+The structural answer is to split `_blocks()` so a list item is its own block,
+which would have made this finding one bullet wide and the citation a change RES-2
+could make without touching four other bullets. It re-partitions all 435 blocks in
+the paper and would open an unknown number of new reds, so it is its own ticket
+with its own adversarial pass, not a fix smuggled into a red-gate repair.
+**Recommend booking it.**
 
 ## 2 · `monitor/runs/_worktree-scratch-archive/` is a second copy of the repo, and it broke a gate
 

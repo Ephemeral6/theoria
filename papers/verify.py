@@ -160,24 +160,59 @@ NOT_PAPERS = frozenset({
     # `Theoria.md` §3.2 item 7 and its downstream section, not a paper. Its own
     # `related-work/README.md:7` opens "This directory is **not** a paper. It is
     # the evidence base a paper draws on", and it was superseded before it was
-    # committed: 16 of its 48 BibTeX keys are already in
+    # committed: 16 of the 48 BibTeX keys in its `lines/*.bib` are already in
     # `papers/phase1-workshop/references.bib`, phase1-workshop's own P-7 search
-    # traces cover all seven literature lines including the two `lines/` never
-    # wrote, and the `[bib: TODO]` markers it existed to fill are gone.
+    # traces cover every literature line including the two `lines/` never wrote,
+    # and the `[bib: TODO]` markers it existed to fill are gone. It is a torso in
+    # any case: four of the seven files its own README's layout table promises --
+    # `RELATED.md`, `references.bib`, `UNVERIFIED.md`, `AUDIT.md` -- do not exist.
     "related-work",
-    # 2026-07-31, registered 2026-08-04 (V31): P3's chart data and prose bodies
-    # for figures 5 and 6, not a paper. `case-studies/README.md:20-22` says so
-    # itself -- "Figures themselves are the P21-figures ticket's territory; this
-    # directory ships the numbers and the words, not the plots" -- and
-    # `README.md:40-47` records that the 死锁定理集 half of the Phase 3 unit it
-    # was drafted against "is not here", it is `engine-rig`'s. `README.md:28-38`
-    # calls its three cases "pre-campaign case studies standing in for the ones
-    # the clause asks for", to be re-cut on live material. Nothing in the tree
-    # cites it. The nearest thing to a counter-argument is `Theoria.md:381`,
-    # which books the Phase 3 boundary as a 最小可发表单元; a unit that ships one
-    # of its two named halves, on self-built worlds, is not that unit yet.
+    # 2026-07-31, registered 2026-08-04 (V31): P3's prose bodies and chart data
+    # for the concept-timeline and repair-loop cases, not a paper.
+    #
+    # This one is a judgement call and the argument against it has to be quoted
+    # rather than left out, because an adversarial pass caught the first version
+    # of this comment omitting exactly the two lines that most contradict it.
+    # `case-studies/README.md:1` titles the directory "the Phase 3 结 deliverable,
+    # drafted early", and `:8` calls it "the prose half of that unit"; and
+    # `Theoria.md:381` books that boundary as a 最小可发表单元. So the directory
+    # does claim to be a publishable unit, in as many words.
+    #
+    # It is registered anyway, because the same README withdraws the claim three
+    # times over. `:40-47`: the 死锁定理集 half "is not here", it is `engine-rig`'s
+    # and is written up there. `:28-38`: 开发堆 is unsatisfied -- all three cases
+    # run on self-built worlds, so they are "pre-campaign case studies standing in
+    # for the ones the clause asks for", to be re-cut on live material. `:20-22`:
+    # the plots belong to the P21-figures ticket and "this directory ships the
+    # numbers and the words, not the plots". A phase-boundary unit that ships one
+    # of its two named halves, on the wrong material, before the phase has closed,
+    # is a draft toward that unit and not the unit.
+    #
+    # The decisive point is mechanical rather than interpretive: `GATE_NAMES`
+    # below makes a paper directory that ships no gate RED, so the choice was
+    # never "PAPER.md or registration" -- it was "write and maintain a whole gate
+    # implementation for a torso, or register it with a reason". `check_citations.py`
+    # is not one of `GATE_NAMES` and currently exits 1 on a dangling `runs/` link.
+    #
+    # Nothing in the tree *cites* it; four files mention it (this ticket, its own
+    # archived prompt, a cleanup health report, and a worktree census).
     "case-studies",
 })
+
+#: The subset of `NOT_PAPERS` that is not required to exist.
+#:
+#: `runs/` is a repository-wide convention, not a judgement about this tree: a
+#: territory that has produced no run legitimately has no `runs/`, and reddening
+#: the gate for that would punish a fresh checkout for being fresh.
+#:
+#: Everything else in `NOT_PAPERS` is a ruling about a directory that is here,
+#: and a ruling outlives its subject unless something says so. The check below
+#: exists because the precedent this register was modelled on has **already**
+#: rotted: `monitor/gates.py:59` registers `scratchpad` with a dated 2026-07-29
+#: reason, and `scratchpad/` is not in the repository. Nothing said. Copying the
+#: form without the guard would have reproduced, inside a file written to refuse
+#: exactly this, the failure it refuses.
+NOT_PAPERS_MAY_BE_ABSENT = frozenset({"runs"})
 
 #: At least one paper must exist. The floor is the point: a walk over nothing
 #: returns success from every check written above it.
@@ -326,10 +361,24 @@ def main(argv=None):
         # wrong when the register grows.
         print("   --    %s (declared not a paper, see NOT_PAPERS)" % name)
     for name in strays:
-        problems.append("%s is neither a paper (no %s) nor declared provenance"
+        problems.append("%s is neither a paper (no %s) nor named in NOT_PAPERS"
                         % (name, PAPER_MARKER))
         print("   FAIL  %s: no %s, and not named in NOT_PAPERS"
               % (name, PAPER_MARKER))
+    # A registration is a ruling, and a ruling that has outlived its subject is
+    # removed rather than left to excuse the next thing that lands under the same
+    # name. Only on the live tree: `--root` is how the tests drive this function
+    # over synthetic trees, and demanding `case-studies/` inside each of them
+    # would make the check impossible to test rather than impossible to rot.
+    if root == HERE:
+        for name in sorted(NOT_PAPERS - NOT_PAPERS_MAY_BE_ABSENT):
+            if not os.path.isdir(os.path.join(root, name)):
+                problems.append("%s is declared in NOT_PAPERS and does not exist"
+                                % name)
+                print("   FAIL  %s: named in NOT_PAPERS, and there is no such "
+                      "directory. A registration that excuses nothing is "
+                      "removed, not left to excuse whatever lands here next."
+                      % name)
     if len(papers) < MIN_PAPERS:
         problems.append("no paper directory under papers/")
         print("   FAIL  no paper directory under papers/ -- an empty walk "

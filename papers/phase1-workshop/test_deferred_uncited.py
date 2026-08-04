@@ -57,9 +57,12 @@ def test_the_live_deferral_is_applicable_and_matches_exactly_one_block():
         assert path.is_file(), (
             f"deferral names {section}, which is not in sections/. On the live "
             f"tree that silently disables the entry.")
-        text = path.read_text(encoding="utf-8")
-        flat = " ".join(text.split())
-        assert flat.count(" ".join(anchor.split())) == 1, (
+        # Not normalised. The gate matches `anchor in flat` with the anchor as
+        # written, so a test that normalises it would accept an anchor the gate
+        # calls STALE -- two definitions of the same object, and the test's is
+        # the more forgiving one, which is the wrong way round.
+        flat = " ".join(path.read_text(encoding="utf-8").split())
+        assert flat.count(anchor) == 1, (
             f"the anchor for {section} must occur exactly once in it; a "
             f"deferral is opened against one finding.")
         assert len(anchor) >= vp.MIN_ANCHOR
@@ -123,13 +126,14 @@ def test_the_gate_still_exits_zero_with_a_deferral_live():
     assert _run_gate().returncode == 0
 
 
-def _run_gate():
+def _run_gate(*args):
     import subprocess
     import sys
     env = dict(os.environ, PYTHONIOENCODING="utf-8")
-    return subprocess.run([sys.executable, str(vp.HERE / "verify_paper.py")],
-                          capture_output=True, text=True, encoding="utf-8",
-                          errors="replace", cwd=str(vp.HERE), env=env)
+    return subprocess.run(
+        [sys.executable, str(vp.HERE / "verify_paper.py"), *args],
+        capture_output=True, text=True, encoding="utf-8",
+        errors="replace", cwd=str(vp.HERE), env=env)
 
 
 # ------------------------------------------------- driving each guard until red
@@ -142,7 +146,11 @@ def _scratch(monkeypatch, tmp_path, body, deferrals, rulings=None):
     return vp.check_uncited()
 
 
-GOOD = ("2026-08-04", "RES-2", "CLAUDE.md", "because the repair is not mine")
+#: A record must be a non-empty file under `papers/`, so the fixture uses one.
+#: `CLAUDE.md` was the first draft and it is the demonstration of why existence
+#: alone is too cheap a guard: a path anywhere on the machine satisfied it.
+GOOD = ("2026-08-04", "RES-2", "papers/verify.py",
+        "because the repair is not mine")
 ANCHOR = "the sheet was sat by 41 readers in one"
 BODY = f"A claim: {ANCHOR} sitting.\n"
 
@@ -224,6 +232,20 @@ def test_the_live_table_is_within_the_ceiling():
     assert len(vp.DEFERRED_UNCITED) <= vp.MAX_DEFERRED
 
 
+def test_the_ceiling_itself_is_pinned():
+    """Otherwise the ceiling is enforced by nothing but the reader's attention.
+
+    `MAX_DEFERRED = 5` with five entries passes every other test in this file:
+    the guard compares the table against the constant, and both move in one
+    hunk. Pinning the value makes raising it a test edit as well as a constant
+    edit -- two hunks, in two files, one of which exists to say why.
+    """
+    assert vp.MAX_DEFERRED == 1, (
+        "the ceiling is 1 because one deferral is a disclosure and a table of "
+        "them is a check switched off one row at a time. Raising it is a real "
+        "decision: say why here, in the same commit.")
+
+
 def test_a_broken_deferral_does_not_corrupt_the_ruling_counts(monkeypatch, tmp_path):
     """The summary line's arithmetic must be about the table it names.
 
@@ -246,20 +268,124 @@ def test_a_broken_deferral_does_not_corrupt_the_ruling_counts(monkeypatch, tmp_p
     assert "1 broken deferral(s)" in summary, summary
 
 
-def test_an_absent_section_is_skipped_not_reported(monkeypatch, tmp_path):
+def test_an_absent_section_is_skipped_on_a_control_run_and_announced(
+        monkeypatch, tmp_path):
     """The escape the other suites depend on, pinned so it stays narrow.
 
-    It must skip *silently* -- reporting STALE against a section the run never
-    looked at would be a false statement about the live paper, printed by a
-    scratch-tree run.
+    It must not report STALE -- that would be a false statement about the live
+    paper, printed by a scratch-tree run -- and it must not be silent either.
     """
     ok, notes = _scratch(monkeypatch, tmp_path, "Nothing quantitative here.\n",
                          {("99_absent.md", ANCHOR): GOOD})
     assert ok
-    assert not any("99_absent.md" in n for n in notes)
+    assert not any("STALE" in n for n in notes)
+    assert any("skipped   deferral" in n and "99_absent.md" in n for n in notes)
+
+
+def test_an_absent_section_is_NOT_skipped_on_the_live_tree(monkeypatch):
+    """The escape must be unreachable when `SECTIONS` is the paper's own.
+
+    An adversarial pass showed the first version was reachable: the guard was
+    "the section is missing", justified by an appeal to `A GENERATED` and
+    `MIN_SECTIONS`, and neither fires. `check_generated` compares PAPER.md to
+    `assemble(whatever is in sections/)` and has no opinion about *which*
+    sections, and `MIN_SECTIONS` is 2 against twelve. Delete a section,
+    re-assemble, and the whole gate went green with the deferral never evaluated
+    and never named -- while the verdict line went on advertising that it was
+    being held open. The guard is structural now, and this is where that is held.
+    """
+    monkeypatch.setattr(vp, "DEFERRED_UNCITED", {("99_absent.md", ANCHOR): GOOD})
+    ok, notes = vp.check_uncited()
+    assert vp.SECTIONS == vp._LIVE_SECTIONS, "this test must run on the paper"
+    assert not ok, "a deferral naming a section the paper does not have is stale"
+    assert any("STALE" in n and "99_absent.md" in n for n in notes)
+    assert not any("skipped   deferral" in n for n in notes)
+
+
+def test_the_verdict_line_reports_what_check_e_evaluated(monkeypatch, capsys):
+    """Not `len(DEFERRED_UNCITED)`.
+
+    Built from the table alone, the suffix advertised holding open a finding
+    about a section that was not in the paper, pointing at a check that had said
+    nothing -- the gate over-claiming its own disclosure.
+    """
+    monkeypatch.setattr(vp, "SECTIONS", vp.HERE / "no-such-sections")
+    monkeypatch.setattr(vp, "CHECKS", [])
+    monkeypatch.setattr("sys.argv", ["verify_paper.py"])
+    vp.main()
+    assert "DEFERRED" not in capsys.readouterr().out
+
+
+def test_quiet_mode_still_prints_the_whole_finding():
+    """`--quiet` is "verdict lines only", and a passing check normally has none.
+
+    A deferral breaks that rule: the check passes while holding a finding it
+    still reports. Quiet mode printed `[PASS] E UNCITED` and dropped the line
+    number, the quantities, the block text and the owner -- every word the red
+    gate had printed. In that one mode a deferral was exactly the ruling it
+    claims not to be, and the verdict line's "see check E" pointed at nothing.
+    """
+    loud = _run_gate().stdout
+    quiet = _run_gate("--quiet").stdout
+    for (section, anchor), (_o, owner, record, _r) in LIVE:
+        for needle in (f"DEFERRED  {section}:", "STILL TRUE, not fixed",
+                       owner, record):
+            assert needle in quiet, (needle, quiet)
+    # and specifically the two the old test did not assert: the excerpt and the
+    # quantity list, which are the halves `--quiet` actually lost.
+    excerpt = next(l for l in loud.splitlines() if "Three of four papers" in l)
+    assert excerpt.strip() in quiet
+    assert "quantities [1]" in quiet
+
+
+# ---------------------------------------------- check C's second output (V31)
+
+def test_a_new_rendering_is_reported_and_not_left_behind(tmp_path, monkeypatch):
+    """An extractor that starts emitting a `.txt` nobody committed.
+
+    The first version of the `.txt` arm suppressed this case together with
+    "never had one", so the gate passed green and left the file on disk --
+    `finally` restores only what was in the snapshot. That is the drift this
+    whole change was written to kill, reproduced one column to the right, and it
+    falsified the docstring's claim that both files are handled on the same
+    footing.
+    """
+    here = tmp_path / "paper"
+    figs = here / "figures"
+    (figs / "data").mkdir(parents=True)
+    (figs / "fig01.py").write_text(
+        "import json, pathlib\n"
+        "d = pathlib.Path(__file__).parent\n"
+        "(d / 'data' / 'fig01.json').write_text(json.dumps({'n': 1}))\n"
+        "(d / 'fig01.txt').write_text('a rendering nobody committed\\n')\n",
+        encoding="utf-8")
+    (figs / "data" / "fig01.json").write_text('{"n": 1}', encoding="utf-8")
+    monkeypatch.setattr(vp, "HERE", here)
+
+    ok, notes = vp.check_figdata()
+    assert not ok, "a payload that was never committed is a finding"
+    assert any("fig01.txt" in n and "is new" in n for n in notes), notes
+    assert not (figs / "fig01.txt").exists(), (
+        "the gate must leave the tree as it found it; a leftover untracked "
+        "payload breaks that as surely as a modified tracked one")
 
 
 # ------------------------------------------- check F's corpus narrowing (V31)
+
+def _repoint(monkeypatch, prefixes):
+    """Repoint the exclusion list *and* drop the basename cache with it.
+
+    `_BASENAMES` is a module-level cache built on first use, so patching
+    `_WALK_SKIP_PREFIXES` alone changes nothing if some earlier test already
+    populated it -- and if it was *not* populated, the index is rebuilt under the
+    patched prefixes and left behind for every test that follows, because
+    monkeypatch restores only what it was asked to. Either way the outcome
+    depends on collection order, which is how a suite acquires a flake it cannot
+    reproduce. Patching both makes the rebuild happen here and be undone here.
+    """
+    monkeypatch.setattr(vp, "_BASENAMES", None)
+    monkeypatch.setattr(vp, "_WALK_SKIP_PREFIXES", prefixes)
+
 
 def test_the_live_prefixes_are_well_formed():
     for prefix in vp._WALK_SKIP_PREFIXES:
@@ -274,7 +400,7 @@ def test_a_prefix_that_names_nothing_takes_the_check_red(monkeypatch):
     Without this the archive could be deleted tomorrow and check F would go on
     narrowing its corpus forever, for a tree that is not there.
     """
-    monkeypatch.setattr(vp, "_WALK_SKIP_PREFIXES", ("monitor/no-such-archive/",))
+    _repoint(monkeypatch, ("monitor/no-such-archive/",))
     assert [p for p, _ in vp._bad_skip_prefixes()] == ["monitor/no-such-archive/"]
     ok, notes = vp.check_bare()
     assert not ok, "an exclusion that excuses nothing must not pass silently"
@@ -294,7 +420,7 @@ def test_a_malformed_prefix_takes_the_check_red(monkeypatch, bad):
     declared, excluded by a typo, and invisible in the output because the note
     prints the prefix as written.
     """
-    monkeypatch.setattr(vp, "_WALK_SKIP_PREFIXES", (bad,))
+    _repoint(monkeypatch, (bad,))
     ok, notes = vp.check_bare()
     assert not ok, f"{bad!r} must not be accepted"
     assert any("STALESKIP" in n for n in notes)
@@ -338,7 +464,7 @@ def test_the_exclusion_prunes_the_archive_and_nothing_else(monkeypatch):
     strings, or without the separator normalised, can prune a sibling whose name
     merely starts the same way.
     """
-    monkeypatch.setattr(vp, "_BASENAMES", None)
+    _repoint(monkeypatch, vp._WALK_SKIP_PREFIXES)
     everything = {p for paths in _index().values() for p in paths}
     assert not any(p.startswith("monitor/runs/_worktree-scratch-archive/")
                    for p in everything)
