@@ -1,0 +1,41 @@
+{
+ "budget_per_leg": 500,
+ "ceiling_per_leg": 120.0,
+ "change": "A26 LONG LEG: nothing about the framework changes. The leg budget goes from 25 to 120 dollars and 300 to 500 actions, because g50t level 1 has a baseline of 78 actions and no leg has ever exceeded 33. The question is arithmetic, not theory: given enough money, can the arm reach a level boundary at all. Carries R2b-g50t's books and keeps the generated frontier (kept by the R2b verdict), so this is the current best configuration run long rather than a new intervention.",
+ "exit_codes": {
+  "20260802T122531Z-A26-g50t-a": 1,
+  "20260802T122531Z-A26-sk48-b": 1
+ },
+ "knobs": [
+  "--frontier=generated"
+ ],
+ "legs": [
+  {
+   "slug": "20260802T122531Z-A26-g50t-a",
+   "state": "no RUN_STATE.json"
+  },
+  {
+   "slug": "20260802T122531Z-A26-sk48-b",
+   "state": "no RUN_STATE.json"
+  }
+ ],
+ "model": "claude-opus-5",
+ "round": "A26",
+ "seed_books": "runs/20260801T044640Z-R2b-g50t-a/books",
+ "totals": {
+  "actions_ok": 0,
+  "desk_calls": 0,
+  "levels_completed": 0,
+  "surprises": {
+   "execution_mismatch": 0,
+   "heuristic_miss": 0,
+   "probe_refutation": 0,
+   "proof_failure": 0,
+   "render_mismatch": 0,
+   "replay_mismatch": 0,
+   "search_timeout": 0
+  },
+  "usd": 0
+ },
+ "utc": "20260802T122531Z"
+}

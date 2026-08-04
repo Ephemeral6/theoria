@@ -1,0 +1,15 @@
+{
+ "carried": {
+  "playbook.dsl": {
+   "chars": 17397,
+   "sha256": "6123f5843fd9d4e6ee79ef750574ce4f6a82213a53edff610309df4e0599a777"
+  },
+  "theory.dsl": {
+   "chars": 72299,
+   "sha256": "b53744910f82416eb0240091122a9af11a1d92d8813e759326a030c1d059ca9b"
+  }
+ },
+ "empty": false,
+ "seed_from": "runs/20260801T044640Z-R2b-g50t-a/books",
+ "skipped": []
+}

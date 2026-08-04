@@ -150,7 +150,7 @@ def test_every_reply_the_arm_accepted_begins_with_the_marker():
                 leg["leg"], row["transcript"])
 
 
-def test_the_archive_still_holds_the_thirteen_lost_replies():
+def test_the_archive_still_holds_the_twenty_five_lost_replies():
     """The measurement, pinned.
 
     This number is a fact about files that are committed, so it does not drift
@@ -165,13 +165,26 @@ def test_the_archive_still_holds_the_thirteen_lost_replies():
     # all. A lost reply that cost nothing is either genuinely free or
     # unattributed, and this census cannot tell which -- named here so
     # the next reader does not read the flat dollar figure as good news.
-    assert report["counts"]["lost_continuation"] == 13, report["counts"]
+    # 13 -> 25 on 2026-08-04: the two A26b long legs lost twelve more between
+    # them. Twelve in two legs against thirteen in all fifteen before is not the
+    # same rate, and A32 has just measured this class from the other side
+    # (transport_total_loss: 5 calls, $13.65, over 104 transcripts). Whether long
+    # legs lose replies faster or these two were unlucky is NOT settled here --
+    # it is named so the next reader does not take the new number as routine.
+    assert report["counts"]["lost_continuation"] == 25, report["counts"]
     assert report["counts"]["provider_refusal"] == 24, report["counts"]
     assert report["counts"]["empty"] == 1, report["counts"]
     # $31.05 of $108.54. Compared loosely so a re-priced archive does not fail
     # here for a rounding reason -- the point is the order of magnitude.
-    assert 30.0 < report["usd_lost_to_lost_continuation"] < 32.0
-    assert 0.24 < report["share_of_desk_spend_lost"] < 0.32
+    # $31.05 -> $75.48 on 2026-08-04. The A26b long legs did not merely lose
+    # more replies, they lost a far larger share of their own spend: the
+    # g50t leg lost $15.26 of the $21.10 it had spent, 72%, and sat at ten
+    # actions for nine desk calls because the replies it paid for never
+    # arrived. Across the project this class is now 39% of all desk spend.
+    # That is not a rounding drift and the bound is widened deliberately,
+    # with the number named, rather than loosened quietly.
+    assert 70.0 < report["usd_lost_to_lost_continuation"] < 80.0
+    assert 0.35 < report["share_of_desk_spend_lost"] < 0.45
 
 
 def test_a_leg_with_no_transcripts_says_so_rather_than_reporting_zero():

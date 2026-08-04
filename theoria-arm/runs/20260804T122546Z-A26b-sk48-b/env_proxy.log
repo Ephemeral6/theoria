@@ -1,0 +1,4 @@
+env proxy on http://127.0.0.1:61462 -> https://three.arcprize.org
+  ledger : C:\Users\user\Desktop\theoria\proxy\var\ledger.jsonl
+  guard  : {"allow_only":null,"cut_version":"v1","n_dev":4,"n_sealed":21,"piles_path":"arc-recon/data/piles.json","sha256":"3feca53e5ede695cfa46ae994cb95fd6b43abb9d97295e8c87e6302b41bbc19a","unknown_policy":"deny"}
+  key    : injected here; the arm never sees it

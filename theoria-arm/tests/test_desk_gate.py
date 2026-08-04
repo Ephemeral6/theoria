@@ -26,6 +26,7 @@ What is checked, in the order the defect report asked for it:
 import glob
 import json
 import os
+import pathlib
 import re
 import sys
 
@@ -501,7 +502,16 @@ def test_a_scratch_pool_may_not_be_pointed_at_a_run_ledger(tmp_path):
     ok = run_mod._scratch_policy(str(tmp_path / "scratch-pool.jsonl"))
     assert ok.pool == "theoria-arm-scratch"
     assert ok.ledger_path == os.path.abspath(str(tmp_path / "scratch-pool.jsonl"))
-    assert ok.usd_ceiling == 214.9, "a scratch pool keeps the tracked arithmetic"
+    # Read the tracked policy rather than repeating its number. The claim is
+    # that a scratch pool inherits the tracked arithmetic; a test that hardcodes
+    # the figure asserts a different, weaker thing and fails the day someone
+    # legitimately raises the ceiling -- which happened on 2026-08-02
+    # ($214.90 -> $700.00, spend_policy.json's own raising_it procedure).
+    import json as _json
+    _tracked = _json.loads((pathlib.Path(run_mod.__file__).parents[2]
+                            / "proxy" / "spend_policy.json").read_text(encoding="utf-8"))
+    assert ok.usd_ceiling == _tracked["usd_ceiling"], (
+        "a scratch pool keeps the tracked arithmetic")
 
 
 def test_the_one_true_pool_is_the_default_expectation():
