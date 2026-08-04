@@ -43,20 +43,26 @@
     "economy": {
       "E1": {
         "by_status": {
-          "not-applicable": 3,
-          "ok": 3
+          "not-applicable": 5,
+          "ok": 9
         },
         "direction": "neutral",
         "measured": {
           "20260731T1310Z-A3-level2-carried-r2": 9.556852,
           "20260731T1430Z-A3-level2-carried-r3": 13.439862,
-          "20260731T1500Z-A3-sk48-carried-l1": 12.251719
+          "20260731T1500Z-A3-sk48-carried-l1": 12.251719,
+          "20260731T231654Z-R1-g50t-a": 7.6034195,
+          "20260731T231654Z-R1-sk48-b": 7.6085275,
+          "20260801T001851Z-R1b-g50t-a": 17.7491065,
+          "20260801T001851Z-R1b-sk48-b": 17.390721,
+          "20260801T044640Z-R2b-g50t-a": 18.7360085,
+          "20260801T044640Z-R2b-sk48-b": 20.3032235
         }
       },
       "E2": {
         "by_status": {
-          "insufficient-data": 2,
-          "not-applicable": 3,
+          "insufficient-data": 8,
+          "not-applicable": 5,
           "ok": 1
         },
         "direction": "higher",
@@ -66,8 +72,8 @@
       },
       "E3": {
         "by_status": {
-          "insufficient-data": 2,
-          "not-applicable": 3,
+          "insufficient-data": 8,
+          "not-applicable": 5,
           "ok": 1
         },
         "direction": "lower",
@@ -77,31 +83,42 @@
       },
       "E4": {
         "by_status": {
-          "not-applicable": 3,
-          "ok": 3
+          "insufficient-data": 2,
+          "not-applicable": 5,
+          "ok": 7
         },
         "direction": "lower",
         "measured": {
           "20260731T1310Z-A3-level2-carried-r2": 0.367445724,
           "20260731T1430Z-A3-level2-carried-r3": 2.5884e-05,
-          "20260731T1500Z-A3-sk48-carried-l1": 0.006481176
+          "20260731T1500Z-A3-sk48-carried-l1": 0.006481176,
+          "20260801T001851Z-R1b-g50t-a": 0.318963988,
+          "20260801T001851Z-R1b-sk48-b": 0.303950019,
+          "20260801T044640Z-R2b-g50t-a": 0.02424868,
+          "20260801T044640Z-R2b-sk48-b": 0.001417209
         }
       },
       "E5": {
         "by_status": {
-          "not-applicable": 3,
-          "ok": 3
+          "not-applicable": 5,
+          "ok": 9
         },
         "direction": "lower",
         "measured": {
           "20260731T1310Z-A3-level2-carried-r2": 0.682632286,
           "20260731T1430Z-A3-level2-carried-r3": 0.395290059,
-          "20260731T1500Z-A3-sk48-carried-l1": 0.556896318
+          "20260731T1500Z-A3-sk48-carried-l1": 0.556896318,
+          "20260731T231654Z-R1-g50t-a": 0.543101393,
+          "20260731T231654Z-R1-sk48-b": 1.268087917,
+          "20260801T001851Z-R1b-g50t-a": 0.682657942,
+          "20260801T001851Z-R1b-sk48-b": 2.8984535,
+          "20260801T044640Z-R2b-g50t-a": 0.624533617,
+          "20260801T044640Z-R2b-sk48-b": 2.03032235
         }
       },
       "E6": {
         "by_status": {
-          "ok": 6
+          "ok": 14
         },
         "direction": "neutral",
         "measured": {
@@ -110,72 +127,108 @@
           "20260731T1240Z-A3-level2-carried": 1.0,
           "20260731T1310Z-A3-level2-carried-r2": 1.0,
           "20260731T1430Z-A3-level2-carried-r3": 1.0,
-          "20260731T1500Z-A3-sk48-carried-l1": 1.0
+          "20260731T1500Z-A3-sk48-carried-l1": 1.0,
+          "20260731T231654Z-R1-g50t-a": 1.0,
+          "20260731T231654Z-R1-sk48-b": 1.0,
+          "20260801T001851Z-R1b-g50t-a": 1.0,
+          "20260801T001851Z-R1b-sk48-b": 1.0,
+          "20260801T043743Z-R2-g50t-a": 1.025,
+          "20260801T043743Z-R2-sk48-b": 1.025,
+          "20260801T044640Z-R2b-g50t-a": 1.017241379,
+          "20260801T044640Z-R2b-sk48-b": 1.0
         }
       },
       "E7": {
         "by_status": {
-          "not-applicable": 3,
-          "ok": 3
+          "insufficient-data": 2,
+          "not-applicable": 5,
+          "ok": 7
         },
         "direction": "lower",
         "measured": {
           "20260731T1310Z-A3-level2-carried-r2": 0.180047219,
           "20260731T1430Z-A3-level2-carried-r3": 0.001128362,
-          "20260731T1500Z-A3-sk48-carried-l1": 0.017845169
+          "20260731T1500Z-A3-sk48-carried-l1": 0.017845169,
+          "20260801T001851Z-R1b-g50t-a": 0.063064818,
+          "20260801T001851Z-R1b-sk48-b": 0.48652865,
+          "20260801T044640Z-R2b-g50t-a": 0.006219463,
+          "20260801T044640Z-R2b-sk48-b": 0.165834679
         }
       }
     },
     "epistemic": {
       "K1": {
         "by_status": {
+          "insufficient-data": 2,
           "not-applicable": 2,
-          "ok": 4
+          "ok": 10
         },
         "direction": "higher",
         "measured": {
           "20260731T1240Z-A3-level2-carried": 0.2,
           "20260731T1310Z-A3-level2-carried-r2": 0.692307692,
           "20260731T1430Z-A3-level2-carried-r3": 1.0,
-          "20260731T1500Z-A3-sk48-carried-l1": 0.411764706
+          "20260731T1500Z-A3-sk48-carried-l1": 0.411764706,
+          "20260731T231654Z-R1-g50t-a": 1.0,
+          "20260731T231654Z-R1-sk48-b": 0.8,
+          "20260801T001851Z-R1b-g50t-a": 0.761904762,
+          "20260801T001851Z-R1b-sk48-b": 0.8,
+          "20260801T044640Z-R2b-g50t-a": 1.0,
+          "20260801T044640Z-R2b-sk48-b": 0.555555556
         }
       },
       "K10": {
         "by_status": {
           "not-applicable": 2,
-          "ok": 4
+          "ok": 12
         },
         "direction": "higher",
         "measured": {
           "20260731T1240Z-A3-level2-carried": 6.0,
           "20260731T1310Z-A3-level2-carried-r2": 7.0,
           "20260731T1430Z-A3-level2-carried-r3": 12.0,
-          "20260731T1500Z-A3-sk48-carried-l1": 29.0
+          "20260731T1500Z-A3-sk48-carried-l1": 29.0,
+          "20260731T231654Z-R1-g50t-a": 13.0,
+          "20260731T231654Z-R1-sk48-b": 8.0,
+          "20260801T001851Z-R1b-g50t-a": 24.0,
+          "20260801T001851Z-R1b-sk48-b": 9.0,
+          "20260801T043743Z-R2-g50t-a": 12.0,
+          "20260801T043743Z-R2-sk48-b": 12.0,
+          "20260801T044640Z-R2b-g50t-a": 22.0,
+          "20260801T044640Z-R2b-sk48-b": 8.0
         }
       },
       "K11": {
         "by_status": {
           "not-applicable": 2,
-          "ok": 4
+          "ok": 12
         },
         "direction": "neutral",
         "measured": {
           "20260731T1240Z-A3-level2-carried": 3.0,
           "20260731T1310Z-A3-level2-carried-r2": 11.0,
           "20260731T1430Z-A3-level2-carried-r3": 17.0,
-          "20260731T1500Z-A3-sk48-carried-l1": 19.0
+          "20260731T1500Z-A3-sk48-carried-l1": 19.0,
+          "20260731T231654Z-R1-g50t-a": 9.0,
+          "20260731T231654Z-R1-sk48-b": 5.0,
+          "20260801T001851Z-R1b-g50t-a": 17.0,
+          "20260801T001851Z-R1b-sk48-b": 7.0,
+          "20260801T043743Z-R2-g50t-a": 1.0,
+          "20260801T043743Z-R2-sk48-b": 1.0,
+          "20260801T044640Z-R2b-g50t-a": 15.0,
+          "20260801T044640Z-R2b-sk48-b": 9.0
         }
       },
       "K12": {
         "by_status": {
-          "not-applicable": 6
+          "not-applicable": 14
         },
         "direction": "higher",
         "measured": {}
       },
       "K13": {
         "by_status": {
-          "not-applicable": 6
+          "not-applicable": 14
         },
         "direction": "lower",
         "measured": {}
@@ -183,19 +236,27 @@
       "K14": {
         "by_status": {
           "not-applicable": 2,
-          "ok": 4
+          "ok": 12
         },
         "direction": "higher",
         "measured": {
           "20260731T1240Z-A3-level2-carried": 9.0,
           "20260731T1310Z-A3-level2-carried-r2": 3.0,
           "20260731T1430Z-A3-level2-carried-r3": 3.0,
-          "20260731T1500Z-A3-sk48-carried-l1": 8.0
+          "20260731T1500Z-A3-sk48-carried-l1": 8.0,
+          "20260731T231654Z-R1-g50t-a": 3.0,
+          "20260731T231654Z-R1-sk48-b": 8.0,
+          "20260801T001851Z-R1b-g50t-a": 3.0,
+          "20260801T001851Z-R1b-sk48-b": 8.0,
+          "20260801T043743Z-R2-g50t-a": 3.0,
+          "20260801T043743Z-R2-sk48-b": 3.0,
+          "20260801T044640Z-R2b-g50t-a": 3.0,
+          "20260801T044640Z-R2b-sk48-b": 8.0
         }
       },
       "K2": {
         "by_status": {
-          "insufficient-data": 4,
+          "insufficient-data": 12,
           "not-applicable": 2
         },
         "direction": "higher",
@@ -204,99 +265,155 @@
       "K3": {
         "by_status": {
           "not-applicable": 2,
-          "ok": 4
+          "ok": 12
         },
         "direction": "higher",
         "measured": {
           "20260731T1240Z-A3-level2-carried": 25.0,
           "20260731T1310Z-A3-level2-carried-r2": 28.0,
           "20260731T1430Z-A3-level2-carried-r3": 37.0,
-          "20260731T1500Z-A3-sk48-carried-l1": 41.0
+          "20260731T1500Z-A3-sk48-carried-l1": 41.0,
+          "20260731T231654Z-R1-g50t-a": 31.0,
+          "20260731T231654Z-R1-sk48-b": 22.0,
+          "20260801T001851Z-R1b-g50t-a": 37.0,
+          "20260801T001851Z-R1b-sk48-b": 23.0,
+          "20260801T043743Z-R2-g50t-a": 37.0,
+          "20260801T043743Z-R2-sk48-b": 37.0,
+          "20260801T044640Z-R2b-g50t-a": 46.0,
+          "20260801T044640Z-R2b-sk48-b": 28.0
         }
       },
       "K4": {
         "by_status": {
           "not-applicable": 2,
-          "ok": 4
+          "ok": 12
         },
         "direction": "higher",
         "measured": {
           "20260731T1240Z-A3-level2-carried": 1.0,
           "20260731T1310Z-A3-level2-carried-r2": 1.0,
           "20260731T1430Z-A3-level2-carried-r3": 1.0,
-          "20260731T1500Z-A3-sk48-carried-l1": 1.0
+          "20260731T1500Z-A3-sk48-carried-l1": 1.0,
+          "20260731T231654Z-R1-g50t-a": 1.0,
+          "20260731T231654Z-R1-sk48-b": 1.0,
+          "20260801T001851Z-R1b-g50t-a": 0.936363636,
+          "20260801T001851Z-R1b-sk48-b": 1.0,
+          "20260801T043743Z-R2-g50t-a": 1.0,
+          "20260801T043743Z-R2-sk48-b": 1.0,
+          "20260801T044640Z-R2b-g50t-a": 1.0,
+          "20260801T044640Z-R2b-sk48-b": 1.0
         }
       },
       "K5": {
         "by_status": {
           "not-applicable": 2,
-          "ok": 4
+          "ok": 12
         },
         "direction": "higher",
         "measured": {
           "20260731T1240Z-A3-level2-carried": 3.0,
           "20260731T1310Z-A3-level2-carried-r2": 4.0,
           "20260731T1430Z-A3-level2-carried-r3": 4.0,
-          "20260731T1500Z-A3-sk48-carried-l1": 6.0
+          "20260731T1500Z-A3-sk48-carried-l1": 6.0,
+          "20260731T231654Z-R1-g50t-a": 4.0,
+          "20260731T231654Z-R1-sk48-b": 7.0,
+          "20260801T001851Z-R1b-g50t-a": 4.0,
+          "20260801T001851Z-R1b-sk48-b": 7.0,
+          "20260801T043743Z-R2-g50t-a": 4.0,
+          "20260801T043743Z-R2-sk48-b": 4.0,
+          "20260801T044640Z-R2b-g50t-a": 4.0,
+          "20260801T044640Z-R2b-sk48-b": 7.0
         }
       },
       "K6": {
         "by_status": {
           "not-applicable": 2,
-          "ok": 4
+          "ok": 12
         },
         "direction": "higher",
         "measured": {
           "20260731T1240Z-A3-level2-carried": 24.0,
           "20260731T1310Z-A3-level2-carried-r2": 19.25,
           "20260731T1430Z-A3-level2-carried-r3": 21.75,
-          "20260731T1500Z-A3-sk48-carried-l1": 12.833333333
+          "20260731T1500Z-A3-sk48-carried-l1": 12.833333333,
+          "20260731T231654Z-R1-g50t-a": 18.75,
+          "20260731T231654Z-R1-sk48-b": 13.857142857,
+          "20260801T001851Z-R1b-g50t-a": 20.25,
+          "20260801T001851Z-R1b-sk48-b": 13.857142857,
+          "20260801T043743Z-R2-g50t-a": 21.75,
+          "20260801T043743Z-R2-sk48-b": 21.75,
+          "20260801T044640Z-R2b-g50t-a": 20.75,
+          "20260801T044640Z-R2b-sk48-b": 13.857142857
         }
       },
       "K7": {
         "by_status": {
           "not-applicable": 2,
-          "ok": 4
+          "ok": 12
         },
         "direction": "neutral",
         "measured": {
           "20260731T1240Z-A3-level2-carried": 0.0,
           "20260731T1310Z-A3-level2-carried-r2": 0.0,
           "20260731T1430Z-A3-level2-carried-r3": 0.0,
-          "20260731T1500Z-A3-sk48-carried-l1": 0.0
+          "20260731T1500Z-A3-sk48-carried-l1": 0.0,
+          "20260731T231654Z-R1-g50t-a": 0.0,
+          "20260731T231654Z-R1-sk48-b": 0.0,
+          "20260801T001851Z-R1b-g50t-a": 0.0,
+          "20260801T001851Z-R1b-sk48-b": 0.0,
+          "20260801T043743Z-R2-g50t-a": 0.0,
+          "20260801T043743Z-R2-sk48-b": 0.0,
+          "20260801T044640Z-R2b-g50t-a": 0.0,
+          "20260801T044640Z-R2b-sk48-b": 0.0
         }
       },
       "K8": {
         "by_status": {
+          "insufficient-data": 2,
           "not-applicable": 2,
-          "ok": 4
+          "ok": 10
         },
         "direction": "higher",
         "measured": {
           "20260731T1240Z-A3-level2-carried": 0.0,
           "20260731T1310Z-A3-level2-carried-r2": 0.888888889,
           "20260731T1430Z-A3-level2-carried-r3": 0.965517241,
-          "20260731T1500Z-A3-sk48-carried-l1": 0.941176471
+          "20260731T1500Z-A3-sk48-carried-l1": 0.941176471,
+          "20260731T231654Z-R1-g50t-a": 0.555555556,
+          "20260731T231654Z-R1-sk48-b": 0.0,
+          "20260801T001851Z-R1b-g50t-a": 0.666666667,
+          "20260801T001851Z-R1b-sk48-b": 0.2,
+          "20260801T044640Z-R2b-g50t-a": 0.96,
+          "20260801T044640Z-R2b-sk48-b": 0.6
         }
       },
       "K9": {
         "by_status": {
           "not-applicable": 2,
-          "ok": 4
+          "ok": 12
         },
         "direction": "higher",
         "measured": {
           "20260731T1240Z-A3-level2-carried": 24.0,
           "20260731T1310Z-A3-level2-carried-r2": 34.0,
           "20260731T1430Z-A3-level2-carried-r3": 40.0,
-          "20260731T1500Z-A3-sk48-carried-l1": 65.0
+          "20260731T1500Z-A3-sk48-carried-l1": 65.0,
+          "20260731T231654Z-R1-g50t-a": 49.0,
+          "20260731T231654Z-R1-sk48-b": 32.0,
+          "20260801T001851Z-R1b-g50t-a": 76.0,
+          "20260801T001851Z-R1b-sk48-b": 30.0,
+          "20260801T043743Z-R2-g50t-a": 40.0,
+          "20260801T043743Z-R2-sk48-b": 40.0,
+          "20260801T044640Z-R2b-g50t-a": 82.0,
+          "20260801T044640Z-R2b-sk48-b": 32.0
         }
       }
     },
     "exploration": {
       "X1": {
         "by_status": {
-          "ok": 6
+          "not-applicable": 2,
+          "ok": 12
         },
         "direction": "lower",
         "measured": {
@@ -305,12 +422,19 @@
           "20260731T1240Z-A3-level2-carried": 0.166666667,
           "20260731T1310Z-A3-level2-carried-r2": 0.214285714,
           "20260731T1430Z-A3-level2-carried-r3": 0.088235294,
-          "20260731T1500Z-A3-sk48-carried-l1": 0.227272727
+          "20260731T1500Z-A3-sk48-carried-l1": 0.227272727,
+          "20260731T231654Z-R1-g50t-a": 0.142857143,
+          "20260731T231654Z-R1-sk48-b": 0.0,
+          "20260801T001851Z-R1b-g50t-a": 0.076923077,
+          "20260801T001851Z-R1b-sk48-b": 0.0,
+          "20260801T044640Z-R2b-g50t-a": 0.033333333,
+          "20260801T044640Z-R2b-sk48-b": 0.0
         }
       },
       "X2": {
         "by_status": {
-          "ok": 6
+          "not-applicable": 2,
+          "ok": 12
         },
         "direction": "higher",
         "measured": {
@@ -319,25 +443,37 @@
           "20260731T1240Z-A3-level2-carried": 1.0,
           "20260731T1310Z-A3-level2-carried-r2": 0.928571429,
           "20260731T1430Z-A3-level2-carried-r3": 0.970588235,
-          "20260731T1500Z-A3-sk48-carried-l1": 0.818181818
+          "20260731T1500Z-A3-sk48-carried-l1": 0.818181818,
+          "20260731T231654Z-R1-g50t-a": 1.0,
+          "20260731T231654Z-R1-sk48-b": 1.0,
+          "20260801T001851Z-R1b-g50t-a": 1.0,
+          "20260801T001851Z-R1b-sk48-b": 1.0,
+          "20260801T044640Z-R2b-g50t-a": 1.0,
+          "20260801T044640Z-R2b-sk48-b": 1.0
         }
       },
       "X3": {
         "by_status": {
-          "insufficient-data": 2,
-          "ok": 4
+          "insufficient-data": 4,
+          "not-applicable": 2,
+          "ok": 8
         },
         "direction": "higher",
         "measured": {
           "20260729T004020Z-leg01": 0.0,
           "20260731T1310Z-A3-level2-carried-r2": 0.333333333,
           "20260731T1430Z-A3-level2-carried-r3": 0.125,
-          "20260731T1500Z-A3-sk48-carried-l1": 0.4
+          "20260731T1500Z-A3-sk48-carried-l1": 0.4,
+          "20260731T231654Z-R1-g50t-a": 0.0,
+          "20260801T001851Z-R1b-g50t-a": 0.0,
+          "20260801T044640Z-R2b-g50t-a": 0.0,
+          "20260801T044640Z-R2b-sk48-b": 0.0
         }
       },
       "X4": {
         "by_status": {
-          "ok": 6
+          "not-applicable": 2,
+          "ok": 12
         },
         "direction": "lower",
         "measured": {
@@ -346,12 +482,19 @@
           "20260731T1240Z-A3-level2-carried": 0.166666667,
           "20260731T1310Z-A3-level2-carried-r2": 0.071428571,
           "20260731T1430Z-A3-level2-carried-r3": 0.029411765,
-          "20260731T1500Z-A3-sk48-carried-l1": 0.045454545
+          "20260731T1500Z-A3-sk48-carried-l1": 0.045454545,
+          "20260731T231654Z-R1-g50t-a": 0.071428571,
+          "20260731T231654Z-R1-sk48-b": 0.0,
+          "20260801T001851Z-R1b-g50t-a": 0.038461538,
+          "20260801T001851Z-R1b-sk48-b": 0.0,
+          "20260801T044640Z-R2b-g50t-a": 0.033333333,
+          "20260801T044640Z-R2b-sk48-b": 0.0
         }
       },
       "X5": {
         "by_status": {
-          "ok": 6
+          "not-applicable": 2,
+          "ok": 12
         },
         "direction": "neutral",
         "measured": {
@@ -360,12 +503,18 @@
           "20260731T1240Z-A3-level2-carried": 5.0,
           "20260731T1310Z-A3-level2-carried-r2": 11.0,
           "20260731T1430Z-A3-level2-carried-r3": 31.0,
-          "20260731T1500Z-A3-sk48-carried-l1": 17.0
+          "20260731T1500Z-A3-sk48-carried-l1": 17.0,
+          "20260731T231654Z-R1-g50t-a": 12.0,
+          "20260731T231654Z-R1-sk48-b": 6.0,
+          "20260801T001851Z-R1b-g50t-a": 24.0,
+          "20260801T001851Z-R1b-sk48-b": 6.0,
+          "20260801T044640Z-R2b-g50t-a": 29.0,
+          "20260801T044640Z-R2b-sk48-b": 10.0
         }
       },
       "X6": {
         "by_status": {
-          "ok": 6
+          "ok": 14
         },
         "direction": "higher",
         "measured": {
@@ -374,49 +523,57 @@
           "20260731T1240Z-A3-level2-carried": 0.0,
           "20260731T1310Z-A3-level2-carried-r2": 0.0,
           "20260731T1430Z-A3-level2-carried-r3": 0.0,
-          "20260731T1500Z-A3-sk48-carried-l1": 0.0
+          "20260731T1500Z-A3-sk48-carried-l1": 0.0,
+          "20260731T231654Z-R1-g50t-a": 0.0,
+          "20260731T231654Z-R1-sk48-b": 0.0,
+          "20260801T001851Z-R1b-g50t-a": 0.0,
+          "20260801T001851Z-R1b-sk48-b": 0.015075377,
+          "20260801T043743Z-R2-g50t-a": 0.0,
+          "20260801T043743Z-R2-sk48-b": 0.0,
+          "20260801T044640Z-R2b-g50t-a": 0.0,
+          "20260801T044640Z-R2b-sk48-b": 0.0
         }
       }
     },
     "mechanism": {
       "M1": {
         "by_status": {
-          "not-applicable": 6
+          "not-applicable": 14
         },
         "direction": "lower",
         "measured": {}
       },
       "M2": {
         "by_status": {
-          "not-applicable": 6
+          "not-applicable": 14
         },
         "direction": "higher",
         "measured": {}
       },
       "M3": {
         "by_status": {
-          "not-applicable": 6
+          "not-applicable": 14
         },
         "direction": "lower",
         "measured": {}
       },
       "M4": {
         "by_status": {
-          "not-applicable": 6
+          "not-applicable": 14
         },
         "direction": "lower",
         "measured": {}
       },
       "M5": {
         "by_status": {
-          "not-applicable": 6
+          "not-applicable": 14
         },
         "direction": "higher",
         "measured": {}
       },
       "M6": {
         "by_status": {
-          "not-applicable": 6
+          "not-applicable": 14
         },
         "direction": "neutral",
         "measured": {}
@@ -425,31 +582,44 @@
     "planning": {
       "P1": {
         "by_status": {
-          "not-applicable": 3,
-          "ok": 3
+          "not-applicable": 5,
+          "ok": 9
         },
         "direction": "higher",
         "measured": {
           "20260731T1310Z-A3-level2-carried-r2": 2.8,
           "20260731T1430Z-A3-level2-carried-r3": 4.25,
-          "20260731T1500Z-A3-sk48-carried-l1": 2.444444444
+          "20260731T1500Z-A3-sk48-carried-l1": 2.444444444,
+          "20260731T231654Z-R1-g50t-a": 3.5,
+          "20260731T231654Z-R1-sk48-b": 2.0,
+          "20260801T001851Z-R1b-g50t-a": 2.888888889,
+          "20260801T001851Z-R1b-sk48-b": 1.0,
+          "20260801T044640Z-R2b-g50t-a": 3.333333333,
+          "20260801T044640Z-R2b-sk48-b": 1.666666667
         }
       },
       "P2": {
         "by_status": {
-          "not-applicable": 3,
-          "ok": 3
+          "insufficient-data": 1,
+          "not-applicable": 5,
+          "ok": 8
         },
         "direction": "higher",
         "measured": {
           "20260731T1310Z-A3-level2-carried-r2": 0.5,
           "20260731T1430Z-A3-level2-carried-r3": 0.0,
-          "20260731T1500Z-A3-sk48-carried-l1": 0.35
+          "20260731T1500Z-A3-sk48-carried-l1": 0.35,
+          "20260731T231654Z-R1-g50t-a": 0.0,
+          "20260801T001851Z-R1b-g50t-a": 0.25,
+          "20260801T001851Z-R1b-sk48-b": 0.0,
+          "20260801T044640Z-R2b-g50t-a": 0.15,
+          "20260801T044640Z-R2b-sk48-b": 0.0
         }
       },
       "P3": {
         "by_status": {
-          "ok": 6
+          "not-applicable": 2,
+          "ok": 12
         },
         "direction": "lower",
         "measured": {
@@ -458,19 +628,25 @@
           "20260731T1240Z-A3-level2-carried": 0.0,
           "20260731T1310Z-A3-level2-carried-r2": 0.0,
           "20260731T1430Z-A3-level2-carried-r3": 0.0,
-          "20260731T1500Z-A3-sk48-carried-l1": 0.25
+          "20260731T1500Z-A3-sk48-carried-l1": 0.25,
+          "20260731T231654Z-R1-g50t-a": 0.0,
+          "20260731T231654Z-R1-sk48-b": 0.0,
+          "20260801T001851Z-R1b-g50t-a": 0.0,
+          "20260801T001851Z-R1b-sk48-b": 0.0,
+          "20260801T044640Z-R2b-g50t-a": 0.0,
+          "20260801T044640Z-R2b-sk48-b": 0.0
         }
       },
       "P4": {
         "by_status": {
-          "not-applicable": 6
+          "not-applicable": 14
         },
         "direction": "lower",
         "measured": {}
       },
       "P5": {
         "by_status": {
-          "ok": 6
+          "ok": 14
         },
         "direction": "neutral",
         "measured": {
@@ -479,7 +655,15 @@
           "20260731T1240Z-A3-level2-carried": 0.9,
           "20260731T1310Z-A3-level2-carried-r2": 0.858585859,
           "20260731T1430Z-A3-level2-carried-r3": 0.854700855,
-          "20260731T1500Z-A3-sk48-carried-l1": 0.875706215
+          "20260731T1500Z-A3-sk48-carried-l1": 0.875706215,
+          "20260731T231654Z-R1-g50t-a": 0.867924528,
+          "20260731T231654Z-R1-sk48-b": 0.842105263,
+          "20260801T001851Z-R1b-g50t-a": 0.803030303,
+          "20260801T001851Z-R1b-sk48-b": 0.970873786,
+          "20260801T043743Z-R2-g50t-a": 1.0,
+          "20260801T043743Z-R2-sk48-b": 1.0,
+          "20260801T044640Z-R2b-g50t-a": 0.896551724,
+          "20260801T044640Z-R2b-sk48-b": 0.807692308
         }
       }
     }
@@ -542,6 +726,82 @@
       "probes.jsonl": "sha256:0b0654cd8895ba0d0d0a73b8c9a5db8bd08fa8adbfcbe870567e8e47960bbed7",
       "surprises.jsonl": "sha256:097210d25c551274e3ab8ecad3867b4e9a4e4adca8527b5246a7579475b43bb4",
       "turns.json": "sha256:b2bc67473ad09f6f40e9acebfa8a5f89b1665b73cd93ecf04bad2b725fa4f5b9"
+    },
+    "20260731T231654Z-R1-g50t-a": {
+      "books/playbook.dsl": "sha256:5b5391633529a24b0ac9d25a703fd40ee24f1d7df2dee44ecda8d568d57187d6",
+      "books/theory.dsl": "sha256:efb22c873d3c7dca6ea383344b2939d57ce5bfe55b6f824e9249b2af42c37a26",
+      "certify.json": "sha256:9c8398364e9710a0e3643800b299e92659be0353d32eb92aafcaa5f46cf33624",
+      "curves.json": "sha256:aa1a968f80f3e39c0a940f7cc6ad36bccd5c6d5f4d5435772ea593c2ccf36c07",
+      "ledger.jsonl": "sha256:326643316766eb50049c60e87f7eb1c9de12ab25c7e574390441718bc643557f",
+      "probes.jsonl": "sha256:0724c7bc5262827c3ef655a1cd7de92594e1b17ba72e5cdb981359d45fa82a9b",
+      "surprises.jsonl": "sha256:13bc5f239ce7f8681fd509e73cee5cfe20c309370aa865f52abec6e31a068caa",
+      "turns.json": "sha256:9cd25d89291a9b8ec14f234cf0baab52b8413ab4910c15fedf58ee51d50889f9"
+    },
+    "20260731T231654Z-R1-sk48-b": {
+      "books/playbook.dsl": "sha256:9cd76177a19fb0fde3749f2478588752887c367ff6732c698db04ef705ddd41e",
+      "books/theory.dsl": "sha256:e1f2e65bf1f66d0f2c23bf860de12a9b444787bd69da9986c5ff8a61b267e600",
+      "certify.json": "sha256:5b735502fea88fc3d96a9b8e0ac4cc948bfa17c55c616773a63ea40070ee90eb",
+      "curves.json": "sha256:11fc9fa23976cd510914f48be9ac1cfe39366c06eb52005245a1544d72bae295",
+      "ledger.jsonl": "sha256:bc8514e4173134c36f0885ebd0e60408f68d9b7e4a047fe8ebab06b2e6027a5e",
+      "probes.jsonl": "sha256:6a8f8f20a3bbfb9dc405ee7e316f889d4e6405bb39c3d220dcd44776c03de89d",
+      "surprises.jsonl": "sha256:a9f69852eeec34efd10eb96354acf001fc91e8af62728db8114019ff0f833a8f",
+      "turns.json": "sha256:c8ba20f14d05f95e8310ec34e7d40022ee51e3f12639e902387e786802ee1527"
+    },
+    "20260801T001851Z-R1b-g50t-a": {
+      "books/playbook.dsl": "sha256:94dcf824929d39a24a1e7847bd5207af81d9f637a9d73452ae1479ed12bbc8f7",
+      "books/theory.dsl": "sha256:a842ba14352e0ffbcc739ffee6a669d8751c802e17ce7762f55e6885a951a7e4",
+      "certify.json": "sha256:a524570737e277391370860f80a3e030a2106f1099562ab5d452dd7a21d138bc",
+      "curves.json": "sha256:97f07f348e7b3b97d3540df48b78aed858f3d7ea21d299fd1f162d19f532efc8",
+      "ledger.jsonl": "sha256:e21ad90fa3494a8aa43b78ab70aa74b2ffbdf308da6bc5cb8b97acfdf93a74bf",
+      "probes.jsonl": "sha256:c7ac8ee45c285a392b07f9125ee9d28ff0cfff749f775420fe73096535e9ba2e",
+      "surprises.jsonl": "sha256:fd1703142eb0fc033c5b92639c4cc51f9fc9db6d699b69b0bdbb051337431646",
+      "turns.json": "sha256:6df91d73ff532e34b19e3332db684d17b914842f178fa0ee7c6f106f20972132"
+    },
+    "20260801T001851Z-R1b-sk48-b": {
+      "books/playbook.dsl": "sha256:00ab9be06066f2c48831e9a5fee8c3d0121a954908f49ae1c214adeb6015f8d1",
+      "books/theory.dsl": "sha256:7f00c20cc1bc2178908e1578d4d8952201fc0900d0470bd362862191baf697a8",
+      "certify.json": "sha256:13bb6f1306ed44ab8b9124deb8384240f97fd816b20fd83c83992ede47739dcf",
+      "curves.json": "sha256:4c7547a5d24d0965463887d45a7a95754a785a2454251b843466f1893f529833",
+      "ledger.jsonl": "sha256:d315b6088d928d0b1e7b74e99a9c7fddb41f59c02011effa2918c4d36cb6854d",
+      "probes.jsonl": "sha256:fedda0916fa014574645b7f65fdd67c1ebdd2aaf2b95699a39821afc72be9d78",
+      "surprises.jsonl": "sha256:99ae2785253cdf5023336c8bee0f675a34e84b25e1b80a672eb6aa5d8286f7a5",
+      "turns.json": "sha256:f674745514c4a1c2b140a1ba7e2b1a4a4ca18160de78c407f111c9aa59d27316"
+    },
+    "20260801T043743Z-R2-g50t-a": {
+      "books/playbook.dsl": "sha256:8945e784b0aba80860a9238fb04607d20fdba5be440848797536030bb752fc16",
+      "books/theory.dsl": "sha256:231ae4d7a48783a75704f244310f620b9dc32c141a1b500c35efa6ff28d7a8ef",
+      "certify.json": "sha256:37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "ledger.jsonl": "sha256:baa44c20edcf6526fc726bc79833d6b0ae60d11f6120ca2b8ed4cb2fb6411e55",
+      "surprises.jsonl": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "turns.json": "sha256:37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    "20260801T043743Z-R2-sk48-b": {
+      "books/playbook.dsl": "sha256:8945e784b0aba80860a9238fb04607d20fdba5be440848797536030bb752fc16",
+      "books/theory.dsl": "sha256:231ae4d7a48783a75704f244310f620b9dc32c141a1b500c35efa6ff28d7a8ef",
+      "certify.json": "sha256:37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "ledger.jsonl": "sha256:0b4e9ec0a0ad7fc29ced9b08dbe577095fb3ba05eb82c50b407280720f9b222b",
+      "surprises.jsonl": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "turns.json": "sha256:37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    "20260801T044640Z-R2b-g50t-a": {
+      "books/playbook.dsl": "sha256:6123f5843fd9d4e6ee79ef750574ce4f6a82213a53edff610309df4e0599a777",
+      "books/theory.dsl": "sha256:b53744910f82416eb0240091122a9af11a1d92d8813e759326a030c1d059ca9b",
+      "certify.json": "sha256:d15604a8b1dec247648347936d7e74a056eb6b7c45d9810f7570bb81a495a479",
+      "curves.json": "sha256:1a385133170c660f85432b5919836a58546e08ccee8be025c531562744522aa3",
+      "ledger.jsonl": "sha256:e354a7f835e0f935d0e4c73dfd1747c4213c74178ca3dfed25332e3912c7cc53",
+      "probes.jsonl": "sha256:668008dfcb2a59ed66be86dfb2768c8a16e3fc415729dad3bc9bab46000c2aef",
+      "surprises.jsonl": "sha256:8b4556c31b5f7b3985f0d4707e89793e79df91f1d37ed91927cc6afae80f472f",
+      "turns.json": "sha256:5b48d683e3c26b7a726e14a0a08f007c3038f0902b2457cdfde0b36c81849e40"
+    },
+    "20260801T044640Z-R2b-sk48-b": {
+      "books/playbook.dsl": "sha256:ec1ad6b8e03a5ebd57c61704b4ec0ccf37cc236b6d8e57c06a98244bddf50ab9",
+      "books/theory.dsl": "sha256:f0769b1000747b0eadbb66f3a4a7e107f625d4812becb88c1f3bebb4932e58d0",
+      "certify.json": "sha256:0ceed71715dc33be00d59893c955e3af1dc2ffd1bca01dfa2b40530e72adbcc6",
+      "curves.json": "sha256:242233ebee07fa325a5741a61252df1b300d8795925d09140c64757d4d93eaf9",
+      "ledger.jsonl": "sha256:2d2a9f07eecb1a4689c4478f77583b9b727e55426df8e5d1884e988f40167d1a",
+      "probes.jsonl": "sha256:5d3148b96059b58d4014d34cb2c7b8ef7f93e3911993d7cf46d864e407f7334a",
+      "surprises.jsonl": "sha256:69aa51caba2265ff2f4ac0cedf489286de4a27860e8d758ebe57953e735be933",
+      "turns.json": "sha256:ceaf8a6abd7e288f9673153474c68e891668a171c38eacb214cea465cb3f48c1"
     }
   },
   "measured_by_family": {
@@ -584,8 +844,8 @@
     ]
   },
   "n_games": 2,
-  "n_measured_cells": 116,
-  "n_runs": 6,
+  "n_measured_cells": 289,
+  "n_runs": 14,
   "piles": [
     "dev"
   ],
@@ -838,6 +1098,7 @@
       "pile": "dev",
       "source": "theoria-arm-live",
       "steps": 104,
+      "turn_axis": "no-calls",
       "turns": null
     },
     "20260729T105729Z-leg01": {
@@ -1084,6 +1345,7 @@
       "pile": "dev",
       "source": "theoria-arm-live",
       "steps": 34,
+      "turn_axis": "no-calls",
       "turns": null
     },
     "20260731T1240Z-A3-level2-carried": {
@@ -1350,6 +1612,7 @@
       "pile": "dev",
       "source": "theoria-arm-live",
       "steps": 60,
+      "turn_axis": "no-calls",
       "turns": null
     },
     "20260731T1310Z-A3-level2-carried-r2": {
@@ -1643,6 +1906,7 @@
       "pile": "dev",
       "source": "theoria-arm-live",
       "steps": 99,
+      "turn_axis": "exact",
       "turns": 3
     },
     "20260731T1430Z-A3-level2-carried-r3": {
@@ -1943,6 +2207,7 @@
       "pile": "dev",
       "source": "theoria-arm-live",
       "steps": 234,
+      "turn_axis": "exact",
       "turns": 8
     },
     "20260731T1500Z-A3-sk48-carried-l1": {
@@ -2236,7 +2501,2241 @@
       "pile": "dev",
       "source": "theoria-arm-live",
       "steps": 177,
+      "turn_axis": "exact",
       "turns": 4
+    },
+    "20260731T231654Z-R1-g50t-a": {
+      "arm": "theoria",
+      "campaign": "theoria-arm:A3-campaign-devpile",
+      "failed_steps": 92,
+      "game_id": "g50t-5849a774",
+      "intent": "solve",
+      "metrics": {
+        "E1": {
+          "status": "ok",
+          "support": {
+            "calls": 4
+          },
+          "value": 7.6034195
+        },
+        "E2": {
+          "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E3": {
+          "reason": "fewer than 8 turns; the same early-exit confound as E2",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E4": {
+          "reason": "fewer than five turns; a quadratic needs room",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E5": {
+          "status": "ok",
+          "support": {
+            "actions": 14,
+            "total_usd": 7.603419
+          },
+          "value": 0.543101393
+        },
+        "E6": {
+          "status": "ok",
+          "support": {
+            "http_calls": 106,
+            "on_failed_steps": 1.0,
+            "steps": 106
+          },
+          "value": 1.0
+        },
+        "E7": {
+          "reason": "fewer than five turns; a quadratic needs room",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "K1": {
+          "status": "ok",
+          "support": {
+            "agree": 9,
+            "pairs": 9
+          },
+          "value": 1.0
+        },
+        "K10": {
+          "status": "ok",
+          "value": 13.0
+        },
+        "K11": {
+          "status": "ok",
+          "value": 9.0
+        },
+        "K12": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K13": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K14": {
+          "status": "ok",
+          "support": {
+            "best": 39,
+            "concepts": 4,
+            "mean": 18.75,
+            "worst_concept": "Dark"
+          },
+          "value": 3.0
+        },
+        "K2": {
+          "reason": "no held-out pairs; every reachable pair was covered",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "K3": {
+          "status": "ok",
+          "value": 31.0
+        },
+        "K4": {
+          "status": "ok",
+          "support": {
+            "annotated": 21,
+            "min_witnesses": 1,
+            "unannotated": 31
+          },
+          "value": 1.0
+        },
+        "K5": {
+          "status": "ok",
+          "value": 4.0
+        },
+        "K6": {
+          "status": "ok",
+          "support": {
+            "best": 39,
+            "concepts": 4,
+            "worst": 3
+          },
+          "value": 18.75
+        },
+        "K7": {
+          "status": "ok",
+          "support": {
+            "of_concepts": 4
+          },
+          "value": 0.0
+        },
+        "K8": {
+          "status": "ok",
+          "support": {
+            "designed": 9,
+            "executable": 5
+          },
+          "value": 0.555555556
+        },
+        "K9": {
+          "status": "ok",
+          "value": 49.0
+        },
+        "M1": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M2": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M3": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M4": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M5": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M6": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P1": {
+          "status": "ok",
+          "support": {
+            "actions": 14,
+            "calls": 4
+          },
+          "value": 3.5
+        },
+        "P2": {
+          "status": "ok",
+          "support": {
+            "basis": "proportional",
+            "first_rate": 3.5,
+            "second_rate": 3.5
+          },
+          "value": 0.0
+        },
+        "P3": {
+          "status": "ok",
+          "support": {
+            "undos": 0,
+            "windows": 12
+          },
+          "value": 0.0
+        },
+        "P4": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P5": {
+          "status": "ok",
+          "support": {
+            "failed": 92,
+            "steps": 106
+          },
+          "value": 0.867924528
+        },
+        "X1": {
+          "status": "ok",
+          "support": {
+            "distinct": 12,
+            "observed": 14
+          },
+          "value": 0.142857143
+        },
+        "X2": {
+          "status": "ok",
+          "support": {
+            "novel": 14,
+            "transitions": 14
+          },
+          "value": 1.0
+        },
+        "X3": {
+          "status": "ok",
+          "support": {
+            "first_quarter": 1.0,
+            "last_quarter": 1.0,
+            "transitions": 14
+          },
+          "value": 0.0
+        },
+        "X4": {
+          "status": "ok",
+          "support": {
+            "longest_streak": 1,
+            "observed": 14
+          },
+          "value": 0.071428571
+        },
+        "X5": {
+          "status": "ok",
+          "value": 12.0
+        },
+        "X6": {
+          "status": "ok",
+          "support": {
+            "changed": 0,
+            "windows": 92
+          },
+          "value": 0.0
+        }
+      },
+      "model": "claude-opus-5",
+      "model_calls": 4,
+      "notes": {
+        "books": "books/theory.dsl + books/playbook.dsl",
+        "campaign_declared": "theoria-arm:A3-campaign-devpile:g50t-5849a774:20260731T231654Z-R1-g50t-a",
+        "carried_books": true,
+        "certify_records": 4,
+        "concept_source": "word_table `compress:` annotations parsed from books/theory.dsl; no object palette exists for a live game, so first_seen_step is None throughout",
+        "env_steps": 106,
+        "ledger_complete": true,
+        "ledger_cost_usd": 7.6034195,
+        "ledger_run_id": "r-6d3607e4c2eb4db9",
+        "levels_completed": 0,
+        "model_calls": 4,
+        "outcome": "spend_gate_tripped",
+        "slug": "20260731T231654Z-R1-g50t-a",
+        "surprises": {
+          "heuristic_miss": 2,
+          "probe_refutation": 5,
+          "replay_mismatch": 2
+        },
+        "turn_join": {
+          "join_confidence": "exact",
+          "joined_calls": 4,
+          "ledger_calls": 4,
+          "source": "curves.json"
+        }
+      },
+      "pile": "dev",
+      "source": "theoria-arm-live",
+      "steps": 106,
+      "turn_axis": "exact",
+      "turns": 2
+    },
+    "20260731T231654Z-R1-sk48-b": {
+      "arm": "theoria",
+      "campaign": "theoria-arm:A3-campaign-devpile",
+      "failed_steps": 32,
+      "game_id": "sk48-d8078629",
+      "intent": "solve",
+      "metrics": {
+        "E1": {
+          "status": "ok",
+          "support": {
+            "calls": 3
+          },
+          "value": 7.6085275
+        },
+        "E2": {
+          "reason": "no model call carries a turn label; 3 call(s) of unknown decision order is not a bill shape, and numbering them 0..n-1 would answer a question this record cannot answer",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E3": {
+          "reason": "no model call carries a turn label; 3 call(s) of unknown decision order is not a bill shape, and numbering them 0..n-1 would answer a question this record cannot answer",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E4": {
+          "reason": "fewer than five turns; a quadratic needs room",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E5": {
+          "status": "ok",
+          "support": {
+            "actions": 6,
+            "total_usd": 7.608528
+          },
+          "value": 1.268087917
+        },
+        "E6": {
+          "status": "ok",
+          "support": {
+            "http_calls": 38,
+            "on_failed_steps": 1.0,
+            "steps": 38
+          },
+          "value": 1.0
+        },
+        "E7": {
+          "reason": "fewer than five turns; a quadratic needs room",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "K1": {
+          "status": "ok",
+          "support": {
+            "agree": 4,
+            "pairs": 5
+          },
+          "value": 0.8
+        },
+        "K10": {
+          "status": "ok",
+          "value": 8.0
+        },
+        "K11": {
+          "status": "ok",
+          "value": 5.0
+        },
+        "K12": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K13": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K14": {
+          "status": "ok",
+          "support": {
+            "best": 24,
+            "concepts": 7,
+            "mean": 13.857143,
+            "worst_concept": "Rail3"
+          },
+          "value": 8.0
+        },
+        "K2": {
+          "reason": "no held-out pairs; every reachable pair was covered",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "K3": {
+          "status": "ok",
+          "value": 22.0
+        },
+        "K4": {
+          "status": "ok",
+          "support": {
+            "annotated": 7,
+            "min_witnesses": 1,
+            "unannotated": 22
+          },
+          "value": 1.0
+        },
+        "K5": {
+          "status": "ok",
+          "value": 7.0
+        },
+        "K6": {
+          "status": "ok",
+          "support": {
+            "best": 24,
+            "concepts": 7,
+            "worst": 8
+          },
+          "value": 13.857142857
+        },
+        "K7": {
+          "status": "ok",
+          "support": {
+            "of_concepts": 7
+          },
+          "value": 0.0
+        },
+        "K8": {
+          "status": "ok",
+          "support": {
+            "designed": 1,
+            "executable": 0
+          },
+          "value": 0.0
+        },
+        "K9": {
+          "status": "ok",
+          "value": 32.0
+        },
+        "M1": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M2": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M3": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M4": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M5": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M6": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P1": {
+          "status": "ok",
+          "support": {
+            "actions": 6,
+            "calls": 3
+          },
+          "value": 2.0
+        },
+        "P2": {
+          "reason": "fewer than four model calls; no trend to fit",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "P3": {
+          "status": "ok",
+          "support": {
+            "undos": 0,
+            "windows": 4
+          },
+          "value": 0.0
+        },
+        "P4": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P5": {
+          "status": "ok",
+          "support": {
+            "failed": 32,
+            "steps": 38
+          },
+          "value": 0.842105263
+        },
+        "X1": {
+          "status": "ok",
+          "support": {
+            "distinct": 6,
+            "observed": 6
+          },
+          "value": 0.0
+        },
+        "X2": {
+          "status": "ok",
+          "support": {
+            "novel": 6,
+            "transitions": 6
+          },
+          "value": 1.0
+        },
+        "X3": {
+          "reason": "fewer than eight transitions; quartiles meaningless",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "X4": {
+          "status": "ok",
+          "support": {
+            "longest_streak": 0,
+            "observed": 6
+          },
+          "value": 0.0
+        },
+        "X5": {
+          "status": "ok",
+          "value": 6.0
+        },
+        "X6": {
+          "status": "ok",
+          "support": {
+            "changed": 0,
+            "windows": 32
+          },
+          "value": 0.0
+        }
+      },
+      "model": "claude-opus-5",
+      "model_calls": 3,
+      "notes": {
+        "books": "books/theory.dsl + books/playbook.dsl",
+        "campaign_declared": "theoria-arm:A3-campaign-devpile:sk48-d8078629:20260731T231654Z-R1-sk48-b",
+        "carried_books": true,
+        "certify_records": 2,
+        "concept_source": "word_table `compress:` annotations parsed from books/theory.dsl; no object palette exists for a live game, so first_seen_step is None throughout",
+        "env_steps": 38,
+        "ledger_complete": true,
+        "ledger_cost_usd": 7.6085275,
+        "ledger_run_id": "r-b3cce9aa15ff4bc7",
+        "levels_completed": 0,
+        "model_calls": 3,
+        "outcome": "spend_gate_tripped",
+        "slug": "20260731T231654Z-R1-sk48-b",
+        "surprises": {
+          "heuristic_miss": 1,
+          "replay_mismatch": 2
+        },
+        "turn_join": {
+          "join_confidence": "degraded",
+          "joined_calls": 0,
+          "ledger_calls": 3,
+          "source": "unjoined: curves.json counts 0 billed call(s), the ledger has 3"
+        }
+      },
+      "pile": "dev",
+      "source": "theoria-arm-live",
+      "steps": 38,
+      "turn_axis": "absent",
+      "turns": null
+    },
+    "20260801T001851Z-R1b-g50t-a": {
+      "arm": "theoria",
+      "campaign": "theoria-arm:A3-campaign-devpile",
+      "failed_steps": 106,
+      "game_id": "g50t-5849a774",
+      "intent": "solve",
+      "metrics": {
+        "E1": {
+          "status": "ok",
+          "support": {
+            "calls": 9
+          },
+          "value": 17.7491065
+        },
+        "E2": {
+          "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E3": {
+          "reason": "fewer than 8 turns; the same early-exit confound as E2",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E4": {
+          "status": "ok",
+          "support": {
+            "r2_linear": 0.046352,
+            "r2_quadratic": 0.365316,
+            "turns": 9
+          },
+          "value": 0.318963988
+        },
+        "E5": {
+          "status": "ok",
+          "support": {
+            "actions": 26,
+            "total_usd": 17.749106
+          },
+          "value": 0.682657942
+        },
+        "E6": {
+          "status": "ok",
+          "support": {
+            "http_calls": 132,
+            "on_failed_steps": 1.0,
+            "steps": 132
+          },
+          "value": 1.0
+        },
+        "E7": {
+          "status": "ok",
+          "support": {
+            "first_chars": 87705,
+            "last_chars": 97024,
+            "r2_linear": 0.708637,
+            "r2_quadratic": 0.771702,
+            "turns": 9
+          },
+          "value": 0.063064818
+        },
+        "K1": {
+          "status": "ok",
+          "support": {
+            "agree": 16,
+            "pairs": 21
+          },
+          "value": 0.761904762
+        },
+        "K10": {
+          "status": "ok",
+          "value": 24.0
+        },
+        "K11": {
+          "status": "ok",
+          "value": 17.0
+        },
+        "K12": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K13": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K14": {
+          "status": "ok",
+          "support": {
+            "best": 45,
+            "concepts": 4,
+            "mean": 20.25,
+            "worst_concept": "Dark"
+          },
+          "value": 3.0
+        },
+        "K2": {
+          "reason": "no held-out pairs; every reachable pair was covered",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "K3": {
+          "status": "ok",
+          "value": 37.0
+        },
+        "K4": {
+          "status": "ok",
+          "support": {
+            "annotated": 22,
+            "min_witnesses": 1,
+            "unannotated": 37
+          },
+          "value": 0.936363636
+        },
+        "K5": {
+          "status": "ok",
+          "value": 4.0
+        },
+        "K6": {
+          "status": "ok",
+          "support": {
+            "best": 45,
+            "concepts": 4,
+            "worst": 3
+          },
+          "value": 20.25
+        },
+        "K7": {
+          "status": "ok",
+          "support": {
+            "of_concepts": 4
+          },
+          "value": 0.0
+        },
+        "K8": {
+          "status": "ok",
+          "support": {
+            "designed": 21,
+            "executable": 14
+          },
+          "value": 0.666666667
+        },
+        "K9": {
+          "status": "ok",
+          "value": 76.0
+        },
+        "M1": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M2": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M3": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M4": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M5": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M6": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P1": {
+          "status": "ok",
+          "support": {
+            "actions": 26,
+            "calls": 9
+          },
+          "value": 2.888888889
+        },
+        "P2": {
+          "status": "ok",
+          "support": {
+            "basis": "proportional",
+            "first_rate": 2.75,
+            "second_rate": 3.0
+          },
+          "value": 0.25
+        },
+        "P3": {
+          "status": "ok",
+          "support": {
+            "undos": 0,
+            "windows": 24
+          },
+          "value": 0.0
+        },
+        "P4": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P5": {
+          "status": "ok",
+          "support": {
+            "failed": 106,
+            "steps": 132
+          },
+          "value": 0.803030303
+        },
+        "X1": {
+          "status": "ok",
+          "support": {
+            "distinct": 24,
+            "observed": 26
+          },
+          "value": 0.076923077
+        },
+        "X2": {
+          "status": "ok",
+          "support": {
+            "novel": 26,
+            "transitions": 26
+          },
+          "value": 1.0
+        },
+        "X3": {
+          "status": "ok",
+          "support": {
+            "first_quarter": 1.0,
+            "last_quarter": 1.0,
+            "transitions": 26
+          },
+          "value": 0.0
+        },
+        "X4": {
+          "status": "ok",
+          "support": {
+            "longest_streak": 1,
+            "observed": 26
+          },
+          "value": 0.038461538
+        },
+        "X5": {
+          "status": "ok",
+          "value": 24.0
+        },
+        "X6": {
+          "status": "ok",
+          "support": {
+            "changed": 0,
+            "windows": 106
+          },
+          "value": 0.0
+        }
+      },
+      "model": "claude-opus-5",
+      "model_calls": 9,
+      "notes": {
+        "books": "books/theory.dsl + books/playbook.dsl",
+        "campaign_declared": "theoria-arm:A3-campaign-devpile:g50t-5849a774:20260801T001851Z-R1b-g50t-a",
+        "carried_books": true,
+        "certify_records": 8,
+        "concept_source": "word_table `compress:` annotations parsed from books/theory.dsl; no object palette exists for a live game, so first_seen_step is None throughout",
+        "env_steps": 132,
+        "ledger_complete": true,
+        "ledger_cost_usd": 17.7491065,
+        "ledger_run_id": "r-0d93cbd855344ea1",
+        "levels_completed": 0,
+        "model_calls": 9,
+        "outcome": "spend_gate_tripped",
+        "slug": "20260801T001851Z-R1b-g50t-a",
+        "surprises": {
+          "heuristic_miss": 5,
+          "probe_refutation": 14,
+          "replay_mismatch": 5
+        },
+        "turn_join": {
+          "join_confidence": "degraded",
+          "joined_calls": 9,
+          "ledger_calls": 9,
+          "source": "curves.json"
+        }
+      },
+      "pile": "dev",
+      "source": "theoria-arm-live",
+      "steps": 132,
+      "turn_axis": "exact",
+      "turns": 6
+    },
+    "20260801T001851Z-R1b-sk48-b": {
+      "arm": "theoria",
+      "campaign": "theoria-arm:A3-campaign-devpile",
+      "failed_steps": 200,
+      "game_id": "sk48-d8078629",
+      "intent": "solve",
+      "metrics": {
+        "E1": {
+          "status": "ok",
+          "support": {
+            "calls": 6
+          },
+          "value": 17.390721
+        },
+        "E2": {
+          "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E3": {
+          "reason": "fewer than 8 turns; the same early-exit confound as E2",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E4": {
+          "status": "ok",
+          "support": {
+            "r2_linear": 0.495434,
+            "r2_quadratic": 0.799384,
+            "turns": 6
+          },
+          "value": 0.303950019
+        },
+        "E5": {
+          "status": "ok",
+          "support": {
+            "actions": 6,
+            "total_usd": 17.390721
+          },
+          "value": 2.8984535
+        },
+        "E6": {
+          "status": "ok",
+          "support": {
+            "http_calls": 206,
+            "on_failed_steps": 1.0,
+            "steps": 206
+          },
+          "value": 1.0
+        },
+        "E7": {
+          "status": "ok",
+          "support": {
+            "first_chars": 85904,
+            "last_chars": 70185,
+            "r2_linear": 0.267668,
+            "r2_quadratic": 0.754196,
+            "turns": 6
+          },
+          "value": 0.48652865
+        },
+        "K1": {
+          "status": "ok",
+          "support": {
+            "agree": 4,
+            "pairs": 5
+          },
+          "value": 0.8
+        },
+        "K10": {
+          "status": "ok",
+          "value": 9.0
+        },
+        "K11": {
+          "status": "ok",
+          "value": 7.0
+        },
+        "K12": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K13": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K14": {
+          "status": "ok",
+          "support": {
+            "best": 24,
+            "concepts": 7,
+            "mean": 13.857143,
+            "worst_concept": "Ink3"
+          },
+          "value": 8.0
+        },
+        "K2": {
+          "reason": "no held-out pairs; every reachable pair was covered",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "K3": {
+          "status": "ok",
+          "value": 23.0
+        },
+        "K4": {
+          "status": "ok",
+          "support": {
+            "annotated": 7,
+            "min_witnesses": 1,
+            "unannotated": 23
+          },
+          "value": 1.0
+        },
+        "K5": {
+          "status": "ok",
+          "value": 7.0
+        },
+        "K6": {
+          "status": "ok",
+          "support": {
+            "best": 24,
+            "concepts": 7,
+            "worst": 8
+          },
+          "value": 13.857142857
+        },
+        "K7": {
+          "status": "ok",
+          "support": {
+            "of_concepts": 7
+          },
+          "value": 0.0
+        },
+        "K8": {
+          "status": "ok",
+          "support": {
+            "designed": 5,
+            "executable": 1
+          },
+          "value": 0.2
+        },
+        "K9": {
+          "status": "ok",
+          "value": 30.0
+        },
+        "M1": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M2": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M3": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M4": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M5": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M6": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P1": {
+          "status": "ok",
+          "support": {
+            "actions": 6,
+            "calls": 6
+          },
+          "value": 1.0
+        },
+        "P2": {
+          "status": "ok",
+          "support": {
+            "basis": "proportional",
+            "first_rate": 1.0,
+            "second_rate": 1.0
+          },
+          "value": 0.0
+        },
+        "P3": {
+          "status": "ok",
+          "support": {
+            "undos": 0,
+            "windows": 4
+          },
+          "value": 0.0
+        },
+        "P4": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P5": {
+          "status": "ok",
+          "support": {
+            "failed": 200,
+            "steps": 206
+          },
+          "value": 0.970873786
+        },
+        "X1": {
+          "status": "ok",
+          "support": {
+            "distinct": 6,
+            "observed": 6
+          },
+          "value": 0.0
+        },
+        "X2": {
+          "status": "ok",
+          "support": {
+            "novel": 6,
+            "transitions": 6
+          },
+          "value": 1.0
+        },
+        "X3": {
+          "reason": "fewer than eight transitions; quartiles meaningless",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "X4": {
+          "status": "ok",
+          "support": {
+            "longest_streak": 0,
+            "observed": 6
+          },
+          "value": 0.0
+        },
+        "X5": {
+          "status": "ok",
+          "value": 6.0
+        },
+        "X6": {
+          "status": "ok",
+          "support": {
+            "changed": 3,
+            "windows": 199
+          },
+          "value": 0.015075377
+        }
+      },
+      "model": "claude-opus-5",
+      "model_calls": 6,
+      "notes": {
+        "books": "books/theory.dsl + books/playbook.dsl",
+        "campaign_declared": "theoria-arm:A3-campaign-devpile:sk48-d8078629:20260801T001851Z-R1b-sk48-b",
+        "carried_books": true,
+        "certify_records": 3,
+        "concept_source": "word_table `compress:` annotations parsed from books/theory.dsl; no object palette exists for a live game, so first_seen_step is None throughout",
+        "env_steps": 206,
+        "ledger_complete": true,
+        "ledger_cost_usd": 17.390721,
+        "ledger_run_id": "r-f8642d6ebdf14cd6",
+        "levels_completed": null,
+        "model_calls": 6,
+        "outcome": "spend_gate_tripped",
+        "slug": "20260801T001851Z-R1b-sk48-b",
+        "surprises": {
+          "heuristic_miss": 1,
+          "probe_refutation": 1,
+          "replay_mismatch": 3
+        },
+        "turn_join": {
+          "join_confidence": "degraded",
+          "joined_calls": 6,
+          "ledger_calls": 6,
+          "source": "curves.json"
+        }
+      },
+      "pile": "dev",
+      "source": "theoria-arm-live",
+      "steps": 206,
+      "turn_axis": "exact",
+      "turns": 2
+    },
+    "20260801T043743Z-R2-g50t-a": {
+      "arm": "theoria",
+      "campaign": "theoria-arm:A3-campaign-devpile",
+      "failed_steps": 40,
+      "game_id": "g50t-5849a774",
+      "intent": "solve",
+      "metrics": {
+        "E1": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E2": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E3": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E4": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E5": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E6": {
+          "status": "ok",
+          "support": {
+            "http_calls": 41,
+            "on_failed_steps": 1.025,
+            "steps": 40
+          },
+          "value": 1.025
+        },
+        "E7": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K1": {
+          "reason": "no replay score recorded for this run",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "K10": {
+          "status": "ok",
+          "value": 12.0
+        },
+        "K11": {
+          "status": "ok",
+          "value": 1.0
+        },
+        "K12": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K13": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K14": {
+          "status": "ok",
+          "support": {
+            "best": 51,
+            "concepts": 4,
+            "mean": 21.75,
+            "worst_concept": "Dark"
+          },
+          "value": 3.0
+        },
+        "K2": {
+          "reason": "no held-out pairs; every reachable pair was covered",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "K3": {
+          "status": "ok",
+          "value": 37.0
+        },
+        "K4": {
+          "status": "ok",
+          "support": {
+            "annotated": 22,
+            "min_witnesses": 1,
+            "unannotated": 37
+          },
+          "value": 1.0
+        },
+        "K5": {
+          "status": "ok",
+          "value": 4.0
+        },
+        "K6": {
+          "status": "ok",
+          "support": {
+            "best": 51,
+            "concepts": 4,
+            "worst": 3
+          },
+          "value": 21.75
+        },
+        "K7": {
+          "status": "ok",
+          "support": {
+            "of_concepts": 4
+          },
+          "value": 0.0
+        },
+        "K8": {
+          "reason": "no probes were designed",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "K9": {
+          "status": "ok",
+          "value": 40.0
+        },
+        "M1": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M2": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M3": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M4": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M5": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M6": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P1": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P2": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P3": {
+          "reason": "no step carries an observation to identify a state by",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P4": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P5": {
+          "status": "ok",
+          "support": {
+            "failed": 40,
+            "steps": 40
+          },
+          "value": 1.0
+        },
+        "X1": {
+          "reason": "no step carries an observation to identify a state by",
+          "status": "not-applicable",
+          "value": null
+        },
+        "X2": {
+          "reason": "no step carries an observation to identify a state by",
+          "status": "not-applicable",
+          "value": null
+        },
+        "X3": {
+          "reason": "no step carries an observation to identify a state by",
+          "status": "not-applicable",
+          "value": null
+        },
+        "X4": {
+          "reason": "no step carries an observation to identify a state by",
+          "status": "not-applicable",
+          "value": null
+        },
+        "X5": {
+          "reason": "no step carries an observation to identify a state by",
+          "status": "not-applicable",
+          "value": null
+        },
+        "X6": {
+          "status": "ok",
+          "support": {
+            "changed": 0,
+            "windows": 39
+          },
+          "value": 0.0
+        }
+      },
+      "model": null,
+      "model_calls": 0,
+      "notes": {
+        "books": "books/theory.dsl + books/playbook.dsl",
+        "campaign_declared": "theoria-arm:A3-campaign-devpile:g50t-5849a774:20260801T043743Z-R2-g50t-a",
+        "carried_books": true,
+        "certify_records": null,
+        "concept_source": "word_table `compress:` annotations parsed from books/theory.dsl; no object palette exists for a live game, so first_seen_step is None throughout",
+        "env_steps": 40,
+        "ledger_complete": true,
+        "ledger_cost_usd": 0,
+        "ledger_run_id": "r-4abc6c6ec352435d",
+        "levels_completed": null,
+        "model_calls": 0,
+        "outcome": "reset_failed",
+        "slug": "20260801T043743Z-R2-g50t-a",
+        "surprises": {},
+        "turn_join": {
+          "join_confidence": null,
+          "joined_calls": 0,
+          "ledger_calls": 0,
+          "source": "unjoined: no turn_series.json and no curves.json"
+        }
+      },
+      "pile": "dev",
+      "source": "theoria-arm-live",
+      "steps": 40,
+      "turn_axis": "no-calls",
+      "turns": null
+    },
+    "20260801T043743Z-R2-sk48-b": {
+      "arm": "theoria",
+      "campaign": "theoria-arm:A3-campaign-devpile",
+      "failed_steps": 40,
+      "game_id": "sk48-d8078629",
+      "intent": "solve",
+      "metrics": {
+        "E1": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E2": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E3": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E4": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E5": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E6": {
+          "status": "ok",
+          "support": {
+            "http_calls": 41,
+            "on_failed_steps": 1.025,
+            "steps": 40
+          },
+          "value": 1.025
+        },
+        "E7": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K1": {
+          "reason": "no replay score recorded for this run",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "K10": {
+          "status": "ok",
+          "value": 12.0
+        },
+        "K11": {
+          "status": "ok",
+          "value": 1.0
+        },
+        "K12": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K13": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K14": {
+          "status": "ok",
+          "support": {
+            "best": 51,
+            "concepts": 4,
+            "mean": 21.75,
+            "worst_concept": "Dark"
+          },
+          "value": 3.0
+        },
+        "K2": {
+          "reason": "no held-out pairs; every reachable pair was covered",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "K3": {
+          "status": "ok",
+          "value": 37.0
+        },
+        "K4": {
+          "status": "ok",
+          "support": {
+            "annotated": 22,
+            "min_witnesses": 1,
+            "unannotated": 37
+          },
+          "value": 1.0
+        },
+        "K5": {
+          "status": "ok",
+          "value": 4.0
+        },
+        "K6": {
+          "status": "ok",
+          "support": {
+            "best": 51,
+            "concepts": 4,
+            "worst": 3
+          },
+          "value": 21.75
+        },
+        "K7": {
+          "status": "ok",
+          "support": {
+            "of_concepts": 4
+          },
+          "value": 0.0
+        },
+        "K8": {
+          "reason": "no probes were designed",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "K9": {
+          "status": "ok",
+          "value": 40.0
+        },
+        "M1": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M2": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M3": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M4": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M5": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M6": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P1": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P2": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P3": {
+          "reason": "no step carries an observation to identify a state by",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P4": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P5": {
+          "status": "ok",
+          "support": {
+            "failed": 40,
+            "steps": 40
+          },
+          "value": 1.0
+        },
+        "X1": {
+          "reason": "no step carries an observation to identify a state by",
+          "status": "not-applicable",
+          "value": null
+        },
+        "X2": {
+          "reason": "no step carries an observation to identify a state by",
+          "status": "not-applicable",
+          "value": null
+        },
+        "X3": {
+          "reason": "no step carries an observation to identify a state by",
+          "status": "not-applicable",
+          "value": null
+        },
+        "X4": {
+          "reason": "no step carries an observation to identify a state by",
+          "status": "not-applicable",
+          "value": null
+        },
+        "X5": {
+          "reason": "no step carries an observation to identify a state by",
+          "status": "not-applicable",
+          "value": null
+        },
+        "X6": {
+          "status": "ok",
+          "support": {
+            "changed": 0,
+            "windows": 39
+          },
+          "value": 0.0
+        }
+      },
+      "model": null,
+      "model_calls": 0,
+      "notes": {
+        "books": "books/theory.dsl + books/playbook.dsl",
+        "campaign_declared": "theoria-arm:A3-campaign-devpile:sk48-d8078629:20260801T043743Z-R2-sk48-b",
+        "carried_books": true,
+        "certify_records": null,
+        "concept_source": "word_table `compress:` annotations parsed from books/theory.dsl; no object palette exists for a live game, so first_seen_step is None throughout",
+        "env_steps": 40,
+        "ledger_complete": true,
+        "ledger_cost_usd": 0,
+        "ledger_run_id": "r-b9d73ccb61d44b98",
+        "levels_completed": null,
+        "model_calls": 0,
+        "outcome": "reset_failed",
+        "slug": "20260801T043743Z-R2-sk48-b",
+        "surprises": {},
+        "turn_join": {
+          "join_confidence": null,
+          "joined_calls": 0,
+          "ledger_calls": 0,
+          "source": "unjoined: no turn_series.json and no curves.json"
+        }
+      },
+      "pile": "dev",
+      "source": "theoria-arm-live",
+      "steps": 40,
+      "turn_axis": "no-calls",
+      "turns": null
+    },
+    "20260801T044640Z-R2b-g50t-a": {
+      "arm": "theoria",
+      "campaign": "theoria-arm:A3-campaign-devpile",
+      "failed_steps": 260,
+      "game_id": "g50t-5849a774",
+      "intent": "solve",
+      "metrics": {
+        "E1": {
+          "status": "ok",
+          "support": {
+            "calls": 9
+          },
+          "value": 18.7360085
+        },
+        "E2": {
+          "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E3": {
+          "reason": "fewer than 8 turns; the same early-exit confound as E2",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E4": {
+          "status": "ok",
+          "support": {
+            "r2_linear": 0.328571,
+            "r2_quadratic": 0.35282,
+            "turns": 9
+          },
+          "value": 0.02424868
+        },
+        "E5": {
+          "status": "ok",
+          "support": {
+            "actions": 30,
+            "total_usd": 18.736009
+          },
+          "value": 0.624533617
+        },
+        "E6": {
+          "status": "ok",
+          "support": {
+            "http_calls": 295,
+            "on_failed_steps": 1.0192307692307692,
+            "steps": 290
+          },
+          "value": 1.017241379
+        },
+        "E7": {
+          "status": "ok",
+          "support": {
+            "first_chars": 87705,
+            "last_chars": 128759,
+            "r2_linear": 0.941307,
+            "r2_quadratic": 0.947526,
+            "turns": 9
+          },
+          "value": 0.006219463
+        },
+        "K1": {
+          "status": "ok",
+          "support": {
+            "agree": 25,
+            "pairs": 25
+          },
+          "value": 1.0
+        },
+        "K10": {
+          "status": "ok",
+          "value": 22.0
+        },
+        "K11": {
+          "status": "ok",
+          "value": 15.0
+        },
+        "K12": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K13": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K14": {
+          "status": "ok",
+          "support": {
+            "best": 47,
+            "concepts": 4,
+            "mean": 20.75,
+            "worst_concept": "Dark"
+          },
+          "value": 3.0
+        },
+        "K2": {
+          "reason": "no held-out pairs; every reachable pair was covered",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "K3": {
+          "status": "ok",
+          "value": 46.0
+        },
+        "K4": {
+          "status": "ok",
+          "support": {
+            "annotated": 22,
+            "min_witnesses": 1,
+            "unannotated": 46
+          },
+          "value": 1.0
+        },
+        "K5": {
+          "status": "ok",
+          "value": 4.0
+        },
+        "K6": {
+          "status": "ok",
+          "support": {
+            "best": 47,
+            "concepts": 4,
+            "worst": 3
+          },
+          "value": 20.75
+        },
+        "K7": {
+          "status": "ok",
+          "support": {
+            "of_concepts": 4
+          },
+          "value": 0.0
+        },
+        "K8": {
+          "status": "ok",
+          "support": {
+            "designed": 25,
+            "executable": 24
+          },
+          "value": 0.96
+        },
+        "K9": {
+          "status": "ok",
+          "value": 82.0
+        },
+        "M1": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M2": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M3": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M4": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M5": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M6": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P1": {
+          "status": "ok",
+          "support": {
+            "actions": 30,
+            "calls": 9
+          },
+          "value": 3.333333333
+        },
+        "P2": {
+          "status": "ok",
+          "support": {
+            "basis": "proportional",
+            "first_rate": 3.25,
+            "second_rate": 3.4
+          },
+          "value": 0.15
+        },
+        "P3": {
+          "status": "ok",
+          "support": {
+            "undos": 0,
+            "windows": 28
+          },
+          "value": 0.0
+        },
+        "P4": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P5": {
+          "status": "ok",
+          "support": {
+            "failed": 260,
+            "steps": 290
+          },
+          "value": 0.896551724
+        },
+        "X1": {
+          "status": "ok",
+          "support": {
+            "distinct": 29,
+            "observed": 30
+          },
+          "value": 0.033333333
+        },
+        "X2": {
+          "status": "ok",
+          "support": {
+            "novel": 30,
+            "transitions": 30
+          },
+          "value": 1.0
+        },
+        "X3": {
+          "status": "ok",
+          "support": {
+            "first_quarter": 1.0,
+            "last_quarter": 1.0,
+            "transitions": 30
+          },
+          "value": 0.0
+        },
+        "X4": {
+          "status": "ok",
+          "support": {
+            "longest_streak": 1,
+            "observed": 30
+          },
+          "value": 0.033333333
+        },
+        "X5": {
+          "status": "ok",
+          "value": 29.0
+        },
+        "X6": {
+          "status": "ok",
+          "support": {
+            "changed": 0,
+            "windows": 260
+          },
+          "value": 0.0
+        }
+      },
+      "model": "claude-opus-5",
+      "model_calls": 9,
+      "notes": {
+        "books": "books/theory.dsl + books/playbook.dsl",
+        "campaign_declared": "theoria-arm:A3-campaign-devpile:g50t-5849a774:20260801T044640Z-R2b-g50t-a",
+        "carried_books": true,
+        "certify_records": 7,
+        "concept_source": "word_table `compress:` annotations parsed from books/theory.dsl; no object palette exists for a live game, so first_seen_step is None throughout",
+        "env_steps": 290,
+        "ledger_complete": true,
+        "ledger_cost_usd": 18.7360085,
+        "ledger_run_id": "r-d3448e8cd4234d56",
+        "levels_completed": 0,
+        "model_calls": 9,
+        "outcome": "spend_gate_tripped",
+        "slug": "20260801T044640Z-R2b-g50t-a",
+        "surprises": {
+          "heuristic_miss": 6,
+          "probe_refutation": 24,
+          "replay_mismatch": 1
+        },
+        "turn_join": {
+          "join_confidence": "degraded",
+          "joined_calls": 9,
+          "ledger_calls": 9,
+          "source": "curves.json"
+        }
+      },
+      "pile": "dev",
+      "source": "theoria-arm-live",
+      "steps": 290,
+      "turn_axis": "exact",
+      "turns": 7
+    },
+    "20260801T044640Z-R2b-sk48-b": {
+      "arm": "theoria",
+      "campaign": "theoria-arm:A3-campaign-devpile",
+      "failed_steps": 42,
+      "game_id": "sk48-d8078629",
+      "intent": "solve",
+      "metrics": {
+        "E1": {
+          "status": "ok",
+          "support": {
+            "calls": 6
+          },
+          "value": 20.3032235
+        },
+        "E2": {
+          "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E3": {
+          "reason": "fewer than 8 turns; the same early-exit confound as E2",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E4": {
+          "status": "ok",
+          "support": {
+            "r2_linear": 0.696337,
+            "r2_quadratic": 0.697754,
+            "turns": 6
+          },
+          "value": 0.001417209
+        },
+        "E5": {
+          "status": "ok",
+          "support": {
+            "actions": 10,
+            "total_usd": 20.303224
+          },
+          "value": 2.03032235
+        },
+        "E6": {
+          "status": "ok",
+          "support": {
+            "http_calls": 52,
+            "on_failed_steps": 1.0,
+            "steps": 52
+          },
+          "value": 1.0
+        },
+        "E7": {
+          "status": "ok",
+          "support": {
+            "first_chars": 85904,
+            "last_chars": 70971,
+            "r2_linear": 0.270327,
+            "r2_quadratic": 0.436161,
+            "turns": 6
+          },
+          "value": 0.165834679
+        },
+        "K1": {
+          "status": "ok",
+          "support": {
+            "agree": 5,
+            "pairs": 9
+          },
+          "value": 0.555555556
+        },
+        "K10": {
+          "status": "ok",
+          "value": 8.0
+        },
+        "K11": {
+          "status": "ok",
+          "value": 9.0
+        },
+        "K12": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K13": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K14": {
+          "status": "ok",
+          "support": {
+            "best": 24,
+            "concepts": 7,
+            "mean": 13.857143,
+            "worst_concept": "Ink3"
+          },
+          "value": 8.0
+        },
+        "K2": {
+          "reason": "no held-out pairs; every reachable pair was covered",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "K3": {
+          "status": "ok",
+          "value": 28.0
+        },
+        "K4": {
+          "status": "ok",
+          "support": {
+            "annotated": 33,
+            "min_witnesses": 1,
+            "unannotated": 28
+          },
+          "value": 1.0
+        },
+        "K5": {
+          "status": "ok",
+          "value": 7.0
+        },
+        "K6": {
+          "status": "ok",
+          "support": {
+            "best": 24,
+            "concepts": 7,
+            "worst": 8
+          },
+          "value": 13.857142857
+        },
+        "K7": {
+          "status": "ok",
+          "support": {
+            "of_concepts": 7
+          },
+          "value": 0.0
+        },
+        "K8": {
+          "status": "ok",
+          "support": {
+            "designed": 5,
+            "executable": 3
+          },
+          "value": 0.6
+        },
+        "K9": {
+          "status": "ok",
+          "value": 32.0
+        },
+        "M1": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M2": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M3": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M4": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M5": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M6": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P1": {
+          "status": "ok",
+          "support": {
+            "actions": 10,
+            "calls": 6
+          },
+          "value": 1.666666667
+        },
+        "P2": {
+          "status": "ok",
+          "support": {
+            "basis": "proportional",
+            "first_rate": 1.666667,
+            "second_rate": 1.666667
+          },
+          "value": 0.0
+        },
+        "P3": {
+          "status": "ok",
+          "support": {
+            "undos": 0,
+            "windows": 8
+          },
+          "value": 0.0
+        },
+        "P4": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P5": {
+          "status": "ok",
+          "support": {
+            "failed": 42,
+            "steps": 52
+          },
+          "value": 0.807692308
+        },
+        "X1": {
+          "status": "ok",
+          "support": {
+            "distinct": 10,
+            "observed": 10
+          },
+          "value": 0.0
+        },
+        "X2": {
+          "status": "ok",
+          "support": {
+            "novel": 10,
+            "transitions": 10
+          },
+          "value": 1.0
+        },
+        "X3": {
+          "status": "ok",
+          "support": {
+            "first_quarter": 1.0,
+            "last_quarter": 1.0,
+            "transitions": 10
+          },
+          "value": 0.0
+        },
+        "X4": {
+          "status": "ok",
+          "support": {
+            "longest_streak": 0,
+            "observed": 10
+          },
+          "value": 0.0
+        },
+        "X5": {
+          "status": "ok",
+          "value": 10.0
+        },
+        "X6": {
+          "status": "ok",
+          "support": {
+            "changed": 0,
+            "windows": 42
+          },
+          "value": 0.0
+        }
+      },
+      "model": "claude-opus-5",
+      "model_calls": 6,
+      "notes": {
+        "books": "books/theory.dsl + books/playbook.dsl",
+        "campaign_declared": "theoria-arm:A3-campaign-devpile:sk48-d8078629:20260801T044640Z-R2b-sk48-b",
+        "carried_books": true,
+        "certify_records": 4,
+        "concept_source": "word_table `compress:` annotations parsed from books/theory.dsl; no object palette exists for a live game, so first_seen_step is None throughout",
+        "env_steps": 52,
+        "ledger_complete": true,
+        "ledger_cost_usd": 20.3032235,
+        "ledger_run_id": "r-0e38c80cabdf478c",
+        "levels_completed": 0,
+        "model_calls": 6,
+        "outcome": "spend_gate_tripped",
+        "slug": "20260801T044640Z-R2b-sk48-b",
+        "surprises": {
+          "heuristic_miss": 1,
+          "probe_refutation": 2,
+          "replay_mismatch": 4
+        },
+        "turn_join": {
+          "join_confidence": "degraded",
+          "joined_calls": 6,
+          "ledger_calls": 6,
+          "source": "curves.json"
+        }
+      },
+      "pile": "dev",
+      "source": "theoria-arm-live",
+      "steps": 52,
+      "turn_axis": "exact",
+      "turns": 3
     }
   },
   "runs_root": "theoria-arm/runs",

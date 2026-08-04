@@ -188,6 +188,7 @@ SUITE = [
     "battery/tests/test_metrics.py",
     "battery/tests/test_theoria_live.py",
     "battery/tests/test_threat_and_frontload.py",
+    "battery/tests/test_turn_axis.py",
     "battery/tests/test_v9_blinding.py",
     "battery/tests/test_v9_defences.py",
     "battery/tests/test_v9_prereg.py",

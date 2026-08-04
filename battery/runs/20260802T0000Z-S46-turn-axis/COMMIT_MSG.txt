@@ -1,0 +1,60 @@
+S46: an axis that cannot be rebuilt is a measurement that was not taken
+
+Run.turn_costs() filled a missing Call.turn in with the call's position in the
+list and put that position into the same bucket dictionary as the real labels.
+Two defects in one line: a partly labelled record summed the unlabelled call at
+position 7 into the bucket of the call genuinely labelled turn=7, and a wholly
+unlabelled one was renumbered 0..n-1 and scored -- a record that could not
+answer the question answering it anyway. freeze ruled on it in STATS_RULES.md
+3.0.2 step 4 and registered it as RESIDUALS.json E2-AXIS.
+
+Run.turn_axis() now reports exact / partial / absent / no-calls, turn_costs
+returns nothing rather than something invented, E2 and E3 refuse (partial ->
+unsound, absent -> thin) and ledger_jsonl stops handing an unstamped row its
+own position. No fourth status was invented; Value's three are a contract the
+artefacts are written against.
+
+Measured before anything was edited, which is what makes this a repair and not
+a change of definition:
+
+* every priced call in every loadable ledger already carries a step_idx, so the
+  fallback was reachable but never load-bearing. 4028 metric cells compared
+  against master one by one -- none moved;
+* v9_demotions() recomputes against the live metric, so a gate that stopped a
+  V9 attack landing would *promote* a metric, which PREREG_V9 R1 forbids. 38
+  demotions before, 38 after, zero tier moves, mutant sweep agreeing. The V9
+  mutants and exploit fixtures that meant "one call per turn" now say it
+  (turn=i) instead of inferring it from the fallback; every asserted number and
+  every registered verdict is unchanged.
+
+The gate sits after the price check and before total <= 0 and
+MIN_TURNS_FOR_SHAPE, because those read the empty list and would report "total
+cost is zero" about a leg that spent real money. Live leg R1-sk48-b is that
+leg: three calls, $7.6085275, no turn label on any of them.
+
+Two sibling holes closed rather than moved: the live economy curve returned []
+for that leg, byte-identical to a leg that never called a model, so the money
+now has a named home in spend_with_no_shape; and the turns column could not
+tell "no decisions" from "decisions nobody labelled", so both artefacts carry
+turn_axis beside it.
+
+E2L: acceptance asked for verdicts consistent with each leg's join_confidence.
+Gating on that label would have re-coupled E2L to the very axis PREREG_E2L 1
+says it exists to escape -- every degraded label here comes from a turn-spine
+check while the step axis is provably intact -- and would have converted six
+readings into silence after seeing they point against C2, which STATS_RULES 8
+seals off. It would also have missed the one leg that is actually wrong. So the
+gate is on the money instead: G6 refuses a leg whose curves.json does not
+certify it accounts for the bill. It catches R1-sk48-b, which published "total
+cost is zero" for $7.6085275, and R1-g50t-a, which read ok at 0.0 off a curve
+$0.005 short. The other eight legs, six of them degraded, are untouched.
+Consistency with join_confidence is delivered by making it unreadable-as-more:
+n_evaluable_by_join_confidence, a top-level axis_caveat, accounts_for_the_bill
+per leg. The amendment is appended to PREREG_E2L.md under PREREG_V9 0's
+protocol and says in its own text that it was written after the numbers and
+that the procedure still bites.
+
+470 passed. verify.py green on all eight rungs. Zero API spend, zero sealed-pile
+contact. The deviation above is reported to monitor for adjudication.
+
+Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>

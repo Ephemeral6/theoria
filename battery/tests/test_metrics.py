@@ -115,7 +115,13 @@ def test_redundancy_refuses_a_run_that_never_reached_the_goal():
 # -------------------------------------------------------------------- economy
 
 def _cost_calls(costs, context=None):
-    return [Call(idx=i, cost_usd=c,
+    """One call per turn, and `turn=i` is how that is now said.
+
+    Until S46 `Run.turn_costs()` filled a missing label in with the call's
+    position, so these fixtures got their decision axis from the fallback
+    rather than from the record. The fallback is gone; the intent is stated.
+    """
+    return [Call(idx=i, cost_usd=c, turn=i,
                  cache_read_tokens=(context[i] if context else 0))
             for i, c in enumerate(costs)]
 
