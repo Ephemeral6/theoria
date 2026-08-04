@@ -1,4 +1,13 @@
 {
+  "gate_flakiness": {
+    "caveat": "a gate that reddens at a different stage on each run under load is itself worth reporting",
+    "observation": "monitor/verify.sh failed twice in a row at DIFFERENT stages, then passed",
+    "reading": "non-zero exit with empty stderr is the Windows 0xC0000142 process-spawn signature; verify.py own docstring notes the 460s budget was measured under six concurrent pytest. Load-dependent flakiness, not a defect in this change.",
+    "run1": "GREEN (pre-merge)",
+    "run2": "RED real run -- board.py list failed, empty stderr; standalone reproduction returncode 0, 187 lines",
+    "run3": "RED tests -- 3 test_orphan_commits failures at git push in a temp repo; standalone 10/10 pass",
+    "run4": "GREEN, all four stages ok, exit 0"
+  },
   "gates": {
     "boundary": "1/1 green -- nothing outside monitor/",
     "monitor_suite": {

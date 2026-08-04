@@ -1,8 +1,8 @@
 {
   "artifacts": {
     "monitor/INCIDENTS.md": {
-      "bytes": 7504,
-      "sha256": "1de787b26c1d08d3b58d5373040f458e45a42237cffba2ebdeeaf04da4724a7c"
+      "bytes": 9078,
+      "sha256": "83254ef0c64129193d7faadbd5c253977d3e3f57592e77e2fe50655de54022d0"
     },
     "monitor/inbox/20260802T1240Z-monitor-to-freeze-9-2-cannot-be-cleared-a-one-token-tautology-passes.md": {
       "bytes": 4311,
@@ -12,33 +12,37 @@
       "bytes": 4300,
       "sha256": "e4dce6f5360dc947171f29c8ef16fb53d6fddc44e3f7e892c2129837c744a3ec"
     },
+    "monitor/inbox/20260802T1330Z-monitor-to-theory-compiler-partner-sync-append-only-was-broken-mid-file.md": {
+      "bytes": 3529,
+      "sha256": "5fcf006d60e94aa5eb1746591b5cbfaacfe4a6cf36d80269254a3bcf6a872f79"
+    },
     "monitor/loop_state.json": {
       "bytes": 11787,
       "sha256": "6500a5cec5c62f09fff155fe7f9037fa79ea520b9258258a835070b52bd3cb4f"
     },
     "monitor/money.json": {
-      "bytes": 10304,
-      "sha256": "bc9640cf5fe90d5ba7fe8aa57edfe948497fcdf62ef569d5abc3402cb37991b0"
+      "bytes": 11147,
+      "sha256": "e5a0688912013f3094697f343f4b617592acec1b992cd2b71f25447828abf343"
     },
     "monitor/runs/2026-08-02T122508Z-M-1-money-single-truth/NOTES.md": {
-      "bytes": 4248,
-      "sha256": "4f696ed45b3f282675145997cd1b840773944983e698a524ca6a3c254603a5c2"
+      "bytes": 5311,
+      "sha256": "4b43e484cf1d001dc76165f6a6671933153e01bdb829958072f3edb766ca4d6c"
     },
     "monitor/runs/2026-08-02T122508Z-M-1-money-single-truth/RUN_STATE.md": {
-      "bytes": 11430,
-      "sha256": "e22f2e8f0ce06f18a331b3589e941759dc629fab52a5d66a91f23f7a61145caa"
+      "bytes": 13148,
+      "sha256": "1cbaf76bdd27a0d2b0a3cb84f73e2c9d56534ecdd9bbba86c915ee5edff77f15"
     },
     "monitor/runs/2026-08-02T122508Z-M-1-money-single-truth/results.json": {
-      "bytes": 1145,
-      "sha256": "1103009ff04e9ea0f026c9140f9470b9a1745cf6ef0e1eb3ce1dba7e9c208c86"
+      "bytes": 1923,
+      "sha256": "109e29a3345e2040dbff4fd0177a50662d33831b4c93d9b0ac79244c312650fd"
     },
     "monitor/scan.py": {
       "bytes": 176287,
       "sha256": "cf40144b71e97f8b307c8ff15a2a4a7b1d1394f89bee761a98236639299f126c"
     },
     "monitor/spec.py": {
-      "bytes": 123612,
-      "sha256": "2523e645c7de35df00fe72da99329dc02f6357212fed098c49a50551faf52e45"
+      "bytes": 123163,
+      "sha256": "d9a30e46c35e1f1fa9c4b62bd0f7d5bf7b717cefb870f08ae06081a2eb39effb"
     },
     "monitor/tests/test_money_register.py": {
       "bytes": 12185,
@@ -51,6 +55,15 @@
   "prompt": null,
   "prompt_id": "M-1",
   "results": {
+    "gate_flakiness": {
+      "caveat": "a gate that reddens at a different stage on each run under load is itself worth reporting",
+      "observation": "monitor/verify.sh failed twice in a row at DIFFERENT stages, then passed",
+      "reading": "non-zero exit with empty stderr is the Windows 0xC0000142 process-spawn signature; verify.py own docstring notes the 460s budget was measured under six concurrent pytest. Load-dependent flakiness, not a defect in this change.",
+      "run1": "GREEN (pre-merge)",
+      "run2": "RED real run -- board.py list failed, empty stderr; standalone reproduction returncode 0, 187 lines",
+      "run3": "RED tests -- 3 test_orphan_commits failures at git push in a temp repo; standalone 10/10 pass",
+      "run4": "GREEN, all four stages ok, exit 0"
+    },
     "gates": {
       "boundary": "1/1 green -- nothing outside monitor/",
       "monitor_suite": {
@@ -91,7 +104,7 @@
   },
   "run_dir": "monitor/runs/2026-08-02T122508Z-M-1-money-single-truth",
   "seed": null,
-  "t": "2026-08-02T12:48:30Z",
-  "tests": "monitor suite 534 passed, 2 xfailed, exit 0 (baseline 525 passed / 2 xfailed at base d10788f7; +9 tests). Guards: sealed 2/2 with a disclosed --allow on 3 pre-existing paths, secret 5/5, boundary 1/1.",
+  "t": "2026-08-04T12:24:53Z",
+  "tests": "monitor suite 534 passed / 2 xfailed. Territory gate GREEN exit 0 on the 4th run (two prior reds at different stages, both reproducing green standalone -- load flakiness, recorded). Guards: sealed 2/2 with a disclosed --allow, secret 5/5, boundary 1/1.",
   "title": "M-1: money gets a single source of truth, and the register acquires a test that can turn it red"
 }
