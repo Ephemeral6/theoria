@@ -1,0 +1,201 @@
+=== available (通用工人可领 7) ===
+  p1  A33-forty-six-baseline-runs-scored-zero-is-wrong-three-times-over cell=A33 territory=baseline-arms  unlaned
+  p1  A34-nothing-has-ever-completed-a-level-and-we-cannot-say-why cell=A34 territory=monitor        unlaned
+  p1  S50-freeze-gate-red-on-master cell=S50 territory=freeze         unlaned
+  p1  S51-the-ceiling-moved-to-700-and-the-freeze-manifest-still-publishes-a-negative-balance cell=S51 territory=freeze         unlaned
+  p2  S49-the-12-d1-hole-is-two-rows-wide-and-the-aggregate-is-already-published cell=S49 territory=freeze         unlaned
+  p2  S52-the-inbox-is-a-drop-box-nine-of-ten-addressed-asks-were-never-seen cell=S52 territory=monitor        unlaned
+  p2  V31-class-ii-cannot-be-built-and-the-request-to-build-it-was-never-boarded cell=V31 territory=exam           unlaned
+=== blocked ===
+  A26-frontier-width-and-probe-yield-as-scoreboard waits on A24-round-scoreboard-columns-are-null
+=== territory-blocked (10) ===
+  p1  A22-r3-generated-frontier-round territory=theoria-arm    领地 theoria-arm 被 A24-round-scoreboard-columns-are-null 占着
+  p1  A27-freeze-gate-reads-the-rewritable-half territory=theoria-arm    领地 theoria-arm 被 A24-round-scoreboard-columns-are-null 占着
+  p1  A29-theoria-arm-suite-red    territory=theoria-arm    领地 theoria-arm 被 A24-round-scoreboard-columns-are-null 占着
+  p1  A30-the-arm-spends-its-actions-on-probes-not-on-the-level territory=theoria-arm    领地 theoria-arm 被 A24-round-scoreboard-columns-are-null 占着
+  p1  A31-the-win-detector-has-never-fired-and-the-round-total-turns-absence-into-zero territory=theoria-arm    领地 theoria-arm 被 A24-round-scoreboard-columns-are-null 占着
+  p1  A35-the-only-record-of-a-win-is-written-once-at-the-end-of-the-leg territory=theoria-arm    领地 theoria-arm 被 A24-round-scoreboard-columns-are-null 占着
+  p1  A36-half-the-desk-bill-buys-nothing-and-the-measurement-that-says-so-has-no-owner territory=theoria-arm    领地 theoria-arm 被 A24-round-scoreboard-columns-are-null 占着
+  p2  A25-change-sentence-not-bound-to-the-knob territory=theoria-arm    领地 theoria-arm 被 A24-round-scoreboard-columns-are-null 占着
+  p2  A28-desk-through-the-model-proxy-behind-a-flag territory=theoria-arm    领地 theoria-arm 被 A24-round-scoreboard-columns-are-null 占着
+  p2  A32-the-sk48-leg-pays-more-per-desk-call-and-moves-less territory=theoria-arm    领地 theoria-arm 被 A24-round-scoreboard-columns-are-null 占着
+=== claimed ===
+  A24-round-scoreboard-columns-are-null by W-9202
+=== done (177) ===
+  A10-shared-ledger-real-arms.W-1641
+  A11-bypass-attempts-explained.W-1641
+  A12-cost-claim-sources.RES-1
+  A13-sealed-audit-reads-the-wrong-fields.RES-4
+  A14-campaign-json-untracked.W-1670
+  A15-ablation-calibration-uncommitted.W-1672
+  A16-A16-launch-gate-wired.W-1800
+  A18-scorer-at-run-end.W-A18
+  A19-bare-cc-seal-split.W-A19
+  A20-model-side-bypass-negative.W-A20
+  A21-ablation-arm-name.W-A21
+  A23-anchor-drift-on-the-default-leg.W-9202
+  A3-A17-armversion-reads-all-refs.W-1800
+  A3-campaign-devpile.RES-1
+  A3-campaign-level2.W-1800
+  A4-ablation-online.superseded-by-A4a
+  A4a-ablation-build.RES-1
+  A4b-ablation-calibrate.RES-1
+  A6-transfer-protocol.RES-1
+  A7-envelope-finish.APP-A7
+  A8-campaign-ledger-pipeline.W-1800
+  A9-readonly-baseline.RES-3
+  C1-P23-fourth-form-unqualified.CLEANUP
+  C1-worldgen.W-1610
+  C10-unsolvable-proof-canon.RES-3
+  C11-tool-failure-as-truth.RES-3
+  C13-certificate-bridge-two-halves.W-1700
+  C14-four-forms-is-three-and-a-half.W-1710
+  C15-the-unnameable-cell-has-no-home-in-the-dsl.W-9204
+  C4-deadlock-lean.W-1541
+  C6-worldgen-mutate.W-1251
+  C7-dsl-v03-mentions.APP-C7
+  C8-handover-package.W-1252
+  C9-count-lock-vocabulary.W-131
+  E10-engine-crosscheck.RES-3
+  E11-engine-crosscheck-deep.RES-3
+  E12-adopt-the-unsolvable-canon.RES-3
+  E13-engine-section-numbers.RES-3
+  E14-crash-is-not-a-finding.RES-3
+  E15-solver-status-bit.RES-3
+  E16-verdict-must-gate.W-1650
+  E17-held-out-validation.RES-3
+  E18-survey-numbers-reproducible.CLEANUP
+  E19-merge-clean-but-broken.RES-3
+  E2-fd-ladder-bench.W-1520
+  E3-engines-online.CLEANUP
+  E4-property-fuzz.W-1610
+  E5-cert-recheck.W-1411
+  E6-engine-dividend.W-130
+  E7-deadlock-claim-audit.W-130
+  E8-ic3-scale.W-1660
+  E9-engine-paper-table.RES-3
+  P-P21-line-anchor-range.RES-2
+  P-P22-anchor-rots-at-commit.RES-2
+  P10-figures-into-paper.W-1253
+  P11-battery-section-refresh.RES-2
+  P12-paper-multi-review.RES-2
+  P13-P13-figure-numbering-and-plates.RES-2
+  P13-paper-intro-abstract.RES-2
+  P14-honesty-section.RES-2
+  P15-capability-column-has-no-signal.RES-2
+  P16-P16-uncited-number-gate.RES-2
+  P17-P17-bare-filename-citations.RES-2
+  P17-P17-machine-checked-ruling.RES-2
+  P18-P18-certificate-verb-ruling.RES-2
+  P18-audits-cover-half-the-paper.RES-3
+  P19-P19.RES-2
+  P4-P16-e06-contradiction.RES-2
+  P4-figures.W-1611
+  P5-R4-ruling-path-for-undetermined.RES-4
+  P5-release.RES-2
+  P6-paper-assembly.W-1610
+  P7-P14-battery-section-blind-round.RES-2
+  P7-paper-section7.APP-P7
+  P8-billshape-pipeline.RES-2
+  P9-paper-to-submittable.RES-2
+  R2-release-licence.W-1412
+  R3-release-classifier-defaults.RES-4
+  R4-worktree-rescue.CLEANUP
+  S-P20-nosecret-noop.RES-2
+  S-S33-monitor-gate-red-on-master.RES-4
+  S-S34-papers-owes-a-verify-gate.RES-2
+  S1-quota-auto-exit.W-1250
+  S10-invariant-on-resource.W-1251
+  S11-sealed-halfguard.W-1410
+  S12-quota-hold-tests.W-1412
+  S13-verify-gate-enforced.RES-1
+  S14-gates-for-all.RES-4
+  S15-ledger-hashchain.RES-4
+  S16-silent-failure-hunt.RES-4
+  S17-fleet-evidence-capture.W-1641
+  S18-fleetkit-extract.RES-4
+  S19-session-liveness.RES-4
+  S2-canary-schedule.W-1540
+  S20-gate-negative-sample.RES-4
+  S21-app-session-death.RES-4
+  S22-access-check-close.RES-1
+  S23-unreadable-is-not-clean.W-1642
+  S24-merge-conflict-drain.W-1641
+  S25-probe-the-merge-queue.RES-4
+  S26-phase1-gate-must-decide.RES-4
+  S27-S27-release-must-stick.RES-4
+  S27-credential-in-body-triage.RES-4
+  S28-S28-claim-warns-on-existing-branch.RES-4
+  S28-no-third-value-in-the-monitor.RES-4
+  S29-S29-third-condition-and-lock-ignore.RES-4
+  S29-S29-triage-the-five-red-gates.RES-4
+  S29-measurement-missing-is-not-zero.RES-4
+  S3-spend-gate.W-1540
+  S30-S30-clock-sanity-widen.RES-4
+  S30-scan-crash-is-invisible.W-1680
+  S31-S31-fleetkit-gate.RES-4
+  S31-a10-said-done-prove-it.W-1800
+  S32-S32-close-the-gate-gap.RES-4
+  S32-dual-agent-is-one-agent.W-1800
+  S35-s35-reserved-but-unreachable.RES-4
+  S36-s36-orphan-commits-one-disk.RES-4
+  S38-S38-append-only-probe-branch-blind.RES-4
+  S39-S39-writes-into-the-live-master-tree.RES-4
+  S4-E-WORDING.RES-1
+  S4-S34-done-items-resurrect.RES-4
+  S4-S4-E1-HOLES.RES-1
+  S4-S4-E23-TIERS.RES-1
+  S4-freeze-complete.RES-1
+  S4-freeze.RES-1
+  S40-S40-fleetkit-fork-has-drifted.RES-4
+  S41-S41-prior-work-scans-one-of-two.RES-4
+  S42-S42-fleetkit-three-lies.RES-4
+  S43-S43-three-guards-reverted.RES-4
+  S44-S44-reflex-heartbeat-unwatched.W-1800
+  S44-monitor-suite-outgrew-its-gate.W-1800
+  S45-launch-blockers-915-916-and-the-reason-floor.W-9201
+  S46-turn-costs-mixes-two-axes.W-9205
+  S47-refusal-wave-retry-predicate.W-9203
+  S48-schema-column-withdrawal-claims-text.W-9204
+  S5-phase1-close.W-1250
+  S6-merge-gate-509.superseded-by-derived-gate
+  S7-ledger-hashchain.RES-4
+  S8-provenance-backfill.W-1412
+  S9-contract-change-protocol.W-1250
+  V-V26-handover-leak-ruling.RES-3
+  V10-fuzz-mutation-power.RES-3
+  V11-handover-auto.RES-3
+  V11-negative-control-census.RES-3
+  V12-worldgen-gate-deaf.RES-3
+  V13-audit-the-published-surface.RES-3
+  V14-standing-negative-control-probe.RES-3
+  V15-census-sampling-frame.RES-3
+  V16-determinism-has-no-caller.RES-3
+  V17-pin-the-partial-verdict.RES-3
+  V18-battery-prereg-check.RES-3
+  V19-unverified-is-not-true.RES-3
+  V2-V25-leakage-loo-and-multiplicity.RES-3
+  V2-V25-verify-does-not-check-what-is-committed.W-1800
+  V2-exam-on-worldgen.W-1540
+  V20-figures-pipeline-red.RES-3
+  V21-leakage-gate-token-level.RES-3
+  V21-lp-unavailable-is-not-a-pass.RES-3
+  V22-battery-separated-zero-metrics.W-1671
+  V23-figures-sources-absent.CLEANUP
+  V24-battery-blind-hardcoded-path.W-1682
+  V25-worldgen-unchecked-is-not-holding.CLEANUP
+  V26-fuzzlab-readme-points-at-the-smoke-run.W-1800
+  V27-V27-manifest-absolute-paths.RES-3
+  V28-exam-four-tests-must-flip.W-9204
+  V29-one-proxy-validated-not-two.W-9203
+  V3-battery-discrimination.APP-V3
+  V30-p18-hand-merge.W-9201
+  V4-exam-selftest.RES-1
+  V5-battery-freeze.W-252
+  V5-verdict-three-types.W-1652
+  V6-V22-wintighten-absent-vs-below.RES-3
+  V6-V23-large-space-verdict-gap.RES-3
+  V6-exam-on-sealed-dryrun.RES-3
+  V7-exam-stress-fanout.RES-3
+  V8-judge-trust-audit.RES-3
+  V9-battery-gaming-audit.RES-3

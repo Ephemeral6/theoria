@@ -86,3 +86,41 @@ audit-smoke                           lines=0  bytes=0
 * 一条 `final_level` 已达的 mock 腿必须**停止**并落终局事件，而不是继续
   `observe()` 把 `completed` 越加越大；`levels.py:102` 的那个分支同样没有
   被任何一次执行覆盖过。
+
+---
+
+## 对账 2026-08-04（监控·board hygiene）· 第二证人来了，`or 0` 还在——本件的核心一条未动
+
+2026-08-02 的 A27 交付（`theoria-arm/inner/scoreboard.py` 718 行 + 659 行测试，
+`runs/20260802T2100Z-A27-level-boundary-detector/`，合入 master 于 `3a1ee035`）
+**推翻了本件的一条前提并交付了本件没要的一件好东西**：
+
+* **前提修正。** 臂并非「看不见边界」——每一次 `_record` 都把信封的
+  `levels_completed` 推进 `LevelLog.observe`（`inner/loop.py:443`），
+  `state == "WIN"` 每回合检查。真正的盲点是**记分卡**：`score` /
+  `level_scores` / `level_actions` / `level_baseline_actions` 不在任何对局
+  响应上，全臂唯一一次取记分卡是 `_finish` 里的 `close_scorecard`，
+  所以一条腿从来握不住自己的分母。
+* **多出来的东西。** `ScoreWatch` 是第二个证人，`boundary_verdict()` 把
+  `not_measured`（null）与 `measured_absent`（false）分开，十条负样本逐条列在
+  `RUN_STATE.md`，其中一条正是本件第 3 条要的：记分卡说通了关而 `LevelLog`
+  没说时，`corroborate` 报 `disagree` 而不是二选一。
+
+**本件的核心一条没有动**，逐字复算：
+
+```
+$ grep -n "levels_completed" theoria-arm/armtools/round.py
+104:        "levels_completed": levels.get("levels_completed"),
+188:  "levels_completed": sum((l.get("levels_completed") or 0) for l in legs),
+```
+
+`round.py:188` 的 `or 0` 原样在树上。`theoria-arm/runs/*/levels.jsonl`
+**22 个文件，非零字节 0 个**（本件复算，与正文逐目录点的结果一致）。所以
+「缺席读成零」这件事今天仍然成立，A34 的负样本（造一条真通了关但
+`levels.jsonl` 被截断的腿）今天仍然会红。
+
+**本件保持 open，范围收窄为**：`round.py` 的 `totals` 在任一条腿缺 `levels_completed`
+时落 `null` + `legs_missing_levels_completed` 计数；以及正文第 2 条的离线
+mock 通关——`ScoreWatch` 的合成正样本证明**记分卡侧**能发信号，
+`LevelLog` 侧仍未被任何一次执行走通。正文第 1、3 条与两条负样本原样保留。
+另见新开的 A35：这条记录路径除了没发过，还只在腿末尾写一次。
