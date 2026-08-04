@@ -44,12 +44,45 @@ the defect this file exists to prevent:
     python freeze/build_budget_table.py                 # write JSON + refresh the block
     python freeze/build_budget_table.py --verify         # exit 1 on drift
     python freeze/build_budget_table.py --verify --allow-absent-pool
+    python freeze/build_budget_table.py --verify --frozen   # at the freeze
     python freeze/build_budget_table.py --emit-pool-digest
+    python freeze/build_budget_table.py --self-test
 
 `--verify` is what belongs in a gate.  Drift in the tracked half means somebody
 edited a ledger or the table; drift in the pool half means **the balance moved**,
 which is not a nuisance — it is the one event that must invalidate a frozen
 budget table.
+
+**Amended 2026-08-04 (S50).**  The paragraph above is still the rule, but it was
+being applied to a file a live fleet appends to every few seconds, so `--verify`
+was red continuously from at least 2026-08-01 and `ci_merge` refused every
+freeze-touching branch on an exit code nobody could attribute.  `--verify` now
+recomputes the pool **as of the `as_of_seq` the committed table states**, and
+compares a digest over exactly those records.  Growth past that point is
+reported with a dollar figure and a record count on every run — green or red —
+instead of being collapsed into an unattributable red.  Everything tracked is
+still compared live and exactly.  Retroactive edits and truncations of the pool
+are now caught, which the old whole-file digest could not do while the file was
+growing.  `--verify --frozen` restores the all-or-nothing behaviour and is what
+the freeze itself must run.  The reasoning is set out above `read_pool` and the
+controls that make it more than a claim are in `_pool_as_of_selftest`.
+
+Two things this file is known to get WRONG, found while fixing the above and
+filed rather than quietly patched, because both change what a published number
+means:
+
+* `programme_measured_usd` **double-counts** every `theoria-arm:` pool campaign
+  that also has a tracked `ledger.jsonl` — `build()` excludes only three
+  hard-coded `phase3-*` names.  Measured 2026-08-04: **$129.03** across 10
+  campaigns, which is byte-identical to `monitor/money.json`'s
+  `allocations.dev_pile_B.measured_usd`, i.e. the money single-source-of-truth
+  and this file agree on the overlap and this file then adds it twice.  It
+  overstates spend and understates headroom, so it is conservative and did not
+  manufacture any verdict — but it is wrong.
+* `pool.abspath_is_main_checkout` is True when the generator had to walk up out
+  of a worktree, so a table regenerated in a worktree fails `--verify` on
+  master.  Regenerate from the main checkout; S50's runs directory carries a
+  script that does it and asserts the flag afterwards.
 """
 
 import argparse
@@ -89,10 +122,37 @@ def resolve_pool(rel):
 
 
 def sha256_file(path):
+    """Content digest over LF-normalised bytes — NOT the raw file digest.
+
+    Changed 2026-08-04 (S50) after the raw digest produced two different values
+    for one unmodified file.  `proxy/spend_policy.json` is CRLF on disk in the
+    main checkout and LF in a fresh worktree; `git status` calls neither
+    modified, because `proxy/.gitattributes` pins `*.json text eol=lf` and git
+    compares the normalised form.  So `policy.sha256` was a fact about which
+    checkout ran the generator, and stage [15b] failed with `sections that
+    moved: policy` for a file nobody had touched.
+
+    `tools/check_locations.py:sha256` already reached this conclusion and
+    records the reasoning: "core.autocrlf is true on the machine this
+    repository is developed on and only some paths carry an eol=lf, so a raw
+    digest would expire every exemption at the checkout boundary."  Same defect,
+    same fix, and it is the git-mandated LF form that every other checkout will
+    reproduce.
+
+    KNOWN DISAGREEMENT, stated rather than hidden: `proxy/spend_gate.py` stamps
+    every run_start with its OWN `policy_sha256` over raw bytes, so a run
+    launched from the CRLF main checkout records `d722c615…` while a run
+    launched from a correct checkout records `2f22ba45…` for the same policy.
+    Both values are in the live pool right now (2 records and 4 records
+    respectively, measured 2026-08-04).  That is the proxy's defect, not this
+    file's, and it is reported to `proxy/` rather than worked around here — but
+    a reader comparing this field against a run_start must know the two are
+    computed differently before concluding the policy changed.
+    """
     digest = hashlib.sha256()
     with open(path, "rb") as handle:
-        for chunk in iter(lambda: handle.read(1 << 20), b""):
-            digest.update(chunk)
+        raw = handle.read()
+    digest.update(raw.replace(b"\r\n", b"\n"))
     return digest.hexdigest()
 
 
@@ -151,7 +211,59 @@ def read_pricing():
 # 2 · the gate's pool (untracked)
 # --------------------------------------------------------------------------
 
-def read_pool(rel):
+#: WHY THE POOL IS READ AS OF A SEQ, AND NOT LIVE (S50, 2026-08-04)
+#:
+#: Read this before deciding the check below has been loosened, because the
+#: question it answers changed and the answer it gives got stricter.
+#:
+#: Until today `--verify` re-read the whole live pool and compared it to the
+#: committed table.  The docstring's justification is right as far as it goes:
+#: "drift in the pool half means the balance moved, which is not a nuisance --
+#: it is the one event that must invalidate a frozen budget table."  But
+#: `proxy/var/spend_gate.jsonl` is an untracked, append-only file that a
+#: running fleet appends to continuously.  Measured on 2026-08-04 while fixing
+#: this ticket: 17592 -> 17662 -> 17677 -> 17745 -> 17768 lines inside one
+#: session.  So the committed table was stale within minutes of every
+#: regeneration, `[15b]` had been red continuously since at least 2026-08-01,
+#: and because `ci_merge` reads only the exit code, EVERY freeze-touching
+#: branch was refused -- s45 was explicitly ruled "no new failure, not its
+#: fault, blocked by master".  A gate whose steady state is red is not a strict
+#: gate; it is an unread one.  Nobody could distinguish "red because somebody
+#: hand-edited the table" from "red because a leg spent forty cents", which is
+#: precisely the discrimination this check exists to make.
+#:
+#: The category error is the fix: **a frozen artefact cannot pin live
+#: untracked state and also be reproducible.**  `build_manifest.py` already
+#: refuses that error in the other direction -- untracked inputs are hashed
+#: from disk "and marked, because an untracked input to a freeze manifest is
+#: itself a finding".  So the table stops claiming to be current and starts
+#: claiming what it can actually be: **a truthful record of the pool up to a
+#: stated `as_of_seq`**.  `--verify` recomputes the pool restricted to that
+#: prefix.
+#:
+#: What this makes STRICTER, not weaker:
+#:
+#:   * `prefix_sha256` digests the included records, so **editing or deleting
+#:     any historical line is caught**.  The old full-file `sha256` could not
+#:     do this on a live pool -- growth changed it every minute, so a
+#:     retroactive edit was hidden inside a red that was already there for an
+#:     innocent reason.  Tamper-evidence went UP.
+#:   * A pool that SHRANK past `as_of_seq` fails: the prefix no longer
+#:     reproduces.
+#:   * Every tracked input (the policy, the citations, the arm ledgers, the
+#:     price table) is compared exactly as before.  Nothing there was relaxed.
+#:
+#: What it stops failing on: the pool having grown since the table was
+#: written.  That is not silently dropped -- `--verify` prints the live seq,
+#: the live total and the delta on every run, so "the balance moved, by $X,
+#: over N records" is now a NUMBER a reader gets rather than a red they cannot
+#: attribute.  And `--verify --frozen` restores the old all-or-nothing
+#: behaviour: any live delta fails.  **That is the flag the actual freeze must
+#: run**, because at the freeze moment "the balance moved" IS the event that
+#: invalidates the table.  Wiring `--frozen` into the freeze ritual is filed
+#: as its own board item; today 0 of 13 freeze-list items are ready, so there
+#: is no freeze yet for it to guard.
+def read_pool(rel, as_of_seq=None):
     path = resolve_pool(rel)
     if path is None:
         return {"present": False, "path": rel,
@@ -168,16 +280,28 @@ def read_pool(rel):
     by_model = {}
     lines = 0
     max_seq = 0
+    prefix = hashlib.sha256()
+    skipped = 0
     with open(path, encoding="utf-8") as handle:
         for line in handle:
             line = line.strip()
             if not line:
                 continue
-            lines += 1
             rec = json.loads(line)
+            seq = int(rec.get("seq") or 0)
+            # Records past the as-of point are not this table's business.  A
+            # record with no `seq` reads as 0 and is therefore always INSIDE
+            # the prefix: that fails closed, because appending a seq-less line
+            # then changes `prefix_sha256` and the check goes red.
+            if as_of_seq is not None and seq > as_of_seq:
+                skipped += 1
+                continue
+            lines += 1
+            prefix.update(line.encode("utf-8"))
+            prefix.update(b"\n")
             kind = rec.get("kind")
             kinds[kind] = kinds.get(kind, 0) + 1
-            max_seq = max(max_seq, int(rec.get("seq") or 0))
+            max_seq = max(max_seq, seq)
             if kind not in ("spend", "price_correction"):
                 continue
             amount = float(rec.get("usd") or 0)
@@ -232,9 +356,32 @@ def read_pool(rel):
     return {
         "present": True,
         "path": rel,
-        "abspath_is_main_checkout": os.path.normpath(path)
+        # `abspath_is_main_checkout` used to live here. It records whether
+        # `resolve_pool` had to walk UP out of `.worktrees/<id>/`, i.e. a fact
+        # about where the generator stood -- True in a worktree, False in the
+        # main checkout -- and it was inside the `--verify` comparison, so a
+        # table regenerated on a branch failed on master and vice versa. It has
+        # moved to `generated_from`, next to `commit`/`branch`/`dirty`, which
+        # is where the facts about the run already live and which `--verify`
+        # already strips.
+        #
+        # Nothing is lost by moving it. The guarantee it was standing in for --
+        # "these numbers came from the one true pool, not a worktree-local
+        # copy" -- is enforced better by `prefix_sha256` below: a different
+        # pool produces a different digest and the gate goes red with it,
+        # whereas the boolean only ever described the search, never the result.
+        # The `resolve_pool` walk itself is what implements the guarantee
+        # (proxy/SPEND_GATE.md:219-226, one pool per worktree was a real defect
+        # worth $10,959.90 of authorised exposure).
+        "resolved_out_of_worktree": os.path.normpath(path)
                                     != os.path.normpath(os.path.join(REPO, rel)),
-        "sha256": sha256_file(path),
+        # The prefix digest replaces the old whole-file `sha256`, which could
+        # not survive one append and therefore certified nothing on a live
+        # pool. This one digests exactly the records the numbers below are
+        # computed from, so it is reproducible AND it catches a retroactive
+        # edit. See the block above `read_pool`.
+        "prefix_sha256": prefix.hexdigest(),
+        "as_of_seq": max_seq,
         "lines": lines,
         "max_seq": max_seq,
         "kinds": dict(sorted(kinds.items())),
@@ -523,8 +670,20 @@ def projections(factors):
 #: checked.  A `path:line` that has drifted, or a section number that does not
 #: exist, is a silent failure of exactly the kind the table is supposed to stop.
 CITED_LINES = [
-    ("proxy/spend_policy.json", 4, '"usd_ceiling": 214.9'),
-    ("proxy/spend_policy.json", 5, '"action_ceiling": 24000'),
+    # Re-anchored 2026-08-04 (S50). These two numbers were raised on
+    # 2026-08-02 by `c42f5ad4`, through `spend_policy.json`'s own `raising_it`
+    # clause, and registered as `monitor/spec.py` p3-gate-exception #15. The
+    # citation check did its job: it went red, and clearing it required a
+    # human to read WHY the ceiling moved rather than a regeneration to paper
+    # over it. What changed is only the value on the line -- line 6 still
+    # matches, so the file's shape did not shift underneath the anchor.
+    # $214.90 was a *measurement* ($50 G1 + $164.90 stop-loss = INC-BA-003's
+    # worst-case exposure); $700.00 is a *budget* with no such derivation.
+    # That distinction is stated in this file's §A prose, because a re-anchor
+    # that keeps the number checked but drops the reason is the failure this
+    # mechanism exists to prevent.
+    ("proxy/spend_policy.json", 4, '"usd_ceiling": 700.0'),
+    ("proxy/spend_policy.json", 5, '"action_ceiling": 40000'),
     ("proxy/spend_policy.json", 6, '"ledger": "proxy/var/spend_gate.jsonl"'),
     ("proxy/.gitignore", 3, "var/"),
     ("baseline-arms/BUDGET_REPORT.md", 119, "3014"),
@@ -673,10 +832,10 @@ def check_citations():
 # 7 · assembly
 # --------------------------------------------------------------------------
 
-def build():
+def build(pool_as_of=None):
     policy = read_policy()
     pricing = read_pricing()
-    pool = read_pool(policy["ledger_rel"])
+    pool = read_pool(policy["ledger_rel"], as_of_seq=pool_as_of)
     reprice, pricing_sha = make_repricer()
     bare = read_tracked_ledgers(BARE_CC_LEDGERS, reprice)
     theoria = read_tracked_ledgers(THEORIA_LEDGERS, reprice)
@@ -741,6 +900,11 @@ def build():
             "commit": git("rev-parse", "HEAD"),
             "branch": git("rev-parse", "--abbrev-ref", "HEAD"),
             "dirty": bool(git("status", "--porcelain")),
+            # See the note in `read_pool`'s return: a fact about where the
+            # generator stood belongs here, with the other three, and not in
+            # the compared object.
+            "pool_resolved_out_of_worktree":
+                pool.pop("resolved_out_of_worktree", None),
         },
         "policy": policy,
         "pricing": dict(pricing, table_sha256_as_loaded=pricing_sha),
@@ -798,9 +962,10 @@ def render(data):
     out.append("| 动作上限 | %s | `proxy/spend_policy.json:5` |"
                % format(bal["action_ceiling"], ","))
     if pool["present"]:
-        out.append("| 闸门可见已花 | **$%.4f** | `%s` seq 1–%d（%d 行，sha256 `%s…`）|"
-                   % (pool["usd"], pool["path"], pool["max_seq"], pool["lines"],
-                      pool["sha256"][:12]))
+        out.append("| 闸门可见已花 | **$%.4f** | `%s` seq 1–%d（%d 行，前缀 sha256 "
+                   "`%s…`；**这是截至该 seq 的记录，不是当期余额**）|"
+                   % (pool["usd"], pool["path"], pool["as_of_seq"],
+                      pool["lines"], pool["prefix_sha256"][:12]))
         out.append("| 闸门可见余额 | $%.4f | 上两行相减 |"
                    % bal["gate_visible_headroom_usd"])
         out.append("| 其中未计价占位 | $%.4f（%d 笔）| 见 C1 |"
@@ -1028,7 +1193,12 @@ def pool_digest(data):
                "and cannot be hashed into freeze/MANIFEST.json. This digest is "
                "the tracked, redacted stand-in the budget table cites.",
         "pool_path": pool["path"],
-        "pool_sha256": pool["sha256"],
+        # Was `pool["sha256"]`, the whole-file digest. S50 replaced it with the
+        # digest over the records up to `pool_max_seq`: on an append-only file
+        # that a live fleet is still writing to, the whole-file digest expired
+        # between generation and any later reading, so a reader could never use
+        # it to say "the same pool". The prefix digest they can.
+        "pool_prefix_sha256": pool["prefix_sha256"],
         "pool_lines": pool["lines"],
         "pool_max_seq": pool["max_seq"],
         "kinds": pool["kinds"],
@@ -1043,6 +1213,113 @@ def pool_digest(data):
         "redaction": "allow-list; holder/pid/host, reservation_id, "
                      "policy_sha256 and all detail payloads are not copied",
     }
+
+
+def _pool_as_of_selftest():
+    """Negative controls for the as-of pool read (S50).
+
+    A weakening dressed as a fix is the thing this repository keeps catching --
+    `monitor/inbox/20260802T1240Z-...-a-one-token-tautology-passes.md` is the
+    live example: a check whose stated criterion was "the invariant is not
+    constant" and whose implementation was "the body is not the literal token
+    `true`", with the gap invisible because the registered negative control
+    happened to be clumsy enough to be caught anyway.
+
+    Reading the pool as of a seq COULD be that same move: if `prefix_sha256`
+    were, say, a digest of the record count, it would reproduce across every
+    append and pass every honest case while certifying nothing.  So each claim
+    made for the mechanism gets a control here, in both directions, against a
+    synthetic pool whose bytes are known:
+
+      1. growth past the as-of point does NOT drift   (the point of the change)
+      2. editing a record INSIDE the prefix DOES      (tamper-evidence)
+      3. deleting a record inside the prefix DOES     (truncation)
+      4. an appended record with no `seq` DOES        (the fail-closed claim in
+                                                       `read_pool`'s comment)
+      5. an uncapped read of a grown pool DOES differ (control 1 is the as-of
+                                                       filter working, not the
+                                                       digest being blind)
+
+    Control 5 is the one that kills the tautology: without it, controls 1-4 are
+    equally satisfied by a `prefix_sha256` that ignores its input entirely.
+    """
+    import shutil
+    import tempfile
+
+    def rec(seq, usd_amt, kind="spend", **extra):
+        row = {"seq": seq, "kind": kind, "usd": usd_amt, "actions": 1,
+               "campaign": "selftest", "detail": {"model": "m"}}
+        row.update(extra)
+        return json.dumps(row, sort_keys=True)
+
+    base = [rec(1, 1.0), rec(2, 2.0), rec(3, 4.0)]
+    tmp = tempfile.mkdtemp()
+    saved = globals()["resolve_pool"]
+    results = []
+
+    def digest(rows, as_of):
+        """`read_pool` over exactly these rows, through the real code path.
+
+        `resolve_pool` is rebound rather than reimplemented so that the control
+        exercises the shipped function; a hand-rolled digest here would prove
+        something about the test and nothing about the gate.
+        """
+        path = os.path.join(tmp, "pool.jsonl")
+        with open(path, "w", encoding="utf-8", newline="\n") as handle:
+            handle.write("\n".join(rows) + "\n")
+        globals()["resolve_pool"] = lambda rel: path
+        return read_pool("selftest/pool.jsonl", as_of_seq=as_of)
+
+    try:
+        ref = digest(base, None)
+        as_of = ref["as_of_seq"]
+
+        grown = digest(base + [rec(4, 8.0)], as_of)
+        results.append(("CONTROL: the pool GROWING past the as-of point is not "
+                        "drift (this is the change; if it fails the change did "
+                        "nothing)",
+                        grown["prefix_sha256"] == ref["prefix_sha256"]
+                        and grown["usd"] == ref["usd"], True))
+
+        edited = digest([base[0], rec(2, 999.0), base[2]], as_of)
+        results.append(("CONTROL: EDITING a record inside the prefix is drift "
+                        "-- retroactive rewriting is what the digest is for",
+                        edited["prefix_sha256"] == ref["prefix_sha256"], False))
+
+        cut = digest([base[0], base[2]], as_of)
+        results.append(("CONTROL: DELETING a record inside the prefix is drift "
+                        "(a shrunk append-only pool is an incident)",
+                        cut["prefix_sha256"] == ref["prefix_sha256"], False))
+
+        seqless = digest(base + ['{"kind": "spend", "usd": 5.0, "actions": 1, '
+                                 '"campaign": "selftest"}'], as_of)
+        results.append(("CONTROL: an appended record with NO seq reads as seq 0 "
+                        "and therefore lands INSIDE the prefix -- the missing "
+                        "field fails closed, it does not slip past the cap",
+                        seqless["prefix_sha256"] == ref["prefix_sha256"], False))
+
+        uncapped = digest(base + [rec(4, 8.0)], None)
+        results.append(("CONTROL: an UNCAPPED read of the grown pool differs "
+                        "from the reference -- so control 1 is the as-of filter "
+                        "working, not a digest that ignores its input",
+                        uncapped["prefix_sha256"] == ref["prefix_sha256"], False))
+
+        results.append(("CONTROL: the capped read reports the cap it honoured, "
+                        "so a reader can tell WHICH prefix was certified",
+                        grown["as_of_seq"] == as_of
+                        and grown["lines"] == len(base), True))
+    finally:
+        globals()["resolve_pool"] = saved
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    rc = 0
+    for label, got, want in results:
+        if got is want:
+            print("PASS %s" % label)
+        else:
+            print("FAIL %s (got %r, want %r)" % (label, got, want))
+            rc = 1
+    return rc
 
 
 def self_test():
@@ -1093,6 +1370,8 @@ def self_test():
             print("FAIL %s (got %r, want %r)" % (label, got, want))
             rc = 1
 
+    rc |= _pool_as_of_selftest()
+
     live = [r for r in check_citations()["lines"] if " " in r["cite"]]
     if len(live) != len(CITED_IN_SECTION):
         print("FAIL section-anchored citations not all evaluated: %d of %d"
@@ -1123,6 +1402,14 @@ def main():
                              "proxy/var/spend_gate.jsonl is a warning, not a "
                              "failure. Use only where the balance is not the "
                              "thing under test.")
+    parser.add_argument("--frozen", action="store_true",
+                        help="with --verify: the pool having GROWN since the "
+                             "table's as_of_seq is a failure, not a note. This "
+                             "is the flag the actual freeze must run -- at the "
+                             "freeze moment 'the balance moved' is exactly the "
+                             "event that invalidates the table. Off by default "
+                             "because the fleet is still spending and a gate "
+                             "that is red every minute is a gate nobody reads.")
     parser.add_argument("--emit-pool-digest", action="store_true",
                         help="write freeze/POOL_DIGEST.json, the tracked "
                              "redacted stand-in for the untracked pool")
@@ -1134,7 +1421,24 @@ def main():
     if args.self_test:
         return self_test()
 
-    data = build()
+    # `--verify` recomputes the pool AS OF the seq the committed table states,
+    # so that an append by a still-spending fleet is not read as a hand-edit.
+    # See the long note above `read_pool`. Everything else -- the policy, the
+    # citations, the tracked ledgers, the price table -- is recomputed live and
+    # compared exactly as before.
+    live = None
+    pool_as_of = None
+    if args.verify and os.path.exists(OUT_JSON):
+        try:
+            committed = json.loads(open(OUT_JSON, encoding="utf-8").read())
+            if committed.get("pool", {}).get("present"):
+                pool_as_of = committed["pool"].get("as_of_seq")
+        except Exception:                                   # pragma: no cover
+            pool_as_of = None                # a corrupt table drifts anyway
+        if pool_as_of is not None:
+            live = build()                   # uncapped, for the delta report
+
+    data = build(pool_as_of=pool_as_of)
     text = json.dumps(data, indent=2, sort_keys=True, ensure_ascii=False) + "\n"
     block = render(data)
 
@@ -1177,6 +1481,33 @@ def main():
         if data["citations"]["absent"]:
             print("CITATION NOT YET ON DISK (⛔, not a failure): %s"
                   % ", ".join(data["citations"]["absent"]))
+
+        # The balance-moved report. This is not decoration and it is not
+        # optional: it is the information the old all-or-nothing red destroyed
+        # by refusing to say HOW MUCH or SINCE WHEN. It prints on every run,
+        # green or red, so nobody can read a PASS as "the balance is current".
+        if live is not None and live["pool"]["present"]:
+            grew = live["pool"]["as_of_seq"] - (pool_as_of or 0)
+            d_usd = usd(live["pool"]["usd"] - data["pool"]["usd"])
+            d_act = live["pool"]["actions"] - data["pool"]["actions"]
+            if grew or d_usd or d_act:
+                print("BALANCE MOVED SINCE THIS TABLE WAS WRITTEN:")
+                print("       table is as of pool seq %s; the pool is now at %s "
+                      "(+%s records)"
+                      % (pool_as_of, live["pool"]["as_of_seq"], grew))
+                print("       spent since: $%.4f over %d action(s); live pool "
+                      "total $%.4f against a $%s ceiling"
+                      % (d_usd, d_act, live["pool"]["usd"],
+                         live["policy"]["usd_ceiling"]))
+                print("       the table above is a RECORD, not a current "
+                      "balance. Regenerate before quoting it as one, and run "
+                      "`--verify --frozen` at the freeze itself.")
+                if args.frozen:
+                    print("       --frozen: a moved balance is a failure here.")
+                    rc = 1
+            else:
+                print("the pool has not moved since this table was written "
+                      "(as of seq %s)" % pool_as_of)
         if rc == 0:
             print("freeze/BUDGET_TABLE.{json,md} still describes this tree")
             print("  %s" % data["verdict"]["statement"])

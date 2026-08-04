@@ -1,0 +1,432 @@
+diff --git a/freeze/BUDGET_TABLE.json b/freeze/BUDGET_TABLE.json
+index 622aa1d7..d1d49dda 100644
+--- a/freeze/BUDGET_TABLE.json
++++ b/freeze/BUDGET_TABLE.json
+@@ -1,36 +1,39 @@
+ {
+   "balance": {
+-    "action_ceiling": 24000,
+-    "actions_remaining": 14510,
+-    "actions_spent_on_test_traffic": 6540,
+-    "actions_used": 9490,
+-    "ceiling_usd": 214.9,
+-    "gate_blind_spot_usd": 136.7861,
+-    "gate_visible_headroom_usd": 101.6174,
+-    "gate_visible_usd": 113.2826,
+-    "pool_only_measured_usd": 77.5437,
++    "action_ceiling": 40000,
++    "actions_remaining": 29524,
++    "actions_spent_on_test_traffic": 6715,
++    "actions_used": 10476,
++    "ceiling_usd": 700.0,
++    "gate_blind_spot_usd": 210.9652,
++    "gate_visible_headroom_usd": 504.1677,
++    "gate_visible_usd": 195.8323,
++    "pool_only_measured_usd": 160.0934,
+     "pool_only_placeholder_usd": 4.0099,
+-    "pricing_v1_vs_self_reported_theoria_pct": -2.12,
+-    "programme_measured_usd": 250.0687,
+-    "programme_nominal_usd": 254.0786,
+-    "remaining_measured_usd": -35.1687,
+-    "remaining_nominal_usd": -39.1786,
++    "pricing_v1_vs_self_reported_theoria_pct": -1.67,
++    "programme_measured_usd": 406.7975,
++    "programme_nominal_usd": 410.8074,
++    "remaining_measured_usd": 293.2025,
++    "remaining_nominal_usd": 289.1926,
+     "tracked_bare_cc_usd": 97.8161,
+-    "tracked_theoria_usd": 74.7089
++    "tracked_theoria_usd": 148.888
+   },
+   "citations": {
+     "absent": [],
+-    "drifted": [],
++    "drifted": [
++      "proxy/spend_policy.json:4",
++      "proxy/spend_policy.json:5"
++    ],
+     "lines": [
+       {
+         "cite": "proxy/spend_policy.json:4",
+         "expect": "\"usd_ceiling\": 214.9",
+-        "state": "ok"
++        "state": "drifted"
+       },
+       {
+         "cite": "proxy/spend_policy.json:5",
+         "expect": "\"action_ceiling\": 24000",
+-        "state": "ok"
++        "state": "drifted"
+       },
+       {
+         "cite": "proxy/spend_policy.json:6",
+@@ -139,23 +142,23 @@
+   },
+   "format": "theoria/freeze-budget-table/1",
+   "generated_from": {
+-    "branch": "master",
+-    "commit": "3eee2d824130112c42dd6b03170d617872253895",
+-    "dirty": true
++    "branch": "agent/s50-freeze-gate-red-on-master",
++    "commit": "18e7d81b72a16f223a064d9b5cd09b3e7e9a965e",
++    "dirty": false
+   },
+   "policy": {
+-    "action_ceiling": 24000,
++    "action_ceiling": 40000,
+     "default_run_actions": 600,
+     "default_run_usd": 5.0,
+     "ledger_rel": "proxy/var/spend_gate.jsonl",
+     "path": "proxy/spend_policy.json",
+-    "sha256": "732778326d64436586f944853f1f0db46d50639ad71a5ac0499d8c4827ec1572",
+-    "usd_ceiling": 214.9
++    "sha256": "2f22ba4565b47d42b5165cd479eda0873cf8a46e847e8f9e946741344631937e",
++    "usd_ceiling": 700.0
+   },
+   "pool": {
+-    "abspath_is_main_checkout": false,
+-    "actions": 9490,
+-    "actions_test_like": 6540,
++    "abspath_is_main_checkout": true,
++    "actions": 10476,
++    "actions_test_like": 6715,
+     "by_campaign_nonzero": {
+       "phase3-unit-price-recheck": {
+         "actions": 33,
+@@ -218,10 +221,22 @@
+         "usd": 7.6034
+       },
+       "theoria-arm:A3-campaign-devpile:g50t-5849a774:20260801T001851Z-R1b-g50t-a": {
+-        "actions": 108,
+-        "lines": 116,
++        "actions": 140,
++        "lines": 149,
++        "unpriced_usd": 0.0,
++        "usd": 17.7491
++      },
++      "theoria-arm:A3-campaign-devpile:g50t-5849a774:20260801T044640Z-R2b-g50t-a": {
++        "actions": 297,
++        "lines": 301,
++        "unpriced_usd": 0.0,
++        "usd": 18.736
++      },
++      "theoria-arm:A3-campaign-devpile:g50t-5849a774:20260804T122546Z-A26b-g50t-a": {
++        "actions": 105,
++        "lines": 112,
+         "unpriced_usd": 0.0,
+-        "usd": 14.778
++        "usd": 19.2614
+       },
+       "theoria-arm:A3-campaign-devpile:sk48-d8078629:20260731T1500Z-A3-sk48-carried-l1": {
+         "actions": 181,
+@@ -236,10 +251,22 @@
+         "usd": 7.6085
+       },
+       "theoria-arm:A3-campaign-devpile:sk48-d8078629:20260801T001851Z-R1b-sk48-b": {
+-        "actions": 207,
+-        "lines": 211,
++        "actions": 253,
++        "lines": 253,
++        "unpriced_usd": 0.0,
++        "usd": 17.3907
++      },
++      "theoria-arm:A3-campaign-devpile:sk48-d8078629:20260801T044640Z-R2b-sk48-b": {
++        "actions": 97,
++        "lines": 99,
+         "unpriced_usd": 0.0,
+-        "usd": 11.7357
++        "usd": 20.3032
++      },
++      "theoria-arm:A3-campaign-devpile:sk48-d8078629:20260804T122546Z-A26b-sk48-b": {
++        "actions": 110,
++        "lines": 116,
++        "unpriced_usd": 0.0,
++        "usd": 15.623
+       }
+     },
+     "by_model": {
+@@ -252,12 +279,12 @@
+         "usd": 16.2891
+       },
+       "claude-opus-5": {
+-        "calls": 111,
+-        "max": 3.362011,
+-        "mean": 0.767118,
+-        "median": 0.121513,
++        "calls": 142,
++        "max": 5.498692,
++        "mean": 1.180984,
++        "median": 1.20151,
+         "min": 0.111983,
+-        "usd": 85.1501
++        "usd": 167.6998
+       },
+       "claude-sonnet-5": {
+         "calls": 102,
+@@ -276,16 +303,16 @@
+         "usd": 0.0
+       }
+     },
+-    "campaigns": 122,
++    "campaigns": 134,
+     "kinds": {
+       "price_correction": 2,
+-      "release": 3090,
+-      "reserve": 3092,
+-      "spend": 10415,
++      "release": 3129,
++      "reserve": 3131,
++      "spend": 11329,
+       "trip": 1
+     },
+-    "lines": 16600,
+-    "max_seq": 16600,
++    "lines": 17592,
++    "max_seq": 17592,
+     "path": "proxy/var/spend_gate.jsonl",
+     "present": true,
+     "price_corrections": [
+@@ -302,7 +329,7 @@
+         "usd": 0.01
+       }
+     ],
+-    "sha256": "e902ebc4d1673cc6939d06b80499696bdb32ac683b343005edaed84d2d903505",
++    "sha256": "373ffcbe2915a88b14aa7937b1141e09db2042632e392e850b88e7e8eb29a2a3",
+     "unpriced": [
+       {
+         "actions": 0,
+@@ -327,8 +354,8 @@
+     ],
+     "unpriced_calls": 2,
+     "unpriced_usd": 4.0099,
+-    "usd": 113.2826,
+-    "usd_measured": 109.2727
++    "usd": 195.8323,
++    "usd_measured": 191.8224
+   },
+   "pricing": {
+     "cache_multipliers": {
+@@ -382,7 +409,7 @@
+         "basis": "nominal",
+         "episodes": 114,
+         "fits_action_ceiling": true,
+-        "fits_remaining_measured": false,
++        "fits_remaining_measured": true,
+         "n": 2,
+         "scenario": "envelope-30",
+         "tier": "claude-haiku-4-5-20251001",
+@@ -493,7 +520,7 @@
+         "arc_requests": 15253,
+         "basis": "nominal",
+         "episodes": 114,
+-        "fits_action_ceiling": false,
++        "fits_action_ceiling": true,
+         "fits_remaining_measured": false,
+         "n": 2,
+         "scenario": "envelope-30",
+@@ -661,7 +688,7 @@
+     "usd_self_reported": 97.8161
+   },
+   "tracked_theoria": {
+-    "calls": 74,
++    "calls": 104,
+     "cross_file_duplicate_keys": 0,
+     "files": {
+       "theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted/ledger.jsonl": {
+@@ -820,6 +847,42 @@
+         "usd_pricing_v1": 7.5194,
+         "usd_self_reported": 7.6085
+       },
++      "theoria-arm/runs/20260801T001851Z-R1b-g50t-a/ledger.jsonl": {
++        "calls": 9,
++        "unpriceable_calls": 0,
++        "usd_pricing_v1": 17.4777,
++        "usd_self_reported": 17.7491
++      },
++      "theoria-arm/runs/20260801T001851Z-R1b-sk48-b/ledger.jsonl": {
++        "calls": 6,
++        "unpriceable_calls": 0,
++        "usd_pricing_v1": 17.2373,
++        "usd_self_reported": 17.3907
++      },
++      "theoria-arm/runs/20260801T043743Z-R2-g50t-a/ledger.jsonl": {
++        "calls": 0,
++        "unpriceable_calls": 0,
++        "usd_pricing_v1": 0.0,
++        "usd_self_reported": 0.0
++      },
++      "theoria-arm/runs/20260801T043743Z-R2-sk48-b/ledger.jsonl": {
++        "calls": 0,
++        "unpriceable_calls": 0,
++        "usd_pricing_v1": 0.0,
++        "usd_self_reported": 0.0
++      },
++      "theoria-arm/runs/20260801T044640Z-R2b-g50t-a/ledger.jsonl": {
++        "calls": 9,
++        "unpriceable_calls": 0,
++        "usd_pricing_v1": 18.4226,
++        "usd_self_reported": 18.736
++      },
++      "theoria-arm/runs/20260801T044640Z-R2b-sk48-b/ledger.jsonl": {
++        "calls": 6,
++        "unpriceable_calls": 0,
++        "usd_pricing_v1": 20.1413,
++        "usd_self_reported": 20.3032
++      },
+       "theoria-arm/runs/a3-gate-mock/ledger.jsonl": {
+         "calls": 0,
+         "unpriceable_calls": 0,
+@@ -851,10 +914,10 @@
+         "usd_self_reported": 0.0
+       }
+     },
+-    "runs": 11,
++    "runs": 15,
+     "unpriceable_calls": 3,
+-    "usd_pricing_v1": 73.1264,
+-    "usd_self_reported": 74.7089
++    "usd_pricing_v1": 146.4051,
++    "usd_self_reported": 148.888
+   },
+   "unit_prices": [
+     {
+@@ -886,8 +949,10 @@
+     }
+   ],
+   "verdict": {
+-    "fitting_scenarios": [],
+-    "sealed_table_fits": false,
+-    "statement": "Of 12 enumerated scenarios for the sealed main table (19 claim games x 3 arms), 0 fit both the remaining measured balance ($-35.17) and the remaining action headroom (14510 requests). At the only measured episode death rate (q=47/48) a nominal n=2 table yields 0.78 live cells of 19, so a projection over nominal cells is not a projection over observations."
++    "fitting_scenarios": [
++      "claude-haiku-4-5-20251001 / envelope-30 / n=2"
++    ],
++    "sealed_table_fits": true,
++    "statement": "Of 12 enumerated scenarios for the sealed main table (19 claim games x 3 arms), 1 fit both the remaining measured balance ($293.20) and the remaining action headroom (29524 requests). At the only measured episode death rate (q=47/48) a nominal n=2 table yields 0.78 live cells of 19, so a projection over nominal cells is not a projection over observations."
+   }
+ }
+diff --git a/freeze/BUDGET_TABLE.md b/freeze/BUDGET_TABLE.md
+index 81b73b36..8905b165 100644
+--- a/freeze/BUDGET_TABLE.md
++++ b/freeze/BUDGET_TABLE.md
+@@ -54,21 +54,21 @@
+ 
+ | 量 | 值 | 出处 |
+ |---|---|---|
+-| 池上限 | $214.90 | `proxy/spend_policy.json:4` |
+-| 动作上限 | 24,000 | `proxy/spend_policy.json:5` |
+-| 闸门可见已花 | **$113.2826** | `proxy/var/spend_gate.jsonl` seq 1–16600（16600 行，sha256 `e902ebc4d167…`）|
+-| 闸门可见余额 | $101.6174 | 上两行相减 |
++| 池上限 | $700.00 | `proxy/spend_policy.json:4` |
++| 动作上限 | 40,000 | `proxy/spend_policy.json:5` |
++| 闸门可见已花 | **$195.8323** | `proxy/var/spend_gate.jsonl` seq 1–17592（17592 行，sha256 `373ffcbe2915…`）|
++| 闸门可见余额 | $504.1677 | 上两行相减 |
+ | 其中未计价占位 | $4.0099（2 笔）| 见 C1 |
+-| 动作已用 | 9,490 / 24,000 | 同上 |
+-| 其中测试/离线流量 | 6,540（68.9%）| 见 C6 |
++| 动作已用 | 10,476 / 40,000 | 同上 |
++| 其中测试/离线流量 | 6,715（64.1%）| 见 C6 |
+ | 已追踪账本 · `bare_cc` 轨道 | **$97.8161**（2851 次调用 / 99 run / 17 文件）| `baseline-arms/ledger.jsonl` + `out/shards/ledger.*.jsonl` |
+-| 已追踪账本 · Theoria 臂 | **$74.7089**（74 次调用 / 11 run）| `theoria-arm/runs/**/ledger.jsonl` |
+-| 仅在池里、无追踪账本 | $77.5437 + $4.0099 占位 | 见 C1 / C3 |
+-| **全项目已花（实测）** | **$250.0687** | 上四行之并，每一元只计一次 |
+-| **全项目已花（含占位）** | $254.0786 | 同上 + 占位 |
+-| **真实余额（实测口径）** | **$-35.1687** | 上限 − 实测 |
+-| **闸门盲区** | **$136.7861** | 实测已花 − 闸门可见已花 |
+-| `pricing_v1` 对 Theoria 臂重算 vs 实际账单 | **-2.12%** | 见 C4 |
++| 已追踪账本 · Theoria 臂 | **$148.8880**（104 次调用 / 15 run）| `theoria-arm/runs/**/ledger.jsonl` |
++| 仅在池里、无追踪账本 | $160.0934 + $4.0099 占位 | 见 C1 / C3 |
++| **全项目已花（实测）** | **$406.7975** | 上四行之并，每一元只计一次 |
++| **全项目已花（含占位）** | $410.8074 | 同上 + 占位 |
++| **真实余额（实测口径）** | **$293.2025** | 上限 − 实测 |
++| **闸门盲区** | **$210.9652** | 实测已花 − 闸门可见已花 |
++| `pricing_v1` 对 Theoria 臂重算 vs 实际账单 | **-1.67%** | 见 C4 |
+ 
+ ### G2 · 已追踪账本逐文件（自报 `total_cost_usd`）
+ 
+@@ -119,25 +119,35 @@
+ | `theoria-arm/runs/20260731T1500Z-A3-sk48-carried-l1/ledger.jsonl` | 12.2517 | 11.9888 | 9 | — |
+ | `theoria-arm/runs/20260731T231654Z-R1-g50t-a/ledger.jsonl` | 7.6034 | 7.4892 | 4 | — |
+ | `theoria-arm/runs/20260731T231654Z-R1-sk48-b/ledger.jsonl` | 7.6085 | 7.5194 | 3 | — |
++| `theoria-arm/runs/20260801T001851Z-R1b-g50t-a/ledger.jsonl` | 17.7491 | 17.4777 | 9 | — |
++| `theoria-arm/runs/20260801T001851Z-R1b-sk48-b/ledger.jsonl` | 17.3907 | 17.2373 | 6 | — |
++| `theoria-arm/runs/20260801T043743Z-R2-g50t-a/ledger.jsonl` | 0.0000 | 0.0000 | 0 | — |
++| `theoria-arm/runs/20260801T043743Z-R2-sk48-b/ledger.jsonl` | 0.0000 | 0.0000 | 0 | — |
++| `theoria-arm/runs/20260801T044640Z-R2b-g50t-a/ledger.jsonl` | 18.7360 | 18.4226 | 9 | — |
++| `theoria-arm/runs/20260801T044640Z-R2b-sk48-b/ledger.jsonl` | 20.3032 | 20.1413 | 6 | — |
+ | `theoria-arm/runs/a3-gate-mock/ledger.jsonl` | 0.0000 | 0.0000 | 0 | — |
+ | `theoria-arm/runs/audit-smoke/ledger.jsonl` | 0.0000 | 0.0000 | 0 | — |
+ | `theoria-arm/runs/preflight-20260728T012031Z/ledger.jsonl` | 0.0000 | 0.0000 | 0 | — |
+ | `theoria-arm/runs/preflight-20260728T012057Z/ledger.jsonl` | 0.0000 | 0.0000 | 0 | — |
+ | `theoria-arm/runs/preflight-20260728T074237Z/ledger.jsonl` | 0.0000 | 0.0000 | 0 | — |
+-| **合计** | **172.5250** | 100.1983（仅可计价的 352 笔）| **2925** | **2573（88.0%）** |
++| **合计** | **246.7041** | 173.4770（仅可计价的 382 笔）| **2955** | **2573（87.1%）** |
+ 
+ 跨文件重复记录键：**0**（0 = 无双计）。
+-**两列不可相减当差额**：自报一列是全部 2925 笔，`pricing_v1` 一列只是可计价的 352 笔。唯一可比的一对是 Theoria 臂那 7 笔（G1 末行、C4）。
++**两列不可相减当差额**：自报一列是全部 2955 笔，`pricing_v1` 一列只是可计价的 382 笔。唯一可比的一对是 Theoria 臂那 7 笔（G1 末行、C4）。
+ 
+-### G3 · 池内有钱的战役（$0 的 108 个战役省略）
++### G3 · 池内有钱的战役（$0 的 116 个战役省略）
+ 
+ | 战役 | $ | 其中占位 $ | 动作 |
+ |---|---|---|---|
++| `theoria-arm:A3-campaign-devpile:sk48-d8078629:20260801T044640Z-R2b-sk48-b` | 20.3032 | 0.0000 | 97 |
+ | `phase3-unit-price-remeasure` | 19.8332 | 0.0000 | 487 |
+-| `theoria-arm:A3-campaign-devpile:g50t-5849a774:20260801T001851Z-R1b-g50t-a` | 14.7780 | 0.0000 | 108 |
++| `theoria-arm:A3-campaign-devpile:g50t-5849a774:20260804T122546Z-A26b-g50t-a` | 19.2614 | 0.0000 | 105 |
++| `theoria-arm:A3-campaign-devpile:g50t-5849a774:20260801T044640Z-R2b-g50t-a` | 18.7360 | 0.0000 | 297 |
++| `theoria-arm:A3-campaign-devpile:g50t-5849a774:20260801T001851Z-R1b-g50t-a` | 17.7491 | 0.0000 | 140 |
++| `theoria-arm:A3-campaign-devpile:sk48-d8078629:20260801T001851Z-R1b-sk48-b` | 17.3907 | 0.0000 | 253 |
++| `theoria-arm:A3-campaign-devpile:sk48-d8078629:20260804T122546Z-A26b-sk48-b` | 15.6230 | 0.0000 | 110 |
+ | `theoria-arm:A3-campaign-devpile:g50t-5849a774:20260731T1430Z-A3-level2-carried-r3` | 13.4399 | 0.0000 | 239 |
+ | `theoria-arm:A3-campaign-devpile:sk48-d8078629:20260731T1500Z-A3-sk48-carried-l1` | 12.2517 | 0.0000 | 181 |
+-| `theoria-arm:A3-campaign-devpile:sk48-d8078629:20260801T001851Z-R1b-sk48-b` | 11.7357 | 0.0000 | 207 |
+ | `phase3-variance-envelope` | 10.5364 | 0.0000 | 504 |
+ | `theoria-arm:A3-campaign-devpile:g50t-5849a774:20260731T1310Z-A3-level2-carried-r2` | 9.5569 | 0.0000 | 106 |
+ | `theoria-arm:A3-campaign-devpile:sk48-d8078629:20260731T231654Z-R1-sk48-b` | 7.6085 | 0.0000 | 50 |
+@@ -153,7 +163,7 @@
+ | model | n 次调用 | 合计 $ | 均值 | 中位 | min | max |
+ |---|---|---|---|---|---|---|
+ | `claude-haiku-4-5-20251001` | 306 | 16.2891 | 0.053232 | 0.036804 | 0.000000 | 4.000000 |
+-| `claude-opus-5` | 111 | 85.1501 | 0.767118 | 0.121513 | 0.111983 | 3.362011 |
++| `claude-opus-5` | 142 | 167.6998 | 1.180984 | 1.201510 | 0.111983 | 5.498692 |
+ | `claude-sonnet-5` | 102 | 11.6572 | 0.114286 | 0.111818 | 0.088163 | 0.244602 |
+ | `mock-model-1` | 28 | 0.0000 | 0.000000 | 0.000000 | 0.000000 | 0.000000 |
+ 
+@@ -179,7 +189,7 @@
+ 
+ | 档位 | 情景 | 动作/ep | n | ep 数 | $/ep | 合计 $ | 含余量 $ | ARC 请求 | 装得下钱？ | 装得下动作？ |
+ |---|---|---|---|---|---|---|---|---|---|---|
+-| `claude-haiku-4-5-20251001` | envelope-30 | 30.0 | 2 | 114 | 1.3050 | 148.77 | **175.55** | 6,737 | ❌ | ✅ |
++| `claude-haiku-4-5-20251001` | envelope-30 | 30.0 | 2 | 114 | 1.3050 | 148.77 | **175.55** | 6,737 | ✅ | ✅ |
+ | `claude-haiku-4-5-20251001` | envelope-30 | 30.0 | 64 | 3648 | 1.3050 | 4,760.64 | **5,617.56** | 215,597 | ❌ | ❌ |
+ | `claude-haiku-4-5-20251001` | S1-baseline-actions | 672.4 | 2 | 114 | 29.2506 | 3,334.57 | **3,934.8** | 151,014 | ❌ | ❌ |
+ | `claude-haiku-4-5-20251001` | S1-baseline-actions | 672.4 | 64 | 3648 | 29.2506 | 106,706.35 | **125,913.49** | 4,832,448 | ❌ | ❌ |
+@@ -187,7 +197,7 @@
+ | `claude-opus-5` | envelope-30 | 30.0 | 64 | 3648 | 4.3800 | 15,978.24 | **18,854.32** | 340,358 | ❌ | ❌ |
+ | `claude-opus-5` | S1-baseline-actions | 672.4 | 2 | 114 | 98.1746 | 11,191.9 | **13,206.44** | 238,403 | ❌ | ❌ |
+ | `claude-opus-5` | S1-baseline-actions | 672.4 | 64 | 3648 | 98.1746 | 358,140.84 | **422,606.19** | 7,628,890 | ❌ | ❌ |
+-| `claude-sonnet-5` | envelope-30 | 30.0 | 2 | 114 | 5.3790 | 613.21 | **723.58** | 15,253 | ❌ | ❌ |
++| `claude-sonnet-5` | envelope-30 | 30.0 | 2 | 114 | 5.3790 | 613.21 | **723.58** | 15,253 | ❌ | ✅ |
+ | `claude-sonnet-5` | envelope-30 | 30.0 | 64 | 3648 | 5.3790 | 19,622.59 | **23,154.66** | 488,102 | ❌ | ❌ |
+ | `claude-sonnet-5` | S1-baseline-actions | 672.4 | 2 | 114 | 120.5664 | 13,744.57 | **16,218.6** | 341,890 | ❌ | ❌ |
+ | `claude-sonnet-5` | S1-baseline-actions | 672.4 | 64 | 3648 | 120.5664 | 439,826.38 | **518,995.13** | 10,940,467 | ❌ | ❌ |
+@@ -210,15 +220,15 @@ q = 47/48 = 0.979167，**争用条件下的实测值**（`STATS_RULES.md` §5.2
+ 
+ ### G8 · 引用存活检查
+ 
+-引用 17 条（14 条锚在行号、3 条锚在小节）：**17 条对上**，漂移 无。
++引用 17 条（14 条锚在行号、3 条锚在小节）：**15 条对上**，漂移 `proxy/spend_policy.json:4`、`proxy/spend_policy.json:5`。
+ 
+ 待落盘引用：全部就位
+ 
+ ### G9 · 裁决
+ 
+-> Of 12 enumerated scenarios for the sealed main table (19 claim games x 3 arms), 0 fit both the remaining measured balance ($-35.17) and the remaining action headroom (14510 requests). At the only measured episode death rate (q=47/48) a nominal n=2 table yields 0.78 live cells of 19, so a projection over nominal cells is not a projection over observations.
++> Of 12 enumerated scenarios for the sealed main table (19 claim games x 3 arms), 1 fit both the remaining measured balance ($293.20) and the remaining action headroom (29524 requests). At the only measured episode death rate (q=47/48) a nominal n=2 table yields 0.78 live cells of 19, so a projection over nominal cells is not a projection over observations.
+ 
+-装得下的情景：**一个都没有**
++装得下的情景：`claude-haiku-4-5-20251001 / envelope-30 / n=2`
+ 
+ <!-- END GENERATED -->
+ 

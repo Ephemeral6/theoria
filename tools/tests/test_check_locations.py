@@ -102,6 +102,47 @@ def test_it_fires_on_the_artefact_that_motivated_it():
     assert "windows absolute path" in hits and "worktree segment" in hits, hits
 
 
+def test_it_fires_on_a_real_run_record_in_run_scope():
+    """The same house rule, for the scope that carries 94% of the findings.
+
+    Added 2026-08-04 by S50 because the run half of this gate had never been
+    seen red against real bytes. Every other run test in this file hands
+    `adjudicate` a hand-fabricated finding tuple, which tests the bookkeeping
+    and never the predicate, and `_hits` defaults to `scope="artefact"` -- so
+    `_patterns("run")`, a DIFFERENT frozenset, was exercised by nothing.
+
+    Measured before writing this: setting `RUN_PATTERN_NAMES = frozenset()` in
+    memory -- i.e. deleting the run detector outright -- turned every test in
+    this file green, including the two that were red at the time. A mutation
+    that removes half the gate should not repair its test suite. This test
+    kills that mutant.
+
+    `445c647e` is the R1b landing; its `run.json` records the spend gate's
+    `ledger_abspath`, which is absolute by design (harness/spend.py:160) and is
+    therefore a stable specimen rather than something a later fix will erase.
+    """
+    blob = subprocess.run(
+        ["git", "show",
+         "445c647e:theoria-arm/runs/20260801T001851Z-R1b-sk48-b/run.json"],
+        cwd=REPO, capture_output=True)
+    if blob.returncode != 0:
+        import pytest
+        pytest.skip("the run blob is not reachable in this clone")
+    hits = _hits("run.json", blob.stdout.decode("utf-8"), scope="run")
+    assert "windows absolute path" in hits, hits
+
+
+def test_run_scope_has_patterns_at_all():
+    """A `_patterns("run")` that returned nothing would report `clean` forever.
+
+    The failure mode this guards is silence, not a wrong answer: 5946 run files
+    scanned and zero findings reads exactly like a tidy tree. It is not implied
+    by the test above, which skips when the blob is unreachable.
+    """
+    names = [name for name, _rx in cl._patterns("run")]
+    assert "windows absolute path" in names and "worktree segment" in names, names
+
+
 def test_the_full_pipeline_reports_the_pre_fix_blob_as_a_violation():
     """Not just the regex: an unlisted dirty artefact must reach `adjudicate`."""
     findings = {"artefact": [("exam/artifacts/build_manifest.json",

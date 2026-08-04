@@ -44,6 +44,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import subprocess
 import sys
 
@@ -80,8 +81,12 @@ ITEMS = [
         "paths": ["CONTRACTS/dsl_grammar_v0.1.md",
                   "CONTRACTS/dsl_grammar_v0.2.md",
                   "CONTRACTS/dsl_grammar_v0.3.md",
+                  "CONTRACTS/dsl_grammar_v0.4.md",
                   "theory-compiler/src/theory_compiler/parser/theory_parser.py",
                   "theory-compiler/src/theory_compiler/parser/playbook_parser.py"],
+        # See FAMILIES.  This item's paths are a version series, so a new
+        # version is the expected event and silence about it is the defect.
+        "family": r"^CONTRACTS/dsl_grammar_v[^/]*\.md$",
         "note": "**v0.3 is current and the campaign should compile against it** "
                 "-- it is the version the running validator implements "
                 "(`theory_parser.py:296,328`, `writes.py:25-26`) and its "
@@ -94,7 +99,17 @@ ITEMS = [
                 "does not exist** -- the theory-compiler track has cut none. "
                 "v0.3 inherits the same dangling reference verbatim. "
                 "`theory_grammar.lark` is a dead file and is excluded on "
-                "purpose (its own header says it is not the parser in use).",
+                "purpose (its own header says it is not the parser in use). "
+                "**v0.4 added 2026-08-04 (S50)**: it landed 2026-08-02 by C15 "
+                "and was silently unhashed here until W-9204 reported it "
+                "(`monitor/inbox/20260802T085557Z-...-v0-4.md`). It carries "
+                "the REFUSAL of GAP R2-2 and adds no production, so v0.3 "
+                "remains the version the campaign compiles against and this "
+                "item's status does not move; what moves is that the refusal "
+                "is now inside the freeze list instead of outside it. The "
+                "`family` key below is why a v0.5 cannot repeat this. "
+                "`CLAUDE.md:64`'s contracts table still does not name v0.4 "
+                "either -- reported to the monitor, not edited from here.",
     },
     {
         "n": 3, "name": "生成器", "status": "partial",
@@ -555,6 +570,50 @@ def _tracked_files_under(rel):
     return sorted(p for p in listing.split("\0") if p)
 
 
+#: Declare-and-assert, not glob.
+#:
+#: W-9204 reported (`monitor/inbox/20260802T085557Z-...-freeze-manifest-will-
+#: not-hash-dsl-grammar-v0-4.md`) that item 2's path list names v0.1/v0.2/v0.3
+#: explicitly, so `CONTRACTS/dsl_grammar_v0.4.md` -- landed 2026-08-02 by C15,
+#: carrying the REFUSAL of GAP R2-2, i.e. a contract clause -- was absent from
+#: this manifest with no error and no warning.  Verified: it was.  `build()`
+#: only ever walked the declared paths, and `absent` records declared-but-
+#: missing, never present-but-undeclared.  The manifest failed OPEN, which for
+#: a document whose whole job is "these exact bytes are what the campaign ran
+#: against" is the one direction it must not fail in.
+#:
+#: The obvious repair -- glob `CONTRACTS/dsl_grammar_v*.md` -- was rejected.
+#: A glob would admit a future v0.5 into the freeze list with nobody ruling on
+#: it, and this module's own docstring says a judgement is exactly the thing
+#: that must not be regenerated.  So the list stays hand-declared and gains an
+#: assertion: an item may name a `family` regex over tracked paths, and any
+#: tracked file matching it that the item does NOT list is recorded as
+#: `unlisted`.  Because `--verify` compares a regeneration against the
+#: committed file, an unlisted sibling appearing on the tree is drift, and the
+#: gate goes red with the file's name in it rather than staying silently green.
+#: `_selftest` carries the negative control that this actually fires.
+#:
+#: WHAT IT DOES NOT CLOSE: only item 2 declares a family today.  Every other
+#: single-file path in ITEMS/EXTRA is still fail-open on its siblings, and the
+#: audit of that class -- 7 of 10 tracked `CONTRACTS/` files unhashed,
+#: including `candidates_schema.md`, which CLAUDE.md calls the only candidates
+#: contract in force; `proxy/spend_policy.json`, `monitor/spec.py` and
+#: `monitor/money.json` unhashed although item 12 is about the money -- is
+#: filed as its own board item rather than decided here.  Adding a file to the
+#: freeze list is a ruling about what the release publishes, and S50's warrant
+#: was to make the gate honest, not to widen what it covers.
+def family_unlisted(item):
+    """Tracked files that match the item's family regex and it does not name."""
+    pattern = item.get("family")
+    if not pattern:
+        return []
+    declared = set(item["paths"])
+    listing = git("ls-files", "-z")
+    tracked = [p for p in (listing or "").split("\0") if p]
+    return sorted(p for p in tracked
+                  if re.match(pattern, p) and p not in declared)
+
+
 def hash_path(rel):
     """`(kind, sha256, file count, source)` for a file or a directory.
 
@@ -611,11 +670,15 @@ def build():
                           "files": count, "hashed_from": source,
                           "tracked": bool(git("ls-files", "--error-unmatch", rel))})
         missing = [p["path"] for p in paths if p["kind"] == "absent"]
-        entries.append({
+        entry = {
             "n": item["n"], "name": item["name"],
             "status": item["status"], "note": item["note"],
             "paths": paths, "absent": missing,
-        })
+        }
+        if item.get("family"):
+            entry["family"] = item["family"]
+            entry["unlisted"] = family_unlisted(item)
+        entries.append(entry)
 
     budget = budget_state()
     held = apply_budget_hold(entries, budget)
@@ -638,6 +701,10 @@ def build():
             "partial": sum(1 for e in entries if e["status"] == "partial"),
             "blocked": sum(1 for e in entries if e["status"] == "blocked"),
             "absent_paths": sorted(p for e in entries for p in e["absent"]),
+            # Present-but-undeclared, the direction `absent_paths` cannot see.
+            # See FAMILIES above `family_unlisted`.
+            "unlisted_paths": sorted(p for e in entries
+                                     for p in e.get("unlisted", [])),
             "budget_held_items": held,
             "freeze_ready": ready == len(ITEMS),
             "statement": (
@@ -758,6 +825,40 @@ def _selftest():
           "verbatim (a paraphrase would let the number rot)",
           lambda: "-35.1687" in sentence and "214.9" in sentence
           and "NEGATIVE" in sentence)
+
+    # ---- the family assert (see FAMILIES above `family_unlisted`) ----------
+    #
+    # These are here and not in a test file because the defect they guard is
+    # *silence*: `family_unlisted` returning `[]` looks identical whether the
+    # tree is genuinely fully declared or the matcher never matched anything.
+    # So the fire direction is checked against a real tracked file, not a
+    # fabricated one.
+    real = next(i for i in ITEMS if i["n"] == 2)
+
+    check("control fires: with v0.4 dropped from item 2's list, the family "
+          "assert names it -- this is the exact hole W-9204 reported, and it "
+          "is now visible rather than silent",
+          lambda: family_unlisted(
+              dict(real, paths=[p for p in real["paths"]
+                                if not p.endswith("v0.4.md")]))
+          == ["CONTRACTS/dsl_grammar_v0.4.md"])
+
+    check("control fires: the family regex actually matches the tree -- it "
+          "sees all four grammar versions, so an empty `unlisted` means "
+          "declared, not unmatched",
+          lambda: family_unlisted(dict(real, paths=[])) ==
+          ["CONTRACTS/dsl_grammar_v0.%d.md" % k for k in (1, 2, 3, 4)])
+
+    check("control fires: the real item 2 declares its whole family today "
+          "(`unlisted` is empty for the reason above, not by accident)",
+          lambda: family_unlisted(real) == [])
+
+    check("control fires: an item with no `family` key is not silently "
+          "treated as fully declared by this mechanism -- it opts out, and "
+          "the opt-out is what the board item about the other 20+ items is "
+          "for",
+          lambda: family_unlisted({"paths": ["x"]}) == []
+          and "family" not in next(i for i in ITEMS if i["n"] == 3))
 
     bad_count = sum(1 for _, ok in results if not ok)
     print("%d/%d" % (len(results) - bad_count, len(results)))
