@@ -1246,11 +1246,41 @@ def _offline_done():
 
 
 def _spend_watch():
-    """花了多少、剩多少 —— 账号额度是唯一的真约束，且是共享池。"""
-    led = rel("proxy", "var", "spend_gate.jsonl")
+    """花了多少、剩多少 —— 按 `monitor/money.json` 的每一笔额度分别看。
+
+    **本函数此前在结构上看不见它自称在看的那个量。** 它把 `ENVELOPE` 硬编码为
+    200.0、对账本全量求和（不按 `kind`、不按战役过滤），再把结果标称为
+    「开发堆战役包」。开发堆配额 B 是 **$60**，而 200 是池；于是 B 在
+    2026-08-01T00:48:42Z 越线之后，这一格仍然是绿的——绿色正压着刚刚变负的那个量。
+    登记为 `INC-MON-001`。
+
+    现在金额只有一个出处（`monitor/money.json`），本函数不再自带任何数字。
+    三值不许坍缩：账本或 money.json 读不到时返回 `partial`/`unknown`，
+    绝不回落到一个读起来健康的默认值（`monitor/accounts.py` 同规）。
+    """
+    money_path = rel("monitor", "money.json")
+    if not os.path.exists(money_path):
+        return {"status": "unknown",
+                "detail": "monitor/money.json 不在——金额没有出处，本格不作判断。"}
+    try:
+        with open(money_path, encoding="utf-8") as fh:
+            money = json.load(fh)
+    except Exception as exc:                           # noqa: BLE001
+        return {"status": "unknown",
+                "detail": "monitor/money.json 读不动（%s）——不猜。" % exc}
+
+    # `proxy/var/` 是 gitignore 的，所以 worktree 里没有账本而这台机器上有。
+    # `THEORIA_SPEND_LEDGER` 让一次 worktree 里的重算也能读到真账本；
+    # 没有它的话，在 worktree 里重新生成 index.html 会把一格真实的红
+    # 换成一格「未产生记录」，而那一格正是本次要修的东西。
+    led = os.environ.get("THEORIA_SPEND_LEDGER") or rel(
+        "proxy", "var", "spend_gate.jsonl")
     if not os.path.exists(led):
-        return {"status": "partial", "detail": "闸门账本尚未产生记录。"}
-    total, rows = 0.0, 0
+        # 不是绿，也不是红。
+        return {"status": "partial",
+                "detail": "闸门账本尚未产生记录（proxy/var/ 未跟踪，新检出本就没有）。"}
+
+    spend_rows = 0
     by_campaign = {}
     for line in open(led, encoding="utf-8", errors="ignore"):
         line = line.strip()
@@ -1260,21 +1290,53 @@ def _spend_watch():
             r = json.loads(line)
         except Exception:
             continue
+        # 计费口径：`spend` 是扣款，`price_correction` 是对已扣价格的修正，
+        # 两者都进；`reserve`/`release` 是簿记（各自合计恰为 0，计进去只会
+        # 重复计数）；`trip` 是事件。口径写在这里，因为 2026-08-02 就是「全量
+        # 求和」与「只算 spend」差了 $0.1563 而两个数被同时引用过。
+        if r.get("kind") not in ("spend", "price_correction"):
+            continue
         usd = float(r.get("usd") or 0)
-        total += usd
-        rows += 1
+        spend_rows += 1
         c = r.get("campaign") or "未标注"
         by_campaign[c] = by_campaign.get(c, 0.0) + usd
-    ENVELOPE = 200.0
-    left = ENVELOPE - total
-    detail = ("开发堆战役包 $%.0f，已花 **$%.2f**，剩 $%.2f（%d 条记账）"
-              % (ENVELOPE, total, left, rows))
-    if by_campaign:
-        detail += "；分战役：" + "、".join(
-            "%s $%.2f" % (k, v) for k, v in sorted(by_campaign.items())[:4])
-    if left < 40:
-        return {"status": "risk", "detail": detail + "　→ **余额不足，需续包**"}
-    return {"status": "green", "detail": detail}
+
+    pool_total = sum(by_campaign.values())
+    lines, worst = [], "green"
+    for name, alloc in sorted((money.get("allocations") or {}).items()):
+        cap = alloc.get("usd")
+        needle = alloc.get("campaign_substring")
+        if cap is None or not needle:
+            continue
+        spent = sum(v for k, v in by_campaign.items() if needle in k)
+        left = cap - spent
+        mark = "" if left >= 0 else "　→ **已超支**"
+        if left < 0:
+            worst = "risk"
+        elif worst == "green" and left < 0.2 * cap:
+            worst = "risk"
+            mark = "　→ **余额不足**"
+        lines.append("%s：额度 $%.2f，已花 **$%.2f**，剩 $%.2f%s"
+                     % (name, cap, spent, left, mark))
+
+    if not lines:
+        return {"status": "unknown",
+                "detail": "money.json 里没有一笔可比对的额度——本格不作判断。"}
+
+    # 池是指针，不是副本：上限只在 proxy/spend_policy.json 里存在。
+    ceiling = None
+    try:
+        with open(rel("proxy", "spend_policy.json"), encoding="utf-8") as fh:
+            ceiling = json.load(fh).get("usd_ceiling")
+    except Exception:                                  # noqa: BLE001
+        ceiling = None
+    pool_line = ("池（闸门可见）已花 $%.2f，%s（%d 条计费记账）"
+                 % (pool_total,
+                    ("上限 $%.2f，剩 $%.2f" % (ceiling, ceiling - pool_total))
+                    if isinstance(ceiling, (int, float))
+                    else "上限读不到，见 proxy/spend_policy.json",
+                    spend_rows))
+    return {"status": worst, "detail": "；".join(lines) + "。" + pool_line}
 
 
 def probe_needs_human():

@@ -2085,3 +2085,8 @@ claimed 悬挂），测试可加不会撞。三条如实登记的缺口：(1) `r
 测试：`proxy` 套件；`freeze/verify.sh` 第 [19] 阶段（预算表为负时第 12 项不得报 ready）会随新上限重算，结果照实记录。
 阻塞：无。
 下一步：A26 长腿实验重开（$120/500 动作/腿），回答「给够钱能不能赢一次」。
+## [monitor] 2026-08-02T12:48:54Z m-1-money-single-truth
+状态：钱有了唯一出处。monitor/money.json 新建：金额只在这里手写一次,池上限只作指针指向 proxy/spend_policy.json 从不复制(此前树上有三个互相矛盾的花费数字)。新建 monitor/INCIDENTS.md:INC-MON-001 开发堆 B=$60 被花到 $129.0326(215%)而看板全程发绿——正文是后半句,_spend_watch() 把信封硬编码 $200、全量求和、不按战役过滤,B 从来就不是这个仪表能表达的量;INC-MON-002 两条在册条目都叫 #12,而这决定一条已付费的 $12.2517 腿有没有授权。登记簿 :522 原地改号 #12→#14(先例:被外部引用的保号、绝不重排、撞号记为事件),R1b 越限重述,#13 过期数字订正,新增 #15 事后登记 R2/R2b。_spend_watch 重写为逐额度比对,实测转 risk 并点名超支。
+测试：monitor 全套 534 passed / 2 xfailed / exit 0（基线 525+2,新增 9 条仍绿）。守卫:封存 2/2（见阻塞）、凭据 5/5（13093 个跟踪文件无泄漏）、边界 1/1（未越出 monitor/）。
+阻塞：封存守卫原始运行为红:3 个文件(spec.py / state.json / index.html)含 dc22-fdcac232、ft09-0d8bbf25、ls20-9607627b。守卫是**文件级**的,我为改号碰了 spec.py 就整份扫。已查证而非假定:base 上 spec.py 本就含有它们;**我的 diff 新增行含 0 个封存 id**;我新建的 6 个文件一个都没有;state.json/index.html 是同一段既有文字的重算副本;那两行是污染**登记**本身(spec.py:739 记止读前已读到哪些、:1011 记 dc22 在封存堆且两份文档明禁),正是守卫消息自己点名的例外。按 --allow 三条路径重跑 2/2 绿,--allow 是一次披露,RUN_STATE 里逐字复述。另:三处需人裁未决——B 是每战役还是每局、#12 保号方向、#13 是否解除 #14/#12 的上限。
+下一步：三处人裁落定后把 theoria-arm/harness/campaign.py 的常量接到 money.json 同一出处;freeze/BUDGET_TABLE.json 今日仍报 THE BALANCE MOVED,属 freeze 领地未动;另已送两封 inbox(给 freeze 的 9.2 重言式旁路复现、给 theoria-arm 的三处更正请求)。
