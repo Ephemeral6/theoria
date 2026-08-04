@@ -1,0 +1,262 @@
+{
+  "_what": "monitor 领地里钱的唯一出处。金额在本文件被手写一次,别处只许指过来。monitor/scan.py 的 _spend_watch() 读它,monitor/tests/test_money_register.py 把它对着账本复算。",
+  "_division_of_labour": "本文件管数,monitor/spec.py 的 p3-gate-exception 登记簿管判断与叙述。spec.py 仍是舰队手写的判断文件(scan.py:32),本文件不生成它;但凡两处出现同一个金额,以本文件为准,spec.py 应当指过来而不是复述。",
+  "_why_it_exists": "2026-08-02 之前,同一棵树上有三个互相矛盾的花费数字:仪表盘发绿说开发堆包 $200 已花 $121.91,freeze 说上限 $214.90 已花 $250.07 余 -$35.17,闸门说还有 $92.99。三者的分歧不是算错,是三个不同的量被叫了同一个名字。见 INC-MON-001。",
+  "_never_copy": "池的上限只在 proxy/spend_policy.json 里存在。本文件从不复述那个数字——复述就是制造第四个真相。",
+  "pool": {
+    "policy": "proxy/spend_policy.json",
+    "ledger": "proxy/var/spend_gate.jsonl",
+    "_ledger_is_untracked": "proxy/var/ 被 gitignore。新检出没有账本,读它的代码与测试必须降级为 skip/unknown,不许坍缩成一个读起来健康的默认值(monitor/accounts.py 的「不许有第三个值坍缩」同规)。",
+    "_unit": "一次「动作」在池的计量里 = 一次出站 ARC HTTP 请求,不是记分卡上的成功动作数(spend_policy.json 原话)。换算 outbound = 36 + ceil(actions × 9.3 × 2.0)。把 action_cap 直接除以申报动作数是两种单位相除。",
+    "_charge_kinds": [
+      "spend",
+      "price_correction"
+    ],
+    "model_call_ceiling_usd": 4.0,
+    "_model_call_ceiling_cite": "theoria-arm/harness/spend.py —— 预留的 usd_cap = 申报单腿上限 + 这一笔单次调用余量。写在这里是为了让 monitor 的测试不必 import 另一个领地。",
+    "outbound_per_action": 9.3,
+    "outbound_tail_safety": 2.0,
+    "outbound_fixed": 36,
+    "_outbound_formula": "action_cap = outbound_fixed + ceil(actions × outbound_per_action × outbound_tail_safety)。test_money_register.py 用它做单位护栏:凡把 action_cap 直接除以申报动作数的读法(5616/300 = 18.7「倍」)都是两种单位相除,那个误读在 2026-08-02 被写进过一版草稿,护栏在此。",
+    "_charge_basis": "计费口径:spend 是扣款,price_correction 是对已扣价格的修正,两者都进;reserve/release 是簿记(各自合计恰为 0,计进去是重复计数),trip 是事件。只算 spend 得池 $160.7917,按本口径得 $160.9480,差 $0.1563 全部是 price_correction。本工单一度同时引用过这两个数,所以口径写在这里而不是留给读者推断。开发堆 B 在两种口径下相同(没有价格修正行)。"
+  },
+  "allocations": {
+    "dev_pile_B": {
+      "usd": 60.0,
+      "reading": "per-campaign",
+      "campaign_substring": "A3-campaign-devpile",
+      "authority": {
+        "file": "monitor/board/done/A3-campaign-devpile.RES-1.md",
+        "line": 54,
+        "blob": "3b04548c9a39499c94b7152cbd7128c3cb69100d",
+        "_do_not_edit": "freeze/build_budget_table.py:538 按 (文件,第54行,\"B = $60\") 行锚引用,freeze/verify.sh [15b] 会跑。让第 54 行移位会让 freeze 为一个它没有的缺陷变红。"
+      },
+      "measured_usd": 129.0326,
+      "measured_at": "2026-08-02T12:19:04.949Z",
+      "breached": true,
+      "incident": "INC-MON-001",
+      "conflicting_reading": {
+        "usd_per_game": 60.0,
+        "cited_at": [
+          "monitor/loop_state.json:58",
+          "theoria-arm/harness/campaign.py:93"
+        ],
+        "per_game_measured": {
+          "g50t-5849a774": 71.4784,
+          "sk48-d8078629": 57.5542,
+          "ar25-0c556536": 0.0
+        },
+        "status": "needs_human",
+        "_note": "两种读法下结论都是已越线或逼近,所以裁定不改变「已超支」;它改变归责与剩余额度,而这里只能写一个。"
+      },
+      "crossed_at": {
+        "ledger_line": 16346,
+        "utc": "2026-08-01T00:48:42.766Z",
+        "during": "20260801T001851Z-R1b-sk48-b",
+        "cumulative": [
+          59.086316,
+          62.448327
+        ]
+      }
+    },
+    "g1_stop_loss": {
+      "usd": 50.0,
+      "reading": "per-campaign",
+      "campaign_substring": "A3-campaign-devpile",
+      "breached": true,
+      "crossed_at": {
+        "ledger_line": 16157,
+        "utc": "2026-07-31T23:54:45.969Z",
+        "during": "20260731T231654Z-R1-g50t-a",
+        "cumulative": [
+          49.78684,
+          51.509416
+        ]
+      }
+    }
+  },
+  "register": [
+    {
+      "id": 10,
+      "title": "A3-campaign-level2",
+      "declared": {
+        "usd_per_leg": 12.0,
+        "actions_per_leg": 300,
+        "usd_leg_hard_cap": 25.0
+      },
+      "covers": {
+        "campaign_substrings": [
+          "20260731T1240Z-A3-level2-carried",
+          "20260731T1310Z-A3-level2-carried-r2"
+        ]
+      },
+      "settled_usd": 9.5569,
+      "_settled_reproduces": "两条 g50t 战役之和,逐分吻合登记簿自己写的 $9.5569"
+    },
+    {
+      "id": 11,
+      "title": "A3-campaign-level2-r3",
+      "declared": {
+        "usd_per_leg": 15.0,
+        "actions_per_leg": 300
+      },
+      "covers": {
+        "campaign_substrings": [
+          "20260731T1430Z-A3-level2-carried-r3"
+        ]
+      },
+      "settled_usd": 13.4399
+    },
+    {
+      "id": 12,
+      "title": "Phase-3 加速迭代战役",
+      "commit": "f6a95719",
+      "utc": "2026-07-31T15:06:17Z",
+      "declared": {
+        "usd_per_leg": 15.0,
+        "actions_per_leg": 300,
+        "usd_batch": 75.0,
+        "actions_batch": 2500,
+        "stop_loss_pool_remaining_usd": 40.0
+      },
+      "covers": {
+        "campaign_substrings": [
+          "A3-campaign-devpile"
+        ],
+        "from_utc": "2026-07-31T15:06:17Z",
+        "attribution": "by-row-timestamp"
+      },
+      "settled_usd": null,
+      "_keeps_the_number": "撞号裁定:本条保 #12,因为 PARTNER_SYNC.md:1898 与 monitor/runs/20260731T155302Z-P1READJ/RUN_STATE.md:18 两处外部引用都写在 af138a0d 之前、都指向本条。见 INC-MON-002。",
+      "_also_covers": "20260731T1500Z-A3-sk48-carried-l1 ($12.2517),其预留在本条落盘后 11.4 秒(spend_gate.jsonl:15032, 15:06:28.568Z, usd_cap 19.0)。该腿的 MANIFEST 误写 prompt_id=A3-campaign-level2(#10),已走 inbox 请 theoria-arm 更正。",
+      "known_reserve_breaches": [
+        {
+          "campaign_substring": "20260804T122546Z-A26b-g50t-a",
+          "usd_cap": 124.0,
+          "allowed": 19.0
+        }
+      ],
+      "_a26b_note": "2026-08-04：A26b 长腿（#14，所有者明批 $120/腿，预留 $124 = 120+4 恰在 #14 包络内）同时落进本条 from_utc 起的毯式覆盖，按 $15 包络计为越限。这不是钱纪律事故，是两条覆盖重叠且匹配器不支持 to_utc/专项优先——按登记簿\"越限必须写下\"的规矩在此记账；sk48-b 腿首次扣费时须补同样一行。结构性修法（#12 加时代终点或专项申报压过毯式）与编号互斥同列 needs_human，本领地不代拍。"
+    },
+    {
+      "id": 13,
+      "title": "超上限续跑裁决",
+      "utc": "2026-08-01",
+      "declared": {},
+      "covers": null,
+      "settled_usd": null,
+      "_declares_no_number": "本条只裁「继续」,自身不申报任何单腿/单轮/批量数字。因此它不构成 R2b 的信封——R2b 是记录上最大的一轮而没有自己的额度。#13 是否解除 #14 的 $15/$30 与 #12 的 $75/2500,登记为 needs_human。",
+      "_figures_superseded": "本条引用的 programme $250.07 / 闸门可见 $113.28 / 盲区 $136.79 / 余量 $101.62 取自一份跑到 R1b 中途的 BUDGET_TABLE 快照(它把 R1b 两腿记作 $14.7780/$11.7357,且没有 R2b)。当期闸门可见总额为 $160.9480。freeze/build_budget_table.py --verify 当期即报 THE BALANCE MOVED。"
+    },
+    {
+      "id": 14,
+      "title": "通关阻塞实验 / A26 长腿实验",
+      "commit": "b4540026",
+      "utc": "2026-08-02",
+      "declared": {
+        "usd_per_leg": 120.0,
+        "actions_per_leg": 500
+      },
+      "covers": {
+        "campaign_substrings": [
+          "20260804T122546Z-A26b-"
+        ]
+      },
+      "settled_usd": null,
+      "_transcribed": "本条由另一个会话以 b4540026 写入 monitor/spec.py,此处仅转录其申报数字以保持编号无缺口;判断与叙述以 spec.py 为准,金额以本文件为准。",
+      "_started": "2026-08-04T12:25:47Z 两腿开跑（g50t-a / sk48-b），预留 usd_cap $124.0 = 申报 $120 + 单次调用余量 $4（与 #10/#11/#17 同一余量惯例），action_cap 6000。本 covers 由 monitor 在合并 m-1 时转录（登记时写明尚未开跑）；叙述以 spec.py #14 为准。"
+    },
+    {
+      "id": 15,
+      "title": "池上限上调 $214.90 → $700",
+      "commit": "c42f5ad4",
+      "utc": "2026-08-02",
+      "declared": {
+        "usd_ceiling": 700.0,
+        "action_ceiling": 40000
+      },
+      "covers": null,
+      "settled_usd": null,
+      "_transcribed": "本条由另一个会话以 c42f5ad4 写入 monitor/spec.py，此处仅转录以保持编号无缺口；判断与叙述以 spec.py 为准，金额以本文件为准。",
+      "_not_a_spend": "这是一笔预算而非花费：不退役钱闸、不放宽任何单 run 上限、不追认钱闸未见过的 $136.79 盲区花费（spec.py #15 原文）。"
+    },
+    {
+      "id": 17,
+      "title": "Phase 3 轮次制",
+      "commit": "af138a0d",
+      "utc": "2026-07-31T23:16:47Z",
+      "declared": {
+        "usd_per_leg": 15.0,
+        "actions_per_leg": 300,
+        "usd_per_round": 30.0
+      },
+      "covers": {
+        "campaign_substrings": [
+          "20260731T231654Z-R1-",
+          "20260801T001851Z-R1b-"
+        ]
+      },
+      "settled_usd": 50.3517,
+      "_renumbered": "本条 2026-07-31 以 #12 落盘,与 f6a95719 的 #12 撞号,2026-08-02 先改为 #14;当天稍晚发现 master 上另一个会话已用 b4540026 新增了一个 #14(通关阻塞实验),于是本条再让一号改为 #15。让号方向同先例:已发布/被外部引用的保号,未发布的让。两次撞号都记在 INC-MON-002；2026-08-04 合并 agent/m-1-money-single-truth 时发现 master 已以 c42f5ad4 发布 #15（池上限上调 $214.90→$700），同一先例第三次让号：本条改为 #17。三次撞号同记 INC-MON-002。",
+      "_rounds": {
+        "R1": 15.2119,
+        "R1b": 35.1398
+      },
+      "_breach": "R1b 单轮 $35.1398 超本条 $30 上限 17%;两腿 $17.7491/$17.3907 均超 $15。破口在美元轴:执行者以 --ceiling 25 覆盖 theoria-arm/armtools/round.py:126 的默认 15.0,预留被开到 usd_cap $29.00(= 25 + 单次调用余量 $4),见 spend_gate.jsonl:16228/:16229。动作轴无破口:action_cap 5616 = 36 + ceil(300 × 9.3 × 2.0),与合规结算的 #10/#11 同值。",
+      "known_reserve_breaches": [
+        {
+          "campaign_substring": "20260801T001851Z-R1b-g50t-a",
+          "usd_cap": 29.0,
+          "allowed": 19.0
+        },
+        {
+          "campaign_substring": "20260801T001851Z-R1b-sk48-b",
+          "usd_cap": 29.0,
+          "allowed": 19.0
+        }
+      ],
+      "known_round_breaches": [
+        {
+          "round": "R1b",
+          "usd": 35.1398,
+          "declared_cap": 30.0
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "title": "R2 / R2b —— 事后登记,本条在花费之后写成",
+      "utc": "2026-08-02",
+      "declared": {},
+      "covers": {
+        "campaign_substrings": [
+          "20260801T043743Z-R2-",
+          "20260801T044640Z-R2b-"
+        ]
+      },
+      "settled_usd": 39.0392,
+      "_rounds": {
+        "R2": 0.0,
+        "R2b": 39.0392
+      },
+      "_why_it_exists": "R2(2026-08-01T04:37Z)与 R2b(04:46Z)在登记簿上此前没有任何条目。#13 落盘于 R2 预留前约 15 秒,但不申报任何数字,所以它不是信封。R2b $39.0392 是记录上最大的一轮。",
+      "_r2_bought_nothing": "R2 两腿均 reset_failed(RESET did not return 200 after 40 attempts),0 动作 0 desk 调用 0 关 $0.00;两腿退出码却都是 0。",
+      "_after_the_fact": "先登记后动手是本登记簿的规矩,本条违反了它。如实记为事后登记,不追认合规。",
+      "_reserves": "spend_gate.jsonl:16838/:16839,usd_cap 29.0——与 R1b 同,仍高于 #17（轮次制）申报的 $15 + $4。",
+      "known_reserve_breaches": [
+        {
+          "campaign_substring": "20260801T044640Z-R2b-g50t-a",
+          "usd_cap": 29.0,
+          "allowed": null
+        },
+        {
+          "campaign_substring": "20260801T044640Z-R2b-sk48-b",
+          "usd_cap": 29.0,
+          "allowed": null
+        }
+      ],
+      "_allowed_is_null": "#16 自身不申报单腿上限(它是事后登记),所以 allowed 无值;这两条预留登记为已知越限,等 #13 是否解除 #14 上限的裁定落下再定性。",
+      "_renumbered": "本条起草时编为 #15,因上述连锁让号改为 #16。"
+    }
+  ]
+}

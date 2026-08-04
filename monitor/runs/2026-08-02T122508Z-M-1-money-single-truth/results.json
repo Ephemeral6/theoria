@@ -1,0 +1,48 @@
+{
+  "gate_flakiness": {
+    "caveat": "a gate that reddens at a different stage on each run under load is itself worth reporting",
+    "observation": "monitor/verify.sh failed twice in a row at DIFFERENT stages, then passed",
+    "reading": "non-zero exit with empty stderr is the Windows 0xC0000142 process-spawn signature; verify.py own docstring notes the 460s budget was measured under six concurrent pytest. Load-dependent flakiness, not a defect in this change.",
+    "run1": "GREEN (pre-merge)",
+    "run2": "RED real run -- board.py list failed, empty stderr; standalone reproduction returncode 0, 187 lines",
+    "run3": "RED tests -- 3 test_orphan_commits failures at git push in a temp repo; standalone 10/10 pass",
+    "run4": "GREEN, all four stages ok, exit 0"
+  },
+  "gates": {
+    "boundary": "1/1 green -- nothing outside monitor/",
+    "monitor_suite": {
+      "baseline": "525 passed, 2 xfailed",
+      "command": "python -m pytest monitor/tests -q",
+      "delta": "+9 tests, still green",
+      "exit": 0,
+      "result": "534 passed, 2 xfailed"
+    },
+    "sealed": "2/2 green with --allow on 3 pre-existing paths (disclosed); raw run flagged them file-level, my added lines contain zero sealed ids",
+    "secret": "5/5 green -- no secret value in 13093 tracked files"
+  },
+  "money": {
+    "B_crossed": {
+      "during": "20260801T001851Z-R1b-sk48-b",
+      "line": 16346,
+      "utc": "2026-08-01T00:48:42.766Z"
+    },
+    "G1_crossed": {
+      "during": "20260731T231654Z-R1-g50t-a",
+      "line": 16157,
+      "utc": "2026-07-31T23:54:45.969Z"
+    },
+    "R2": 0.0,
+    "R2b": 39.0392,
+    "dev_pile_B_cap": 60.0,
+    "dev_pile_B_measured": 129.0326,
+    "pct_of_cap": 215,
+    "per_game": {
+      "ar25": 0.0,
+      "g50t": 71.4784,
+      "sk48": 57.5542
+    },
+    "pool_basis": "spend + price_correction",
+    "pool_ceiling_source": "proxy/spend_policy.json",
+    "pool_charged": 160.948
+  }
+}
