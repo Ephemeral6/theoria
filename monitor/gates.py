@@ -124,6 +124,21 @@ def gate_env(root: str) -> Dict[str, str]:
     env = dict(os.environ)
     existing = env.get("PYTHONPATH")
     env["PYTHONPATH"] = root + (os.pathsep + existing if existing else "")
+    # Gitignored evidence payloads never reach a throwaway worktree, so a
+    # suite that keys its skips on their presence fails where it means to
+    # skip -- A19's false-red baseline (2026-08-01), and the same disease
+    # let this runner manufacture a BASE RED for baseline-arms on
+    # 2026-08-04 while the main checkout ran 559/0 green.  Point the
+    # territories' own documented escape hatches (schema_column.resolve_root,
+    # battery/STATUS.md) at the launching checkout's copies unless the
+    # caller already chose.
+    main_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    schema = os.path.join(main_root, "baseline-arms", "schema_traces")
+    if "THEORIA_SCHEMA_TRACES" not in env and os.path.isdir(schema):
+        env["THEORIA_SCHEMA_TRACES"] = schema
+    ba = os.path.join(main_root, "baseline-arms")
+    if "THEORIA_BASELINE_ARMS" not in env and os.path.isdir(ba):
+        env["THEORIA_BASELINE_ARMS"] = ba
     return env
 
 
