@@ -1305,3 +1305,71 @@ ambiguities in E11's prose recipe by reading code, and each recorded which
 reading it took rather than the reading that made the number come out — but a
 shared misreading of the same document would pass. And `input_digests()` pins
 what a script read, not that it read the right thing.
+
+## D-E20-001 · The action alphabet is read off the evidence, not assumed to be a compass
+
+`atoms.DIRECTIONS` was doing two unrelated jobs under one name. `strip_cells`
+needs UP/DOWN/LEFT/RIGHT because a grid has four geometric directions; that is a
+fact about grids. `build_vocabulary` also used it to name the world's *actions*,
+which is a fact about one fixture. Every fixture in this repo happens to be
+compass-labelled, so the conflation was invisible here and fatal outside.
+
+Measured on the recorded `g50t-5849a774` r3 leg, whose action alphabet is
+`RESET, ACTION1..ACTION5`: of the 36 atoms `build_vocabulary` produced for the
+mover's track, **16 were identically false, 16 identically true, and 4
+discriminating** — and the four were `at(8,14)`, `at(14,14)` and their negations.
+Every `act==` literal had mask `0`. The miner could not see which action had been
+taken, so `synthesize` reported, correctly, that no literal separated two
+transitions that differed only by action.
+
+`build_vocabulary(states, actions=None)` now takes the alphabet. Omitted, it
+assumes the compass and returns exactly what it always did — that is why the
+existing suite is unaffected. `mine` passes the alphabet it observes, so the
+default path is fixed without any caller changing. `action_alphabet=` overrides
+it, which is how the negative control reproduces the old blindness on demand.
+
+**Not fixed here, and named so it is not mistaken for fixed:** `_POS_BITS = 8` is
+commented "a cell coordinate on a 12x12 board" and is still 8 on a 64x64 board,
+where an honest coordinate costs 12 bits. That mis-prices `at()` against the
+predicates in `guard_order_key` and so can pick the wrong *representative* of a
+frontier — never the frontier's membership, which is why it is a separate
+ticket and not smuggled in here.
+
+## D-E20-002 · One unseparable effect class must not cost the frontier for the others
+
+`Theoria.md:202` asks this engine for the frontier of all hypotheses consistent
+with the evidence. `mine` grouped transitions by (action, effect) and let
+`NoSeparatingGuard` escape from any one group, which discarded every rule for
+the track — including the groups that were perfectly separable. On the r3 ring
+track that was the difference between 0 rules and 4.
+
+`synthesize` still raises: at the level of a single effect class there is nothing
+to return, and `tests/test_cegis_miner.py::test_contradictory_evidence_is_reported_not_papered_over`
+is right to demand it. `mine` gains `on_unseparable`, default `"raise"`, so the
+published contract is unchanged. Under `"record"` the unseparable class is filed
+on `MiningResult.unseparable` with its action, effect, support and reason, and
+mining continues.
+
+`explains_every_transition()` deliberately returns **False** when anything is
+recorded: the stranded transitions are not covered, and a gap must not read as
+full coverage. Absence is recorded as absence.
+
+The recorded classes are the useful half of the output. On the r3 mover the four
+of them are exactly `ACTION2` and `ACTION5` — the two actions whose effect the
+anchor does not determine (`ACTION2` moved on 12 transitions and did nothing on
+1; `ACTION5` moved on 12 and did nothing on the last 4). That is a named target
+for a probe, which is what `Theoria.md:208` wants to price.
+
+## D-E20-003 · A track born after frame 0 keeps its evidence
+
+`transitions_from_segmentation` walked from frame 0 unconditionally and raised
+"object absent at frame 0" for any track that appears later. On the r3 leg that
+was **13 of the 16 refusals** under the operator the leg actually ran — so most
+of what was recorded as the world failing the one-mover precondition was not
+about the world's narration at all. Only 3 refusals said `recolor` or `vanish`.
+
+`while_present=True` bounds the walk to `[first_frame, last_present]`, which is
+where the track's evidence is. Default `False` keeps the old scope, so nothing
+already green moves. An object that vanishes and comes back still raises: a gap
+in the middle is a claim about identity across the gap, and the miner is not
+entitled to make it — the segmenter is, and if it did, there would be no gap.

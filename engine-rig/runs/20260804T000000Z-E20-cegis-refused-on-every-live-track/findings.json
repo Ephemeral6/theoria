@@ -1,0 +1,439 @@
+{
+  "action_alphabet": [
+    "ACTION1",
+    "ACTION2",
+    "ACTION3",
+    "ACTION4",
+    "ACTION5",
+    "RESET"
+  ],
+  "co_variation": {
+    "class_sizes": [
+      48,
+      23,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "largest_class_cells": 48,
+    "n_classes": 18
+  },
+  "games": [
+    "g50t-5849a774"
+  ],
+  "ledger": "20260731T1430Z-A3-level2-carried-r3",
+  "n_frames_with_pixels": 34,
+  "operators": [
+    {
+      "events": {
+        "appear": 13,
+        "move": 26,
+        "recolor": 42,
+        "vanish": 13
+      },
+      "largest_track_cells": 1006,
+      "n_refusals": 16,
+      "n_tracks": 18,
+      "operator": "connected_components(4)",
+      "passed_precondition": [
+        {
+          "alphabet": {
+            "explains_every_transition": false,
+            "frontier_widths": [
+              1,
+              1,
+              1,
+              1,
+              1,
+              4
+            ],
+            "rules": 6,
+            "unseparable_classes": 2,
+            "vocabulary": {
+              "act_atoms_are_all_constant": false,
+              "action_alphabet": [
+                "ACTION1",
+                "ACTION2",
+                "ACTION3",
+                "ACTION4",
+                "ACTION5",
+                "RESET"
+              ],
+              "actions_observed": [
+                "ACTION1",
+                "ACTION2",
+                "ACTION3",
+                "ACTION4",
+                "ACTION5",
+                "RESET"
+              ],
+              "n_atoms": 40,
+              "n_constant_atoms": 24,
+              "n_discriminating_atoms": 16
+            }
+          },
+          "cells": 8,
+          "compass": "NoSeparatingGuard: no literal separates transition 2 from the positives",
+          "track": "obj0",
+          "transitions": 33
+        },
+        {
+          "alphabet": {
+            "explains_every_transition": false,
+            "frontier_widths": [
+              1,
+              1,
+              1,
+              1,
+              1,
+              4
+            ],
+            "rules": 6,
+            "unseparable_classes": 2,
+            "vocabulary": {
+              "act_atoms_are_all_constant": false,
+              "action_alphabet": [
+                "ACTION1",
+                "ACTION2",
+                "ACTION3",
+                "ACTION4",
+                "ACTION5",
+                "RESET"
+              ],
+              "actions_observed": [
+                "ACTION1",
+                "ACTION2",
+                "ACTION3",
+                "ACTION4",
+                "ACTION5",
+                "RESET"
+              ],
+              "n_atoms": 40,
+              "n_constant_atoms": 24,
+              "n_discriminating_atoms": 16
+            }
+          },
+          "cells": 3,
+          "compass": "NoSeparatingGuard: no literal separates transition 2 from the positives",
+          "track": "obj2",
+          "transitions": 33
+        }
+      ],
+      "refusal_kinds": {
+        "ValueError: object absent at frame 0": 13,
+        "ValueError: transition 1 narrates ['recolor']": 2,
+        "ValueError: transition 4 narrates ['vanish']": 1
+      },
+      "script_bits": 13332,
+      "split_by_color": false,
+      "tracks_born_after_frame_0": 13
+    },
+    {
+      "events": {
+        "appear": 71,
+        "move": 78,
+        "vanish": 70
+      },
+      "largest_track_cells": 879,
+      "n_refusals": 74,
+      "n_tracks": 81,
+      "operator": "connected_components(4)+uniform_color",
+      "passed_precondition": [
+        {
+          "alphabet": {
+            "explains_every_transition": false,
+            "frontier_widths": [
+              1,
+              1,
+              1,
+              1,
+              1,
+              4
+            ],
+            "rules": 6,
+            "unseparable_classes": 2,
+            "vocabulary": {
+              "act_atoms_are_all_constant": false,
+              "action_alphabet": [
+                "ACTION1",
+                "ACTION2",
+                "ACTION3",
+                "ACTION4",
+                "ACTION5",
+                "RESET"
+              ],
+              "actions_observed": [
+                "ACTION1",
+                "ACTION2",
+                "ACTION3",
+                "ACTION4",
+                "ACTION5",
+                "RESET"
+              ],
+              "n_atoms": 40,
+              "n_constant_atoms": 24,
+              "n_discriminating_atoms": 16
+            }
+          },
+          "cells": 8,
+          "compass": "NoSeparatingGuard: no literal separates transition 2 from the positives",
+          "track": "obj0",
+          "transitions": 33
+        },
+        {
+          "alphabet": {
+            "explains_every_transition": false,
+            "frontier_widths": [
+              1,
+              1,
+              1,
+              1,
+              1,
+              4
+            ],
+            "rules": 6,
+            "unseparable_classes": 2,
+            "vocabulary": {
+              "act_atoms_are_all_constant": false,
+              "action_alphabet": [
+                "ACTION1",
+                "ACTION2",
+                "ACTION3",
+                "ACTION4",
+                "ACTION5",
+                "RESET"
+              ],
+              "actions_observed": [
+                "ACTION1",
+                "ACTION2",
+                "ACTION3",
+                "ACTION4",
+                "ACTION5",
+                "RESET"
+              ],
+              "n_atoms": 40,
+              "n_constant_atoms": 24,
+              "n_discriminating_atoms": 16
+            }
+          },
+          "cells": 3,
+          "compass": "NoSeparatingGuard: no literal separates transition 2 from the positives",
+          "track": "obj2",
+          "transitions": 33
+        },
+        {
+          "alphabet": {
+            "explains_every_transition": false,
+            "frontier_widths": [
+              1,
+              1,
+              1,
+              1
+            ],
+            "rules": 4,
+            "unseparable_classes": 4,
+            "vocabulary": {
+              "act_atoms_are_all_constant": false,
+              "action_alphabet": [
+                "ACTION1",
+                "ACTION2",
+                "ACTION3",
+                "ACTION4",
+                "ACTION5",
+                "RESET"
+              ],
+              "actions_observed": [
+                "ACTION1",
+                "ACTION2",
+                "ACTION3",
+                "ACTION4",
+                "ACTION5",
+                "RESET"
+              ],
+              "n_atoms": 40,
+              "n_constant_atoms": 24,
+              "n_discriminating_atoms": 16
+            }
+          },
+          "cells": 24,
+          "compass": "NoSeparatingGuard: no literal separates transition 2 from the positives",
+          "track": "obj4",
+          "transitions": 33
+        },
+        {
+          "alphabet": {
+            "explains_every_transition": true,
+            "frontier_widths": [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            "rules": 6,
+            "unseparable_classes": 0,
+            "vocabulary": {
+              "act_atoms_are_all_constant": false,
+              "action_alphabet": [
+                "ACTION1",
+                "ACTION2",
+                "ACTION3",
+                "ACTION4",
+                "ACTION5",
+                "RESET"
+              ],
+              "actions_observed": [
+                "ACTION1",
+                "ACTION2",
+                "ACTION3",
+                "ACTION4",
+                "ACTION5",
+                "RESET"
+              ],
+              "n_atoms": 38,
+              "n_constant_atoms": 26,
+              "n_discriminating_atoms": 12
+            }
+          },
+          "cells": 82,
+          "compass": "mined",
+          "track": "obj5",
+          "transitions": 33
+        },
+        {
+          "alphabet": {
+            "explains_every_transition": false,
+            "frontier_widths": [
+              1,
+              1,
+              1,
+              1
+            ],
+            "rules": 4,
+            "unseparable_classes": 4,
+            "vocabulary": {
+              "act_atoms_are_all_constant": false,
+              "action_alphabet": [
+                "ACTION1",
+                "ACTION2",
+                "ACTION3",
+                "ACTION4",
+                "ACTION5",
+                "RESET"
+              ],
+              "actions_observed": [
+                "ACTION1",
+                "ACTION2",
+                "ACTION3",
+                "ACTION4",
+                "ACTION5",
+                "RESET"
+              ],
+              "n_atoms": 40,
+              "n_constant_atoms": 24,
+              "n_discriminating_atoms": 16
+            }
+          },
+          "cells": 1,
+          "compass": "NoSeparatingGuard: no literal separates transition 2 from the positives",
+          "track": "obj6",
+          "transitions": 33
+        },
+        {
+          "alphabet": {
+            "explains_every_transition": true,
+            "frontier_widths": [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            "rules": 6,
+            "unseparable_classes": 0,
+            "vocabulary": {
+              "act_atoms_are_all_constant": false,
+              "action_alphabet": [
+                "ACTION1",
+                "ACTION2",
+                "ACTION3",
+                "ACTION4",
+                "ACTION5",
+                "RESET"
+              ],
+              "actions_observed": [
+                "ACTION1",
+                "ACTION2",
+                "ACTION3",
+                "ACTION4",
+                "ACTION5",
+                "RESET"
+              ],
+              "n_atoms": 38,
+              "n_constant_atoms": 26,
+              "n_discriminating_atoms": 12
+            }
+          },
+          "cells": 19,
+          "compass": "mined",
+          "track": "obj7",
+          "transitions": 33
+        },
+        {
+          "alphabet": {
+            "explains_every_transition": true,
+            "frontier_widths": [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            "rules": 6,
+            "unseparable_classes": 0,
+            "vocabulary": {
+              "act_atoms_are_all_constant": false,
+              "action_alphabet": [
+                "ACTION1",
+                "ACTION2",
+                "ACTION3",
+                "ACTION4",
+                "ACTION5",
+                "RESET"
+              ],
+              "actions_observed": [
+                "ACTION1",
+                "ACTION2",
+                "ACTION3",
+                "ACTION4",
+                "ACTION5",
+                "RESET"
+              ],
+              "n_atoms": 38,
+              "n_constant_atoms": 26,
+              "n_discriminating_atoms": 12
+            }
+          },
+          "cells": 1,
+          "compass": "mined",
+          "track": "obj8",
+          "transitions": 33
+        }
+      ],
+      "refusal_kinds": {
+        "ValueError: object absent at frame 0": 71,
+        "ValueError: transition 1 narrates ['vanish']": 2,
+        "ValueError: transition 4 narrates ['vanish']": 1
+      },
+      "script_bits": 158012,
+      "split_by_color": true,
+      "tracks_born_after_frame_0": 71
+    }
+  ]
+}

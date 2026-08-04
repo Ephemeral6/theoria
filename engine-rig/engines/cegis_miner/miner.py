@@ -17,6 +17,19 @@ matters twice over --
     cell" and by "the wall was in the way and it was not on any other cell",
 
 which is precisely the input `probe_frontier` is built to consume.
+
+**One unseparable effect class must not cost the frontier for the others.**
+`synthesize` raises `NoSeparatingGuard` when no literal in the vocabulary tells
+a group of transitions apart from the rest -- a true report, and it stays a
+raise, because at the level of one effect class there is nothing to return.
+`mine` groups transitions by (action, effect) and used to let that raise escape,
+which threw away every rule for the track including the classes that were
+perfectly separable.  `on_unseparable="record"` keeps the frontier for the
+groups that have one and files the rest under `MiningResult.unseparable` with
+the reason, so the output says which part of the world the vocabulary can and
+cannot name.  The default is still `"raise"`: this widening is opt-in, and on
+every existing fixture the two modes produce byte-identical results because no
+group is unseparable there.  See DECISIONS.md D-E20-002.
 """
 
 import itertools
@@ -271,6 +284,11 @@ class MiningResult:
     rules: List[Rule]
     lifted: List[Rule]
     transitions: List[Transition]
+    unseparable: List[Dict[str, object]] = field(default_factory=list)
+    #: the action alphabet the guard vocabulary was built over, and how much of
+    #: it the evidence could actually see.  Recorded on every result so that a
+    #: vocabulary blind to the world's actions is visible without rerunning.
+    vocabulary: Dict[str, object] = field(default_factory=dict)
 
     @property
     def all_rules(self) -> List[Rule]:
@@ -300,10 +318,28 @@ class MiningResult:
 
 
 def mine(transitions: Sequence[Transition],
-         max_frontier_size: int = MAX_FRONTIER_SIZE) -> MiningResult:
+         max_frontier_size: int = MAX_FRONTIER_SIZE,
+         on_unseparable: str = "raise",
+         action_alphabet: Optional[Sequence[str]] = None) -> MiningResult:
+    """Mine the frontier of every effect class the vocabulary can separate.
+
+    `on_unseparable` is `"raise"` (the default, and the behaviour this engine has
+    always had) or `"record"`, which files the unseparable classes on the result
+    and keeps the frontier for the rest.
+
+    `action_alphabet` widens the `act` atoms beyond the compass.  Passing it is
+    how a world whose actions are not UP/DOWN/LEFT/RIGHT gets a vocabulary that
+    can see which action was taken; the default `None` reads the alphabet off
+    the transitions themselves when it is not the compass, and is a no-op when
+    it is.
+    """
+    if on_unseparable not in ("raise", "record"):
+        raise ValueError("on_unseparable must be 'raise' or 'record', not %r" % on_unseparable)
     states = [t.state for t in transitions]
     actions = [t.action for t in transitions]
-    vocabulary = build_vocabulary(states)
+    observed = sorted(set(actions))
+    alphabet = sorted(set(action_alphabet)) if action_alphabet is not None else observed
+    vocabulary = build_vocabulary(states, alphabet)
     masks = atom_masks(vocabulary, states, actions)
     universe = (1 << len(transitions)) - 1
 
@@ -312,12 +348,27 @@ def mine(transitions: Sequence[Transition],
         groups.setdefault((transition.action, transition.effect.key()), []).append(transition)
 
     rules: List[Rule] = []
+    unseparable: List[Dict[str, object]] = []
     for key in sorted(groups):
         members = groups[key]
         positives = 0
         for transition in members:
             positives |= 1 << transition.index
-        guard, trace, added = synthesize(positives, universe, masks)
+        try:
+            guard, trace, added = synthesize(positives, universe, masks)
+        except NoSeparatingGuard as exc:
+            if on_unseparable == "raise":
+                raise
+            # Absence is recorded as absence: this effect class has no guard in
+            # this vocabulary, which is evidence about the vocabulary and a
+            # probe target, not a reason to lose the classes that do have one.
+            unseparable.append({
+                "action": members[0].action,
+                "effect": members[0].effect.as_json(),
+                "support": sorted(t.index for t in members),
+                "reason": str(exc),
+            })
+            continue
         size = min(max(len(guard), 1), max_frontier_size)
         frontier = enumerate_frontier(positives, universe, masks, size)
         truncated = len(guard) > max_frontier_size
@@ -352,4 +403,21 @@ def mine(transitions: Sequence[Transition],
         )
 
     rules.sort(key=lambda r: (r.name, r.action))
-    return MiningResult(rules=rules, lifted=lift(rules), transitions=list(transitions))
+    blind = sorted(a.name for a in vocabulary
+                   if masks[a] == 0 or masks[a] == universe)
+    return MiningResult(
+        rules=rules,
+        lifted=lift(rules),
+        transitions=list(transitions),
+        unseparable=unseparable,
+        vocabulary={
+            "action_alphabet": alphabet,
+            "actions_observed": observed,
+            "n_atoms": len(vocabulary),
+            "n_constant_atoms": len(blind),
+            "n_discriminating_atoms": len(vocabulary) - len(blind),
+            "act_atoms_are_all_constant": all(
+                masks[a] in (0, universe) for a in vocabulary if a.kind == "act"
+            ),
+        },
+    )
