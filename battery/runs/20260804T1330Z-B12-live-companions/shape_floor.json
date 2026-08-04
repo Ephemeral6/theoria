@@ -1,0 +1,126 @@
+{
+  "answer": "No. The floor is per-leg and no leg archived after 20260731T1430Z-A3-level2-carried-r3 has reached it: 1 of 14 scored legs clear 8 decision turns, the same one that cleared it before the R rounds landed, and the longest leg since is 7 turns. More legs bought more money and more actions; they did not buy more bill shape, because E2 and E3 are gated on the length of a single leg. This is the same shape as figures/'s standing finding that every leg is a cold start of level 1: the material cannot test the convergence prediction yet, and reporting that is the honest reading, not a defect.",
+  "cumulative": [
+    {
+      "axis": "absent",
+      "cumulative_usd": null,
+      "decision_turns": null,
+      "leg_added": "20260729T004020Z-leg01",
+      "n_clearing_floor": 0,
+      "n_legs": 1
+    },
+    {
+      "axis": "absent",
+      "cumulative_usd": null,
+      "decision_turns": null,
+      "leg_added": "20260729T105729Z-leg01",
+      "n_clearing_floor": 0,
+      "n_legs": 2
+    },
+    {
+      "axis": "not-applicable",
+      "cumulative_usd": null,
+      "decision_turns": null,
+      "leg_added": "20260731T1240Z-A3-level2-carried",
+      "n_clearing_floor": 0,
+      "n_legs": 3
+    },
+    {
+      "axis": "exact",
+      "cumulative_usd": 9.556852,
+      "decision_turns": 3,
+      "leg_added": "20260731T1310Z-A3-level2-carried-r2",
+      "n_clearing_floor": 0,
+      "n_legs": 4
+    },
+    {
+      "axis": "exact",
+      "cumulative_usd": 22.996714,
+      "decision_turns": 8,
+      "leg_added": "20260731T1430Z-A3-level2-carried-r3",
+      "n_clearing_floor": 1,
+      "n_legs": 5
+    },
+    {
+      "axis": "exact",
+      "cumulative_usd": 35.248433,
+      "decision_turns": 4,
+      "leg_added": "20260731T1500Z-A3-sk48-carried-l1",
+      "n_clearing_floor": 1,
+      "n_legs": 6
+    },
+    {
+      "axis": "exact",
+      "cumulative_usd": 42.851852,
+      "decision_turns": 2,
+      "leg_added": "20260731T231654Z-R1-g50t-a",
+      "n_clearing_floor": 1,
+      "n_legs": 7
+    },
+    {
+      "axis": "exact",
+      "cumulative_usd": 50.46038,
+      "decision_turns": 1,
+      "leg_added": "20260731T231654Z-R1-sk48-b",
+      "n_clearing_floor": 1,
+      "n_legs": 8
+    },
+    {
+      "axis": "exact",
+      "cumulative_usd": 68.209486,
+      "decision_turns": 6,
+      "leg_added": "20260801T001851Z-R1b-g50t-a",
+      "n_clearing_floor": 1,
+      "n_legs": 9
+    },
+    {
+      "axis": "exact",
+      "cumulative_usd": 85.600207,
+      "decision_turns": 2,
+      "leg_added": "20260801T001851Z-R1b-sk48-b",
+      "n_clearing_floor": 1,
+      "n_legs": 10
+    },
+    {
+      "axis": "not-applicable",
+      "cumulative_usd": 85.600207,
+      "decision_turns": null,
+      "leg_added": "20260801T043743Z-R2-g50t-a",
+      "n_clearing_floor": 1,
+      "n_legs": 11
+    },
+    {
+      "axis": "not-applicable",
+      "cumulative_usd": 85.600207,
+      "decision_turns": null,
+      "leg_added": "20260801T043743Z-R2-sk48-b",
+      "n_clearing_floor": 1,
+      "n_legs": 12
+    },
+    {
+      "axis": "exact",
+      "cumulative_usd": 104.336216,
+      "decision_turns": 7,
+      "leg_added": "20260801T044640Z-R2b-g50t-a",
+      "n_clearing_floor": 1,
+      "n_legs": 13
+    },
+    {
+      "axis": "exact",
+      "cumulative_usd": 124.639439,
+      "decision_turns": 2,
+      "leg_added": "20260801T044640Z-R2b-sk48-b",
+      "n_clearing_floor": 1,
+      "n_legs": 14
+    }
+  ],
+  "legs_clearing": [
+    "20260731T1430Z-A3-level2-carried-r3"
+  ],
+  "max_decision_turns": 8,
+  "min_turns_for_shape": 8,
+  "n_clearing_floor": 1,
+  "n_legs": 14,
+  "negative_control": "The claim is falsifiable by exactly one observation: a scored leg with >= 8 decision turns that is not 20260731T1430Z-A3-level2-carried-r3. If one lands, n_clearing_floor moves, rung 9 turns red until the census is regenerated, and this file's answer must be rewritten.",
+  "what": "scored live legs in archive order, with the running count of legs that clear MIN_TURNS_FOR_SHAPE. Read straight out of the committed census and economy companions."
+}
