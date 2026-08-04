@@ -6,8 +6,49 @@ but with the actual vendor binary at the near end, the real `ModelProxy` in the
 middle, and a `model_call` at status 200 with the provider's `usage` verbatim
 at the far end. `DUAL_PROXY.md` §4's step 2 said that route was structurally
 impossible; it is not, and the reason it looked impossible is now measured
-rather than reasoned.** 442 tests pass. Nothing here has spent a dollar or
-reached the internet.
+rather than reasoned.** 536 tests pass (442 at P-12; 497 before S47). Nothing
+here has spent a dollar or reached the internet.
+
+## S47 — the one `400` that was weather, and the comment that said there were none
+
+`forward.py`'s retry rule carried a comment asserting its own completeness: "A
+4xx that is not 429 is the upstream telling us something true; retrying it would
+only burn quota." The arm's four live legs of 2026-07-31 falsified it for exactly
+one response — `400` + `error: SERVER_ERROR` + `message: "game <id> not found"`,
+which the upstream labels a server error itself and which a byte-identical retry
+clears seconds later. **494 of 570** outbound commands were that response, and
+because `forward()` would not retry it, the arm retried one layer up, where every
+attempt is a separate request through the proxy and therefore a separate
+`env_step` row. 570 rows bought 72 actions.
+
+| | |
+|---|---|
+| `forward.py` | keyword-only `retry_body` predicate, consulted **only** for `status >= 400` that `RETRY_STATUSES` already declined. Widens, never narrows; unset, byte-for-byte the old behaviour. `RETRY_STATUSES` itself is untouched — the discriminator is in the body, and a status set that carried a body-shaped fact would say something false about every other 400. |
+| `env_proxy.py` | `game_not_found_retry(game_id)` — the three conjuncts, anchored message and id identity included. The ARC knowledge lives here so that `forward.py`'s "nothing here knows about ARC" stays true. `/api/scorecard/*` names no game and so gets no predicate at all. |
+| `LEDGER_FORMAT.md` | an `attempt_log` entry retried on the body carries `"body_retry": true`. Written only where true, so no past record becomes ambiguous. |
+| `tools/refusal_replay.py` | offline, zero-spend replay of the archived legs: how many rows the wave would have cost under this policy, and `actions_agree` recomputed on both sides. |
+
+**What S47 does not do, stated plainly.** It does not remove the outer retry.
+`theoria-arm/harness/arc.py` still retries a `400`-not-found up to 40 times, and
+each of those is now up to 5 attempts inside the proxy — so on a **permanently**
+failing id the worst case goes from 40 sockets to 200. Nor is the pool ceiling
+untouched: `permit.check()` reads recorded spend and `_charge` records after the
+loop, so a reservation binds at `action_cap + (max_attempts - 1)`. That
+softness is pre-existing and documented in `SPEND_GATE.md` §5; what S47 changes
+is that it moves from a rare path onto 87% of live traffic. `theoria-arm`'s
+`Budget(commands=2000)`, written to bound this very wave, now counts arm
+attempts rather than sockets and is re-based by up to 5×. Both are named in the
+inbox note; neither is this territory's to fix. It also does not renumber
+`step_idx`, which is item 2 of the same report and would rewrite the meaning of
+a field in published manifests.
+
+**A defect found while verifying, and not fixed here.** `verify_contract.sh`'s
+last step runs `python -m pytest proxy -q` **from the repo root**, where the
+repo-root `tools/` package shadows `proxy/tools` and
+`tests/test_audit_delivery.py` fails at collection. It is red on master at
+`1e5b3f00` for the same reason, so S47 neither caused it nor fixed it. The other
+nine steps are green, and `cd proxy && python -m pytest` — the invocation
+`pytest.ini` is written for — is green. Owned by no cell yet.
 
 ## P-12 — two blockers, not one
 

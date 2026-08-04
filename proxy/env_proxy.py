@@ -83,6 +83,95 @@ PASSTHROUGH_REQUEST_HEADERS = ("content-type", "accept")
 #: Header names that would mean the arm is carrying a key of its own.
 CREDENTIAL_HEADERS = ("x-api-key", "authorization", "api-key", "x-api-token")
 
+#: The upstream's own name for the one transient it answers with a `400` (S47).
+#: A `400` carrying any other `error` is the upstream telling the truth and is
+#: not retried.
+ARC_TRANSIENT_ERROR = "SERVER_ERROR"
+
+#: `game <id> not found`, anchored, with the id captured so it can be checked
+#: against the id **this request named**. Anchored on purpose: a message that
+#: merely contains the phrase is not a message that is it.
+#:
+#: The anchoring and the id capture are the two conjuncts that keep this apart
+#: from the negative sample living in the same four legs -- a `404` with
+#: `error: VALIDATION_ERROR` and `message: "scorecard <uuid> not found"`, which
+#: is a card the server auto-closed and is a real, consequential failure. On the
+#: substring `"not found"` alone the two are indistinguishable, so the substring
+#: is not the signature.
+ARC_GAME_NOT_FOUND = re.compile(r"^game\s+(?P<game_id>\S+)\s+not found\s*$", re.I)
+
+
+def game_not_found_retry(game_id: Optional[str]) -> Optional[fwd.RetryBody]:
+    r"""`forward()`'s body predicate for a command that named `game_id`.
+
+    Returns `None` -- meaning "no body rule at all, behave exactly as before" --
+    when there is no id to check against. That is not a nicety: the third
+    conjunct is *this game's* id, so without an id the predicate would be
+    matching a sentence shape rather than this game, and a predicate that
+    recognises a sentence shape is a retry policy that says "try again" to
+    anything phrased politely. `/api/scorecard/*` traffic has no game id and so
+    gets no body rule, which is also why the scorecard `404` cannot be reached
+    by this code path even before its own conjuncts refuse it.
+
+    Three conjuncts, all required, and nothing else:
+
+    1. `status == 400`;
+    2. `error == "SERVER_ERROR"` -- the upstream's own label, compared exactly;
+    3. `message` matches `^game\s+<id>\s+not found\s*$` case-insensitively,
+       where `<id>` is `game_id` compared case-folded.
+
+    Conjunct 3 is anchored, not "exact" in the strictest sense a reader might
+    assume, and the difference is worth naming rather than discovering: the
+    `\s+` accepts a tab, a newline or a non-breaking space where the archives
+    have a single space, `re.I` accepts the sentence shouted, and a body
+    carrying extra keys beside `error` and `message` is still accepted. All
+    three are deliberate -- an upstream is entitled to reformat its own error
+    prose, and none of them relaxes *which game* the message must name, which is
+    the conjunct doing the work.
+
+    Deliberately **narrower** than the arm's wire-side `_retryable`
+    (`theoria-arm/harness/arc.py:108-124`, a lowercase substring test over any
+    `400`) and **as narrow as** the arm's after-the-fact classifier
+    (`theoria-arm/armtools/refusal.py`). The arm's own docstring argues those
+    two are allowed to differ, because a false positive in accounting launders a
+    real failure into weather while a false negative on the wire costs a leg.
+    This one sits on the wire but is written to the accounting standard, for a
+    reason that only applies here: on the wire *inside the proxy* a false
+    positive is multiplied by `max_attempts` against the shared pool, and the
+    pool is everyone's. Cheap to be wrong upward, expensive to be wrong outward.
+    """
+    if not game_id or game_id == "?":
+        return None
+
+    def retryable(status: int, headers: Dict[str, str], body: bytes) -> bool:
+        if status != 400:
+            return False
+        try:
+            parsed = json.loads(body.decode("utf-8", "replace"))
+        except (json.JSONDecodeError, UnicodeDecodeError):
+            return False
+        if not isinstance(parsed, dict):
+            return False
+        if parsed.get("error") != ARC_TRANSIENT_ERROR:
+            return False
+        match = ARC_GAME_NOT_FOUND.match(str(parsed.get("message") or ""))
+        if match is None:
+            return False
+        # The message must name the game this request asked about. If it names
+        # another one, the id really was wrong -- that is a client defect, not
+        # weather, and retrying it is how a defect becomes a quota bill.
+        #
+        # Case-folded, matching `guard.py:stem()`, which lowercases precisely so
+        # that a case variant cannot walk past the seal. The first version
+        # compared codepoints, and an upstream that echoed `G50T-...` for a
+        # request naming `g50t-...` would have got no retry, no `body_retry`
+        # marker, no incident and no failing test -- S47 doing nothing while
+        # looking correct. Folding cannot turn a *different* game into a match,
+        # so it costs nothing that the exact compare was buying.
+        return match.group("game_id").lower() == game_id.lower()
+
+    return retryable
+
 
 class EnvProxyConfig:
     def __init__(self, *, run_id: str, arm: str,
@@ -338,7 +427,8 @@ class _Handler(BaseHTTPRequestHandler):
             headers["X-API-Key"] = self.cfg.api_key
         return headers
 
-    def _forward(self, method: str, path: str, query: str, raw: bytes) -> fwd.Response:
+    def _forward(self, method: str, path: str, query: str, raw: bytes,
+                 retry_body: Optional[fwd.RetryBody] = None) -> fwd.Response:
         """The only route to a socket in this proxy, and so the only place the
         spend gate has to sit.
 
@@ -348,6 +438,14 @@ class _Handler(BaseHTTPRequestHandler):
         every retry. The *record* is written afterwards, against the attempts
         that actually happened -- check prevents, record accounts, and a retry
         storm is charged for the requests it really made.
+
+        `retry_body` (S47) does not change any of that. It moves *where* a
+        retry of the `game <id> not found` wave happens, from above the proxy to
+        inside this call, and so changes how many rows the ledger grows rather
+        than how many sockets the pool pays for: N attempts under one permit
+        instead of N permits, N `_forward` calls and N `env_step` rows. It is
+        `None` for everything except commands that named a game -- scorecard and
+        game-list traffic keeps the old policy exactly.
         """
         url = self.cfg.upstream + path + (("?" + query) if query else "")
         permit = self.cfg.spend_gate.permit(self.cfg.spend_reservation,
@@ -356,7 +454,7 @@ class _Handler(BaseHTTPRequestHandler):
             response = fwd.forward(url, method, self._upstream_headers(),
                                    raw or None, timeout=self.cfg.timeout,
                                    max_attempts=self.cfg.max_attempts,
-                                   permit=permit)
+                                   permit=permit, retry_body=retry_body)
         except BaseException as exc:
             # The requests that DID happen are recorded even though the call
             # failed. Two ways the naive version under-counts: a permit refused
@@ -436,7 +534,8 @@ class _Handler(BaseHTTPRequestHandler):
             if isinstance(decision, _Remap):
                 applied = decision.applied
                 forwarded_path = "/api/cmd/" + decision.action_name
-            response = self._forward(method, forwarded_path, query, raw)
+            response = self._forward(method, forwarded_path, query, raw,
+                                     game_not_found_retry(game_id))
             status = response.status
             elapsed = response.elapsed_ms
             attempts = response.attempts
