@@ -1,0 +1,97 @@
+{
+  "artifacts": {
+    "baseline-arms/harness/audit_zero.py": {
+      "bytes": 10710,
+      "sha256": "c45e282e0d300721beab93556339f8a877111159ac34a351461be78c9d2989d1"
+    },
+    "baseline-arms/runs/20260802T2040Z-A28-baseline-zero-examined/RUN_STATE.md": {
+      "bytes": 9146,
+      "sha256": "f98642b0acb325aec9aded8a8fed380f5dbb6f77e7bed7c9f93b3f6c45f38d1c"
+    },
+    "baseline-arms/runs/20260802T2040Z-A28-baseline-zero-examined/audit_zero.json": {
+      "bytes": 2637,
+      "sha256": "c622367a58debde634c70ec7c75ddca69ccb56fbb7688b05c75209d33873bcc7"
+    },
+    "baseline-arms/runs/20260802T2040Z-A28-baseline-zero-examined/audit_zero.txt": {
+      "bytes": 1194,
+      "sha256": "c53be05054bf13395ca5b2cf7db02b6332135e00dd3d3088155878b515dac20c"
+    },
+    "baseline-arms/tests/test_audit_zero.py": {
+      "bytes": 6054,
+      "sha256": "82f79c00a3c2bba893c11054c057d1701b85a463ad6a0561a6408c804fe6f1de"
+    }
+  },
+  "base_commit": "b45400263428600a246408b2be6985ee84be63a9",
+  "branch": "w/a28-baseline-zero",
+  "determinism": "No stochastic step; seed is null. audit_zero reads append-only archived artefacts (probe_log.jsonl, out/shards/probe_log*.jsonl, ledger.jsonl, runs/bare_cc-*/run.json) and is byte-reproducible for a fixed archive.",
+  "network": "none -- offline audit of archived artefacts; no live run, no spend",
+  "prompt": null,
+  "prompt_id": "A28",
+  "results": {
+    "archived_run_dirs": 43,
+    "authoritative_observations": 63,
+    "budget_artefact_games": [
+      "g50t-5849a774",
+      "sk48-d8078629"
+    ],
+    "budgets_configured": [
+      20,
+      30
+    ],
+    "capability_tested_games": [
+      "ar25-0c556536",
+      "tn36-ef4dde99"
+    ],
+    "capability_tested_tiers": [
+      "haiku-4.5"
+    ],
+    "distinct_run_ids": 57,
+    "level_1_baselines": {
+      "ar25-0c556536": 32,
+      "g50t-5849a774": 78,
+      "sk48-d8078629": 61,
+      "tn36-ef4dde99": 32
+    },
+    "per_tier": {
+      "claude-haiku-4-5": {
+        "actions": 1427,
+        "levels": 0,
+        "max_actions": 73,
+        "reached_level_1_baseline": 6,
+        "runs": 50
+      },
+      "claude-opus-5": {
+        "actions": 70,
+        "levels": 0,
+        "max_actions": 30,
+        "reached_level_1_baseline": 0,
+        "runs": 4
+      },
+      "claude-sonnet-5": {
+        "actions": 65,
+        "levels": 0,
+        "max_actions": 30,
+        "reached_level_1_baseline": 0,
+        "runs": 3
+      }
+    },
+    "run_dirs_persisting_a_score": 0,
+    "runs_with_budget_below_level_1_baseline": "36 of 36",
+    "score_is_genuinely_zero": true,
+    "score_is_read_correctly": true,
+    "suite": {
+      "new_tests": 7,
+      "new_tests_alone": "7 passed in 0.36s",
+      "pre_existing_failures": "3 x test_schema_column.py (gitignored schema_traces payload absent in a fresh worktree; skip guard checks isdir, which is true because MANIFEST.json is tracked -- already recorded in runs/2026-08-01T044513Z-A19). 3 x test_archive_runs.py, flaky, cold-run only, passes warm. Neither introduced nor fixed here.",
+      "worktree_cold": "6 failed, 546 passed, 1 skipped",
+      "worktree_warm": "3 failed, 549 passed, 1 skipped"
+    },
+    "total_levels_completed": 0,
+    "total_successful_actions": 1562
+  },
+  "run_dir": "baseline-arms/runs/20260802T2040Z-A28-baseline-zero-examined",
+  "seed": null,
+  "t": "2026-08-02T20:40:00Z",
+  "tests": "7 passed (new); suite 546-549 passed, 6/3 pre-existing failures, 1 skipped",
+  "title": "A28: the baseline zero is real, but on two of four games it is a budget artefact -- every run was budgeted below its own level-1 baseline"
+}

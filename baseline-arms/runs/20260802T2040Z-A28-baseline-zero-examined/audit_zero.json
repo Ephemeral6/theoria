@@ -1,0 +1,114 @@
+{
+  "question_1_score_is_read": {
+    "archived_run_dirs": 43,
+    "authoritative_source": "scorecard body (open-GET / close)",
+    "gameplay_response_fields": [
+      "state",
+      "levels_completed",
+      "win_levels"
+    ],
+    "gameplay_response_has_score_field": false,
+    "run_dirs_persisting_a_score_field": 0
+  },
+  "question_2_score_is_zero": {
+    "authoritative_observations": 63,
+    "distinct_run_ids": 57,
+    "observations_with_any_nonzero_level_score": 0,
+    "observations_with_levels_completed_gt_0": 0,
+    "observations_with_nonzero_card_score": 0,
+    "observations_with_nonzero_run_score": 0
+  },
+  "question_3_budget": {
+    "budgets_seen": [
+      20,
+      30
+    ],
+    "per_game": {
+      "ar25-0c556536": {
+        "best_actions": 67,
+        "best_pct_of_level_1": 209.4,
+        "level_1_baseline": 32,
+        "level_baseline_actions": [
+          32,
+          50,
+          75,
+          37,
+          89,
+          159,
+          233,
+          73
+        ],
+        "median_actions": 19,
+        "obs_reaching_level_1_baseline": 4,
+        "observations": 18,
+        "terminal_states": [
+          "GAME_OVER",
+          "NOT_FINISHED"
+        ]
+      },
+      "g50t-5849a774": {
+        "best_actions": 73,
+        "best_pct_of_level_1": 93.6,
+        "level_1_baseline": 78,
+        "level_baseline_actions": [
+          78,
+          175,
+          179,
+          230,
+          96,
+          54,
+          67
+        ],
+        "median_actions": 30,
+        "obs_reaching_level_1_baseline": 0,
+        "observations": 17,
+        "terminal_states": [
+          "NOT_FINISHED"
+        ]
+      },
+      "sk48-d8078629": {
+        "best_actions": 38,
+        "best_pct_of_level_1": 62.3,
+        "level_1_baseline": 61,
+        "level_baseline_actions": [
+          61,
+          177,
+          101,
+          103,
+          230,
+          181,
+          125,
+          92
+        ],
+        "median_actions": 27,
+        "obs_reaching_level_1_baseline": 0,
+        "observations": 15,
+        "terminal_states": [
+          "NOT_FINISHED"
+        ]
+      },
+      "tn36-ef4dde99": {
+        "best_actions": 32,
+        "best_pct_of_level_1": 100.0,
+        "level_1_baseline": 32,
+        "level_baseline_actions": [
+          32,
+          72,
+          26,
+          40,
+          30,
+          55,
+          62
+        ],
+        "median_actions": 18,
+        "obs_reaching_level_1_baseline": 2,
+        "observations": 13,
+        "terminal_states": [
+          "NOT_FINISHED"
+        ]
+      }
+    },
+    "runs_whose_budget_is_below_level_1_baseline": 36,
+    "runs_with_a_budget": 36
+  }
+}
