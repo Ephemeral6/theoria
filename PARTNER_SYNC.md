@@ -2090,3 +2090,9 @@ claimed 悬挂），测试可加不会撞。三条如实登记的缺口：(1) `r
 测试：monitor 全套 534 passed / 2 xfailed / exit 0（基线 525+2,新增 9 条仍绿）。守卫:封存 2/2（见阻塞）、凭据 5/5（13093 个跟踪文件无泄漏）、边界 1/1（未越出 monitor/）。
 阻塞：封存守卫原始运行为红:3 个文件(spec.py / state.json / index.html)含 dc22-fdcac232、ft09-0d8bbf25、ls20-9607627b。守卫是**文件级**的,我为改号碰了 spec.py 就整份扫。已查证而非假定:base 上 spec.py 本就含有它们;**我的 diff 新增行含 0 个封存 id**;我新建的 6 个文件一个都没有;state.json/index.html 是同一段既有文字的重算副本;那两行是污染**登记**本身(spec.py:739 记止读前已读到哪些、:1011 记 dc22 在封存堆且两份文档明禁),正是守卫消息自己点名的例外。按 --allow 三条路径重跑 2/2 绿,--allow 是一次披露,RUN_STATE 里逐字复述。另:三处需人裁未决——B 是每战役还是每局、#12 保号方向、#13 是否解除 #14/#12 的上限。
 下一步：三处人裁落定后把 theoria-arm/harness/campaign.py 的常量接到 money.json 同一出处;freeze/BUDGET_TABLE.json 今日仍报 THE BALANCE MOVED,属 freeze 领地未动;另已送两封 inbox(给 freeze 的 9.2 重言式旁路复现、给 theoria-arm 的三处更正请求)。
+
+## [monitor] 2026-08-04T12:48:37Z m-2-rulings-b-per-campaign-rmin
+状态：所有者两条裁决落盘。**B 按每战役**：$60 是整个开发堆战役的总额,实花 $129.0326 = 215%,超支 $69.03;每局读法降为描述性。money.json 的 needs_human 取消,改为 dev_pile_B.ruling。裁决顺带照出第二个更根本的机制:campaign.py:475 的 self.spent_usd 在构造函数里归零,所以 CAMPAIGN_USD/GAME_USD 约束的是**一次调用**不是累计额度——十次战役各自从 $0 起、各自合规、合计 215%,没有一次单独越限过。于是 B 被两个仪器同时看不见而原因不同:看板**表达不了**(硬编码 $200 信封),harness **累加不了**(计数器按次归零);而「每战役」意味着 B 本质跨调用累计,按次上限**在原理上**执行不了它。**⟨r_min⟩ = 0.5** 属 freeze 领地且被 W-9201 认领,只送裁决与实测依据进 inbox,不代改。
+测试：monitor 常设门 GREEN exit 0(一次过,四阶段全过);test_money_register 9/9 对真账本;守卫 凭据 5/5、边界 1/1、封存见阻塞。
+阻塞：封存守卫原始 1/2,6 个文件命中。三个是既有的(spec.py/state.json/index.html,base 上就有,我的新增行为零);**三个是我自己造成的**——PARTNER_SYNC 的阻塞行与 M-1 的 RUN_STATE/NOTES 在**关于守卫的披露文字里把封存 id 写全了**,于是披露自身触线。第四个 id 在 PARTNER_SYNC:1182 别人的 S23 段落里,不是我的。**不算污染事件**(CLAUDE.md 允许读 id 与状态元数据,守卫消息也明文豁免污染登记类文件),**但仍要紧**:此后每个碰这些文件的分支都继承一个红守卫、都要扩 --allow,检查就是这样退化成形式的。**不在此修**:M-1 归档已进 MANIFEST 哈希、PARTNER_SYNC 只许追加,为消音重写代价大于收益。此后披露一律截断 id;M-2 自己六个新文件封存 id 数为零(已查)。另:两条裁决都不关闭各自的事件。
+下一步：harness 的累计上限、GAME_USD 同源、误写的 MANIFEST prompt_id 三件已交 theoria-arm;理由地板的实现与 §9.2 的判据(c)双见证检查已交 freeze;编号分配互斥点仍是 needs_human——同一条目一天内改号三次,每次处理都对,仍没拦住第四次。

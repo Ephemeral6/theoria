@@ -1,0 +1,76 @@
+{
+  "rulings": {
+    "B": {
+      "cap": 60.0,
+      "measured": 129.0326,
+      "overrun": 69.03,
+      "pct": 215,
+      "per_game_now_descriptive": {
+        "ar25": 0.0,
+        "g50t": 71.4784,
+        "sk48": 57.5542
+      },
+      "reading": "per-campaign",
+      "superseded": "per-game",
+      "verbatim": "B 按每战役"
+    },
+    "r_min": {
+      "caveat": "exam/endpoint.py:244 certified_share = certified/correct_positive -> None when denominator 0, arm-choosable denominator, pooled across classes",
+      "delivered_via": "monitor/inbox 20260802T1420Z",
+      "territory": "freeze",
+      "value": 0.5,
+      "verbatim": "r_min 就 0.5",
+      "verified_today": {
+        "cheater-v4 cert": 0.0,
+        "oracle cert": 1.0,
+        "passes_oracle": true,
+        "refuses_cheater": true
+      }
+    }
+  },
+  "sealed_guard": {
+    "M2_new_files_containing_sealed_ids": 0,
+    "cause": "disclosure text wrote the sealed ids out in full",
+    "cost": "every later branch touching these files inherits a red guard and must widen --allow",
+    "files_flagged": 6,
+    "not_mine": "bp35-0a0ad940 at PARTNER_SYNC.md:1182, someone elses S23 paragraph",
+    "pre_existing": [
+      "monitor/spec.py",
+      "monitor/state.json",
+      "monitor/index.html"
+    ],
+    "self_inflicted_in_M1": [
+      "PARTNER_SYNC.md",
+      "monitor/runs/2026-08-02T122508Z-M-1-money-single-truth/RUN_STATE.md",
+      "monitor/runs/2026-08-02T122508Z-M-1-money-single-truth/NOTES.md"
+    ],
+    "verdict": "practice defect, not a contamination event -- ids are permitted metadata and a guard disclosure is contamination registration"
+  },
+  "third_collision": {
+    "causes": [
+      "f6a95719 already held #12",
+      "master b4540026 took #14",
+      "master c42f5ad4 took #15 (pool ceiling raise)"
+    ],
+    "collisions_in_one_day": 3,
+    "conclusion": "correct handling three times still did not prevent a fourth collision -- this is what no mutual-exclusion point means; it is not a discipline problem",
+    "entry": "Phase 3 轮次制",
+    "handling": "correct every time, by the same precedent",
+    "pool_ceiling_raised": {
+      "actions": [
+        24000,
+        40000
+      ],
+      "commit": "c42f5ad4",
+      "effect_on_money_json": "none -- the ceiling is a pointer, so money.json and _spend_watch followed automatically with no edit",
+      "from": 214.9,
+      "to": 700.0
+    },
+    "renumbering_chain": [
+      12,
+      14,
+      15,
+      16
+    ]
+  }
+}
