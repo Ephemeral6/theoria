@@ -1,0 +1,64 @@
+{
+  "prompt_id": "S50-freeze-gate-red-on-master",
+  "prompt": "monitor/board/claimed/S50-freeze-gate-red-on-master.W-9209.md",
+  "worker": "W-9209",
+  "territory": "freeze",
+  "branch": "agent/s50-freeze-gate-red-on-master",
+  "base_commit": "18e7d81b",
+  "head_commit": "a275da580bf91b624362ee9ed5ae51a983ae121d",
+  "utc": "2026-08-04T15:00:00Z",
+  "seed": null,
+  "seed_why": "nothing here is stochastic; the artefacts are digests over files",
+  "sha256_note": "digests are over LF-normalised bytes, matching the convention this run introduced to freeze/build_budget_table.py and already in tools/check_locations.py -- a raw digest is checkout-dependent under core.autocrlf",
+  "result": {
+    "verify_sh": "82 PASS / 0 FAIL, three consecutive runs",
+    "stages_fixed": [
+      "[12] MANIFEST drift",
+      "[15b] BUDGET_TABLE drift + citation drift",
+      "[18] 11 location violations"
+    ],
+    "api_spend_usd": 0.0,
+    "network": "none"
+  },
+  "delivered_outside_runs_dir": [
+    "freeze/MANIFEST.json",
+    "freeze/BUDGET_TABLE.json",
+    "freeze/BUDGET_TABLE.md",
+    "freeze/build_manifest.py",
+    "freeze/build_budget_table.py",
+    "tools/locations_allowlist.json",
+    "tools/tests/test_check_locations.py"
+  ],
+  "files": [
+    {
+      "path": "RUN_STATE.md",
+      "bytes": 19720,
+      "sha256": "4a4189f0bc527af30eee94e77bcb9b4e3a781a8184c64f4e2cc10bb3ba065acc"
+    },
+    {
+      "path": "add_exemptions.py",
+      "bytes": 7842,
+      "sha256": "377b4532e79e1d725de1489b1c58a3607e6e7a3d43821b2ab383cfed9019f362"
+    },
+    {
+      "path": "budget-table.diff",
+      "bytes": 19272,
+      "sha256": "23f04d5809d9184d070ce2c51301528c765e080bf6442e6337cf80e6119bccbe"
+    },
+    {
+      "path": "check_checkout_independence.sh",
+      "bytes": 3115,
+      "sha256": "509f50e3b96bb6818a7e4b639c61bffba7f3bbf307f530e9eacfb935717f4a6e"
+    },
+    {
+      "path": "manifest-landed-only.diff",
+      "bytes": 5709,
+      "sha256": "35420345541010bab246f2994c16b962199bfef3427f41487e859ba21c83856a"
+    },
+    {
+      "path": "manifest.diff",
+      "bytes": 9551,
+      "sha256": "bbf478d72c9a8ab3e6a7e2aa6f29752d9c83ce100aefe969713a922392dda3f3"
+    }
+  ]
+}
