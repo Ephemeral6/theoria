@@ -24,6 +24,7 @@ python -m pytest exam/tests -q         # 338 tests
 python -m exam.tools.archive_run <id>  # runs/<id>/MANIFEST.json
 python -m exam.tools.build_prereg      # endpoint 2's pre-registration + controls
 python -m exam.tools.endpoint_verdict --table   # the controls, and what kills each
+python -m exam.tools.state_census        # the state count per item, recomputed
 ```
 
 ## The third primary endpoint
@@ -129,8 +130,16 @@ are mixed across boards so board identity carries no signal.
   searcher also answers correctly, possibly for a reason that does not transfer.
   The rubric therefore scores the **reason** separately: a machine-checked
   certificate scores full, "I searched and found nothing" scores partial.
-* **(ii) large-space unsolvable** — **naive** enumeration is out of reach and
-  the bound is computed rather than asserted (2⁶⁰ to 2¹²⁰ configurations). Not
+* **(ii) large-space unsolvable** — **naive** enumeration is out of reach, and
+  the number that says so is a **count**, not a bound. Three of the four items
+  have their reachable set counted exactly on the shipped board by symbolic
+  reachability — 8.86e35, 1.595e38, 1.595e38 — and the fourth, which ships a
+  step budget, carries a two-sided bracket, 1.661e37 to 4.133e63. Every one
+  clears the 2^m the construction proves, by 120x, 120x, 8/3x and (for the
+  bracket's lower side alone) 19 orders of magnitude. The census and the
+  construction share no code, and `_large_space` refuses to build an item whose
+  count is within reach of the naive enumerator — so "this belongs in class (i)"
+  is a gate rather than a judgement. Nothing moves. D-EX-034. Not
   "no exhaustive method is feasible here": every shipped item of this class is
   settled by an exhaustive computation over at most 600 nodes, so
   the item is scored on **selecting a method that is not naive enumeration**, and

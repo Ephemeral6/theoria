@@ -891,6 +891,45 @@ def _make_item(key: str, level_doc: Dict[str, Any], klass: str, claim: str,
     )
 
 
+def _census_fields(level_doc: Dict[str, Any],
+                   construction_floor: int) -> Dict[str, Any]:
+    """The state count, and the cross-check between the two ways of getting it.
+
+    `subset_lower_bound` proves a floor from a construction; `state_space.census`
+    counts (or brackets) the same set by symbolic reachability.  They share no
+    code and no argument, so the one thing worth asserting is that they agree
+    about the same board -- an exact count below a proved floor means one of the
+    two is wrong, and until this line existed there was no way to find out which.
+
+    The floor is passed in rather than recomputed so that what is checked is the
+    number the record actually publishes.
+    """
+    from exam import state_space   # noqa: E402  (own territory; late to keep
+                                   # `papers.verdict` importable on its own)
+    record = state_space.census_of_doc(level_doc)
+    exact = record.get("exact")
+    if exact is not None and exact < construction_floor:
+        raise AssertionError(
+            "%s: the exact count %d is below the construction's proved floor of "
+            "%d. The two methods share no code, so one of them is wrong and the "
+            "item cannot ship until it is known which"
+            % (level_doc["level_id"], exact, construction_floor))
+    if record["lower"] is not None and record["upper"] is not None \
+            and record["lower"] > record["upper"]:
+        raise AssertionError(
+            "%s: the census bracket is inverted (%d > %d)"
+            % (level_doc["level_id"], record["lower"], record["upper"]))
+    return {
+        "exact_states": exact,
+        "census_method": record["method"],
+        "census_lower": record["lower"],
+        "census_upper": record["upper"],
+        "census_positions": record["positions"],
+        "census_note": record["method_note"],
+        "census_naive_enumeration_feasible": record["naive_enumeration_feasible"],
+    }
+
+
 def _small_space(level_doc: Dict[str, Any]) -> Dict[str, Any]:
     """Enumerate, and record the cap alongside the count.
 
@@ -918,6 +957,11 @@ def _small_space(level_doc: Dict[str, Any]) -> Dict[str, Any]:
         "positional_states": positional_states(Level(level_doc)),
         "arithmetic": ("forward enumeration in command space terminated at %d "
                        "states, under the cap of %d" % (result["states"], result["cap"])),
+        # Recorded here too, on an item where the answer is not in doubt, so
+        # that the census has something to be wrong against on every build: on a
+        # small-space item `exact_states` must equal `enumerated`, and the gate
+        # below says so rather than leaving the agreement to be noticed.
+        **_census_fields(level_doc, result["states"]),
     }
 
 
@@ -946,6 +990,18 @@ def _large_space(level_doc: Dict[str, Any]) -> Dict[str, Any]:
             % (level_doc["level_id"], bound["m"], bound["lower_bound"],
                MAX_ENUMERATION, LARGE_SPACE_THRESHOLD))
     quotient = positional_states(Level(level_doc))
+    census = _census_fields(level_doc, bound["lower_bound"])
+    # The class boundary is now drawn by a number instead of by the branch the
+    # builder happened to call. `_large_space` used to write
+    # `naive_enumeration_feasible: False` as a literal; a level that had drifted
+    # small would have carried the word "large" and a false flag with it, and
+    # nothing would have said so. V29.
+    if census["census_naive_enumeration_feasible"]:
+        raise AssertionError(
+            "%s is built as a class (ii) item, but the census puts its state "
+            "count at %s -- within reach of the naive enumeration the class is "
+            "defined against. It belongs in class (i) and must be moved, not "
+            "relabelled." % (level_doc["level_id"], census["census_lower"]))
     return {
         # NOT `exhaustive_feasible`. The old name claimed no exhaustive method
         # is feasible here, and that is false: every shipped class (ii) item is
@@ -1003,6 +1059,14 @@ def _large_space(level_doc: Dict[str, Any]) -> Dict[str, Any]:
             "allowed to be computed that way, and why the search barrier here "
             "is apparent rather than real."
             % quotient),
+        # The census, and it is the field the class name was always promising.
+        # `lower_bound` is 2^m from a construction and stays -- it is the number
+        # the published `arithmetic` derives and a reader can follow by hand.
+        # `exact_states` is the count itself, and where the budget puts a count
+        # out of reach the bracket says so instead of rounding down to the
+        # floor. Measured, on the shipped board, by a method that shares nothing
+        # with the construction. V29.
+        **census,
     }
 
 

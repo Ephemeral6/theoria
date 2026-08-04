@@ -1593,3 +1593,70 @@ So the honest scope is the one shipped, and closing it is an environment-proxy
 change rather than a paper change. Written into
 `artifacts/prereg/verdict_class_inventory.md` next to the per-item constructive
 justifications, so the next reader meets the argument where the items are.
+
+## D-EX-034 — the class (ii) state space is counted, not bounded
+
+`exam/state_space.py`, `exam/tools/state_census.py`, `exam/tests/test_state_space.py`.
+Run: `exam/runs/20260802T0000Z-V29-class-ii-state-census/`.
+
+**The complaint.** Class (ii) is "large-space unsolvable", and the number that
+made it large was `subset_lower_bound`'s 2^m — a floor derived from a
+construction, never a count. The floor is sound and its premises are checked
+(D-EX-021, D-EX-029), but `verdict_class_inventory.md` printed it in a column a
+reader reads as the state space, and the truth record said
+`enumeration_attempted: false` beside `enumerated: null`. So the sentence "the
+naive method cannot walk this space" rested on an inequality nobody had ever
+turned into a number, on the class that carries the third primary endpoint.
+
+**What it turned out to be.** Three of the four items are now **counted
+exactly** on the shipped board:
+
+| item | board | exact states | vs. the 2^m floor |
+|---|---|---|---|
+| ii1 `vq-721d09813c` | gantry, k=60 | 159,507,359,494,189,904,748,456,847,233,641,349,120 | 120x |
+| ii2 `vq-6150a6eeb7` | lattice, k=60 | 159,507,359,494,189,904,748,456,847,233,641,349,120 | 120x |
+| ii4 `vq-2986ed8ffc` | orchard, k=60 | 886,151,997,189,943,915,269,204,706,853,563,048 | 8/3x |
+
+The fourth, ii3 `vq-ee54166153`, ships a `step_limit` of 150, which puts an
+exact count out of reach of every method here, and carries a **two-sided
+bracket** instead: 1.661e37 to 4.133e63. Its lower side is computed from an
+explicit strategy, so it is a floor with no optimality argument in it — and it
+is **19 orders of magnitude above** the 2^60 the construction proves, which is
+the number the inventory had been publishing for that item.
+
+**The method, and why it is checkable.** Positions are enumerated explicitly;
+the latch mask is carried as a reduced ordered BDD; the transition relation is
+`Level.step` itself rather than a second copy of it. It is the same least
+fixpoint `enumerate_states` computes, taken over sets instead of elements — so
+the two must agree wherever the enumerator can finish, and
+`test_symbolic_census_agrees_with_brute_force` requires exactly that, at k=2..6
+across all four constructor+operator families. Nothing is fitted. Applying the
+method at k=60 extrapolates the *method*, not a curve.
+
+**Two things are now derived that were literals.** `naive_enumeration_feasible`
+comes from the census rather than from the branch the builder called, and
+`_large_space` **refuses to build** an item whose census puts it within reach of
+the naive enumerator — the reclassification the brief asked for is a gate, not a
+belief. Nothing moves: all four items survive it.
+
+**What this does NOT revive.** D-EX-028 withdrew 唯不变量推理能答 because every
+class (ii) item is settled by an exhaustive computation over at most 600 nodes.
+A count of 1.6e38 does not bring that back; the two numbers answer different
+questions and now sit on the same record with a test
+(`test_the_count_and_the_search_barrier_answer_different_questions`) that fails
+if either is dropped. The count says the *naive* method cannot run. The 600
+nodes say *a* method can. Both are true and the class is scored on method
+selection, exactly as D-EX-028 left it.
+
+**Two costs paid on the way.** The BDD variable order is column-major, and it is
+load bearing: under (row, column) the two alcoves of one column sit 60 variables
+apart and the intermediate "reachable within t commands" families need diagrams
+quadratic in that separation — row-major exhausted this machine's memory on the
+shipped boards. `test_the_variable_order_does_not_move_the_answer` runs both and
+requires the same count, so the order is a size decision that cannot become a
+correctness decision. And the census's naive probe is `naive_reach`, which is
+`enumerate_states` without the per-state shortest path: the path bookkeeping
+costs ~473 bytes a state and 200,000-state ceilings across seventeen boards in
+one process exhausts memory. `test_the_counting_probe_matches_the_recording_one`
+pins the two to the same count and the same truncation flag, including at a cap
+that lands exactly on the state count.

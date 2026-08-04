@@ -1,0 +1,95 @@
+== unbudgeted: symbolic census vs the naive enumerator ==
+gantry k=1                         brute=8          symbolic=8          OK
+gantry k=2                         brute=64         symbolic=64         OK
+gantry k=3                         brute=384        symbolic=384        OK
+gantry k=4                         brute=2048       symbolic=2048       OK
+gantry k=5                         brute=10240      symbolic=10240      OK
+gantry k=6                         brute=49152      symbolic=49152      OK
+lattice k=2                        brute=64         symbolic=64         OK
+lattice k=3                        brute=384        symbolic=384        OK
+lattice k=4                        brute=2048       symbolic=2048       OK
+lattice k=5                        brute=10240      symbolic=10240      OK
+lattice k=6                        brute=49152      symbolic=49152      OK
+spindle-unbudgeted k=1             brute=8          symbolic=8          OK
+spindle-unbudgeted k=2             brute=64         symbolic=64         OK
+spindle-unbudgeted k=3             brute=384        symbolic=384        OK
+spindle-unbudgeted k=4             brute=2048       symbolic=2048       OK
+spindle-unbudgeted k=5             brute=10240      symbolic=10240      OK
+spindle-unbudgeted k=6             brute=49152      symbolic=49152      OK
+orchard k=2                        brute=8          symbolic=8          OK
+orchard k=3                        brute=40         symbolic=40         OK
+orchard k=4                        brute=168        symbolic=168        OK
+orchard k=5                        brute=680        symbolic=680        OK
+orchard k=6                        brute=2728       symbolic=2728       OK
+
+== budgeted: is the bracket a bracket? ==
+k=2 B=0   lower=1         true=1         upper=3           OK
+k=2 B=1   lower=4         true=4         upper=12          OK
+k=2 B=2   lower=8         true=10        upper=33          OK
+k=2 B=3   lower=14        true=20        upper=72          OK
+k=2 B=4   lower=21        true=33        upper=96          OK
+k=2 B=5   lower=27        true=51        upper=96          OK
+k=2 B=6   lower=33        true=63        upper=96          OK
+k=2 B=7   lower=37        true=64        upper=96          OK
+k=2 B=8   lower=39        true=64        upper=96          OK
+k=2 B=9   lower=40        true=64        upper=96          OK
+k=2 B=10  lower=40        true=64        upper=96          OK
+k=2 B=11  lower=40        true=64        upper=96          OK
+k=2 B=12  lower=40        true=64        upper=96          OK
+k=2 B=13  lower=40        true=64        upper=96          OK
+k=2 B=14  lower=40        true=64        upper=96          OK
+k=2 B=15  lower=40        true=64        upper=96          OK
+k=2 B=16  lower=40        true=64        upper=96          OK
+k=3 B=0   lower=1         true=1         upper=3           OK
+k=3 B=1   lower=4         true=4         upper=12          OK
+k=3 B=2   lower=9         true=11        upper=36          OK
+k=3 B=3   lower=17        true=27        upper=111         OK
+k=3 B=4   lower=30        true=56        upper=267         OK
+k=3 B=5   lower=46        true=104       upper=408         OK
+k=3 B=6   lower=67        true=171       upper=534         OK
+k=3 B=7   lower=91        true=252       upper=573         OK
+k=3 B=8   lower=113       true=321       upper=576         OK
+k=3 B=9   lower=134       true=362       upper=576         OK
+k=3 B=10  lower=149       true=380       upper=576         OK
+k=3 B=11  lower=159       true=383       upper=576         OK
+k=3 B=12  lower=165       true=384       upper=576         OK
+k=3 B=13  lower=167       true=384       upper=576         OK
+k=3 B=14  lower=168       true=384       upper=576         OK
+k=3 B=15  lower=168       true=384       upper=576         OK
+k=3 B=16  lower=168       true=384       upper=576         OK
+k=4 B=0   lower=1         true=1         upper=3           OK
+k=4 B=1   lower=4         true=4         upper=12          OK
+k=4 B=2   lower=9         true=11        upper=36          OK
+k=4 B=3   lower=18        true=28        upper=114         OK
+k=4 B=4   lower=33        true=65        upper=330         OK
+k=4 B=5   lower=57        true=139       upper=825         OK
+k=4 B=6   lower=92        true=266       upper=1491        OK
+k=4 B=7   lower=144       true=471       upper=2109        OK
+k=4 B=8   lower=208       true=748       upper=2664        OK
+k=4 B=9   lower=285       true=1101      upper=3000        OK
+k=4 B=10  lower=370       true=1444      upper=3072        OK
+k=4 B=11  lower=450       true=1741      upper=3072        OK
+k=4 B=12  lower=526       true=1938      upper=3072        OK
+k=4 B=13  lower=584       true=2012      upper=3072        OK
+k=4 B=14  lower=627       true=2047      upper=3072        OK
+k=4 B=15  lower=655       true=2048      upper=3072        OK
+k=4 B=16  lower=669       true=2048      upper=3072        OK
+k=5 B=0   lower=1         true=1         upper=3           OK
+k=5 B=1   lower=4         true=4         upper=12          OK
+k=5 B=2   lower=9         true=11        upper=36          OK
+k=5 B=3   lower=18        true=28        upper=114         OK
+k=5 B=4   lower=34        true=66        upper=333         OK
+k=5 B=5   lower=60        true=150       upper=918         OK
+k=5 B=6   lower=105       true=315       upper=2379        OK
+k=5 B=7   lower=175       true=626       upper=4818        OK
+k=5 B=8   lower=284       true=1150      upper=7659        OK
+k=5 B=9   lower=433       true=1967      upper=10296       OK
+k=5 B=10  lower=638       true=3117      upper=12642       OK
+k=5 B=11  lower=886       true=4555      upper=14481       OK
+k=5 B=12  lower=1172      true=6123      upper=15264       OK
+k=5 B=13  lower=1482      true=7684      upper=15357       OK
+k=5 B=14  lower=1777      true=8882      upper=15360       OK
+k=5 B=15  lower=2057      true=9657      upper=15360       OK
+k=5 B=16  lower=2281      true=10085     upper=15360       OK
+
+FAILURES: 0

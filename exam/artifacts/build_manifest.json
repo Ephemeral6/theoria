@@ -742,7 +742,7 @@
       "cheater_brief_path": "exam/artifacts/cheater/p15-verdict-a2.brief.txt",
       "cheater_brief_sha256": "51cb4e42cc19e986bc58e024dbb501eb25a94b57da96b22a21e4027caf7c7ef0",
       "key_path": "exam/artifacts/truth/p15-verdict-a2.truth.json",
-      "key_sha256": "d8b4ae7b96fd619aa0ff3e197d80dbaf23280832ef861c28baf3a13ddf37a984",
+      "key_sha256": "7b99fb7290cd2747469be568c1da5e9aeae877121acd8646f0c0d11c41fc324a",
       "leakage": {
         "label_sets_checked": [
           "board_size_class",
