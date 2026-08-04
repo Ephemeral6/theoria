@@ -1,0 +1,402 @@
+{
+  "counts": {
+    "absent": 8,
+    "recorded": 20,
+    "unobtainable": 15
+  },
+  "distinct_recorded_scores": [
+    0.0
+  ],
+  "max_recorded_score": 0.0,
+  "note": "`unobtainable` and `absent` carry no number. They are not zero and must never be summarised as one -- that substitution is the error this column was built to end.",
+  "rows": [
+    {
+      "card_id": "6bb423a8-6369-4362-a0b7-8182973f64f7",
+      "game_id": "ar25-0c556536",
+      "model": "claude-haiku-4-5-20251001",
+      "run_id": "bare_cc-ar25-claude-haiku-4-5-20251001-0d8cdab8",
+      "score": 0.0,
+      "source": "archived scorecard body (2 observation(s))",
+      "state": "recorded"
+    },
+    {
+      "card_id": "0fab7a75-ad85-4de6-b514-668746cc364e",
+      "game_id": "ar25-0c556536",
+      "model": "claude-haiku-4-5-20251001",
+      "run_id": "bare_cc-ar25-claude-haiku-4-5-20251001-1ebe643b",
+      "score": 0.0,
+      "source": "archived scorecard body (4 observation(s))",
+      "state": "recorded"
+    },
+    {
+      "card_id": "b37caf1f-d35b-4c23-a05e-a63554b83efa",
+      "game_id": "ar25-0c556536",
+      "model": "claude-haiku-4-5-20251001",
+      "run_id": "bare_cc-ar25-claude-haiku-4-5-20251001-24d8edcd",
+      "score": 0.0,
+      "source": "archived scorecard body (2 observation(s))",
+      "state": "recorded"
+    },
+    {
+      "card_id": "5b49b04d-4d76-4fd8-9574-1727721e41de",
+      "game_id": "ar25-0c556536",
+      "model": "claude-haiku-4-5-20251001",
+      "run_id": "bare_cc-ar25-claude-haiku-4-5-20251001-42306405",
+      "score": null,
+      "source": "card probed 2 time(s), statuses [200, 404], 1 refusal(s) -- D-015 measured 8 retries of both GET and close on two other cards and got 404 every time; for this card that finding is applied, not repeated",
+      "state": "unobtainable"
+    },
+    {
+      "card_id": null,
+      "game_id": null,
+      "model": null,
+      "run_id": "bare_cc-ar25-claude-haiku-4-5-20251001-55ea5593",
+      "score": null,
+      "source": "no card_id was ever recorded for this run; the run has no summary at all",
+      "state": "absent"
+    },
+    {
+      "card_id": "25348b1f-5171-434e-8fe9-9b5a508ad7da",
+      "game_id": "ar25-0c556536",
+      "model": "claude-opus-5",
+      "run_id": "bare_cc-ar25-claude-opus-5-2f8b6919",
+      "score": null,
+      "source": "card probed 2 time(s), statuses [200, 404], 1 refusal(s) -- D-015 measured 8 retries of both GET and close on two other cards and got 404 every time; for this card that finding is applied, not repeated",
+      "state": "unobtainable"
+    },
+    {
+      "card_id": "de5ee60c-0ff2-4893-bdaf-45e322656e93",
+      "game_id": "ar25-0c556536",
+      "model": "claude-sonnet-5",
+      "run_id": "bare_cc-ar25-claude-sonnet-5-fe359600",
+      "score": null,
+      "source": "card probed 2 time(s), statuses [200, 404], 1 refusal(s) -- D-015 measured 8 retries of both GET and close on two other cards and got 404 every time; for this card that finding is applied, not repeated",
+      "state": "unobtainable"
+    },
+    {
+      "card_id": null,
+      "game_id": null,
+      "model": null,
+      "run_id": "bare_cc-g50t-claude-haiku-4-5-20251001-069d86f8",
+      "score": null,
+      "source": "no card_id was ever recorded for this run; the run has no summary at all",
+      "state": "absent"
+    },
+    {
+      "card_id": "2288b39c-ffbf-4bef-b520-29c919197411",
+      "game_id": "g50t-5849a774",
+      "model": "claude-haiku-4-5-20251001",
+      "run_id": "bare_cc-g50t-claude-haiku-4-5-20251001-63e7bdd8",
+      "score": 0.0,
+      "source": "archived scorecard body (1 observation(s))",
+      "state": "recorded"
+    },
+    {
+      "card_id": "13f3f867-a874-4867-9c6a-5ffb6a8b0c38",
+      "game_id": "g50t-5849a774",
+      "model": "claude-haiku-4-5-20251001",
+      "run_id": "bare_cc-g50t-claude-haiku-4-5-20251001-7d3c6dcc",
+      "score": 0.0,
+      "source": "archived scorecard body (1 observation(s))",
+      "state": "recorded"
+    },
+    {
+      "card_id": "515db1db-cc0d-4973-9aa8-1e3bca3f964b",
+      "game_id": "g50t-5849a774",
+      "model": "claude-haiku-4-5-20251001",
+      "run_id": "bare_cc-g50t-claude-haiku-4-5-20251001-bfcd3f8f",
+      "score": 0.0,
+      "source": "archived scorecard body (1 observation(s))",
+      "state": "recorded"
+    },
+    {
+      "card_id": "d39121c8-f527-47ef-8aef-bad9dc1ee5b5",
+      "game_id": "g50t-5849a774",
+      "model": "claude-haiku-4-5-20251001",
+      "run_id": "bare_cc-g50t-claude-haiku-4-5-20251001-cfa3d49e",
+      "score": null,
+      "source": "card probed 2 time(s), statuses [200, 404], 1 refusal(s) -- D-015 measured 8 retries of both GET and close on two other cards and got 404 every time; for this card that finding is applied, not repeated",
+      "state": "unobtainable"
+    },
+    {
+      "card_id": "876f5f7b-28ee-415a-843b-76702114a2d3",
+      "game_id": "g50t-5849a774",
+      "model": "claude-haiku-4-5-20251001",
+      "run_id": "bare_cc-g50t-claude-haiku-4-5-20251001-d706111e",
+      "score": 0.0,
+      "source": "archived scorecard body (1 observation(s))",
+      "state": "recorded"
+    },
+    {
+      "card_id": "f6fba0ca-e8f2-4b19-abcc-ef152d7be459",
+      "game_id": "g50t-5849a774",
+      "model": "claude-opus-5",
+      "run_id": "bare_cc-g50t-claude-opus-5-6a39afc2",
+      "score": 0.0,
+      "source": "archived scorecard body (1 observation(s))",
+      "state": "recorded"
+    },
+    {
+      "card_id": "95c25ced-c1be-4c8f-b1be-e81a286f61f8",
+      "game_id": "g50t-5849a774",
+      "model": "claude-opus-5",
+      "run_id": "bare_cc-g50t-claude-opus-5-f60e48af",
+      "score": 0.0,
+      "source": "archived scorecard body (1 observation(s))",
+      "state": "recorded"
+    },
+    {
+      "card_id": "b501cc59-4865-4aed-8230-4d0c343a3186",
+      "game_id": "g50t-5849a774",
+      "model": "claude-sonnet-5",
+      "run_id": "bare_cc-g50t-claude-sonnet-5-3345f981",
+      "score": null,
+      "source": "card probed 2 time(s), statuses [200, 404], 1 refusal(s) -- D-015 measured 8 retries of both GET and close on two other cards and got 404 every time; for this card that finding is applied, not repeated",
+      "state": "unobtainable"
+    },
+    {
+      "card_id": "494beb7c-39f5-48ff-83cd-72d88df210a9",
+      "game_id": "g50t-5849a774",
+      "model": "claude-sonnet-5",
+      "run_id": "bare_cc-g50t-claude-sonnet-5-733ed586",
+      "score": 0.0,
+      "source": "archived scorecard body (1 observation(s))",
+      "state": "recorded"
+    },
+    {
+      "card_id": "619bdcbd-c65a-4236-8dd7-3355d068d396",
+      "game_id": "g50t-5849a774",
+      "model": "claude-sonnet-5",
+      "run_id": "bare_cc-g50t-claude-sonnet-5-ddabe772",
+      "score": null,
+      "source": "card probed 2 time(s), statuses [200, 404], 1 refusal(s) -- D-015 measured 8 retries of both GET and close on two other cards and got 404 every time; for this card that finding is applied, not repeated",
+      "state": "unobtainable"
+    },
+    {
+      "card_id": null,
+      "game_id": null,
+      "model": null,
+      "run_id": "bare_cc-sk48-claude-haiku-4-5-20251001-36c386d1",
+      "score": null,
+      "source": "no card_id was ever recorded for this run; the run has no summary at all",
+      "state": "absent"
+    },
+    {
+      "card_id": null,
+      "game_id": null,
+      "model": null,
+      "run_id": "bare_cc-sk48-claude-haiku-4-5-20251001-4f5d7ddb",
+      "score": null,
+      "source": "no card_id was ever recorded for this run; the run has no summary at all",
+      "state": "absent"
+    },
+    {
+      "card_id": "c90d0a69-9d91-4597-9a68-78ae4b80126f",
+      "game_id": "sk48-d8078629",
+      "model": "claude-haiku-4-5-20251001",
+      "run_id": "bare_cc-sk48-claude-haiku-4-5-20251001-64c11385",
+      "score": 0.0,
+      "source": "archived scorecard body (1 observation(s))",
+      "state": "recorded"
+    },
+    {
+      "card_id": "d594ffdc-075b-4204-9d9f-3b426fbde404",
+      "game_id": "sk48-d8078629",
+      "model": "claude-haiku-4-5-20251001",
+      "run_id": "bare_cc-sk48-claude-haiku-4-5-20251001-8b35a824",
+      "score": 0.0,
+      "source": "archived scorecard body (1 observation(s))",
+      "state": "recorded"
+    },
+    {
+      "card_id": "8261128a-faea-4328-9f19-2fb31174395a",
+      "game_id": "sk48-d8078629",
+      "model": "claude-haiku-4-5-20251001",
+      "run_id": "bare_cc-sk48-claude-haiku-4-5-20251001-90d0e95e",
+      "score": null,
+      "source": "card probed 2 time(s), statuses [200, 404], 1 refusal(s) -- D-015 measured 8 retries of both GET and close on two other cards and got 404 every time; for this card that finding is applied, not repeated",
+      "state": "unobtainable"
+    },
+    {
+      "card_id": null,
+      "game_id": null,
+      "model": null,
+      "run_id": "bare_cc-sk48-claude-haiku-4-5-20251001-b1ae92a0",
+      "score": null,
+      "source": "no card_id was ever recorded for this run; the run has no summary at all",
+      "state": "absent"
+    },
+    {
+      "card_id": null,
+      "game_id": null,
+      "model": null,
+      "run_id": "bare_cc-sk48-claude-haiku-4-5-20251001-b3e5c758",
+      "score": null,
+      "source": "no card_id was ever recorded for this run; the run has no summary at all",
+      "state": "absent"
+    },
+    {
+      "card_id": "619bb817-8022-4afe-a359-1b43c88127f2",
+      "game_id": "sk48-d8078629",
+      "model": "claude-haiku-4-5-20251001",
+      "run_id": "bare_cc-sk48-claude-haiku-4-5-20251001-d671e3d4",
+      "score": 0.0,
+      "source": "archived scorecard body (1 observation(s))",
+      "state": "recorded"
+    },
+    {
+      "card_id": "3162a584-7534-4ce3-bfd0-3905c3bbab47",
+      "game_id": "sk48-d8078629",
+      "model": "claude-opus-5",
+      "run_id": "bare_cc-sk48-claude-opus-5-42705d3c",
+      "score": null,
+      "source": "card probed 2 time(s), statuses [200, 404], 1 refusal(s) -- D-015 measured 8 retries of both GET and close on two other cards and got 404 every time; for this card that finding is applied, not repeated",
+      "state": "unobtainable"
+    },
+    {
+      "card_id": "84f030a5-73d3-4314-8e94-9ff8a28e8a72",
+      "game_id": "sk48-d8078629",
+      "model": "claude-opus-5",
+      "run_id": "bare_cc-sk48-claude-opus-5-ddd63c48",
+      "score": 0.0,
+      "source": "archived scorecard body (1 observation(s))",
+      "state": "recorded"
+    },
+    {
+      "card_id": "2fa84fe8-c80f-4c8c-b276-1321e734fe9e",
+      "game_id": "sk48-d8078629",
+      "model": "claude-sonnet-5",
+      "run_id": "bare_cc-sk48-claude-sonnet-5-70d92713",
+      "score": 0.0,
+      "source": "archived scorecard body (1 observation(s))",
+      "state": "recorded"
+    },
+    {
+      "card_id": "2e99adb7-5130-4df5-8838-49e2f6c159f6",
+      "game_id": "sk48-d8078629",
+      "model": "claude-sonnet-5",
+      "run_id": "bare_cc-sk48-claude-sonnet-5-9022a076",
+      "score": null,
+      "source": "card probed 2 time(s), statuses [200, 404], 1 refusal(s) -- D-015 measured 8 retries of both GET and close on two other cards and got 404 every time; for this card that finding is applied, not repeated",
+      "state": "unobtainable"
+    },
+    {
+      "card_id": "aa137d1e-76a2-482b-a8eb-ba42bc16b4c3",
+      "game_id": "sk48-d8078629",
+      "model": "claude-sonnet-5",
+      "run_id": "bare_cc-sk48-claude-sonnet-5-95c42cfd",
+      "score": null,
+      "source": "card probed 2 time(s), statuses [200, 404], 1 refusal(s) -- D-015 measured 8 retries of both GET and close on two other cards and got 404 every time; for this card that finding is applied, not repeated",
+      "state": "unobtainable"
+    },
+    {
+      "card_id": "5fd5afb8-0269-4c1c-9996-ce3f00aebcb3",
+      "game_id": "tn36-ef4dde99",
+      "model": "claude-haiku-4-5-20251001",
+      "run_id": "bare_cc-tn36-claude-haiku-4-5-20251001-041aca5a",
+      "score": 0.0,
+      "source": "archived scorecard body (1 observation(s))",
+      "state": "recorded"
+    },
+    {
+      "card_id": null,
+      "game_id": null,
+      "model": null,
+      "run_id": "bare_cc-tn36-claude-haiku-4-5-20251001-1b9b5309",
+      "score": null,
+      "source": "no card_id was ever recorded for this run; the run has no summary at all",
+      "state": "absent"
+    },
+    {
+      "card_id": "b675648c-797a-49d6-b1ab-14f518ac730d",
+      "game_id": "tn36-ef4dde99",
+      "model": "claude-haiku-4-5-20251001",
+      "run_id": "bare_cc-tn36-claude-haiku-4-5-20251001-3a033821",
+      "score": null,
+      "source": "card probed 2 time(s), statuses [200, 404], 1 refusal(s) -- D-015 measured 8 retries of both GET and close on two other cards and got 404 every time; for this card that finding is applied, not repeated",
+      "state": "unobtainable"
+    },
+    {
+      "card_id": "9e149e65-4791-48fc-8401-0e8e90ee2dfc",
+      "game_id": "tn36-ef4dde99",
+      "model": "claude-haiku-4-5-20251001",
+      "run_id": "bare_cc-tn36-claude-haiku-4-5-20251001-54a86b1b",
+      "score": 0.0,
+      "source": "archived scorecard body (1 observation(s))",
+      "state": "recorded"
+    },
+    {
+      "card_id": "2b42563f-d204-41e7-9a16-ca85530ee8e3",
+      "game_id": "tn36-ef4dde99",
+      "model": "claude-haiku-4-5-20251001",
+      "run_id": "bare_cc-tn36-claude-haiku-4-5-20251001-62129e6a",
+      "score": null,
+      "source": "card probed 17 time(s), statuses [200, 404], 16 refusal(s) -- D-015 measured 8 retries of both GET and close on two other cards and got 404 every time; for this card that finding is applied, not repeated",
+      "state": "unobtainable"
+    },
+    {
+      "card_id": "bf40f68f-ede7-4be6-809a-0cd1ab85515d",
+      "game_id": "tn36-ef4dde99",
+      "model": "claude-haiku-4-5-20251001",
+      "run_id": "bare_cc-tn36-claude-haiku-4-5-20251001-72c36e10",
+      "score": 0.0,
+      "source": "archived scorecard body (1 observation(s))",
+      "state": "recorded"
+    },
+    {
+      "card_id": "0787fbb1-1166-4e37-b6ba-1913ff3f0c08",
+      "game_id": "tn36-ef4dde99",
+      "model": "claude-haiku-4-5-20251001",
+      "run_id": "bare_cc-tn36-claude-haiku-4-5-20251001-bff3fc18",
+      "score": null,
+      "source": "card probed 17 time(s), statuses [200, 404], 16 refusal(s) -- D-015 measured 8 retries of both GET and close on two other cards and got 404 every time; for this card that finding is applied, not repeated",
+      "state": "unobtainable"
+    },
+    {
+      "card_id": null,
+      "game_id": "tn36-ef4dde99",
+      "model": "claude-haiku-4-5-20251001",
+      "run_id": "bare_cc-tn36-claude-haiku-4-5-20251001-fbc7c11f",
+      "score": null,
+      "source": "no card_id was ever recorded for this run",
+      "state": "absent"
+    },
+    {
+      "card_id": "7f2ce950-ce12-454b-a216-afc57602dc8d",
+      "game_id": "tn36-ef4dde99",
+      "model": "claude-opus-5",
+      "run_id": "bare_cc-tn36-claude-opus-5-914490bf",
+      "score": 0.0,
+      "source": "archived scorecard body (1 observation(s))",
+      "state": "recorded"
+    },
+    {
+      "card_id": "a98e2f13-5b27-4404-9ee7-2372cb329706",
+      "game_id": "tn36-ef4dde99",
+      "model": "claude-opus-5",
+      "run_id": "bare_cc-tn36-claude-opus-5-96d23ad9",
+      "score": null,
+      "source": "card probed 2 time(s), statuses [200, 404], 1 refusal(s) -- D-015 measured 8 retries of both GET and close on two other cards and got 404 every time; for this card that finding is applied, not repeated",
+      "state": "unobtainable"
+    },
+    {
+      "card_id": "3f990a4c-f218-4136-b04e-4215445c8beb",
+      "game_id": "tn36-ef4dde99",
+      "model": "claude-sonnet-5",
+      "run_id": "bare_cc-tn36-claude-sonnet-5-21a1a163",
+      "score": 0.0,
+      "source": "archived scorecard body (1 observation(s))",
+      "state": "recorded"
+    },
+    {
+      "card_id": "adb6b56a-874c-4b69-b6fb-a21ae82a91cc",
+      "game_id": "tn36-ef4dde99",
+      "model": "claude-sonnet-5",
+      "run_id": "bare_cc-tn36-claude-sonnet-5-3f3ac227",
+      "score": null,
+      "source": "card probed 2 time(s), statuses [200, 404], 1 refusal(s) -- D-015 measured 8 retries of both GET and close on two other cards and got 404 every time; for this card that finding is applied, not repeated",
+      "state": "unobtainable"
+    }
+  ],
+  "runs": 43
+}

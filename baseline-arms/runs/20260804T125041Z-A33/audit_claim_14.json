@@ -1,0 +1,595 @@
+{
+  "problems": [],
+  "recount": {
+    "section_1_46_is_entries_not_runs": {
+      "by_kind": {
+        "excluded": 1,
+        "fetch": 1,
+        "migration": 1,
+        "run": 43
+      },
+      "manifest_agrees_with_disk": true,
+      "manifest_by_kind": {
+        "excluded": 1,
+        "fetch": 1,
+        "migration": 1,
+        "run": 43
+      },
+      "manifest_total": 46,
+      "not_runs": [
+        {
+          "id": "fetch-schema-traces-path-a",
+          "kind": "fetch",
+          "path": "runs/fetch-schema-traces-path-a/run.json"
+        },
+        {
+          "id": "migration-ledger-v0-to-v1.0",
+          "kind": "migration",
+          "path": "runs/migration-ledger-v0-to-v1.0/run.json"
+        },
+        {
+          "id": "s1-full-run-not-archived",
+          "kind": "excluded",
+          "path": "runs/s1-full-run-not-archived/run.json"
+        }
+      ],
+      "run_json_files_on_disk": 46,
+      "runs": 43
+    },
+    "section_2_score_is_absent_not_zero": {
+      "completion_counts": {
+        "0": 36,
+        "absent": 7
+      },
+      "distinct_recorded_scores": [
+        0.0
+      ],
+      "max_recorded_score": 0.0,
+      "runs_persisting_a_score_field": 0,
+      "runs_persisting_a_score_field_ids": [],
+      "runs_with_a_summary": 36,
+      "score_absence_reason": "A28/harness.audit_zero: the ARC gameplay response (RESET, ACTIONn) carries state, levels_completed and win_levels and no score field, so no run.json in this arm records one. The authoritative score is on the scorecard body; harness.score_column rebuilds it offline for the runs whose body was archived. For the rest the score is unobtainable (D-015: a closed card 404s forever) or absent -- and neither is zero.",
+      "score_column": {
+        "absent": 8,
+        "recorded": 20,
+        "unobtainable": 15
+      },
+      "score_field_exists_on_gameplay_response": false
+    },
+    "section_3_seven_have_no_count_and_fourteen_never_played": {
+      "by_outcome": {
+        "api_unusable": 8,
+        "budget_exhausted": 20,
+        "gave_up": 2,
+        "model_error": 5,
+        "no_reset_window": 1,
+        "no_summary": 7
+      },
+      "dead_run_ids": [
+        "bare_cc-ar25-claude-haiku-4-5-20251001-0d8cdab8",
+        "bare_cc-ar25-claude-haiku-4-5-20251001-1ebe643b",
+        "bare_cc-ar25-claude-haiku-4-5-20251001-24d8edcd",
+        "bare_cc-ar25-claude-opus-5-2f8b6919",
+        "bare_cc-ar25-claude-sonnet-5-fe359600",
+        "bare_cc-g50t-claude-sonnet-5-3345f981",
+        "bare_cc-sk48-claude-sonnet-5-9022a076",
+        "bare_cc-sk48-claude-sonnet-5-95c42cfd",
+        "bare_cc-tn36-claude-haiku-4-5-20251001-62129e6a",
+        "bare_cc-tn36-claude-haiku-4-5-20251001-bff3fc18",
+        "bare_cc-tn36-claude-haiku-4-5-20251001-fbc7c11f",
+        "bare_cc-tn36-claude-opus-5-914490bf",
+        "bare_cc-tn36-claude-opus-5-96d23ad9",
+        "bare_cc-tn36-claude-sonnet-5-3f3ac227"
+      ],
+      "dead_run_outcomes": [
+        "api_unusable",
+        "model_error",
+        "no_reset_window"
+      ],
+      "dead_runs": 14,
+      "manifest_dead_runs": 14,
+      "runs_that_played_and_lost": 22,
+      "runs_that_played_and_lost_ids": [
+        "bare_cc-ar25-claude-haiku-4-5-20251001-42306405",
+        "bare_cc-g50t-claude-haiku-4-5-20251001-63e7bdd8",
+        "bare_cc-g50t-claude-haiku-4-5-20251001-7d3c6dcc",
+        "bare_cc-g50t-claude-haiku-4-5-20251001-bfcd3f8f",
+        "bare_cc-g50t-claude-haiku-4-5-20251001-cfa3d49e",
+        "bare_cc-g50t-claude-haiku-4-5-20251001-d706111e",
+        "bare_cc-g50t-claude-opus-5-6a39afc2",
+        "bare_cc-g50t-claude-opus-5-f60e48af",
+        "bare_cc-g50t-claude-sonnet-5-733ed586",
+        "bare_cc-g50t-claude-sonnet-5-ddabe772",
+        "bare_cc-sk48-claude-haiku-4-5-20251001-64c11385",
+        "bare_cc-sk48-claude-haiku-4-5-20251001-8b35a824",
+        "bare_cc-sk48-claude-haiku-4-5-20251001-90d0e95e",
+        "bare_cc-sk48-claude-haiku-4-5-20251001-d671e3d4",
+        "bare_cc-sk48-claude-opus-5-42705d3c",
+        "bare_cc-sk48-claude-opus-5-ddd63c48",
+        "bare_cc-sk48-claude-sonnet-5-70d92713",
+        "bare_cc-tn36-claude-haiku-4-5-20251001-041aca5a",
+        "bare_cc-tn36-claude-haiku-4-5-20251001-3a033821",
+        "bare_cc-tn36-claude-haiku-4-5-20251001-54a86b1b",
+        "bare_cc-tn36-claude-haiku-4-5-20251001-72c36e10",
+        "bare_cc-tn36-claude-sonnet-5-21a1a163"
+      ],
+      "runs_without_a_summary": 7,
+      "runs_without_a_summary_ids": [
+        "bare_cc-ar25-claude-haiku-4-5-20251001-55ea5593",
+        "bare_cc-g50t-claude-haiku-4-5-20251001-069d86f8",
+        "bare_cc-sk48-claude-haiku-4-5-20251001-36c386d1",
+        "bare_cc-sk48-claude-haiku-4-5-20251001-4f5d7ddb",
+        "bare_cc-sk48-claude-haiku-4-5-20251001-b1ae92a0",
+        "bare_cc-sk48-claude-haiku-4-5-20251001-b3e5c758",
+        "bare_cc-tn36-claude-haiku-4-5-20251001-1b9b5309"
+      ]
+    },
+    "section_4_no_budget_reached_the_level_1_baseline": {
+      "archived_run_dirs": 43,
+      "budget_at_or_above_level_1_baseline": 0,
+      "budget_at_or_above_level_1_baseline_rows": [],
+      "budget_below_level_1_baseline": 36,
+      "budget_below_level_1_baseline_rows": [
+        {
+          "budget": 30,
+          "game_id": "ar25-0c556536",
+          "id": "bare_cc-ar25-claude-haiku-4-5-20251001-0d8cdab8",
+          "level_1_baseline": 32
+        },
+        {
+          "budget": 30,
+          "game_id": "ar25-0c556536",
+          "id": "bare_cc-ar25-claude-haiku-4-5-20251001-1ebe643b",
+          "level_1_baseline": 32
+        },
+        {
+          "budget": 30,
+          "game_id": "ar25-0c556536",
+          "id": "bare_cc-ar25-claude-haiku-4-5-20251001-24d8edcd",
+          "level_1_baseline": 32
+        },
+        {
+          "budget": 20,
+          "game_id": "ar25-0c556536",
+          "id": "bare_cc-ar25-claude-haiku-4-5-20251001-42306405",
+          "level_1_baseline": 32
+        },
+        {
+          "budget": 20,
+          "game_id": "ar25-0c556536",
+          "id": "bare_cc-ar25-claude-opus-5-2f8b6919",
+          "level_1_baseline": 32
+        },
+        {
+          "budget": 20,
+          "game_id": "ar25-0c556536",
+          "id": "bare_cc-ar25-claude-sonnet-5-fe359600",
+          "level_1_baseline": 32
+        },
+        {
+          "budget": 30,
+          "game_id": "g50t-5849a774",
+          "id": "bare_cc-g50t-claude-haiku-4-5-20251001-63e7bdd8",
+          "level_1_baseline": 78
+        },
+        {
+          "budget": 30,
+          "game_id": "g50t-5849a774",
+          "id": "bare_cc-g50t-claude-haiku-4-5-20251001-7d3c6dcc",
+          "level_1_baseline": 78
+        },
+        {
+          "budget": 30,
+          "game_id": "g50t-5849a774",
+          "id": "bare_cc-g50t-claude-haiku-4-5-20251001-bfcd3f8f",
+          "level_1_baseline": 78
+        },
+        {
+          "budget": 20,
+          "game_id": "g50t-5849a774",
+          "id": "bare_cc-g50t-claude-haiku-4-5-20251001-cfa3d49e",
+          "level_1_baseline": 78
+        },
+        {
+          "budget": 30,
+          "game_id": "g50t-5849a774",
+          "id": "bare_cc-g50t-claude-haiku-4-5-20251001-d706111e",
+          "level_1_baseline": 78
+        },
+        {
+          "budget": 30,
+          "game_id": "g50t-5849a774",
+          "id": "bare_cc-g50t-claude-opus-5-6a39afc2",
+          "level_1_baseline": 78
+        },
+        {
+          "budget": 20,
+          "game_id": "g50t-5849a774",
+          "id": "bare_cc-g50t-claude-opus-5-f60e48af",
+          "level_1_baseline": 78
+        },
+        {
+          "budget": 20,
+          "game_id": "g50t-5849a774",
+          "id": "bare_cc-g50t-claude-sonnet-5-3345f981",
+          "level_1_baseline": 78
+        },
+        {
+          "budget": 30,
+          "game_id": "g50t-5849a774",
+          "id": "bare_cc-g50t-claude-sonnet-5-733ed586",
+          "level_1_baseline": 78
+        },
+        {
+          "budget": 20,
+          "game_id": "g50t-5849a774",
+          "id": "bare_cc-g50t-claude-sonnet-5-ddabe772",
+          "level_1_baseline": 78
+        },
+        {
+          "budget": 30,
+          "game_id": "sk48-d8078629",
+          "id": "bare_cc-sk48-claude-haiku-4-5-20251001-64c11385",
+          "level_1_baseline": 61
+        },
+        {
+          "budget": 30,
+          "game_id": "sk48-d8078629",
+          "id": "bare_cc-sk48-claude-haiku-4-5-20251001-8b35a824",
+          "level_1_baseline": 61
+        },
+        {
+          "budget": 20,
+          "game_id": "sk48-d8078629",
+          "id": "bare_cc-sk48-claude-haiku-4-5-20251001-90d0e95e",
+          "level_1_baseline": 61
+        },
+        {
+          "budget": 30,
+          "game_id": "sk48-d8078629",
+          "id": "bare_cc-sk48-claude-haiku-4-5-20251001-d671e3d4",
+          "level_1_baseline": 61
+        },
+        {
+          "budget": 20,
+          "game_id": "sk48-d8078629",
+          "id": "bare_cc-sk48-claude-opus-5-42705d3c",
+          "level_1_baseline": 61
+        },
+        {
+          "budget": 30,
+          "game_id": "sk48-d8078629",
+          "id": "bare_cc-sk48-claude-opus-5-ddd63c48",
+          "level_1_baseline": 61
+        },
+        {
+          "budget": 30,
+          "game_id": "sk48-d8078629",
+          "id": "bare_cc-sk48-claude-sonnet-5-70d92713",
+          "level_1_baseline": 61
+        },
+        {
+          "budget": 20,
+          "game_id": "sk48-d8078629",
+          "id": "bare_cc-sk48-claude-sonnet-5-9022a076",
+          "level_1_baseline": 61
+        },
+        {
+          "budget": 20,
+          "game_id": "sk48-d8078629",
+          "id": "bare_cc-sk48-claude-sonnet-5-95c42cfd",
+          "level_1_baseline": 61
+        },
+        {
+          "budget": 30,
+          "game_id": "tn36-ef4dde99",
+          "id": "bare_cc-tn36-claude-haiku-4-5-20251001-041aca5a",
+          "level_1_baseline": 32
+        },
+        {
+          "budget": 20,
+          "game_id": "tn36-ef4dde99",
+          "id": "bare_cc-tn36-claude-haiku-4-5-20251001-3a033821",
+          "level_1_baseline": 32
+        },
+        {
+          "budget": 30,
+          "game_id": "tn36-ef4dde99",
+          "id": "bare_cc-tn36-claude-haiku-4-5-20251001-54a86b1b",
+          "level_1_baseline": 32
+        },
+        {
+          "budget": 30,
+          "game_id": "tn36-ef4dde99",
+          "id": "bare_cc-tn36-claude-haiku-4-5-20251001-62129e6a",
+          "level_1_baseline": 32
+        },
+        {
+          "budget": 30,
+          "game_id": "tn36-ef4dde99",
+          "id": "bare_cc-tn36-claude-haiku-4-5-20251001-72c36e10",
+          "level_1_baseline": 32
+        },
+        {
+          "budget": 30,
+          "game_id": "tn36-ef4dde99",
+          "id": "bare_cc-tn36-claude-haiku-4-5-20251001-bff3fc18",
+          "level_1_baseline": 32
+        },
+        {
+          "budget": 30,
+          "game_id": "tn36-ef4dde99",
+          "id": "bare_cc-tn36-claude-haiku-4-5-20251001-fbc7c11f",
+          "level_1_baseline": 32
+        },
+        {
+          "budget": 30,
+          "game_id": "tn36-ef4dde99",
+          "id": "bare_cc-tn36-claude-opus-5-914490bf",
+          "level_1_baseline": 32
+        },
+        {
+          "budget": 20,
+          "game_id": "tn36-ef4dde99",
+          "id": "bare_cc-tn36-claude-opus-5-96d23ad9",
+          "level_1_baseline": 32
+        },
+        {
+          "budget": 30,
+          "game_id": "tn36-ef4dde99",
+          "id": "bare_cc-tn36-claude-sonnet-5-21a1a163",
+          "level_1_baseline": 32
+        },
+        {
+          "budget": 20,
+          "game_id": "tn36-ef4dde99",
+          "id": "bare_cc-tn36-claude-sonnet-5-3f3ac227",
+          "level_1_baseline": 32
+        }
+      ],
+      "budget_unattributable": 7,
+      "budget_unattributable_rows": [
+        {
+          "budget": null,
+          "game_id": null,
+          "id": "bare_cc-ar25-claude-haiku-4-5-20251001-55ea5593",
+          "level_1_baseline": null
+        },
+        {
+          "budget": null,
+          "game_id": null,
+          "id": "bare_cc-g50t-claude-haiku-4-5-20251001-069d86f8",
+          "level_1_baseline": null
+        },
+        {
+          "budget": null,
+          "game_id": null,
+          "id": "bare_cc-sk48-claude-haiku-4-5-20251001-36c386d1",
+          "level_1_baseline": null
+        },
+        {
+          "budget": null,
+          "game_id": null,
+          "id": "bare_cc-sk48-claude-haiku-4-5-20251001-4f5d7ddb",
+          "level_1_baseline": null
+        },
+        {
+          "budget": null,
+          "game_id": null,
+          "id": "bare_cc-sk48-claude-haiku-4-5-20251001-b1ae92a0",
+          "level_1_baseline": null
+        },
+        {
+          "budget": null,
+          "game_id": null,
+          "id": "bare_cc-sk48-claude-haiku-4-5-20251001-b3e5c758",
+          "level_1_baseline": null
+        },
+        {
+          "budget": null,
+          "game_id": null,
+          "id": "bare_cc-tn36-claude-haiku-4-5-20251001-1b9b5309",
+          "level_1_baseline": null
+        }
+      ],
+      "budgets": {
+        "20": 14,
+        "30": 22,
+        "absent": 7
+      },
+      "card_level_reach": {
+        "ar25-0c556536": {
+          "best_card_actions": 67,
+          "cards_reaching_the_baseline": 4,
+          "level_1_baseline": 32,
+          "observations": 18
+        },
+        "g50t-5849a774": {
+          "best_card_actions": 73,
+          "cards_reaching_the_baseline": 0,
+          "level_1_baseline": 78,
+          "observations": 17
+        },
+        "sk48-d8078629": {
+          "best_card_actions": 38,
+          "cards_reaching_the_baseline": 0,
+          "level_1_baseline": 61,
+          "observations": 15
+        },
+        "tn36-ef4dde99": {
+          "best_card_actions": 32,
+          "cards_reaching_the_baseline": 2,
+          "level_1_baseline": 32,
+          "observations": 13
+        }
+      },
+      "cell_cost_to_reach_baseline": {
+        "ar25-0c556536 x absent": {
+          "actions_ok": 0,
+          "level_1_baseline": 32,
+          "runs": 0,
+          "usd": null,
+          "usd_per_action": null,
+          "why": "no priced run of this game at this tier"
+        },
+        "ar25-0c556536 x claude-haiku-4-5-20251001": {
+          "actions_ok": 59,
+          "level_1_baseline": 32,
+          "runs": 4,
+          "usd": 1.6106,
+          "usd_per_action": 0.050333,
+          "why": null
+        },
+        "ar25-0c556536 x claude-opus-5": {
+          "actions_ok": 7,
+          "level_1_baseline": 32,
+          "runs": 1,
+          "usd": 5.9449,
+          "usd_per_action": 0.185778,
+          "why": null
+        },
+        "ar25-0c556536 x claude-sonnet-5": {
+          "actions_ok": 0,
+          "level_1_baseline": 32,
+          "runs": 1,
+          "usd": null,
+          "usd_per_action": null,
+          "why": "1 run(s) costing $0.0823 bought 0 successful actions -- there is no $/action here, and quoting one would price an experiment off a tier that never worked on this game"
+        },
+        "g50t-5849a774 x absent": {
+          "actions_ok": 0,
+          "level_1_baseline": 78,
+          "runs": 0,
+          "usd": null,
+          "usd_per_action": null,
+          "why": "no priced run of this game at this tier"
+        },
+        "g50t-5849a774 x claude-haiku-4-5-20251001": {
+          "actions_ok": 134,
+          "level_1_baseline": 78,
+          "runs": 5,
+          "usd": 2.9991,
+          "usd_per_action": 0.03845,
+          "why": null
+        },
+        "g50t-5849a774 x claude-opus-5": {
+          "actions_ok": 44,
+          "level_1_baseline": 78,
+          "runs": 2,
+          "usd": 8.7445,
+          "usd_per_action": 0.112109,
+          "why": null
+        },
+        "g50t-5849a774 x claude-sonnet-5": {
+          "actions_ok": 45,
+          "level_1_baseline": 78,
+          "runs": 3,
+          "usd": 10.0819,
+          "usd_per_action": 0.129255,
+          "why": null
+        },
+        "sk48-d8078629 x absent": {
+          "actions_ok": 0,
+          "level_1_baseline": 61,
+          "runs": 0,
+          "usd": null,
+          "usd_per_action": null,
+          "why": "no priced run of this game at this tier"
+        },
+        "sk48-d8078629 x claude-haiku-4-5-20251001": {
+          "actions_ok": 96,
+          "level_1_baseline": 61,
+          "runs": 4,
+          "usd": 2.9521,
+          "usd_per_action": 0.048395,
+          "why": null
+        },
+        "sk48-d8078629 x claude-opus-5": {
+          "actions_ok": 40,
+          "level_1_baseline": 61,
+          "runs": 2,
+          "usd": 7.8791,
+          "usd_per_action": 0.129165,
+          "why": null
+        },
+        "sk48-d8078629 x claude-sonnet-5": {
+          "actions_ok": 25,
+          "level_1_baseline": 61,
+          "runs": 3,
+          "usd": 11.7749,
+          "usd_per_action": 0.193032,
+          "why": null
+        },
+        "tn36-ef4dde99 x absent": {
+          "actions_ok": 0,
+          "level_1_baseline": 32,
+          "runs": 0,
+          "usd": null,
+          "usd_per_action": null,
+          "why": "no priced run of this game at this tier"
+        },
+        "tn36-ef4dde99 x claude-haiku-4-5-20251001": {
+          "actions_ok": 111,
+          "level_1_baseline": 32,
+          "runs": 7,
+          "usd": 1.5226,
+          "usd_per_action": 0.04758,
+          "why": null
+        },
+        "tn36-ef4dde99 x claude-opus-5": {
+          "actions_ok": 0,
+          "level_1_baseline": 32,
+          "runs": 2,
+          "usd": null,
+          "usd_per_action": null,
+          "why": "2 run(s) costing $1.8815 bought 0 successful actions -- there is no $/action here, and quoting one would price an experiment off a tier that never worked on this game"
+        },
+        "tn36-ef4dde99 x claude-sonnet-5": {
+          "actions_ok": 12,
+          "level_1_baseline": 32,
+          "runs": 2,
+          "usd": 9.9278,
+          "usd_per_action": 0.310245,
+          "why": null
+        }
+      },
+      "distinct_run_ids_in_scorecard_bodies": 57,
+      "distinct_run_ids_known": 80,
+      "level_1_baselines": {
+        "ar25-0c556536": 32,
+        "g50t-5849a774": 78,
+        "sk48-d8078629": 61,
+        "tn36-ef4dde99": 32
+      },
+      "max_actions_ok": 30,
+      "run_ids_with_a_scorecard_but_no_archived_run_json": 37,
+      "total_actions_ok": 573,
+      "usd_per_action_by_model": {
+        "claude-haiku-4-5-20251001": {
+          "runs": 19,
+          "runs_priced_including_zero_action_runs": 20,
+          "usd_per_action_aggregate": 0.045123,
+          "usd_per_action_max": 0.066309,
+          "usd_per_action_median": 0.045318,
+          "usd_per_action_min": 0.029472
+        },
+        "claude-opus-5": {
+          "runs": 5,
+          "runs_priced_including_zero_action_runs": 7,
+          "usd_per_action_aggregate": 0.14595,
+          "usd_per_action_max": 0.185778,
+          "usd_per_action_median": 0.114702,
+          "usd_per_action_min": 0.106554
+        },
+        "claude-sonnet-5": {
+          "runs": 6,
+          "runs_priced_including_zero_action_runs": 9,
+          "usd_per_action_aggregate": 0.176189,
+          "usd_per_action_max": 0.304033,
+          "usd_per_action_median": 0.179019,
+          "usd_per_action_min": 0.09128
+        }
+      }
+    }
+  }
+}

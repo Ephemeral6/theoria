@@ -97,9 +97,36 @@ def test_unreadable_path_is_a_finding_not_a_pass():
 # --------------------------------------------------------------------------
 
 def _payload_or_skip():
+    """Skip on the payload, not on the directory that holds it.
+
+    A33 (2026-08-04): `os.path.isdir(root)` was not enough, and this file's own
+    docstring names the case it missed -- "a linked worktree does not contain
+    it".  `schema_traces/` holds one *tracked* file, `MANIFEST.json`, and eight
+    *gitignored* run collections.  So in a linked worktree the directory exists
+    and the payload does not: `isdir` passed, `measure_cache_reads()` returned
+    zero runs, and three tests below failed on empty data.
+
+    The fourth was worse.  `test_measurement_does_not_reproduce_the_published
+    _interval` asserts two flags are False, and both are False when there is
+    nothing to measure -- so it went green on no data at all, which is the
+    vacuous pass this suite is written negative-control-first to prevent.
+
+    Checking for at least one collection directory costs a `listdir` and closes
+    both.  It is not `sc.measure_cache_reads()` because that walk is the
+    expensive part of this file and the guard runs on every test in it.
+    """
     root = sc.resolve_root()
     if not os.path.isdir(root):
         pytest.skip("upstream payload absent at %s (gitignored; set %s)"
+                    % (root, sc.ROOT_ENV))
+    collections = [d for d in sorted(os.listdir(root))
+                   if os.path.isdir(os.path.join(root, d))]
+    if not collections:
+        pytest.skip("upstream payload at %s holds no run collections -- only "
+                    "the tracked MANIFEST.json came with this checkout, which "
+                    "is what a linked worktree looks like. The numbers these "
+                    "tests would produce are pinned in SCHEMA_ARM_RULING.md "
+                    "and in the run record. (set %s to point at a full copy)"
                     % (root, sc.ROOT_ENV))
     return root
 

@@ -1,0 +1,112 @@
+{
+  "adversarial_review": "One adversarial subagent was tasked to refute rather than confirm. It found 15 defects, of which these were real and are fixed here: a disagreeing score was emitted as a list, kept in `recorded`, and filtered out of the maximum (a 5.0 could sit under a published 'max 0.0'); the outcome histogram and the 22 played-and-lost were unpinned; recount()'s `obs=` argument was overwritten, which also made both negative samples vacuous; `unobtainable` was assigned without checking that any probe had failed; probe attribution ignored request_body and the scorecard_close_failed records; the cost table was pooled by tier while labelled per cell; and the stated mechanism for cards passing the baseline ('accumulate across resets') was false -- every cited observation records resets: 0. Each now has a regression test.",
+  "artifacts": {
+    "baseline-arms/STATUS.md": {
+      "bytes": 31116,
+      "sha256": "33686d3c1c57062bbdded0646242117fc7decf595f1ee563f73aff248cbe0967"
+    },
+    "baseline-arms/harness/audit_claim_14.py": {
+      "bytes": 38964,
+      "sha256": "469c8b5fe774bca8e8a24f754f2e79ebb80cbaf0336e2a1c85b90376b21d2420"
+    },
+    "baseline-arms/harness/audit_zero.py": {
+      "bytes": 11317,
+      "sha256": "96281c093b8fb4ce254488d790fd77a243c90f0a48080e515cf1d1f2e0601899"
+    },
+    "baseline-arms/harness/score_column.py": {
+      "bytes": 14654,
+      "sha256": "552bf0e6c69d227ecb29333a28f009cde8ebcc9d281bfb431684219ab65cf3aa"
+    },
+    "baseline-arms/runs/20260804T125041Z-A33/CORRECTED_WORDING.md": {
+      "bytes": 7174,
+      "sha256": "b52cb274dc27a7347396b7b6a2e1260149ffcb56e68368fbab1d091541884780"
+    },
+    "baseline-arms/runs/20260804T125041Z-A33/RUN_STATE.md": {
+      "bytes": 13707,
+      "sha256": "f37afeb42da7e6d4d15d66e23e1b19b108c3ae8c2cbc6edb31c10a7512c52d2d"
+    },
+    "baseline-arms/runs/20260804T125041Z-A33/audit_claim_14.json": {
+      "bytes": 19090,
+      "sha256": "a634493c303a38db99f6c4f33302dc185718ea5a11b9f5b2e35aff5b108b3e58"
+    },
+    "baseline-arms/runs/20260804T125041Z-A33/audit_claim_14.txt": {
+      "bytes": 6796,
+      "sha256": "9f8d4cb9993b0e49d76d801ec422d096b2e31c0cab21266afcc368055314f22b"
+    },
+    "baseline-arms/runs/20260804T125041Z-A33/score_column.json": {
+      "bytes": 16058,
+      "sha256": "1321f4145eb858e2cd0a1f4ec9621d4df9488d22b1d8cf913ad45c8c12548b0d"
+    },
+    "baseline-arms/tests/test_audit_claim_14.py": {
+      "bytes": 19591,
+      "sha256": "98dca85036ce8428af60fdf80d863aa2de928fa155223a1c90789c596fec03b8"
+    },
+    "baseline-arms/tests/test_schema_column.py": {
+      "bytes": 8378,
+      "sha256": "8f4a7569022cd9d215d6f0ea5d53e0f081a764366d91b1c91fd5ec8b2233ba89"
+    },
+    "baseline-arms/verify.py": {
+      "bytes": 30899,
+      "sha256": "7e832eb48e3db4a40ec95648317030f3b40285b4086b64236b9d5bdf1c1919e7"
+    }
+  },
+  "base_commit": "4846e66dee64940b3bb457b408db13775728915c",
+  "branch": "agent/a33-forty-six-baseline-runs-scored-zero",
+  "gaps": [
+    "monitor/spec.py:525 is NOT edited -- it is monitor territory and this ticket's territory is baseline-arms. The replacement wording is delivered as CORRECTED_WORDING.md and filed to monitor/inbox/.",
+    "baseline-arms/verify.py rung 1 is RED on a clean checkout because tests/test_archive_runs.py x3 fail on the pristine base commit: the committed run.json evidence hashes disagree with the committed evidence files. Pre-existing, proven by stashing this branch to baseline and re-running. NOT fixed here -- regenerating the archive moves hashes that freeze/MANIFEST.json and battery cite as evidence, which needs an adjudication. Filed to monitor/inbox/."
+  ],
+  "network": "none -- offline recount of archived artefacts; no live run, no spend, no API call",
+  "prompt": "monitor/board/claimed/A33-forty-six-baseline-runs-scored-zero-is-wrong-three-times-over.W-9207.md",
+  "prompt_id": "A33-forty-six-baseline-runs-scored-zero-is-wrong-three-times-over",
+  "reproduce": [
+    "cd baseline-arms && python -m harness.audit_claim_14",
+    "cd baseline-arms && python -m harness.score_column",
+    "cd baseline-arms && python -m pytest tests/test_audit_claim_14.py -q"
+  ],
+  "results": {
+    "archived_runs": 43,
+    "budgets": {
+      "20": 14,
+      "30": 22,
+      "absent": 7
+    },
+    "dead_runs": 14,
+    "distinct_recorded_scores": [
+      0.0
+    ],
+    "distinct_run_ids_in_scorecard_bodies": 57,
+    "distinct_run_ids_known": 80,
+    "level_1_baselines": {
+      "ar25-0c556536": 32,
+      "g50t-5849a774": 78,
+      "sk48-d8078629": 61,
+      "tn36-ef4dde99": 32
+    },
+    "manifest_entries": 46,
+    "max_actions_ok": 30,
+    "max_recorded_score": 0.0,
+    "non_run_entries": {
+      "excluded": 1,
+      "fetch": 1,
+      "migration": 1
+    },
+    "played_and_lost": 22,
+    "runs_budgeted_below_their_level_1_baseline": 36,
+    "runs_persisting_a_score_field_in_run_json": 0,
+    "runs_with_summary": 36,
+    "runs_without_summary": 7,
+    "score_column": {
+      "absent": 8,
+      "recorded": 20,
+      "unobtainable": 15
+    },
+    "scorecard_run_ids_with_no_archived_run_json": 37,
+    "total_actions_ok": 573
+  },
+  "seed": null,
+  "seed_note": "No stochastic step. Every number is derived from append-only archived artefacts (runs/*/run.json, runs/MANIFEST.json, probe_log.jsonl, out/shards/probe_log*.jsonl) and is byte-reproducible for a fixed archive.",
+  "spend_usd": 0.0,
+  "utc": "2026-08-04T12:50:41Z",
+  "worker": "W-9207"
+}

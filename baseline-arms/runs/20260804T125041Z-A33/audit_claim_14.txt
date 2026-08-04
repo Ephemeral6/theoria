@@ -1,0 +1,85 @@
+A33 -- registration #14's sentence, recounted against runs/
+
+1. 46 IS ENTRIES, 43 IS RUNS
+   run.json files on disk ..................... 46
+   MANIFEST.json counts.total ................. 46
+   by kind .................................... excluded=1, fetch=1, migration=1, run=43
+   entries that never played a game ........... 3
+       fetch        fetch-schema-traces-path-a
+       migration    migration-ledger-v0-to-v1.0
+       excluded     s1-full-run-not-archived
+
+2. THE SCORE WAS NEVER IN run.json -- BUT 20 OF 43 ARE RECOVERABLE
+   runs with a summary ........................ 36 of 43
+   runs persisting a `score` field ............ 0
+   gameplay response has a score field ........ False
+   levels_completed across all 43 runs ........ 0 x36, absent x7
+   score column (harness.score_column) ........ absent=8, recorded=20, unobtainable=15
+   distinct recorded scores ................... [0.0]
+   max RECORDED score ......................... 0.0   (undefined for the 23 runs with no recovered score -- not zero)
+   why the rest are missing ................... A28/harness.audit_zero: the ARC gameplay response (RESET, ACTIONn) carries state, levels_completed and win_levels and no score field, so no run.json in this arm records one. The authoritative score is on the scorecard body; harness.score_column rebuilds it offline for the runs whose body was archived. For the rest the score is unobtainable (D-015: a closed card 404s forever) or absent -- and neither is zero.
+
+3. SEVEN HAVE NO COUNT; FOURTEEN NEVER PLAYED
+   runs without a summary ..................... 7
+       bare_cc-ar25-claude-haiku-4-5-20251001-55ea5593
+       bare_cc-g50t-claude-haiku-4-5-20251001-069d86f8
+       bare_cc-sk48-claude-haiku-4-5-20251001-36c386d1
+       bare_cc-sk48-claude-haiku-4-5-20251001-4f5d7ddb
+       bare_cc-sk48-claude-haiku-4-5-20251001-b1ae92a0
+       bare_cc-sk48-claude-haiku-4-5-20251001-b3e5c758
+       bare_cc-tn36-claude-haiku-4-5-20251001-1b9b5309
+   by outcome ................................. api_unusable=8, budget_exhausted=20, gave_up=2, model_error=5, no_reset_window=1, no_summary=7
+   dead runs (api_unusable, model_error, no_reset_window)
+                                              . 14 (manifest says 14)
+   runs that actually played and lost ......... 22
+
+4. NO BUDGET REACHED ITS GAME'S LEVEL-1 BASELINE
+   budgets configured ......................... 20 x14, 30 x22, absent x7
+   largest actions_ok / total ................. 30 / 573
+   archived run dirs .......................... 43
+   distinct run_ids in scorecard bodies ....... 57  (of which 37 have NO archived run.json)
+   distinct run_ids known, either source ...... 80  -- so '43 runs' means *archived* runs; the arm ran at least this many
+   layer one -- per-run budget vs level-1 baseline
+       (the baseline is a reference solver's action count, NOT a
+        lower bound -- theoria-arm/inner/scoreboard.py says so)
+       below the level-1 baseline ............. 36
+       at or above it (a real test) ........... 0
+       unattributable (no budget or no game) .. 7
+   layer two -- actions a card accumulated (crosses resets)
+       game               base_L1    obs      best cards>=base
+       ar25-0c556536           32     18        67 4
+       g50t-5849a774           78     17        73 0
+       sk48-d8078629           61     15        38 0
+       tn36-ef4dde99           32     13        32 2
+   unit price, $/successful action, by model tier
+       model                             runs       min    median       max   aggregate
+       claude-haiku-4-5-20251001           19  0.029472  0.045318  0.066309    0.045123
+       claude-opus-5                        5  0.106554  0.114702  0.185778    0.145950
+       claude-sonnet-5                      6  0.091280  0.179019  0.304033    0.176189
+       'runs' counts runs with a successful action; 'aggregate' is
+       total $ / total successful actions over all priced runs,
+       including the ones that bought nothing. Price a campaign off
+       the aggregate, never off one run's ratio.
+   cost of one run budgeted to its game's level-1 baseline
+       priced per (game, tier) CELL, not per tier: an earlier draft
+       labelled rows 'game x tier' while pricing by tier alone, so
+       every game in a tier got the same number and a cell where
+       that tier bought zero successful actions was priced anyway.
+       ar25-0c556536    x absent                        32 actions -> UNDEFINED (no priced run of this game at this tier)
+       ar25-0c556536    x claude-haiku-4-5-20251001     32 actions -> $  1.61  (4 run(s), 59 successful action(s), $0.0503/action)
+       ar25-0c556536    x claude-opus-5                 32 actions -> $  5.94  (1 run(s), 7 successful action(s), $0.1858/action)
+       ar25-0c556536    x claude-sonnet-5               32 actions -> UNDEFINED (1 run(s) costing $0.0823 bought 0 successful actions -- there is no $/action here, and quoting one would price an experiment off a tier that never worked on this game)
+       g50t-5849a774    x absent                        78 actions -> UNDEFINED (no priced run of this game at this tier)
+       g50t-5849a774    x claude-haiku-4-5-20251001     78 actions -> $  3.00  (5 run(s), 134 successful action(s), $0.0384/action)
+       g50t-5849a774    x claude-opus-5                 78 actions -> $  8.74  (2 run(s), 44 successful action(s), $0.1121/action)
+       g50t-5849a774    x claude-sonnet-5               78 actions -> $ 10.08  (3 run(s), 45 successful action(s), $0.1293/action)
+       sk48-d8078629    x absent                        61 actions -> UNDEFINED (no priced run of this game at this tier)
+       sk48-d8078629    x claude-haiku-4-5-20251001     61 actions -> $  2.95  (4 run(s), 96 successful action(s), $0.0484/action)
+       sk48-d8078629    x claude-opus-5                 61 actions -> $  7.88  (2 run(s), 40 successful action(s), $0.1292/action)
+       sk48-d8078629    x claude-sonnet-5               61 actions -> $ 11.77  (3 run(s), 25 successful action(s), $0.1930/action)
+       tn36-ef4dde99    x absent                        32 actions -> UNDEFINED (no priced run of this game at this tier)
+       tn36-ef4dde99    x claude-haiku-4-5-20251001     32 actions -> $  1.52  (7 run(s), 111 successful action(s), $0.0476/action)
+       tn36-ef4dde99    x claude-opus-5                 32 actions -> UNDEFINED (2 run(s) costing $1.8815 bought 0 successful actions -- there is no $/action here, and quoting one would price an experiment off a tier that never worked on this game)
+       tn36-ef4dde99    x claude-sonnet-5               32 actions -> $  9.93  (2 run(s), 12 successful action(s), $0.3102/action)
+
+A33: green -- every number in the corrected wording recomputes off runs/, and no absent value is being reported as a zero

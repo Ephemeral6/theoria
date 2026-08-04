@@ -595,6 +595,32 @@ def check_campaign_status(problems, dev, sealed):
              % (spend, MIN_CHECKPOINT_SPEND_USD))
 
 
+def check_claim_14(problems):
+    """A33: the sentence registration #14 publishes about this arm still
+    recomputes off `runs/`.
+
+    `monitor/spec.py` #14 called 46 manifest entries "46 runs", read
+    `levels_completed` as a score, and counted 14 dead runs and 7 runs with no
+    summary at all among the zeros.  The corrected wording is only worth
+    publishing if it stays true, so `harness.audit_claim_14` recomputes every
+    number in it and exits 1 when one has moved -- including the one failure
+    that matters most, an absent completion count being backfilled as a zero.
+
+    Run as a subprocess like every other stage here, so the
+    credential-stripped child rule still holds.
+    """
+    proc = sh([sys.executable, "-m", "harness.audit_claim_14", "--json"])
+    try:
+        report = json.loads(proc.stdout)
+    except json.JSONDecodeError:
+        fail(problems, "harness.audit_claim_14 produced no readable report "
+                       "(exit %d): %s"
+             % (proc.returncode, proc.stderr.strip()[:300]))
+        return
+    for problem in report["problems"]:
+        fail(problems, "registration #14 recount: %s" % problem)
+
+
 def rung_artefacts(problems, env_out, pool_out, dev, sealed):
     print("[3/3] artefact self-check")
     if env_out:
@@ -606,6 +632,7 @@ def rung_artefacts(problems, env_out, pool_out, dev, sealed):
     check_gate_json(problems)
     check_cost_artefacts(problems)
     check_campaign_status(problems, dev, sealed)
+    check_claim_14(problems)
     if not problems:
         print("   ok    %d recorded cells over %d dev-pile game(s), envelope "
               "and spend pool both clean, campaign gate green, every "
@@ -614,6 +641,18 @@ def rung_artefacts(problems, env_out, pool_out, dev, sealed):
 
 
 def main():
+    # A33: this gate reads its children as UTF-8 (see `sh`) but printed to a
+    # cp936 console, so the first FAIL message quoting a child's output died
+    # with UnicodeEncodeError *inside* `fail()` -- the gate crashed while
+    # reporting a red instead of reporting it, which is the one moment it must
+    # not.  Replace unencodable characters rather than raise: a '?' in a
+    # traceback excerpt costs nothing, a lost verdict costs the gate.
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(errors="replace")
+        except (AttributeError, ValueError):    # not a reconfigurable stream
+            pass
+
     problems = []
     scratch = tempfile.mkdtemp(prefix="baseline-arms-verify-")
     try:

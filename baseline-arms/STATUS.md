@@ -95,7 +95,7 @@ blob 与磁盘的哈希确实不同，加上就相同。
 | F-15 裁决通道 `harness/adjudications.py` | **采纳为模块与记录**；主线闸门不读它，读的是 barrier |
 | 「G6a 改坐班 + 新增 G6c」的闸门时钟 | **未采纳**（D-022）。主线用 barrier 分段，不引入 sittings |
 | 账本正典迁移 F-16（`migrate_ledger` / `validate_canon`） | **采纳**，产物在 `runs/_migrations/` |
-| 溯源档案 `runs/`（20 条 → 现 46 条） | **采纳**，并按合并后的证据重建 |
+| 溯源档案 `runs/`（20 条 → 现 46 **条目**，其中 43 条是 run） | **采纳**，并按合并后的证据重建 |
 | 那一轮真实花掉的 $1.68 与三个 tn36 格 | **采纳**：账本、probe_log、cells、run.json 四处齐全 |
 
 **原因**：那一轮把闸门重写成 `adjudications` / `interlock` / `g4_suspended` /
@@ -186,6 +186,11 @@ join 命中：card_id 268/286、guid 266/286、arm 274/274。
 **抬不动的必须点名**：`model_call.request` / `response` v0 只记了长度和错误标志，
 而正典把逐字记录定为模型侧不可重放的替代品——**每一条被抬上来的 model_call 都永久
 不可重放**，这个洞只能由 proxy 对未来的运行补。`score` 不是忘了记，上游响应里就没有。
+（A33 2026-08-04 补正：这句话只对 **gameplay** 响应成立。权威分数在 scorecard body
+上，而本臂把其中一部分归档进了 `probe_log.jsonl`——`harness.score_column` 离线复原了
+43 条已归档 run 中 **20 条**的分数，全部 0.0；另 15 条的卡已永久 404（D-015）、8 条
+从未记过 `card_id`，那 23 条不可得。所以正确说法是「分数在 run.json 里从未有过，
+但并非全臂不可得」。）
 金额移进 sidecar（正典禁止账本里出现美元数）。
 4 条 `ACTION0` 原样保留并标记——请求真的发出去过。
 
